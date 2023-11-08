@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script type="module" src="/src/game/main.ts" defer="defer"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Goldman&display=swap" />
+  <link rel="stylesheet" href="/src/styles/app.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/src/styles/navbar.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/src/styles/entry.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/src/styles/resource.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/src/styles/resources.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/src/styles/toolbar.css" crossorigin="anonymous" />
+
+  <link rel="icon" type="image/png" href="/src/images/logo_512.png" crossorigin="anonymous" />
+  <title>Vite App</title>
+</head>
+
+<body>
+
+  <div class="app">
+    <div class="navbar">
+      <div class="navbar--container">
+        <div class="navbar--logo">Resource Tracker</div>
+        <button class="entry button small">Reset</button>
+      </div>
+    </div>
+
+    <div class="resources">
+      <div class="resources--container" id="resources">
+
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar--container">
+        <div class="toolbar--buttons plus">
+          <button class="entry button" data-change="1" id="modifier-plus-one">+1</button>
+          <button class="entry button" data-change="5" id="modifier-plus-five">+5</button>
+          <button class="entry button" data-change="10" id="modifier-plus-ten">+10</button>
+        </div>
+        <div class="toolbar--buttons minus">
+          <button class="entry button" data-change="-1" id="modifier-minus-one">-1</button>
+          <button class="entry button" data-change="-5" id="modifier-minus-five">-5</button>
+          <button class="entry button" data-change="-10" id="modifier-minus-ten">-10</button>
+        </div>
+        <div class="toolbar--buttons center">
+          <button class="entry button">Produce</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <template id="resource-template">
+    <div class="resource">
+      <div class="resource--container">
+        <div class="resource--item">
+          <div class="resource--selectable" data-type="production">
+            <div class="resource--production">
+              <div class="resource--production-box">
+                <label>
+                  <input class="entry counter" data-tid="production" value="0" readonly />
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="resource--item center">
+          <img class="resource--image" data-tid="icon" height="64" width="64" />
+        </div>
+        <div class="resource--item">
+          <div class="resource--selectable" data-type="state">
+            <label>
+              <input class="entry counter" data-tid="state" value="0" readonly />
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+</body>
+
+</html>
