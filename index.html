@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script type="module" src="/src/game/main.tsx" defer="defer"></script>
+  <script type="module" src="/src/game/main.ts" defer="defer"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -43,73 +43,7 @@
     </div>
 
     <div class="app__content">
-      <div class="panel">
-        <div class="panel__item">
-        </div>
-        <div class="panel__item">
-          <div id="supplies" class="supplies">
-            <div class="supplies__production"></div>
-
-            <img data-ref="icon" class="supply__icon supply --points" width="64" height="64" src="/src/images/supplies/points.svg" alt="supply-icon" />
-            <div data-ref="points:amount" class="box --counter supply --points --amount">0</div>
-
-            <div data-ref="gold:production" class="box --counter supply --gold --production">0</div>
-            <img data-ref="icon" class="supply__icon supply --gold" width="64" height="64" src="/src/images/supplies/gold.svg" alt="supply-icon" />
-            <div data-ref="gold:amount" class="box --counter supply --gold --amount">0</div>
-
-            <div data-ref="steel:production" class="box --counter supply --steel --production">0</div>
-            <img data-ref="icon" class="supply__icon supply --steel" width="64" height="64" src="/src/images/supplies/steel.svg" alt="supply-icon" />
-            <div data-ref="steel:amount" class="box --counter supply --steel --amount">0</div>
-
-            <div data-ref="titan:production" class="box --counter supply --titan --production">0</div>
-            <img data-ref="icon" class="supply__icon supply --titan" width="64" height="64" src="/src/images/supplies/titan.svg" alt="supply-icon" />
-            <div data-ref="titan:amount" class="box --counter supply --titan --amount">0</div>
-
-            <div data-ref="plant:production" class="box --counter supply --plant --production">0</div>
-            <img data-ref="icon" class="supply__icon supply --plant" width="64" height="64" src="/src/images/supplies/plant.svg" alt="supply-icon" />
-            <div data-ref="plant:amount" class="box --counter supply --plant --amount">0</div>
-
-            <div data-ref="energy:production" class="box --counter supply --energy --production">0</div>
-            <img data-ref="icon" class="supply__icon supply --energy" width="64" height="64" src="/src/images/supplies/energy.svg" alt="supply-icon" />
-            <div data-ref="energy:amount" class="box --counter supply --energy --amount">0</div>
-
-            <div data-ref="heat:production" class="box --counter supply --heat --production">0</div>
-            <img data-ref="icon" class="supply__icon supply --heat" width="64" height="64" src="/src/images/supplies/heat.svg" alt="supply-icon" />
-            <div data-ref="heat:amount" class="box --counter supply --heat --amount">0</div>
-          </div>
-        </div>
-        <div class="panel__item">
-          <div id="supplies" class="supplies">
-            <div class="supplies__production"></div>
-
-            <img data-ref="icon" class="supply__icon supply --points" width="64" height="64" src="/src/images/supplies/points.svg" alt="supply-icon" />
-            <div data-ref="points:amount" class="box --counter supply --points --amount">0</div>
-
-            <div data-ref="gold:production" class="box --counter supply --gold --production">0</div>
-            <img data-ref="icon" class="supply__icon supply --gold" width="64" height="64" src="/src/images/supplies/gold.svg" alt="supply-icon" />
-            <div data-ref="gold:amount" class="box --counter supply --gold --amount">0</div>
-
-            <div data-ref="steel:production" class="box --counter supply --steel --production">0</div>
-            <img data-ref="icon" class="supply__icon supply --steel" width="64" height="64" src="/src/images/supplies/steel.svg" alt="supply-icon" />
-            <div data-ref="steel:amount" class="box --counter supply --steel --amount">0</div>
-
-            <div data-ref="titan:production" class="box --counter supply --titan --production">0</div>
-            <img data-ref="icon" class="supply__icon supply --titan" width="64" height="64" src="/src/images/supplies/titan.svg" alt="supply-icon" />
-            <div data-ref="titan:amount" class="box --counter supply --titan --amount">0</div>
-
-            <div data-ref="plant:production" class="box --counter supply --plant --production">0</div>
-            <img data-ref="icon" class="supply__icon supply --plant" width="64" height="64" src="/src/images/supplies/plant.svg" alt="supply-icon" />
-            <div data-ref="plant:amount" class="box --counter supply --plant --amount">0</div>
-
-            <div data-ref="energy:production" class="box --counter supply --energy --production">0</div>
-            <img data-ref="icon" class="supply__icon supply --energy" width="64" height="64" src="/src/images/supplies/energy.svg" alt="supply-icon" />
-            <div data-ref="energy:amount" class="box --counter supply --energy --amount">0</div>
-
-            <div data-ref="heat:production" class="box --counter supply --heat --production">0</div>
-            <img data-ref="icon" class="supply__icon supply --heat" width="64" height="64" src="/src/images/supplies/heat.svg" alt="supply-icon" />
-            <div data-ref="heat:amount" class="box --counter supply --heat --amount">0</div>
-          </div>
-        </div>
+      <div id="panel" class="panel">
       </div>
     </div>
 
@@ -159,6 +93,49 @@
     <div data-ref="amount" class="box --counter" value="0"></div>
   </template>
 
+
+  <template id="template-panel">
+    <div class="panel__item">
+      <div data-ref="supplies" class="supplies">
+      </div>
+    </div>
+  </template>
+
+
+  <template id="template-supply1">
+    <div class="panel__item">
+      <div id="supplies" class="supplies">
+        <div class="supplies__production"></div>
+
+        <img data-ref="icon" class="supply__icon supply --points" width="64" height="64" src="/src/images/supplies/points.svg" alt="supply-icon" />
+        <div data-ref="points:amount" class="box --counter supply --points --amount">0</div>
+
+        <div data-ref="gold:production" class="box --counter supply --gold --production">0</div>
+        <img data-ref="icon" class="supply__icon supply --gold" width="64" height="64" src="/src/images/supplies/gold.svg" alt="supply-icon" />
+        <div data-ref="gold:amount" class="box --counter supply --gold --amount">0</div>
+
+        <div data-ref="steel:production" class="box --counter supply --steel --production">0</div>
+        <img data-ref="icon" class="supply__icon supply --steel" width="64" height="64" src="/src/images/supplies/steel.svg" alt="supply-icon" />
+        <div data-ref="steel:amount" class="box --counter supply --steel --amount">0</div>
+
+        <div data-ref="titan:production" class="box --counter supply --titan --production">0</div>
+        <img data-ref="icon" class="supply__icon supply --titan" width="64" height="64" src="/src/images/supplies/titan.svg" alt="supply-icon" />
+        <div data-ref="titan:amount" class="box --counter supply --titan --amount">0</div>
+
+        <div data-ref="plant:production" class="box --counter supply --plant --production">0</div>
+        <img data-ref="icon" class="supply__icon supply --plant" width="64" height="64" src="/src/images/supplies/plant.svg" alt="supply-icon" />
+        <div data-ref="plant:amount" class="box --counter supply --plant --amount">0</div>
+
+        <div data-ref="energy:production" class="box --counter supply --energy --production">0</div>
+        <img data-ref="icon" class="supply__icon supply --energy" width="64" height="64" src="/src/images/supplies/energy.svg" alt="supply-icon" />
+        <div data-ref="energy:amount" class="box --counter supply --energy --amount">0</div>
+
+        <div data-ref="heat:production" class="box --counter supply --heat --production">0</div>
+        <img data-ref="icon" class="supply__icon supply --heat" width="64" height="64" src="/src/images/supplies/heat.svg" alt="supply-icon" />
+        <div data-ref="heat:amount" class="box --counter supply --heat --amount">0</div>
+      </div>
+    </div>
+  </template>
 </body>
 
 </html>

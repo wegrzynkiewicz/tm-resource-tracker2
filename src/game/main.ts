@@ -42,10 +42,21 @@ export function createSupply(supply: Supply) {
   return fragment;
 }
 
-const fragment = document.createDocumentFragment();
-for (const _data of supplies) {
-//   fragment.appendChild(resource);
+export function createPanel() {
+  const panel = cloneTemplate('template-panel');
+  const container = ref(panel, 'supplies');
+  for (const _data of supplies) {
+    const supply = createSupply(_data)
+    container.appendChild(supply);
+  }
+  return panel;
 }
-const resourcesRoot = document.getElementById('supplies');
+
+const fragment = document.createDocumentFragment();
+for (let i = 0; i < 10; i++) {
+  const panel = createPanel();
+  fragment.appendChild(panel);
+}
+const resourcesRoot = document.getElementById('panel');
 assertHTMLElement(resourcesRoot, 'div');
 resourcesRoot.appendChild(fragment);
