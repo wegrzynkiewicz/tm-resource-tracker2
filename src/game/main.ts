@@ -1,37 +1,51 @@
 import { assertHTMLElement } from "./asserts";
-import { cloneTemplate } from "./common";
-import { resources } from "./resources";
+import { cloneTemplate, ref } from "./common";
+import { Supply, supplies } from "./supplies";
 
-const fragment = document.createDocumentFragment();
-for (const resource of resources) {
-  const { refs, root } = cloneTemplate('resource-template');
-  const { icon, state } = refs;
-  assertHTMLElement(icon, 'img');
-  assertHTMLElement(state, 'input');
-  icon.src = resource.icon;
-  fragment.appendChild(root);
-
-  let currentY = 0;
-  let startValue = 0;
-  let currentValue = 0;
-
-  state.value = "50";
-
+export function hydroState(state: HTMLInputElement): void {
+  let startYPosition = 0;
+  let startValue = 50;
+  let current = 50;
+  const update = () => {
+    state.value = current.toString();
+  }
   state.addEventListener('touchstart', (event) => {
-    startValue = parseInt(state.value);
-    currentY = event.touches.item(0)!.clientY;
-    event.preventDefault();
-  })
-  state.addEventListener('touchmove', (event) => {
-    const result = event.touches.item(0)!.clientY - currentY;
-    currentValue = startValue + Math.floor(result / 20);
-    state.value = currentValue.toString();
+    const currentYPosition = event.touches.item(0)!.clientY;
+    startYPosition = currentYPosition;
+    startValue = current;
     event.preventDefault();
   });
-  state.addEventListener('touchend', (event) => {
+  state.addEventListener('touchmove', (event) => {
+    const currentYPosition = event.touches.item(0)!.clientY;
+    const result = currentYPosition - startYPosition;
+    current = startValue + Math.floor(result / 20);
+    update();
     event.preventDefault();
-  })
+  });
+  update();
 }
-const resourcesRoot = document.getElementById('resources');
+
+export function createSupply(supply: Supply) {
+  const { icon, hasProduction, name } = supply;
+  const fragment = cloneTemplate('template-supply');
+  const production = ref(fragment, 'production');
+  const image = ref(fragment, 'icon') as HTMLImageElement;
+  const cells = fragment.querySelectorAll('.supply');
+  for (const cell of cells) {
+    cell.classList.add(`--${name}`);
+  }
+  production.classList.add(`--${name}`);
+  if (hasProduction === false) {
+    production.remove();
+  }
+  image.src = icon;
+  return fragment;
+}
+
+const fragment = document.createDocumentFragment();
+for (const _data of supplies) {
+//   fragment.appendChild(resource);
+}
+const resourcesRoot = document.getElementById('supplies');
 assertHTMLElement(resourcesRoot, 'div');
 resourcesRoot.appendChild(fragment);

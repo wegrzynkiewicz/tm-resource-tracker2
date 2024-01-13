@@ -1,14 +1,189 @@
-.app {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+:root {
+  --animate-parallax-current: 0;
+  --animate-parallax-total: 1;
+
+  --color-player-cube-black: #8D8F92;
+  --color-player-cube-blue: #3586FF;
+  --color-player-cube-green: #1DCF00;
+  --color-player-cube-red: #CF0000;
+  --color-player-cube-yellow: #FFF735;
+
+  --color-text: #222222;
+  --color-text-inactive: rgba(0, 0, 0, 0.30);
+  --color-box-primary: #CDB39A;
+  --gradient-production-border: linear-gradient(180deg, #181818 0%, #2D2D2D 12%, #2D2D2D 88%, #636363 100%);
+  --gradient-production-background: linear-gradient(180deg, #AA5C3A 0%, #843807 100%);
+  --gradient-bar-background: linear-gradient(180deg, #E69252 0%, #A85020 100%);
+  --gradient-box-border: linear-gradient(180deg, #7B7B7B 0%, #2D2D2D 12%, #2D2D2D 88%, #000 100%);
+  --gradient-box-background: linear-gradient(180deg, #978271 0%, var(--color-box-primary) 25%, var(--color-box-primary) 75%, #EDE0D3 100%);
 }
 
 * {
   box-sizing: border-box;
+  font-family: Goldman;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+html {
+  font-size: 16px;
+  overflow: hidden;
 }
 
 body {
   margin: 0;
   padding: 0;
+  overflow: hidden;
+}
+
+.app {
+  align-items: stretch;
+  background-image: url(../images/bg-portrait.jpg);
+  background-position: calc(100% * var(--animate-parallax-current) / var(--animate-parallax-total)) center;
+  background-repeat: no-repeat;
+  color: var(--color-text);
+  display: grid;
+  grid-template-columns: [left] 100lvw [right];
+  grid-template-rows: [top] 32px [content] auto [end];
+  height: 100lvh;
+  min-width: 380px;
+  transition: background-position 0.5s ease-out;
+}
+
+.app.--with-toolbar {
+  grid-template-rows: [top] 32px [content] auto [toolbar] 70px [end];
+}
+
+.app__content {
+  background-color: rgba(183, 100, 43, 0.6);
+  position: relative;
+}
+
+.panel {
+  position: absolute;
+  display: grid;
+  grid-auto-flow: column;
+  left: calc(-100lvw * var(--animate-parallax-current));
+  height: 100%;
+  transition: left 0.5s ease-out;
+}
+
+.panel__item {
+  display: flex;
+  width: 100lvw;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+.content.--homepage {
+  padding: 40px 0px;
+  gap: 60px;
+}
+
+.selector {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.selector__icon {
+  width: 16px;
+  height: 16px;
+}
+
+.selector__content {
+  display: flex;
+  gap: 6px;
+}
+
+.player-cube {
+  --background: transparent;
+  background: var(--background);
+  border-image-slice: 1;
+  border-image-source: var(--gradient-box-border);
+  border-style: solid;
+  border-width: 2px;
+  display: flex;
+  width: 18px;
+  height: 18px;
+  justify-content: center;
+  align-items: center;
+}
+
+.supplies {
+  align-items: center;
+  display: grid;
+  grid-template-columns: [production] 33% [icons] 33% [amount] 33% [end];
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  height: 100%;
+  justify-items: center;
+  padding: 16px;
+  width: 100%;
+}
+
+.supplies__production {
+  background-repeat: repeat;
+  background-size: 10px;
+  background-image: var(--bg-production), var(--gradient-production-background);
+  border-image-slice: 1;
+  border-image-source: var(--gradient-production-border);
+  border-style: solid;
+  border-width: 2px;
+  grid-column: production / icons;
+  grid-row: 2 / 8;
+  height: 100%;
+  width: 100%;
+}
+
+.supply.--production {
+  grid-column: production / icons;
+}
+
+.supply__icon {
+  grid-column: icons / amount;
+  height: 64px;
+  width: 64px;
+}
+
+.supply.--amount {
+  grid-column: amount / end;
+}
+
+.supply.--point {
+  grid-row: 1 / 2;
+}
+
+.supply.--gold {
+  grid-row: 2 / 3;
+}
+
+.supply.--steel {
+  grid-row: 3 / 4;
+}
+
+.supply.--titan {
+  grid-row: 4 / 5;
+}
+
+.supply.--plant {
+  grid-row: 5 / 6;
+}
+
+.supply.--energy {
+  grid-row: 6 / 7;
+}
+
+.supply.--heat {
+  grid-row: 7 / 8;
 }

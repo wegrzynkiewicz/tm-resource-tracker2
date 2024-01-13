@@ -1,14 +1,41 @@
-import { assertHTMLElement } from "./asserts";
+import { assertNonNull } from "./asserts";
+
+export function getElementById<T extends HTMLElement>(id: string,): T {
+  const node = document.getElementById(id);
+  assertNonNull(node, '');
+  return node as T;
+}
 
 export function cloneTemplate(templateId: string) {
-  const template = document.getElementById(templateId);
-  assertHTMLElement(template, 'template', 'cannot-get-template-tag-by-id', { template, templateId });
-  const root = template.content.cloneNode(true) as DocumentFragment;
-  const nodes = root.querySelectorAll('[data-tid]') as NodeListOf<HTMLElement>;
-  const entries = [...nodes.values()].map(node => [node.dataset.tid, node]);
-  const refs = Object.fromEntries(entries) as Record<string, HTMLElement>;
-  return {
-    refs,
-    root,
-  };
+  const template = getElementById<HTMLTemplateElement>(templateId);
+  const fragment = template.content.cloneNode(true) as DocumentFragment;
+  return fragment;
+}
+
+type WithQuerySelector = {
+  querySelector: Element['querySelector'];
+  querySelectorAll: Element['querySelectorAll'];
+}
+
+export function ref(element: WithQuerySelector, name: string): HTMLElement {
+  return querySelector(element, `[data-ref="${name}"]`);
+}
+
+export function querySelector<T extends HTMLElement>(parent: WithQuerySelector, query: string): T {
+  const node = parent.querySelector(query);
+  assertNonNull(node, '');
+  return node as T;
+}
+
+export function listener<TEvent extends keyof GlobalEventHandlersEventMap>(
+  element: HTMLElement,
+  type: TEvent,
+  listener: (this: HTMLElement, event: GlobalEventHandlersEventMap[TEvent]) => any,
+  options?: boolean | AddEventListenerOptions
+): void {
+  const callback = function (this: HTMLElement, event: GlobalEventHandlersEventMap[TEvent]) {
+    listener.call(this, event);
+    event.preventDefault();
+  }
+  element.addEventListener(type, callback, options);
 }

@@ -1,0 +1,27 @@
+.top {
+  align-items: center;
+  background: var(--gradient-bar-background);
+  border-bottom: 1px solid #6A2600;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
+  width: 100%;
+  grid-row: top / content;
+}
+
+.top.--with-controller {
+  justify-content: space-between;
+}
+
+.top__label {
+  align-self: center;
+  line-height: 2;
+  color: var(--color-text);
+}
+
+.top__controller {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  align-self: center;
+}

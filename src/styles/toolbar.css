@@ -1,19 +1,37 @@
 .toolbar {
-  background: linear-gradient(to bottom, #d8782e 0%, #b26127 37%, #88441d 88%, #88441d 100%);
-  border-top: 1px solid #ff9440;
-  width: 100%;
-}
-
-.toolbar--container {
   align-items: center;
+  background: var(--gradient-bar-background);
+  border-top: 1px solid #F0A66D;
   display: flex;
-  flex-wrap: wrap;
+  flex-shrink: 0;
   justify-content: space-between;
-  padding: 0 10px;
+  grid-row: toolbar / end;
 }
 
-@media (orientation: landscape) {
-  .toolbar--container {
-    justify-content: center;
-  }
+.toolbar__item {
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--color-text-inactive);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  flex: 1;
+  gap: 3px;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.toolbar__item.--active {
+  color: var(--color-text);
+}
+
+.toolbar__icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toolbar__label {
+  font-size: 0.9rem;
 }

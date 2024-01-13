@@ -1,0 +1,3 @@
+:root {
+  --bg-production: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='A' x1='74.153' y1='72.233' x2='30.951' y2='31.127' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%237f4623'/%3E%3Cstop offset='1' stop-color='%23935e2c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M5.015 35.491c28.468 12.137 49.012 33.271 62.607 59.92C86.55 88.74 91.072 82.333 95.63 64.87 70.423 52.52 47.9 33.298 33.003 5.609 17.573 9.683 8.672 20.057 5.015 35.49z' fill='url(%23A)'/%3E%3C/svg%3E");
+}
