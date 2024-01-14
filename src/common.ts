@@ -1,4 +1,4 @@
-import { assertNonNull } from "./asserts";
+import { assertNonNull } from "./asserts.ts";
 
 export function getElementById<T extends HTMLElement>(id: string,): T {
   const node = document.getElementById(id);

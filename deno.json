@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "custom",
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable"
+    ]
+  },
+  "fmt": {
+    "options": {
+      "lineWidth": 120
+    }
+  },
+  "imports": {
+    "custom/jsx-runtime": "./src/tsx-runtime.ts"
+  }
+}
