@@ -72,3 +72,12 @@ export function tag<K extends keyof HTMLElementTagNameMap>(
 }
 
 export const div = (classes: string): HTMLDivElement => tag('div', classes);
+
+export function mapToFragment<T>(array: T[], map: (item: T) => Element): DocumentFragment {
+  const fragment = document.createDocumentFragment();
+  for (const item of array) {
+    const data = map(item);
+    fragment.appendChild(data);
+  }
+  return fragment;
+}
