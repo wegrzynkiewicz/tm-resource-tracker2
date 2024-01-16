@@ -17,6 +17,7 @@
   align-self: center;
   line-height: 2;
   color: var(--color-text);
+  text-wrap: nowrap;
 }
 
 .top__controller {

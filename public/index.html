@@ -24,7 +24,7 @@
   <link rel="preload" as="image" type="image/svg+xml" href="/images/supplies/heat.svg" />
 
   <link rel="icon" type="image/png" href="/images/logo_512.png" />
-  <title>Vite App</title>
+  <title>TM Resource Tracker v2</title>
 
 </head>
 
@@ -49,10 +49,18 @@
       </div>
     </div>
 
-    <div class="app__content">
-      <div id="panel" class="panel">
+    <div class="app__main scroll" id="app-scroll-viewport">
+      <div class="scroll__container">
+        <div id="app-shadow-detector-top" data-detector="top"></div>
+        <div id="app-content" class="app__content">
+
+        </div>
+        <div id="app-shadow-detector-bottom" data-detector="bottom"></div>
       </div>
     </div>
+
+    <div id="app-shadow-top" class="app__shadow --top"></div>
+    <div id="app-shadow-bottom" class="app__shadow --bottom"></div>
 
     <!-- <div class="panel">
       <div class="top">
@@ -66,25 +74,25 @@
     </div> -->
 
     <div class="toolbar">
-      <button class="toolbar__item --active">
+      <button id="btn-supplies" class="toolbar__item --active">
         <svg class="toolbar__icon">
           <use href="/images/symbols.svg#icon-box" />
         </svg>
         <span class="toolbar__label">Supplies</span>
       </button>
-      <button class="toolbar__item">
+      <button id="btn-projects" class="toolbar__item">
         <svg class="toolbar__icon">
           <use href="/images/symbols.svg#icon-projects" />
         </svg>
         <span class="toolbar__label">Projects</span>
       </button>
-      <button class="toolbar__item">
+      <button id="btn-history" class="toolbar__item">
         <svg class="toolbar__icon">
           <use href="/images/symbols.svg#icon-clock" />
         </svg>
         <span class="toolbar__label">History</span>
       </button>
-      <button class="toolbar__item">
+      <button id="btn-settings" class="toolbar__item">
         <svg class="toolbar__icon">
           <use href="/images/symbols.svg#icon-gear" />
         </svg>
@@ -94,80 +102,32 @@
 
   </div>
 
-  <template id="tpl-panel">
-    <div class="panel__item">
-      <div data-ref="supplies" class="supplies">
-      </div>
-    </div>
+  <template id="tpl-supply">
+    <div data-ref="production" class="box --counter supply --production">0</div>
+    <img data-ref="icon" class="supply --icon" width="64" height="64" alt="supply-icon" />
+    <div data-ref="amount" class="box --counter supply --amount">0</div>
   </template>
 
   <template id="tpl-supplies">
     <div class="panel__item">
-      <div class="supplies">
+      <div data-ref="supplies" class="supplies">
         <div class="supplies__production"></div>
-
-        <img class="supply --icon --points" width="64" height="64" src="/images/supplies/points.svg" alt="supply-icon" />
-        <div data-ref="points:amount" class="box --counter supply --points --amount">0</div>
-
-        <div data-ref="gold:production" class="box --counter supply --gold --production">0</div>
-        <img class="supply --icon --gold" width="64" height="64" src="/images/supplies/gold.svg" alt="supply-icon" />
-        <div data-ref="gold:amount" class="box --counter supply --gold --amount">0</div>
-
-        <div data-ref="steel:production" class="box --counter supply --steel --production">0</div>
-        <img class="supply --icon --steel" width="64" height="64" src="/images/supplies/steel.svg" alt="supply-icon" />
-        <div data-ref="steel:amount" class="box --counter supply --steel --amount">0</div>
-
-        <div data-ref="titan:production" class="box --counter supply --titan --production">0</div>
-        <img class="supply --icon --titan" width="64" height="64" src="/images/supplies/titan.svg" alt="supply-icon" />
-        <div data-ref="titan:amount" class="box --counter supply --titan --amount">0</div>
-
-        <div data-ref="plant:production" class="box --counter supply --plant --production">0</div>
-        <img class="supply --icon --plant" width="64" height="64" src="/images/supplies/plant.svg" alt="supply-icon" />
-        <div data-ref="plant:amount" class="box --counter supply --plant --amount">0</div>
-
-        <div data-ref="energy:production" class="box --counter supply --energy --production">0</div>
-        <img class="supply --icon --energy" width="64" height="64" src="/images/supplies/energy.svg" alt="supply-icon" />
-        <div data-ref="energy:amount" class="box --counter supply --energy --amount">0</div>
-
-        <div data-ref="heat:production" class="box --counter supply --heat --production">0</div>
-        <img class="supply --icon --heat" width="64" height="64" src="/images/supplies/heat.svg" alt="supply-icon" />
-        <div data-ref="heat:amount" class="box --counter supply --heat --amount">0</div>
       </div>
+    </div>
+  </template>
+
+  <template id="tpl-project">
+    <div class="project">
+      <button data-ref="dec" class="box --button --project">-</button>
+      <img data-ref="icon" class="project__icon" width="40" height="40">
+      <div data-ref="count" class="box --counter">0</div>
+      <button data-ref="inc" class="box --button --project">+</button>
     </div>
   </template>
 
   <template id="tpl-projects">
     <div class="panel__item">
-      <div class="supplies">
-        <div class="supplies__production"></div>
-
-        <img class="supply --icon --points" width="64" height="64" src="/images/supplies/points.svg" alt="supply-icon" />
-        <div data-ref="points:amount" class="box --counter supply --points --amount">0</div>
-
-        <div data-ref="gold:production" class="box --counter supply --gold --production">0</div>
-        <img class="supply --icon --gold" width="64" height="64" src="/images/supplies/gold.svg" alt="supply-icon" />
-        <div data-ref="gold:amount" class="box --counter supply --gold --amount">0</div>
-
-        <div data-ref="steel:production" class="box --counter supply --steel --production">0</div>
-        <img class="supply --icon --steel" width="64" height="64" src="/images/supplies/steel.svg" alt="supply-icon" />
-        <div data-ref="steel:amount" class="box --counter supply --steel --amount">0</div>
-
-        <div data-ref="titan:production" class="box --counter supply --titan --production">0</div>
-        <img class="supply --icon --titan" width="64" height="64" src="/images/supplies/titan.svg" alt="supply-icon" />
-        <div data-ref="titan:amount" class="box --counter supply --titan --amount">0</div>
-
-        <div data-ref="plant:production" class="box --counter supply --plant --production">0</div>
-        <img class="supply --icon --plant" width="64" height="64" src="/images/supplies/plant.svg" alt="supply-icon" />
-        <div data-ref="plant:amount" class="box --counter supply --plant --amount">0</div>
-
-        <div data-ref="energy:production" class="box --counter supply --energy --production">0</div>
-        <img class="supply --icon --energy" width="64" height="64" src="/images/supplies/energy.svg" alt="supply-icon" />
-        <div data-ref="energy:amount" class="box --counter supply --energy --amount">0</div>
-
-        <div data-ref="heat:production" class="box --counter supply --heat --production">0</div>
-        <img class="supply --icon --heat" width="64" height="64" src="/images/supplies/heat.svg" alt="supply-icon" />
-        <div data-ref="heat:amount" class="box --counter supply --heat --amount">0</div>
-      </div>
+      <div data-ref="projects" class="projects"></div>
     </div>
   </template>
 </body>

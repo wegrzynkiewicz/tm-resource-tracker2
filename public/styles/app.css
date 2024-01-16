@@ -65,28 +65,60 @@ body {
   color: var(--color-text);
   display: grid;
   grid-template-columns: [left] 100lvw [right];
-  grid-template-rows: [top] 32px [content] auto [end];
+  grid-template-rows: [top] 32px [content] 50px [shadow-top-end] auto [shadow-bottom] 50px [end];
   height: 100lvh;
   min-width: 380px;
   transition: background-position 0.5s ease-out;
 }
 
 .app.--with-toolbar {
-  grid-template-rows: [top] 32px [content] auto [toolbar] 70px [end];
+  grid-template-rows: [top] 32px [content] 50px [shadow-top-end] auto [shadow-bottom] 50px [toolbar] 70px [end];
+}
+
+.app__main {
+  grid-column: left / right;
+  grid-row: content / toolbar;
+  background-color: rgba(183, 100, 43, 0.6);
+}
+
+.app__shadow {
+  grid-column: left / right;
+  transition: box-shadow 0.3s linear;
+}
+
+.app__shadow.--top {
+  grid-row: content / shadow-top-end;
+}
+
+.app__shadow.--top.--enabled {
+  box-shadow: inset 0px 12px 12px -10px rgba(0, 0, 0, 0.6);
+}
+
+.app__shadow.--bottom {
+  grid-row: shadow-bottom / toolbar;
+  bottom: 0;
+}
+
+.app__shadow.--bottom.--enabled {
+  box-shadow: inset 0px -12px 12px -10px rgba(0, 0, 0, 0.6);
 }
 
 .app__content {
-  background-color: rgba(183, 100, 43, 0.6);
-  position: relative;
+  height: 100%;
+}
+
+.scroll {
+  overflow-y: scroll;
+  height: 100%;
 }
 
 .panel {
-  position: absolute;
   display: grid;
   grid-auto-flow: column;
-  left: calc(-100lvw * var(--animate-parallax-current));
+  margin-left: calc(-100lvw * var(--animate-parallax-current));
+  transition: margin 0.5s ease-out;
   height: 100%;
-  transition: left 0.5s ease-out;
+  overflow-x: hidden;
 }
 
 .panel__item {
@@ -144,11 +176,12 @@ body {
 .supplies {
   align-items: center;
   display: grid;
-  grid-template-columns: [production] 33% [icons] 33% [amount] 33% [end];
+  gap: 20px 12px;
+  grid-template-columns: [production] 1fr [icons] 1fr [amount] 1fr [end];
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   height: 100%;
   justify-items: center;
-  padding: 16px;
+  padding: 24px 16px;
   width: 100%;
 }
 
@@ -183,7 +216,7 @@ body {
   grid-column: amount / end;
 }
 
-.supply.--point {
+.supply.--points {
   grid-row: 1 / 2;
 }
 
@@ -209,4 +242,25 @@ body {
 
 .supply.--heat {
   grid-row: 7 / 8;
+}
+
+.supply.--production.--points {
+  display: none;
+}
+
+.projects {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 16px;
+  padding: 20px 16px;
+}
+
+.project {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-evenly;
+  gap: 16px;
 }
