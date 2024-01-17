@@ -1,6 +1,6 @@
 import { Channel } from "../common/channel.ts";
 import { ElementSwitcher } from "../common/element-switcher.ts";
-import { createProject, createProjectsPanel } from "./project.tsx";
+import { createProjectsPanel } from "./project.tsx";
 import { createSuppliesPanel } from "./supply.tsx";
 import { createToolbar, ToolbarButtonClicked } from "./toolbar.tsx";
 import { createTop } from "./top.tsx";

@@ -75,9 +75,11 @@ export const div = (classes: string): HTMLDivElement => tag('div', classes);
 
 export function mapToFragment<T>(array: T[], map: (item: T) => Element): DocumentFragment {
   const fragment = document.createDocumentFragment();
+  const list = [];
   for (const item of array) {
     const data = map(item);
-    fragment.appendChild(data);
+    list.push(data);
   }
+  fragment.append(...list);
   return fragment;
 }
