@@ -27,6 +27,18 @@ export function cloneTemplate(templateId: string) {
   return fragment;
 }
 
+const regex = /{(\w+?)}/g;
+
+export function bindVariables(template: string, data: Record<string, unknown>) {
+  return template.replace(regex, (_, token) => (data[token] || '') as string);
+}
+
+export function bindTemplate(templateId: string, data: Record<string, unknown>): string {
+  const template = getElementById<HTMLTemplateElement>(templateId);
+  const renderedTemplate = bindVariables(template.innerHTML, data);
+  return renderedTemplate;
+}
+
 export function ref(element: WithQuerySelector, name: string): HTMLElement {
   const node = querySelector(element, `[data-ref="${name}"]`);
   assertNonNull(node, '');
@@ -75,11 +87,9 @@ export const div = (classes: string): HTMLDivElement => tag('div', classes);
 
 export function mapToFragment<T>(array: T[], map: (item: T) => Element): DocumentFragment {
   const fragment = document.createDocumentFragment();
-  const list = [];
   for (const item of array) {
     const data = map(item);
-    list.push(data);
+    fragment.appendChild(data);
   }
-  fragment.append(...list);
   return fragment;
 }
