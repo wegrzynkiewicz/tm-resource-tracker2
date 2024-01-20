@@ -10,5 +10,8 @@
     "options": {
       "lineWidth": 120
     }
+  },
+  "tasks": {
+    "bundle": "deno bundle --watch src/main.ts public/scripts/main.js"
   }
 }
