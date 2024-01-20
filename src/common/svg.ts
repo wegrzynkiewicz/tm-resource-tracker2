@@ -5,7 +5,7 @@ export interface SVGIconProps {
   icon: string;
 }
 
-export function SVGIcon({ className, icon }: SVGIconProps) {
+export function svg_icon(className: string, icon: string) {
   const svg = createSVGElement("svg");
   svg.setAttribute("class", className);
   const use = createSVGElement("use");

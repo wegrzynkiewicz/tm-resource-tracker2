@@ -1,7 +1,4 @@
-import { assertHTMLElement } from "./asserts.ts";
-import { cloneTemplate, getElementById, querySelector, ref, refs } from "./common.ts";
-import { ElementSwitcher } from "./common/element-switcher.ts";
-import { createApp } from "./game/app.tsx";
+import { createApp } from "./game/app.ts";
 
 export function hydroState(state: HTMLInputElement): void {
   let startYPosition = 0;

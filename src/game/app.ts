@@ -1,35 +1,24 @@
 import { Channel } from "../common/channel.ts";
+import { div, div_nodes, fragment_nodes } from "../common/dom.ts";
 import { ElementSwitcher } from "../common/element-switcher.ts";
-import { createProjectsPanel } from "./project.tsx";
-import { createSuppliesPanel } from "./supply.tsx";
-import { createToolbar, ToolbarButtonClicked } from "./toolbar.tsx";
-import { createTop } from "./top.tsx";
+import { createProjectsPanel } from "./project.ts";
+import { createSuppliesPanel2 } from "./supply.ts";
+import { createToolbar, ToolbarButtonClicked } from "./toolbar.ts";
+import { createTop } from "./top.ts";
 
 export function createScroll() {
-  const detectorTop = <div data-detector="top"></div>;
-  const content = <div class="app__content"></div>;
-  const detectorBottom = <div data-detector="bottom"></div>;
-
-  const root = (
-    <div class="app__main scroll">
-      <div class="scroll__container">
-        {detectorTop}
-        {content}
-        {detectorBottom}
-      </div>
-    </div>
-  );
-
-  const shadowTop = <div class="app__shadow --top"></div>;
-  const shadowBottom = <div class="app__shadow --bottom"></div>;
-
-  const fragment = (
-    <>
-      {root}
-      {shadowTop}
-      {shadowBottom}
-    </>
-  );
+  let content, detectorBottom, detectorTop, root, shadowBottom, shadowTop;
+  const fragment = fragment_nodes([
+    root = div_nodes("app__main scroll", [
+      div_nodes("scroll__container", [
+        detectorTop = div("scroll__detector --top"),
+        content = div("app__content"),
+        detectorBottom = div("scroll__detector --bottom"),
+      ]),
+    ]),
+    shadowTop = div("app__shadow --top"),
+    shadowBottom = div("app__shadow --bottom"),
+  ]);
 
   const map = new WeakMap<Element, Element>([
     [detectorTop, shadowTop],
@@ -60,8 +49,8 @@ export function createApp() {
   const scroll = createScroll();
 
   const switcher = new ElementSwitcher(scroll.content);
+  switcher.elements.set("supplies", createSuppliesPanel2());
   switcher.elements.set("projects", createProjectsPanel());
-  switcher.elements.set("supplies", createSuppliesPanel());
   const channel = new Channel<ToolbarButtonClicked>();
   const toolbar = createToolbar(channel);
 
@@ -70,11 +59,9 @@ export function createApp() {
   });
   channel.dispatch({ key: "supplies" });
 
-  return (
-    <div id="app" class="app --with-toolbar">
-      {top}
-      {scroll.fragment}
-      {toolbar}
-    </div>
-  );
+  return div_nodes("app --with-toolbar", [
+    top,
+    scroll.fragment,
+    toolbar,
+  ]);
 }

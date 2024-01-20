@@ -1,6 +1,7 @@
 import { mapToFragment } from "../common.ts";
 import { Channel } from "../common/channel.ts";
-import { SVGIcon } from "../common/svg.ts";
+import { button_nodes, div_nodes, span_text } from "../common/dom.ts";
+import { svg_icon } from "../common/svg.ts";
 
 interface ToolbarButton {
   key: string;
@@ -24,27 +25,23 @@ export function createToolbarButton(
   whenClickChannel: Channel<ToolbarButtonClicked>,
 ) {
   const { key, icon, name } = button;
-  const root = (
-    <button className="toolbar__item" on:click={() => whenClickChannel.dispatch({ key })}>
-      <SVGIcon className="toolbar__icon" icon={icon} />
-      <span className="toolbar__label">{name}</span>
-    </button>
-  );
-  return { button, root };
+  const root = button_nodes("toolbar__item", [
+    svg_icon("toolbar__icon", icon),
+    span_text("toolbar__label", name),
+  ]);
+  root.addEventListener("click", () => {
+    whenClickChannel.dispatch({ key });
+  });
+  whenClickChannel.subscribers.add(({ key }) => {
+    root.classList.toggle("--active", button.key === key);
+  });
+  return root;
 }
 
 export function createToolbar(
   whenClickChannel: Channel<ToolbarButtonClicked>,
 ) {
-  const elements = buttons.map((button) => createToolbarButton(button, whenClickChannel));
-  whenClickChannel.subscribers.add(({ key }) => {
-    for (const { button, root } of elements) {
-      root.classList.toggle("--active", button.key === key);
-    }
-  });
-  return (
-    <div className="toolbar">
-      {mapToFragment(elements, ({ root }) => root)}
-    </div>
-  );
+  return div_nodes("toolbar", [
+    mapToFragment(buttons, (btn) => createToolbarButton(btn, whenClickChannel)),
+  ]);
 }
