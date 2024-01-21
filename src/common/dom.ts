@@ -1,38 +1,42 @@
-function element(tag: string) {
-  return document.createElement(tag);
+export function createElement<TTag extends keyof HTMLElementTagNameMap>(
+  tag: TTag,
+  className = '',
+): HTMLElementTagNameMap[TTag] {
+  const node = document.createElement(tag);
+  node.className = className;
+  return node;
 }
 
-function createTagEmpty(tag: string) {
-  return (className: string) => {
-    const node = element(tag);
-    node.className = className;
-    return node;
+export function appendChildren(node: Node, children: Node[]) {
+  const length = children.length;
+  for (let i = 0; i < length; i++) {
+    node.appendChild(children[i]);
   }
 }
 
-function createTagText(tag: string) {
+function createTagEmpty<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
+  return (className: string) => createElement(tag, className);
+}
+
+function createTagText<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
   return (className: string, textContent: string) => {
-    const node = element(tag);
-    node.className = className;
+    const node = createElement(tag, className);
     node.textContent = textContent;
     return node;
   }
 }
 
-function createTagNodes(tag: string) {
+function createTagNodes<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
   return (className: string, children: Node[]) => {
-    const node = element(tag);
-    node.className = className;
-    for (let i = 0; i < children.length; i++) {
-      node.appendChild(children[i]);
-    }
+    const node = createElement(tag, className);
+    appendChildren(node, children);
     return node;
   }
 }
 
-function createTagProps(tag: string) {
+function createTagProps<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
   return (props: { [key: string]: string }) => {
-    const node = element(tag);
+    const node = createElement(tag);
     Object.assign(node, props);
     return node;
   }
@@ -43,11 +47,9 @@ export function fragment() {
 }
 
 export function fragment_nodes(children: Node[]) {
-  const fragment = document.createDocumentFragment();
-  for (let i = 0; i < children.length; i++) {
-    fragment.appendChild(children[i]);
-  }
-  return fragment;
+  const node = fragment();
+  appendChildren(node, children);
+  return node;
 }
 
 export const button_nodes = createTagNodes('button');
