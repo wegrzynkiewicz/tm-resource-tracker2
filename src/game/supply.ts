@@ -38,7 +38,7 @@ export function createSupplies() {
   ]);
 }
 
-export function createSuppliesPanel2() {
+export function createSuppliesPanel() {
   return div_nodes("panel", [
     mapToFragment([1, 2, 3, 4], createSupplies),
   ]);

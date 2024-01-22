@@ -12,7 +12,7 @@ interface ToolbarButton {
 const buttons: ToolbarButton[] = [
   { key: "supplies", icon: "box", name: "Supplies" },
   { key: "projects", icon: "projects", name: "Projects" },
-  { key: "history", icon: "clock", name: "History" },
+  { key: "histories", icon: "clock", name: "History" },
   { key: "settings", icon: "gear", name: "Settings" },
 ];
 
@@ -20,28 +20,25 @@ export interface ToolbarButtonClicked {
   key: string;
 }
 
-export function createToolbarButton(
-  button: ToolbarButton,
-  whenClickChannel: Channel<ToolbarButtonClicked>,
-) {
+export const toolbarClickChannel = new Channel<ToolbarButtonClicked>();
+
+export function createToolbarButton(button: ToolbarButton) {
   const { key, icon, name } = button;
   const root = button_nodes("toolbar__item", [
     svg_icon("toolbar__icon", icon),
     span_text("toolbar__label", name),
   ]);
   root.addEventListener("click", () => {
-    whenClickChannel.dispatch({ key });
+    toolbarClickChannel.dispatch({ key });
   });
-  whenClickChannel.subscribers.add(({ key }) => {
+  toolbarClickChannel.subscribers.add(({ key }) => {
     root.classList.toggle("--active", button.key === key);
   });
   return root;
 }
 
-export function createToolbar(
-  whenClickChannel: Channel<ToolbarButtonClicked>,
-) {
+export function createToolbar() {
   return div_nodes("toolbar", [
-    mapToFragment(buttons, (btn) => createToolbarButton(btn, whenClickChannel)),
+    mapToFragment(buttons, createToolbarButton),
   ]);
 }

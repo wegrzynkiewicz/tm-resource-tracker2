@@ -1,9 +1,10 @@
-import { Channel } from "../common/channel.ts";
 import { div, div_nodes, fragment_nodes } from "../common/dom.ts";
 import { ElementSwitcher } from "../common/element-switcher.ts";
+import { createHistoriesPanel } from "./history.ts";
 import { createProjectsPanel } from "./project.ts";
-import { createSuppliesPanel2 } from "./supply.ts";
-import { createToolbar, ToolbarButtonClicked } from "./toolbar.ts";
+import { createSuppliesPanel } from "./supply.ts";
+import { toolbarClickChannel } from "./toolbar.ts";
+import { createToolbar } from "./toolbar.ts";
 import { createTop } from "./top.ts";
 
 export function createScroll() {
@@ -49,19 +50,18 @@ export function createApp() {
   const scroll = createScroll();
 
   const switcher = new ElementSwitcher(scroll.content);
-  switcher.elements.set("supplies", createSuppliesPanel2());
+  switcher.elements.set("supplies", createSuppliesPanel());
   switcher.elements.set("projects", createProjectsPanel());
-  const channel = new Channel<ToolbarButtonClicked>();
-  const toolbar = createToolbar(channel);
+  switcher.elements.set("histories", createHistoriesPanel());
 
-  channel.subscribers.add(({ key }) => {
+  toolbarClickChannel.subscribers.add(({ key }) => {
     switcher.switch(key);
   });
-  channel.dispatch({ key: "supplies" });
+  toolbarClickChannel.dispatch({ key: "supplies" });
 
   return div_nodes("app --with-toolbar", [
     top,
     scroll.fragment,
-    toolbar,
+    createToolbar(),
   ]);
 }
