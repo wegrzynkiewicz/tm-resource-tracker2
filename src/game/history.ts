@@ -1,15 +1,9 @@
 import { mapToFragment } from "../common.ts";
 import { Channel } from "../common/channel.ts";
-import { fragment_nodes, div_text, img_props, div_nodes, div, span_text } from "../common/dom.ts";
-
-export type SupplyType = "points" | "gold" | "steel" | "titan" | "plant" | "energy" | "heat";
-export type SupplyTarget = "production" | "amount";
-
-export interface HistorySupply {
-  count: number;
-  target: SupplyTarget;
-  type: SupplyType;
-}
+import { svg_icon } from "../common/svg.ts";
+import { div_nodes, div, button_nodes, div_text, div_props } from "../common/dom.ts";
+import { createResource } from "./resource.ts";
+import { Resource } from "./resource.ts";
 
 export interface Player {
   playerId: string;
@@ -18,18 +12,19 @@ export interface Player {
 }
 
 export interface HistoryCommon {
-  player: Player | null;
   historyEntryId: string;
   time: Date,
 }
 
 export interface HistorySingleEntry extends HistoryCommon {
-  supply: HistorySupply,
+  player: Player;
+  resource: Resource,
   type: "single";
 }
 
 export interface HistorySummaryEntry extends HistoryCommon {
-  supplies: HistorySupply[],
+  player: Player;
+  resources: Resource[],
   type: "summary";
 }
 
@@ -49,7 +44,7 @@ export const examples: HistoryEntry[] = [
       color: "red",
     },
     type: "single",
-    supply: { count: -22, target: "amount", type: "gold" },
+    resource: { count: -22, target: "amount", type: "gold" },
     time: new Date(),
   },
   {
@@ -60,7 +55,7 @@ export const examples: HistoryEntry[] = [
       color: "blue",
     },
     type: "summary",
-    supplies: [
+    resources: [
       { count: 24, target: "amount", type: "gold" },
       { count: 2, target: "amount", type: "steel" },
     ],
@@ -74,20 +69,52 @@ export const examples: HistoryEntry[] = [
       color: "green",
     },
     type: "single",
-    supply: { count: 1, target: "amount", type: "titan" },
+    resource: { count: 1, target: "amount", type: "titan" },
     time: new Date(),
   },
 ];
 
 export const historyEntryCreatedChannel = new Channel<HistoryEntry>();
 
-export function createHistorySingleEntry(entry: HistorySingleEntry) {
-  const { player, supply } = entry;
-  const { count, target, type } = supply;
+export function formatDate(date: Date) {
+  return date.toISOString().substring(0, 10);
+}
 
+export function createHistoryHeader({ player, time, slot, }: {
+  player: Player;
+  time: Date;
+  slot: Node;
+}) {
+  return div_nodes("history__header", [
+    div_props({ className: "player-cube", style: `--background: var(--color-player-cube-${player.color})` }),
+    div_text("history__name", player.name),
+    slot,
+    div_text("history__time", formatDate(time)),
+    button_nodes("history__details", [
+      svg_icon("history__details-icon", "arrow-down"),
+    ]),
+  ]);
+}
+
+export function createHistorySingleEntry(entry: HistorySingleEntry) {
+  const { player, resource, time } = entry;
   return div_nodes("history --single", [
-    span_props({ className: "player-cube", style: `--background: var(--color-player-cube-${player.color})` }),
-    span_text("history__item", player.name),
+    createHistoryHeader({ player, time, slot: createResource(resource) }),
+  ]);
+}
+
+export function createHistorySummaryEntry(entry: HistorySummaryEntry) {
+  const { player, resources, time } = entry;
+  return div_nodes("history --summary", [
+    createHistoryHeader({ player, time, slot: div("history__empty-resource") }),
+    div_nodes("history__body", resources.map(createResource)),
+  ]);
+}
+
+export function createHistoryGenerationEntry(entry: HistoryGenerationEntry) {
+  const { count } = entry;
+  return div_nodes("history --generation", [
+    div_text("history__generation", count.toString()),
   ]);
 }
 
@@ -95,45 +122,40 @@ export function createHistoryEntry(entry: HistoryEntry) {
   switch (entry.type) {
     case "single":
       return createHistorySingleEntry(entry);
-    // case "summary":
-    //   return createHistorySummaryEntry(entry);
-    // case "generation":
-    //   return createHistoryGenerationEntry(entry);
+    case "summary":
+      return createHistorySummaryEntry(entry);
+    case "generation":
+      return createHistoryGenerationEntry(entry);
   }
 }
 
-export function canPaintHistoryEntry(entry: HistoryEntry, panelPlayerId: string | null) {
+export function canPaintPlayerHistoryEntry(entry: HistoryEntry, panelPlayerId: string | null) {
   if (panelPlayerId === null) {
+    return true;
+  }
+  if (entry.type === "generation") {
     return true;
   }
   if (entry.player.playerId === panelPlayerId) {
     return true;
   }
-  if (entry.player.playerId === null) {
-    return true;
-  }
   return false;
 }
 
-export function createHistories(panelPlayerId: string | null) {
-  const container = div("history");
-
+export function createPlayerHistory(panelPlayerId: string | null) {
+  const container = div("histories");
   historyEntryCreatedChannel.subscribers.add((entry) => {
-    if (canPaintHistoryEntry(entry, panelPlayerId)) {
+    if (canPaintPlayerHistoryEntry(entry, panelPlayerId)) {
       const element = createHistoryEntry(entry);
       container.appendChild(element);
     }
   });
-
-  return div_nodes("panel__item", [container]);
+  return container;
 }
 
 export function createHistoriesPanel() {
   return div_nodes("panel", [
-    mapToFragment(["1"], createHistories),
+    createPlayerHistory(null),
+    mapToFragment(["1"], createPlayerHistory),
   ]);
-}
-
-function span_props(arg0: { className: string; style: string; }): Node {
-  throw new Error("Function not implemented.");
 }

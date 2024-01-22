@@ -58,8 +58,10 @@ export const button_text = createTagText('button');
 export const div = createTagEmpty('div');
 export const div_text = createTagText('div');
 export const div_nodes = createTagNodes('div');
+export const div_props = createTagProps('div');
 
 export const img_props = createTagProps('img');
 
+export const span = createTagEmpty('span');
 export const span_props = createTagProps('span');
 export const span_text = createTagText('span');

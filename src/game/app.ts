@@ -1,6 +1,6 @@
 import { div, div_nodes, fragment_nodes } from "../common/dom.ts";
 import { ElementSwitcher } from "../common/element-switcher.ts";
-import { createHistoriesPanel } from "./history.ts";
+import { createHistoriesPanel, examples, historyEntryCreatedChannel } from "./history.ts";
 import { createProjectsPanel } from "./project.ts";
 import { createSuppliesPanel } from "./supply.ts";
 import { toolbarClickChannel } from "./toolbar.ts";
@@ -53,6 +53,10 @@ export function createApp() {
   switcher.elements.set("supplies", createSuppliesPanel());
   switcher.elements.set("projects", createProjectsPanel());
   switcher.elements.set("histories", createHistoriesPanel());
+
+  historyEntryCreatedChannel.dispatch(examples[0]);
+  historyEntryCreatedChannel.dispatch(examples[1]);
+  historyEntryCreatedChannel.dispatch(examples[2]);
 
   toolbarClickChannel.subscribers.add(({ key }) => {
     switcher.switch(key);
