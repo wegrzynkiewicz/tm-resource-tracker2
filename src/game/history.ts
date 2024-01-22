@@ -1,7 +1,5 @@
-import { mapToFragment } from "../common.ts";
 import { Channel } from "../common/channel.ts";
-import { svg_icon } from "../common/svg.ts";
-import { div_nodes, div, button_nodes, div_text, div_props } from "../common/dom.ts";
+import { div_nodes, div, div_text, div_props } from "../common/dom.ts";
 import { createResource } from "./resource.ts";
 import { Resource } from "./resource.ts";
 import { createPanel } from "./panel.ts";
