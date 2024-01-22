@@ -1,5 +1,5 @@
-import { mapToFragment } from "../common";
-import { div_nodes } from "../common/dom";
+import { mapToFragment } from "../common.ts";
+import { div_nodes } from "../common/dom.ts";
 
 export function createPanel(nodes: Node[]) {
   return div_nodes("panel", [

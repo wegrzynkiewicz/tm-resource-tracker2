@@ -320,6 +320,10 @@ body {
   width: 100%;
 }
 
+.settings__form {
+  padding: 20px 0;
+}
+
 .settings__legend {
   font-size: 1.4rem;
   text-align: center;
@@ -331,6 +335,5 @@ body {
   display: flex;
   flex-direction: column;
   padding: 12px;
-  margin: 20px 0;
   gap: 12px;
 }

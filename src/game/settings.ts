@@ -1,8 +1,8 @@
-import { div, div_nodes, fieldset, form, input_props, label_props, legend_text } from "../common/dom";
-import { createSelector, colors } from "./selector";
+import { div_nodes, fieldset, form, input_props, label_props, legend_text } from "../common/dom.ts";
+import { createSelector, colors } from "./selector.ts";
 
 export function createSettings() {
-  return form({}, [
+  return form({ className: 'settings__form' }, [
     fieldset('settings__fieldset', [
       legend_text('settings__legend', 'Personal info'),
       div_nodes('edit-box --input', [

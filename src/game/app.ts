@@ -29,7 +29,6 @@ export function createScroll() {
 
   const callback = (entries: IntersectionObserverEntry[]) => {
     for (const entry of entries) {
-      console.log(entry);
       const target = entry.target as Element;
       const shadow = map.get(target)!;
       shadow.classList.toggle(`--enabled`, !entry.isIntersecting);

@@ -1,7 +1,7 @@
-import { mapToFragment } from "../common";
-import { Channel } from "../common/channel";
-import { div_nodes, span_props, span_text } from "../common/dom";
-import { svg_icon } from "../common/svg";
+import { mapToFragment } from "../common.ts";
+import { Channel } from "../common/channel.ts";
+import { div_nodes, span_props, span_text } from "../common/dom.ts";
+import { svg_icon } from "../common/svg.ts";
 
 export interface SelectorOption {
   color: string;
