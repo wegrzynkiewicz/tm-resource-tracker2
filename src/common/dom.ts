@@ -1,3 +1,5 @@
+export type Properties = { [key: string]: string };
+
 export function createElement<TTag extends keyof HTMLElementTagNameMap>(
   tag: TTag,
   className = '',
@@ -35,9 +37,18 @@ function createTagNodes<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
 }
 
 function createTagProps<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
-  return (props: { [key: string]: string }) => {
+  return (props: Properties) => {
     const node = createElement(tag);
     Object.assign(node, props);
+    return node;
+  }
+}
+
+function createTagAdvanced<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
+  return (props: Properties, children: Node[]) => {
+    const node = createElement(tag);
+    Object.assign(node, props);
+    appendChildren(node, children);
     return node;
   }
 }
@@ -55,13 +66,22 @@ export function fragment_nodes(children: Node[]) {
 export const button_nodes = createTagNodes('button');
 export const button_text = createTagText('button');
 
-export const div = createTagEmpty('div');
+export const div_empty = createTagEmpty('div');
 export const div_text = createTagText('div');
 export const div_nodes = createTagNodes('div');
 export const div_props = createTagProps('div');
+export const div = createTagAdvanced('div');
+
+export const form = createTagAdvanced('form');
+export const fieldset = createTagNodes('fieldset');
+export const input_props = createTagProps('input');
+export const label_props = createTagProps('label');
+export const legend_text = createTagText('legend');
 
 export const img_props = createTagProps('img');
 
 export const span = createTagEmpty('span');
 export const span_props = createTagProps('span');
 export const span_text = createTagText('span');
+
+

@@ -1,7 +1,8 @@
-import { div, div_nodes, fragment_nodes } from "../common/dom.ts";
+import { div_empty, div_nodes, fragment_nodes } from "../common/dom.ts";
 import { ElementSwitcher } from "../common/element-switcher.ts";
 import { createHistoriesPanel, examples, historyEntryCreatedChannel } from "./history.ts";
 import { createProjectsPanel } from "./project.ts";
+import { createSettings } from "./settings.ts";
 import { createSuppliesPanel } from "./supply.ts";
 import { toolbarClickChannel } from "./toolbar.ts";
 import { createToolbar } from "./toolbar.ts";
@@ -12,13 +13,13 @@ export function createScroll() {
   const fragment = fragment_nodes([
     root = div_nodes("app__main scroll", [
       div_nodes("scroll__container", [
-        detectorTop = div("scroll__detector --top"),
-        content = div("app__content"),
-        detectorBottom = div("scroll__detector --bottom"),
+        detectorTop = div_empty("scroll__detector --top"),
+        content = div_empty("app__content"),
+        detectorBottom = div_empty("scroll__detector --bottom"),
       ]),
     ]),
-    shadowTop = div("app__shadow --top"),
-    shadowBottom = div("app__shadow --bottom"),
+    shadowTop = div_empty("app__shadow --top"),
+    shadowBottom = div_empty("app__shadow --bottom"),
   ]);
 
   const map = new WeakMap<Element, Element>([
@@ -49,11 +50,13 @@ export function createScroll() {
 export function createApp() {
   const top = createTop();
   const scroll = createScroll();
+  const toolbar = createToolbar();
 
   const switcher = new ElementSwitcher(scroll.content);
   switcher.elements.set("supplies", createSuppliesPanel());
   switcher.elements.set("projects", createProjectsPanel());
   switcher.elements.set("histories", createHistoriesPanel());
+  switcher.elements.set("settings", createSettings());
 
   historyEntryCreatedChannel.dispatch(examples[0]);
   historyEntryCreatedChannel.dispatch(examples[1]);
@@ -63,11 +66,11 @@ export function createApp() {
   toolbarClickChannel.subscribers.add(({ key }) => {
     switcher.switch(key);
   });
-  toolbarClickChannel.dispatch({ key: "supplies" });
+  toolbarClickChannel.dispatch({ key: "settings" });
 
   return div_nodes("app --with-toolbar", [
     top,
     scroll.fragment,
-    createToolbar(),
+    toolbar,
   ]);
 }

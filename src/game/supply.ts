@@ -1,5 +1,5 @@
 import { mapToFragment } from "../common.ts";
-import { fragment_nodes, div_text, img_props, div_nodes, div } from "../common/dom.ts";
+import { fragment_nodes, div_text, img_props, div_nodes, div_empty } from "../common/dom.ts";
 
 export interface Supply {
   name: string;
@@ -32,7 +32,7 @@ function createSupply({ name }: Supply) {
 export function createSupplies() {
   return div_nodes("panel__item", [
     div_nodes("supplies", [
-      div("supplies__production"),
+      div_empty("supplies__production"),
       mapToFragment(supplies, createSupply),
     ]),
   ]);

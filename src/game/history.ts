@@ -1,5 +1,5 @@
 import { Channel } from "../common/channel.ts";
-import { div_nodes, div, div_text, div_props } from "../common/dom.ts";
+import { div_nodes, div_text, div_props, div_empty } from "../common/dom.ts";
 import { createResource } from "./resource.ts";
 import { Resource } from "./resource.ts";
 import { createPanel } from "./panel.ts";
@@ -155,7 +155,7 @@ export function canPaintPlayerHistoryEntry(entry: HistoryEntry, panelPlayerId: s
 }
 
 export function createPlayerHistory(panelPlayerId: string | null) {
-  const container = div("histories");
+  const container = div_empty("histories");
   historyEntryCreatedChannel.subscribers.add((entry) => {
     if (canPaintPlayerHistoryEntry(entry, panelPlayerId)) {
       const element = createHistoryEntry(entry);

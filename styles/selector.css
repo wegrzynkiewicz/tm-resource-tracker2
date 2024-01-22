@@ -1,0 +1,41 @@
+.selector {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.selector__panel {
+  --index: 0;
+  --panel-width: 80px;
+  overflow-x: hidden;
+  width: var(--panel-width);
+  max-width: var(--panel-width);
+}
+
+.selector__panel-container {
+  display: grid;
+  grid-auto-flow: column;
+  margin-left: calc(-1 * var(--panel-width) * var(--index));
+  transition: margin 0.5s ease-out;
+  width: 100%;
+}
+
+.selector__panel-item {
+  display: flex;
+  gap: 6px;
+  width: var(--panel-width);
+  justify-content: center;
+}
+
+.selector__icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text);
+}
+
+.selector__icon.--disabled {
+  color: var(--color-text-inactive);
+}

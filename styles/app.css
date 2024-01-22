@@ -66,14 +66,14 @@ body {
   color: var(--color-text);
   display: grid;
   grid-template-columns: [left] 100lvw [right];
-  grid-template-rows: [top] 32px [content] 50px [shadow-top-end] auto [shadow-bottom] 50px [end];
+  grid-template-rows: [top] 32px [content] 10px [shadow-top-end] auto [shadow-bottom] 10px [end];
   height: 100lvh;
   min-width: 380px;
   transition: background-position 0.5s ease-out;
 }
 
 .app.--with-toolbar {
-  grid-template-rows: [top] 32px [content] 50px [shadow-top-end] auto [shadow-bottom] 50px [toolbar] 70px [end];
+  grid-template-rows: [top] 32px [content] 10px [shadow-top-end] auto [shadow-bottom] 10px [toolbar] 70px [end];
 }
 
 .app__main {
@@ -143,25 +143,6 @@ body {
 .content.--homepage {
   padding: 40px 0px;
   gap: 60px;
-}
-
-.selector {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  align-self: stretch;
-}
-
-.selector__icon {
-  width: 16px;
-  height: 16px;
-}
-
-.selector__content {
-  display: flex;
-  gap: 6px;
 }
 
 .player-cube {
@@ -297,4 +278,59 @@ body {
 .resource__icon {
   width: 32px;
   height: 32px;
+}
+
+.edit-box {
+  align-items: stretch;
+  background: var(--color-box-primary);
+  border-color: var(--color-frame);
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  display: flex;
+  height: 50px;
+}
+
+.edit-box.--input {
+  justify-content: start;
+}
+
+.edit-box.--selector {
+  justify-content: space-between;
+  padding-right: 12px;
+}
+
+.edit-box__label {
+  padding: 0px 12px;
+  font-size: 1.1rem;
+  align-self: center;
+}
+
+.edit-box__input {
+  background: var(--gradient-box-background);
+  border: none;
+  border-bottom-right-radius: 8px;
+  border-left: 2px solid var(--color-frame);
+  border-top-right-radius: 8px;
+  font-size: 1.2rem;
+  justify-content: center;
+  outline: none;
+  padding: 0 12px;
+  width: 100%;
+}
+
+.settings__legend {
+  font-size: 1.4rem;
+  text-align: center;
+  color: var(--color-text);
+}
+
+.settings__fieldset {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  margin: 20px 0;
+  gap: 12px;
 }
