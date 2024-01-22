@@ -4,6 +4,7 @@ import { svg_icon } from "../common/svg.ts";
 import { div_nodes, div, button_nodes, div_text, div_props } from "../common/dom.ts";
 import { createResource } from "./resource.ts";
 import { Resource } from "./resource.ts";
+import { createPanel } from "./panel.ts";
 
 export interface Player {
   playerId: string;
@@ -58,18 +59,25 @@ export const examples: HistoryEntry[] = [
     resources: [
       { count: 24, target: "amount", type: "gold" },
       { count: 2, target: "amount", type: "steel" },
+      { count: 2, target: "amount", type: "points" },
     ],
+    time: new Date(),
+  },
+  {
+    historyEntryId: "4",
+    type: "generation",
+    count: 14,
     time: new Date(),
   },
   {
     historyEntryId: "3",
     player: {
       playerId: "3",
-      name: "Player 3",
+      name: "Bardzo długie imię gracza, żę jooo i trochę",
       color: "green",
     },
     type: "single",
-    resource: { count: 1, target: "amount", type: "titan" },
+    resource: { count: -11, target: "production", type: "titan" },
     time: new Date(),
   },
 ];
@@ -77,7 +85,7 @@ export const examples: HistoryEntry[] = [
 export const historyEntryCreatedChannel = new Channel<HistoryEntry>();
 
 export function formatDate(date: Date) {
-  return date.toISOString().substring(0, 10);
+  return date.toISOString().substring(11, 19);
 }
 
 export function createHistoryHeader({ player, time, slot, }: {
@@ -90,30 +98,36 @@ export function createHistoryHeader({ player, time, slot, }: {
     div_text("history__name", player.name),
     slot,
     div_text("history__time", formatDate(time)),
-    button_nodes("history__details", [
-      svg_icon("history__details-icon", "arrow-down"),
-    ]),
   ]);
 }
 
 export function createHistorySingleEntry(entry: HistorySingleEntry) {
   const { player, resource, time } = entry;
-  return div_nodes("history --single", [
-    createHistoryHeader({ player, time, slot: createResource(resource) }),
+  return div_nodes("history --background", [
+    div_nodes("history__header", [
+      div_props({ className: "player-cube", style: `--background: var(--color-player-cube-${player.color})` }),
+      div_text("history__name", player.name),
+      createResource(resource),
+      div_text("history__time", formatDate(time)),
+    ]),
   ]);
 }
 
 export function createHistorySummaryEntry(entry: HistorySummaryEntry) {
   const { player, resources, time } = entry;
-  return div_nodes("history --summary", [
-    createHistoryHeader({ player, time, slot: div("history__empty-resource") }),
+  return div_nodes("history --background", [
+    div_nodes("history__header", [
+      div_props({ className: "player-cube", style: `--background: var(--color-player-cube-${player.color})` }),
+      div_text("history__name", player.name),
+      div_text("history__time", formatDate(time)),
+    ]),
     div_nodes("history__body", resources.map(createResource)),
   ]);
 }
 
 export function createHistoryGenerationEntry(entry: HistoryGenerationEntry) {
   const { count } = entry;
-  return div_nodes("history --generation", [
+  return div_nodes("history", [
     div_text("history__generation", count.toString()),
   ]);
 }
@@ -154,8 +168,8 @@ export function createPlayerHistory(panelPlayerId: string | null) {
 }
 
 export function createHistoriesPanel() {
-  return div_nodes("panel", [
+  return createPanel([
     createPlayerHistory(null),
-    mapToFragment(["1"], createPlayerHistory),
+    ...["1"].map(createPlayerHistory),
   ]);
 }

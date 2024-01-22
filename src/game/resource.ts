@@ -9,10 +9,17 @@ export interface Resource {
   type: ResourceType;
 }
 
+export function formatCount(count: number) {
+  if (count >= 0) {
+    return `+${count}`;
+  }
+  return count.toString();
+}
+
 export function createResource(resource: Resource) {
   const { count, target, type } = resource;
   return div_nodes(`resource --${target}`, [
-    span_text('resource__label', count.toString()),
+    span_text('resource__label', formatCount(count)),
     img_props({
       className: 'resource__icon',
       width: "32",

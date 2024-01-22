@@ -28,6 +28,7 @@ export function createScroll() {
 
   const callback = (entries: IntersectionObserverEntry[]) => {
     for (const entry of entries) {
+      console.log(entry);
       const target = entry.target as Element;
       const shadow = map.get(target)!;
       shadow.classList.toggle(`--enabled`, !entry.isIntersecting);
@@ -57,6 +58,7 @@ export function createApp() {
   historyEntryCreatedChannel.dispatch(examples[0]);
   historyEntryCreatedChannel.dispatch(examples[1]);
   historyEntryCreatedChannel.dispatch(examples[2]);
+  historyEntryCreatedChannel.dispatch(examples[3]);
 
   toolbarClickChannel.subscribers.add(({ key }) => {
     switcher.switch(key);

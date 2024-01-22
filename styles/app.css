@@ -31,6 +31,7 @@
   --color-text: #222222;
   --color-text-inactive: rgba(0, 0, 0, 0.30);
   --color-box-primary: #CDB39A;
+  --color-frame: #2D2D2D;
   --gradient-production-border: linear-gradient(180deg, #181818 0%, #2D2D2D 12%, #2D2D2D 88%, #636363 100%);
   --gradient-production-background: linear-gradient(180deg, #AA5C3A 0%, #843807 100%);
   --gradient-bar-background: linear-gradient(180deg, #E69252 0%, #A85020 100%);
@@ -112,6 +113,10 @@ body {
   height: 100%;
 }
 
+.scroll__container {
+  min-height: 100%;
+}
+
 .panel {
   display: grid;
   grid-auto-flow: column;
@@ -161,16 +166,17 @@ body {
 
 .player-cube {
   --background: transparent;
+  align-items: center;
   background: var(--background);
   border-image-slice: 1;
   border-image-source: var(--gradient-box-border);
   border-style: solid;
   border-width: 2px;
   display: flex;
-  width: 18px;
   height: 18px;
   justify-content: center;
-  align-items: center;
+  min-width: 18px;
+  width: 18px;
 }
 
 .supplies {
@@ -263,4 +269,97 @@ body {
   width: 100%;
   justify-content: space-evenly;
   gap: 16px;
+}
+
+.resource {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  padding: 6px;
+}
+
+.resource.--production {
+  background-repeat: repeat;
+  background-size: 9px;
+  background-image: var(--bg-production), var(--gradient-production-background);
+  border-image-slice: 1;
+  border-image-source: var(--gradient-production-border);
+  border-style: solid;
+  border-width: 2px;
+}
+
+.resource__label {
+  font-size: 1.5rem;
+  color: #000;
+}
+
+.resource__icon {
+  width: 32px;
+  height: 32px;
+}
+
+.histories {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 16px;
+}
+
+.history.--background {
+  position: relative;
+  border-color: var(--color-frame);
+  border-radius: 16px;
+  border-style: solid;
+  border-width: 2px;
+  background: var(--color-box-primary);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.history__header {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  align-self: stretch;
+  gap: 12px;
+}
+
+.history__name {
+  max-width: 150px;
+  margin-right: auto;
+}
+
+.history__time {
+  margin-left: auto;
+}
+
+.history__body {
+  display: flex;
+  padding: 4px;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  gap: 4px;
+  align-self: stretch;
+  flex-wrap: wrap;
+  border-top: 2px solid var(--color-frame)
+}
+
+.history__generation {
+  align-items: center;
+  background-image: url('/images/mars-generation.png');
+  background-repeat: no-repeat;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: 60px;
+  height: 100px;
+  justify-content: center;
+  margin: auto;
+  width: 100px;
+  -webkit-text-stroke: 1px black;
 }
