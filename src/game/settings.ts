@@ -48,7 +48,7 @@ export function createGenerals() {
         placeholder: 'GameID'
       }),
     ]),
-    quit = button_text('box --button --action', 'Quit game'),
+    quit = button_text('box --action', 'Quit game'),
   ]);
   quit.addEventListener('click', (event) => {
     event.preventDefault();
@@ -60,22 +60,8 @@ export function createAdmin() {
   let production, subtract;
   const root = fieldset('settings__fieldset', [
     legend_text('settings__legend', 'Admin settings'),
-    production = button_text('box --button --action', 'Turn to production phase'),
-    div_nodes('edit-box --input', [
-      label_props({
-        className: 'edit-box__label',
-        for: 'round',
-        textContent: 'Round'
-      }),
-      input_props({
-        autocomplete: "off",
-        className: 'edit-box__input',
-        name: 'round',
-        type: 'number',
-        placeholder: 'Round'
-      }),
-    ]),
-    subtract = button_text('box --button --action', "Subtract each player's terraforming rate"),
+    production = button_text('box --action', 'Turn to production phase'),
+    subtract = button_text('box --action', "Subtract each player's terraforming rate"),
   ]);
   return root;
 }
