@@ -45,6 +45,7 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  font-variant-numeric: tabular-nums;
 }
 
 html {
@@ -59,6 +60,7 @@ body {
 }
 
 .app {
+  --app-content-height: calc(100dvh - 32px - 70px - 10px);
   align-items: stretch;
   background-image: url(../images/bg-portrait.jpg);
   background-position: calc(100% * var(--animate-parallax-current) / var(--animate-parallax-total)) center;
@@ -67,7 +69,7 @@ body {
   display: grid;
   grid-template-columns: [left] 100lvw [right];
   grid-template-rows: [top] 32px [content] 10px [shadow-top-end] auto [shadow-bottom] 10px [end];
-  height: 100lvh;
+  height: 100dvh;
   min-width: 380px;
   transition: background-position 0.5s ease-out;
 }
@@ -104,13 +106,13 @@ body {
   box-shadow: inset 0px -12px 12px -10px rgba(0, 0, 0, 0.6);
 }
 
-.app__content {
-  height: 100%;
-}
-
 .scroll {
   overflow-y: scroll;
   height: 100%;
+}
+
+.scroll__detector {
+  height: 5px;
 }
 
 .scroll__container {
@@ -163,12 +165,12 @@ body {
 .supplies {
   align-items: center;
   display: grid;
-  gap: 20px 12px;
+  gap: 0;
   grid-template-columns: [production] 1fr [icons] 1fr [amount] 1fr [end];
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  height: 100%;
+  height: var(--app-content-height);
   justify-items: center;
-  padding: 24px 16px;
+  padding: 8px 16px 12px;
   width: 100%;
 }
 
@@ -186,9 +188,30 @@ body {
   width: 100%;
 }
 
+.supplies__round {
+  --size: 60px;
+  -webkit-text-stroke: 1px black;
+  align-items: center;
+  background-image: url('/images/mars-generation.png');
+  background-repeat: no-repeat;
+  background-size: var(--size);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  grid-column: production / icons;
+  grid-row: 1 / 2;
+  height: var(--size);
+  justify-content: center;
+  margin: auto;
+  width: var(--size);
+}
+
 .supply {
-  height: 64px;
-  width: 64px;
+  min-height: 85px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .supply.--production {
@@ -283,8 +306,8 @@ body {
 .edit-box {
   align-items: stretch;
   background: var(--color-box-primary);
-  border-color: var(--color-frame);
-  border-radius: 10px;
+  border-image-slice: 1;
+  border-image-source: var(--gradient-box-border);
   border-style: solid;
   border-width: 2px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -303,16 +326,14 @@ body {
 
 .edit-box__label {
   padding: 0px 12px;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   align-self: center;
 }
 
 .edit-box__input {
   background: var(--gradient-box-background);
   border: none;
-  border-bottom-right-radius: 8px;
   border-left: 2px solid var(--color-frame);
-  border-top-right-radius: 8px;
   font-size: 1.2rem;
   justify-content: center;
   outline: none;
@@ -321,6 +342,9 @@ body {
 }
 
 .settings__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   padding: 20px 0;
 }
 

@@ -17,15 +17,21 @@ const supplies: Supply[] = [
 
 function createSupply({ name }: Supply) {
   return fragment_nodes([
-    div_text(`box --counter supply --production --${name}`, "0"),
-    img_props({
-      className: `supply --icon --${name}`,
-      width: "64",
-      height: "64",
-      alt: "supply-icon",
-      src: `/images/supplies/${name}.svg`,
-    }),
-    div_text(`box --counter supply --amount --${name}`, "0"),
+    div_nodes(`supply --production --${name}`, [
+      div_text('box --counter', "0"),
+    ]),
+    div_nodes(`supply --icon --${name}`, [
+      img_props({
+        className: 'supply__icon',
+        width: "64",
+        height: "64",
+        alt: "supply-icon",
+        src: `/images/supplies/${name}.svg`,
+      }),
+    ]),
+    div_nodes(`supply --amount --${name}`, [
+      div_text('box --counter', "0"),
+    ]),
   ]);
 }
 
@@ -33,6 +39,7 @@ export function createSupplies() {
   return div_nodes("panel__item", [
     div_nodes("supplies", [
       div_empty("supplies__production"),
+      div_text("supplies__round", "0"),
       mapToFragment(supplies, createSupply),
     ]),
   ]);

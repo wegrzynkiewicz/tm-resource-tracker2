@@ -9,7 +9,6 @@
 .history.--background {
   position: relative;
   border-color: var(--color-frame);
-  border-radius: 16px;
   border-style: solid;
   border-width: 2px;
   background: var(--color-box-primary);

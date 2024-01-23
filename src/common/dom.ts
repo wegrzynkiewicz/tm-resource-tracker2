@@ -1,4 +1,4 @@
-export type Properties = { [key: string]: string };
+export type Properties = { [key: string]: unknown };
 
 export function createElement<TTag extends keyof HTMLElementTagNameMap>(
   tag: TTag,

@@ -65,7 +65,7 @@ export function createApp() {
   toolbarClickChannel.subscribers.add(({ key }) => {
     switcher.switch(key);
   });
-  toolbarClickChannel.dispatch({ key: "settings" });
+  toolbarClickChannel.dispatch({ key: "supplies" });
 
   return div_nodes("app --with-toolbar", [
     top,

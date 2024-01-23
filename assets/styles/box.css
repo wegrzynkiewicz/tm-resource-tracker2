@@ -17,10 +17,12 @@
 }
 
 .box.--button {
+  background: var(--color-box-primary);
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
 }
 
 .box.--button:active {
+  background: var(--gradient-box-background);
   box-shadow: none;
 }
 
@@ -30,7 +32,10 @@
 }
 
 .box.--action {
-  font-size: 1.5rem;
+  padding: 12px;
+  min-height: 50px;
+  font-size: 1.2rem;
+  border-width: 2px;
 }
 
 .box.--project {
