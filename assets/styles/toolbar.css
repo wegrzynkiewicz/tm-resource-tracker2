@@ -4,8 +4,9 @@
   border-top: 1px solid #F0A66D;
   display: flex;
   flex-shrink: 0;
-  justify-content: space-between;
+  grid-column: left / right;
   grid-row: toolbar / end;
+  justify-content: space-between;
 }
 
 .toolbar__item {

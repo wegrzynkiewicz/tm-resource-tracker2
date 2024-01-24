@@ -1,38 +1,34 @@
 import { mapToFragment } from "../common.ts";
 import { fragment_nodes, div_text, img_props, div_nodes, div_empty } from "../common/dom.ts";
+import { ResourceDefinitionItem, resources } from "../data/resources.ts";
 
-export interface Supply {
-  name: string;
-}
+function createSupply({ type }: ResourceDefinitionItem) {
+  const production = div_text('box --counter', "0");
+  const amount = div_text('box --counter', "0");
 
-const supplies: Supply[] = [
-  { name: "points" },
-  { name: "gold" },
-  { name: "steel" },
-  { name: "titan" },
-  { name: "plant" },
-  { name: "energy" },
-  { name: "heat" },
-];
-
-function createSupply({ name }: Supply) {
-  return fragment_nodes([
-    div_nodes(`supply --production --${name}`, [
-      div_text('box --counter', "0"),
+  const root = fragment_nodes([
+    div_nodes(`supply --production --${type}`, [
+      production,
     ]),
-    div_nodes(`supply --icon --${name}`, [
+    div_nodes(`supply --icon --${type}`, [
       img_props({
         className: 'supply__icon',
         width: "64",
         height: "64",
         alt: "supply-icon",
-        src: `/images/supplies/${name}.svg`,
+        src: `/images/supplies/${type}.svg`,
       }),
     ]),
-    div_nodes(`supply --amount --${name}`, [
-      div_text('box --counter', "0"),
+    div_nodes(`supply --amount --${type}`, [
+      amount,
     ]),
   ]);
+
+  production.addEventListener('click', () => {
+    console.log("production");
+  });
+
+  return root;
 }
 
 export function createSupplies() {
@@ -40,7 +36,7 @@ export function createSupplies() {
     div_nodes("supplies", [
       div_empty("supplies__production"),
       div_text("supplies__round", "0"),
-      mapToFragment(supplies, createSupply),
+      mapToFragment(resources, createSupply),
     ]),
   ]);
 }

@@ -3,10 +3,11 @@
   background: var(--gradient-bar-background);
   border-bottom: 1px solid #6A2600;
   display: flex;
+  grid-column: left / right;
+  grid-row: top / content;
   justify-content: center;
   padding: 0 16px;
   width: 100%;
-  grid-row: top / content;
 }
 
 .top.--with-controller {

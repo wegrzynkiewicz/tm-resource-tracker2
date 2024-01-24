@@ -21,7 +21,11 @@
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
 }
 
-.box.--button:active {
+.box.--button:disabled {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.box.--button:enabled:active {
   background: var(--gradient-box-background);
   box-shadow: none;
 }
@@ -30,8 +34,12 @@
   font-size: 2rem;
   border-image-slice: 1;
   border-image-source: var(--gradient-box-border);
-  width: 80px;
+  min-width: 80px;
   height: 40px;
+}
+
+.box.--wide {
+  width: 120px;
 }
 
 .box.--action {

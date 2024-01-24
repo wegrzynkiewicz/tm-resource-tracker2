@@ -1,13 +1,5 @@
 import { div_nodes, span_text, img_props } from "../common/dom.ts";
-
-export type ResourceType = "points" | "gold" | "steel" | "titan" | "plant" | "energy" | "heat";
-export type ResourceTarget = "production" | "amount";
-
-export interface Resource {
-  count: number;
-  target: ResourceTarget;
-  type: ResourceType;
-}
+import { Resource } from "../data/resources.ts";
 
 export function formatCount(count: number) {
   if (count >= 0) {

@@ -1,8 +1,8 @@
 import { Channel } from "../common/channel.ts";
 import { div_nodes, div_text, div_props, div_empty } from "../common/dom.ts";
-import { createResource } from "./resource.ts";
-import { Resource } from "./resource.ts";
+import { Resource } from "../data/resources.ts";
 import { createPanel } from "./panel.ts";
+import { createResource } from "./resource.ts";
 
 export interface Player {
   playerId: string;

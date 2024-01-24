@@ -32,7 +32,7 @@
   --color-text-inactive: rgba(0, 0, 0, 0.30);
   --color-box-primary: #CDB39A;
   --color-frame: #2D2D2D;
-  --color-background: rgba(183, 100, 43, 0.6);
+  --color-background: rgba(183, 100, 43, 0.7);
 
   --gradient-production-border: linear-gradient(180deg, #181818 0%, #2D2D2D 12%, #2D2D2D 88%, #636363 100%);
   --gradient-production-background: linear-gradient(180deg, #AA5C3A 0%, #843807 100%);
@@ -111,7 +111,7 @@ body {
 
 .app__content-overlay {
   grid-column: left / right;
-  grid-row: content / toolbar;
+  grid-row: top / end;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 2;
 }
@@ -122,7 +122,7 @@ body {
   align-content: center;
   justify-content: center;
   align-items: center;
-  padding: 32px;
+  padding: 16px;
 }
 
 .modal__background {
@@ -133,16 +133,17 @@ body {
 }
 
 .modal__container {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  gap: 20px 0;
+  gap: 24px 0;
   background-color: var(--color-background);
   background-repeat: no-repeat;
   border-color: var(--color-frame);
   border-radius: 20px;
   border-style: solid;
   border-width: 4px;
-  padding: 32px;
+  padding: 16px;
 }
 
 .modal__title {
@@ -155,6 +156,61 @@ body {
   flex-direction: row;
   justify-content: space-between;
   gap: 20px;
+}
+
+.modal__target {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal__target-supply {
+  padding: 20px;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 2px;
+}
+
+.modal__target-supply.--production {
+  background-repeat: repeat;
+  background-size: 10px;
+  background-image: var(--bg-production), var(--gradient-production-background);
+  border-image-slice: 1;
+  border-image-source: var(--gradient-production-border);
+}
+
+.modal__target-icon {
+  width: 64px;
+  height: 64px;
+}
+
+.modal__count {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal__count-label {
+  width: 80px;
+  font-size: 1.5rem;
+}
+
+.modal__count-label.--left {
+  text-align: right;
+}
+
+.modal__count-label.--right {
+  text-align: left;
+}
+
+.calculator {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
 }
 
 .scroll {
