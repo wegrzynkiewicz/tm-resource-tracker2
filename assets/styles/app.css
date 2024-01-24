@@ -22,12 +22,6 @@
   --animate-parallax-current: 0;
   --animate-parallax-total: 1;
 
-  --color-player-cube-black: #8D8F92;
-  --color-player-cube-blue: #3586FF;
-  --color-player-cube-green: #1DCF00;
-  --color-player-cube-red: #CF0000;
-  --color-player-cube-yellow: #FFF735;
-
   --color-text: #222222;
   --color-text-inactive: rgba(0, 0, 0, 0.30);
   --color-box-primary: #CDB39A;
@@ -260,9 +254,7 @@ body {
 }
 
 .player-cube {
-  --background: transparent;
   align-items: center;
-  background: var(--background);
   border-image-slice: 1;
   border-image-source: var(--gradient-box-border);
   border-style: solid;
@@ -272,6 +264,26 @@ body {
   justify-content: center;
   min-width: 18px;
   width: 18px;
+}
+
+.player-cube._black {
+  background-color: #8D8F92;
+}
+
+.player-cube._blue {
+  background-color: #3586FF;
+}
+
+.player-cube._green {
+  background-color: #1DCF00;
+}
+
+.player-cube._red {
+  background-color: #CF0000;
+}
+
+.player-cube._yellow {
+  background-color: #FFF735;
 }
 
 .projects {

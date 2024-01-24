@@ -92,7 +92,7 @@ export function createHistoryHeader({ player, time, slot, }: {
   slot: Node;
 }) {
   return div_nodes("history_header", [
-    div_props({ className: "player-cube", style: `_background: var(--color-player-cube-${player.color})` }),
+    div_empty(`player-cube _${player.color}`),
     div_text("history_name", player.name),
     slot,
     div_text("history_time", formatDate(time)),
@@ -103,7 +103,7 @@ export function createHistorySingleEntry(entry: HistorySingleEntry) {
   const { player, resource, time } = entry;
   return div_nodes("history _background", [
     div_nodes("history_header", [
-      div_props({ className: "player-cube", style: `_background: var(--color-player-cube-${player.color})` }),
+      div_empty(`player-cube _${player.color}`),
       div_text("history_name", player.name),
       createResource(resource),
       div_text("history_time", formatDate(time)),
@@ -115,7 +115,7 @@ export function createHistorySummaryEntry(entry: HistorySummaryEntry) {
   const { player, resources, time } = entry;
   return div_nodes("history _background", [
     div_nodes("history_header", [
-      div_props({ className: "player-cube", style: `_background: var(--color-player-cube-${player.color})` }),
+      div_empty(`player-cube _${player.color}`),
       div_text("history_name", player.name),
       div_text("history_time", formatDate(time)),
     ]),

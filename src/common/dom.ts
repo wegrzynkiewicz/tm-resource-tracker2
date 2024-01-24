@@ -80,7 +80,7 @@ export const legend_text = createTagText('legend');
 
 export const img_props = createTagProps('img');
 
-export const span = createTagEmpty('span');
+export const span_empty = createTagEmpty('span');
 export const span_props = createTagProps('span');
 export const span_text = createTagText('span');
 

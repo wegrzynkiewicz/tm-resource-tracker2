@@ -1,6 +1,6 @@
 import { mapToFragment } from "../common.ts";
 import { Channel } from "../common/store.ts";
-import { div_nodes, span_props, span_text } from "../common/dom.ts";
+import { div_nodes, span_empty, span_text } from "../common/dom.ts";
 import { svg_icon } from "../common/svg.ts";
 
 export interface SelectorOption {
@@ -20,7 +20,7 @@ export const colors: SelectorOption[] = [
 export function createSelectorOption(option: SelectorOption) {
   const { color, key, name } = option;
   const content = div_nodes("selector_panel-item", [
-    span_props({ className: "player-cube", style: `_background: var(--color-player-cube-${color})` }),
+    span_empty(`player-cube _${color}`),
     span_text("text", name),
   ]);
   content.dataset.key = key;
