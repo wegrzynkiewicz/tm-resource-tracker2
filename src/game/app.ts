@@ -1,8 +1,7 @@
-import { mapToFragment } from "../common.ts";
-import { Channel } from "../common/channel.ts";
-import { button_text, div_empty, div_text, div_nodes, fragment_nodes, img_props, span_text } from "../common/dom.ts";
+import { div_empty, div_text, div_nodes, fragment_nodes } from "../common/dom.ts";
 import { ElementSwitcher } from "../common/element-switcher.ts";
 import { createHistoriesPanel, examples, historyEntryCreatedChannel } from "./history.ts";
+import { modalManager } from "./modal.ts";
 import { createProjectsPanel } from "./project.ts";
 import { createSettings } from "./settings.ts";
 import { createSupplyModal } from "./supply-modal.ts";
@@ -39,11 +38,6 @@ export function createScroll() {
     ]),
     shadowTop = div_empty("app__shadow --top"),
     shadowBottom = div_empty("app__shadow --bottom"),
-    createSupplyModal({
-      count: 15,
-      target: "production",
-      type: 'gold',
-    }).root,
   ]);
 
   const map = new WeakMap<Element, Element>([
@@ -94,6 +88,7 @@ export function createApp() {
   return div_nodes("app --with-toolbar", [
     top,
     scroll.fragment,
+    modalManager.root,
     toolbar,
   ]);
 }

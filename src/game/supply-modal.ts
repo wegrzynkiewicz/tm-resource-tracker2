@@ -1,6 +1,6 @@
 import { assertRequiredString } from "../asserts.ts";
 import { mapToFragment } from "../common.ts";
-import { Channel } from "../common/channel.ts";
+import { Store } from "../common/store.ts";
 import { button_text, div_nodes, div_text, img_props, span_text } from "../common/dom.ts";
 import { Resource, resourcesByType } from "../data/resources.ts";
 import { ResourceTarget, ResourceType } from "../data/resources.ts";
@@ -17,13 +17,9 @@ export interface SupplyModalOptions {
   current: number;
 }
 
-export class CalculatorState {
+export class CalculatorStore extends Store {
   public digits = "0";
   public positive = true;
-  public readonly updates = new Channel<CalculatorState>();
-  public update() {
-    this.updates.dispatch(this);
-  }
   public append(digit: string) {
     if (this.digits.length >= 3) {
       return;
@@ -64,44 +60,42 @@ export function createSupplyModal(options: Resource) {
     clear,
   ]);
 
-  const root = div_nodes("app__content-overlay", [
-    div_nodes("modal", [
-      div_nodes("modal__background", [
-        div_nodes("modal__container", [
-          div_text('modal__title', `Change you ${target}:`),
-          div_nodes('modal__target', [
-            div_nodes(`modal__target-supply --${target}`, [
-              div_text('box --counter', count.toString()),
-            ]),
-            img_props({
-              className: 'modal__target-icon',
-              width: "64",
-              height: "64",
-              alt: "supply-icon",
-              src: `/images/supplies/${type}.svg`,
-            }),
+  const root = div_nodes("modal", [
+    div_nodes("modal__background", [
+      div_nodes("modal__container", [
+        div_text('modal__title', `Change you ${target}:`),
+        div_nodes('modal__target', [
+          div_nodes(`modal__target-supply --${target}`, [
+            div_text('box --counter', count.toString()),
           ]),
-          div_nodes('modal__count', [
-            span_text('modal__count-label --left', 'by'),
-            input,
-            span_text('modal__count-label --right', 'units'),
-          ]),
-          calculator,
-          div_nodes('modal__buttons', [
-            cancel,
-            confirm,
-          ]),
+          img_props({
+            className: 'modal__target-icon',
+            width: "64",
+            height: "64",
+            alt: "supply-icon",
+            src: `/images/supplies/${type}.svg`,
+          }),
+        ]),
+        div_nodes('modal__count', [
+          span_text('modal__count-label --left', 'by'),
+          input,
+          span_text('modal__count-label --right', 'units'),
+        ]),
+        calculator,
+        div_nodes('modal__buttons', [
+          cancel,
+          confirm,
         ]),
       ]),
     ]),
   ]);
 
-  const state = new CalculatorState();
-  state.updates.subscribers.add((state) => {
-    const { digits, positive } = state;
+  const store = new CalculatorStore();
+  store.updates.subscribers.add((store) => {
+    const { digits, positive } = store;
     input.textContent = `${positive ? '' : '-'}${digits}`;
     operator.textContent = positive ? '-' : '+';
-    const valid = count + state.getValue() < min;
+    const valid = count + store.getValue() < min;
     confirm.toggleAttribute('disabled', valid);
   });
 
@@ -109,19 +103,20 @@ export function createSupplyModal(options: Resource) {
     const target = event.target as HTMLElement;
     const digit = target.dataset.digit;
     assertRequiredString(digit, "required-dataset-digit");
-    state.append(digit);
-    state.update();
+    store.append(digit);
+    store.update();
   });
 
   operator.addEventListener('click', (event) => {
-    state.positive = !state.positive;
-    state.update();
+    store.positive = !store.positive;
+    store.update();
     event.stopPropagation();
   });
 
   clear.addEventListener('click', (event) => {
-    state.digits = "0";
-    state.update();
+    store.positive = true;
+    store.digits = "0";
+    store.update();
     event.stopPropagation();
   });
 
@@ -129,19 +124,17 @@ export function createSupplyModal(options: Resource) {
 
   cancel.addEventListener('click', (event) => {
     event.stopPropagation();
-    root.remove();
     resolve({ type: 'cancel' });
   });
 
   confirm.addEventListener('click', (event) => {
     event.stopPropagation();
-    root.remove();
     resolve({
       type: 'confirm',
-      value: state.getValue(),
+      value: store.getValue(),
       resource: options,
     });
   });
 
-  return { promise, root, state };
+  return { promise, root, store };
 }

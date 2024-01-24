@@ -8,3 +8,16 @@ export class Channel<TEvent> {
     }
   }
 }
+
+export class Store {
+  public readonly updates = new Channel<this>();
+  public update() {
+    this.updates.dispatch(this);
+  }
+}
+
+export class Signal<TValue> extends Store {
+  public constructor(public value: TValue) { 
+    super();
+  }
+}

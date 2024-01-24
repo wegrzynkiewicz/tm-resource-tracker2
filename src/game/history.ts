@@ -1,4 +1,4 @@
-import { Channel } from "../common/channel.ts";
+import { Channel } from "../common/store.ts";
 import { div_nodes, div_text, div_props, div_empty } from "../common/dom.ts";
 import { Resource } from "../data/resources.ts";
 import { createPanel } from "./panel.ts";

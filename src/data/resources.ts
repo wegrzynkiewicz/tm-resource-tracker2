@@ -1,8 +1,9 @@
 export type ResourceType = "points" | "gold" | "steel" | "titan" | "plant" | "energy" | "heat";
 export type ResourceTarget = "production" | "amount";
-export type ResourceStoreSupplies = Record<ResourceType, number>;
-export type ResourceStore = Record<ResourceTarget, ResourceStoreSupplies>;
-export type ResourceProducer = (store: ResourceStore, type: ResourceType) => void;
+export type ResourceTargets = Record<ResourceTarget, number>;
+export type ResourceGroup = Record<ResourceType, ResourceTargets>;
+
+export type ResourceProducer = (store: ResourceGroup, type: ResourceType) => void;
 
 export interface Resource {
   count: number;
@@ -45,17 +46,17 @@ export function createResourceDefinitionItem(
   }
 }
 
-export function processNormalProduction(store: ResourceStore, type: ResourceType) {
-  store.amount[type] += store.production[type];
+export function processNormalProduction(store: ResourceGroup, type: ResourceType) {
+  store[type].amount += store[type].production;
 }
 
-export function processPointsProduction(store: ResourceStore) {
-  store.amount.gold += store.amount.points;
+export function processPointsProduction(store: ResourceGroup) {
+  store.gold.amount += store.points.amount;
 }
 
-export function processEnergyProduction(store: ResourceStore) {
-  store.amount.heat += store.amount.energy;
-  store.amount.energy = store.production.energy;
+export function processEnergyProduction(store: ResourceGroup) {
+  store.heat.amount += store.energy.amount;
+  store.energy.amount = store.energy.production;
 }
 
 export const resources: ResourceDefinitionItem[] = [
@@ -69,30 +70,23 @@ export const resources: ResourceDefinitionItem[] = [
 ];
 
 export const resourcesByType: Record<ResourceType, ResourceDefinitionItem> = {
-    points: resources[0],
-    gold: resources[1],
-    steel: resources[2],
-    titan: resources[3],
-    plant: resources[4],
-    energy: resources[5],
-    heat: resources[6],
+  points: resources[0],
+  gold: resources[1],
+  steel: resources[2],
+  titan: resources[3],
+  plant: resources[4],
+  energy: resources[5],
+  heat: resources[6],
 }
 
-export function createResourceStoreTarget(points: number): ResourceStoreSupplies {
+export function createResourceGroup(points: number): ResourceGroup {
   return {
-    points,
-    gold: 0,
-    steel: 0,
-    titan: 0,
-    plant: 0,
-    energy: 0,
-    heat: 0,
-  }
-}
-
-export function createResourceStore(points: number): ResourceStore {
-  return {
-    production: createResourceStoreTarget(0),
-    amount: createResourceStoreTarget(points),
+    points: { amount: points, production: 0 },
+    gold: { amount: 0, production: 0 },
+    steel: { amount: 0, production: 0 },
+    titan: { amount: 0, production: 0 },
+    plant: { amount: 0, production: 0 },
+    energy: { amount: 0, production: 0 },
+    heat: { amount: 0, production: 0 },
   }
 }

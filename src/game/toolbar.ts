@@ -1,5 +1,5 @@
 import { mapToFragment } from "../common.ts";
-import { Channel } from "../common/channel.ts";
+import { Channel } from "../common/store.ts";
 import { button_nodes, div_nodes, span_text } from "../common/dom.ts";
 import { svg_icon } from "../common/svg.ts";
 
