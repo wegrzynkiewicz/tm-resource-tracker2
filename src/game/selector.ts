@@ -19,8 +19,8 @@ export const colors: SelectorOption[] = [
 
 export function createSelectorOption(option: SelectorOption) {
   const { color, key, name } = option;
-  const content = div_nodes("selector__panel-item", [
-    span_props({ className: "player-cube", style: `--background: var(--color-player-cube-${color})` }),
+  const content = div_nodes("selector_panel-item", [
+    span_props({ className: "player-cube", style: `_background: var(--color-player-cube-${color})` }),
     span_text("text", name),
   ]);
   content.dataset.key = key;
@@ -62,19 +62,19 @@ export class SelectorController {
 export function createSelector(options: SelectorOption[]) {
   const controller = new SelectorController(options);
 
-  const left = svg_icon("selector__icon", "arrow-left");
-  const right = svg_icon("selector__icon", "arrow-right");
-  const panel = div_nodes("selector__panel", [
-    div_nodes('selector__panel-container', [
+  const left = svg_icon("selector_icon", "arrow-left");
+  const right = svg_icon("selector_icon", "arrow-right");
+  const panel = div_nodes("selector_panel", [
+    div_nodes('selector_panel-container', [
       mapToFragment(options, createSelectorOption),
     ]),
   ]);
   const root = div_nodes("selector", [left, panel, right]);
 
   controller.channel.subscribers.add(({ index }) => {
-    panel.style.setProperty("--index", `${index}`);
-    left.classList.toggle("--disabled", index === 0);
-    right.classList.toggle("--disabled", index === options.length - 1);
+    panel.style.setProperty("_index", `${index}`);
+    left.classList.toggle("_disabled", index === 0);
+    right.classList.toggle("_disabled", index === options.length - 1);
   });
   controller.setCurrent(0);
 

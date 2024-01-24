@@ -76,40 +76,40 @@ body {
   transition: background-position 0.5s ease-out;
 }
 
-.app.--with-toolbar {
+.app._with-toolbar {
   grid-template-rows: [top] 32px [content] 10px [shadow-top-end] auto [shadow-bottom] 10px [toolbar] 70px [end];
 }
 
-.app__main {
+.app_main {
   grid-column: left / right;
   grid-row: content / toolbar;
   background-color: var(--color-background);
   z-index: 1;
 }
 
-.app__shadow {
+.app_shadow {
   grid-column: left / right;
   transition: box-shadow 0.3s linear;
 }
 
-.app__shadow.--top {
+.app_shadow._top {
   grid-row: content / shadow-top-end;
 }
 
-.app__shadow.--top.--enabled {
+.app_shadow._top._enabled {
   box-shadow: inset 0px 12px 12px -10px rgba(0, 0, 0, 0.6);
 }
 
-.app__shadow.--bottom {
+.app_shadow._bottom {
   grid-row: shadow-bottom / toolbar;
   bottom: 0;
 }
 
-.app__shadow.--bottom.--enabled {
+.app_shadow._bottom._enabled {
   box-shadow: inset 0px -12px 12px -10px rgba(0, 0, 0, 0.6);
 }
 
-.app__content-overlay {
+.app_content-overlay {
   grid-column: left / right;
   grid-row: top / end;
   background-color: rgba(0, 0, 0, 0.6);
@@ -117,7 +117,7 @@ body {
   display: none;
 }
 
-.app__content-overlay.--enabled {
+.app_content-overlay._enabled {
   display: initial;
 }
 
@@ -130,14 +130,14 @@ body {
   padding: 16px;
 }
 
-.modal__background {
+.modal_background {
   background-image: url(../images/bg-portrait.jpg);
   background-repeat: no-repeat;
   background-position: 50%;
   border-radius: 20px;
 }
 
-.modal__container {
+.modal_container {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -151,19 +151,19 @@ body {
   padding: 16px;
 }
 
-.modal__title {
+.modal_title {
   font-size: 1.5rem;
   text-align: center;
 }
 
-.modal__buttons {
+.modal_buttons {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   gap: 20px;
 }
 
-.modal__target {
+.modal_target {
   display: flex;
   flex-direction: row;
   gap: 30px;
@@ -171,14 +171,14 @@ body {
   align-items: center;
 }
 
-.modal__target-supply {
+.modal_target-supply {
   padding: 20px;
   border-color: transparent;
   border-style: solid;
   border-width: 2px;
 }
 
-.modal__target-supply.--production {
+.modal_target-supply._production {
   background-repeat: repeat;
   background-size: 10px;
   background-image: var(--bg-production), var(--gradient-production-background);
@@ -186,12 +186,12 @@ body {
   border-image-source: var(--gradient-production-border);
 }
 
-.modal__target-icon {
+.modal_target-icon {
   width: 64px;
   height: 64px;
 }
 
-.modal__count {
+.modal_count {
   display: flex;
   flex-direction: row;
   gap: 20px;
@@ -199,16 +199,16 @@ body {
   align-items: center;
 }
 
-.modal__count-label {
+.modal_count-label {
   width: 80px;
   font-size: 1.5rem;
 }
 
-.modal__count-label.--left {
+.modal_count-label._left {
   text-align: right;
 }
 
-.modal__count-label.--right {
+.modal_count-label._right {
   text-align: left;
 }
 
@@ -223,11 +223,11 @@ body {
   height: 100%;
 }
 
-.scroll__detector {
+.scroll_detector {
   height: 5px;
 }
 
-.scroll__container {
+.scroll_container {
   min-height: 100%;
 }
 
@@ -240,7 +240,7 @@ body {
   overflow-x: hidden;
 }
 
-.panel__item {
+.panel_item {
   display: flex;
   width: 100lvw;
 }
@@ -254,7 +254,7 @@ body {
   align-self: stretch;
 }
 
-.content.--homepage {
+.content._homepage {
   padding: 40px 0px;
   gap: 60px;
 }
@@ -299,7 +299,7 @@ body {
   padding: 6px;
 }
 
-.resource.--production {
+.resource._production {
   background-repeat: repeat;
   background-size: 9px;
   background-image: var(--bg-production), var(--gradient-production-background);
@@ -309,12 +309,12 @@ body {
   border-width: 2px;
 }
 
-.resource__label {
+.resource_label {
   font-size: 1.5rem;
   color: #000;
 }
 
-.resource__icon {
+.resource_icon {
   width: 32px;
   height: 32px;
 }
@@ -331,22 +331,22 @@ body {
   height: 50px;
 }
 
-.edit-box.--input {
+.edit-box._input {
   justify-content: start;
 }
 
-.edit-box.--selector {
+.edit-box._selector {
   justify-content: space-between;
   padding-right: 12px;
 }
 
-.edit-box__label {
+.edit-box_label {
   padding: 0px 12px;
   font-size: 1.2rem;
   align-self: center;
 }
 
-.edit-box__input {
+.edit-box_input {
   background: var(--gradient-box-background);
   border-right: none;
   border-top: none;
@@ -361,20 +361,20 @@ body {
   width: 100%;
 }
 
-.settings__form {
+.settings_form {
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 20px 0;
 }
 
-.settings__legend {
+.settings_legend {
   font-size: 1.4rem;
   text-align: center;
   color: var(--color-text);
 }
 
-.settings__fieldset {
+.settings_fieldset {
   border: none;
   display: flex;
   flex-direction: column;

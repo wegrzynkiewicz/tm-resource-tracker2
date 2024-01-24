@@ -22,20 +22,20 @@ const projects: Project[] = [
 
 export function createProject({ name }: Project) {
   return div_nodes("project", [
-    button_text("box --button --project", "-"),
+    button_text("box _button _project", "-"),
     img_props({
-      className: "project__icon",
+      className: "project_icon",
       width: "40",
       height: "40",
       src: `/images/projects/${name}.png`,
     }),
-    div_text("box --counter", "0"),
-    button_text("box --button --project", "+"),
+    div_text("box _counter", "0"),
+    button_text("box _button _project", "+"),
   ]);
 }
 
 export function createProjectsList() {
-  return div_nodes("panel__item", [
+  return div_nodes("panel_item", [
     div_nodes("projects", [
       mapToFragment(projects, createProject),
     ]),

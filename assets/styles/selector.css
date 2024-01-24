@@ -7,7 +7,7 @@
   align-self: stretch;
 }
 
-.selector__panel {
+.selector_panel {
   --index: 0;
   --panel-width: 80px;
   overflow-x: hidden;
@@ -15,7 +15,7 @@
   max-width: var(--panel-width);
 }
 
-.selector__panel-container {
+.selector_panel-container {
   display: grid;
   grid-auto-flow: column;
   margin-left: calc(-1 * var(--panel-width) * var(--index));
@@ -23,19 +23,19 @@
   width: 100%;
 }
 
-.selector__panel-item {
+.selector_panel-item {
   display: flex;
   gap: 6px;
   width: var(--panel-width);
   justify-content: center;
 }
 
-.selector__icon {
+.selector_icon {
   width: 16px;
   height: 16px;
   color: var(--color-text);
 }
 
-.selector__icon.--disabled {
+.selector_icon._disabled {
   color: var(--color-text-inactive);
 }

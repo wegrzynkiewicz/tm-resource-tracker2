@@ -24,15 +24,15 @@ export const toolbarClickChannel = new Channel<ToolbarButtonClicked>();
 
 export function createToolbarButton(button: ToolbarButton) {
   const { key, icon, name } = button;
-  const root = button_nodes("toolbar__item", [
-    svg_icon("toolbar__icon", icon),
-    span_text("toolbar__label", name),
+  const root = button_nodes("toolbar_item", [
+    svg_icon("toolbar_icon", icon),
+    span_text("toolbar_label", name),
   ]);
   root.addEventListener("click", () => {
     toolbarClickChannel.dispatch({ key });
   });
   toolbarClickChannel.subscribers.add(({ key }) => {
-    root.classList.toggle("--active", button.key === key);
+    root.classList.toggle("_active", button.key === key);
   });
   return root;
 }

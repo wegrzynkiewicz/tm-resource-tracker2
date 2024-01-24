@@ -9,7 +9,7 @@
   justify-content: space-between;
 }
 
-.toolbar__item {
+.toolbar_item {
   align-items: center;
   background: none;
   border: none;
@@ -23,16 +23,16 @@
   overflow: hidden;
 }
 
-.toolbar__item.--active {
+.toolbar_item._active {
   color: var(--color-text);
 }
 
-.toolbar__icon {
+.toolbar_icon {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
 }
 
-.toolbar__label {
+.toolbar_label {
   font-size: 0.9rem;
 }

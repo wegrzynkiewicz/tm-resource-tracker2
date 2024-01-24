@@ -11,23 +11,23 @@ function createSupply(
     signal: Signal<ResourceGroup>,
   }
 ) {
-  const production = div_text('box --counter', signal.value[type].production.toString());
-  const amount = div_text('box --counter', signal.value[type].amount.toString());
+  const production = div_text('box _counter', signal.value[type].production.toString());
+  const amount = div_text('box _counter', signal.value[type].amount.toString());
 
   const root = fragment_nodes([
-    div_nodes(`supply --production --${type}`, [
+    div_nodes(`supply _production _${type}`, [
       production,
     ]),
-    div_nodes(`supply --icon --${type}`, [
+    div_nodes(`supply _icon _${type}`, [
       img_props({
-        className: 'supply__icon',
+        className: 'supply_icon',
         width: "64",
         height: "64",
         alt: "supply-icon",
         src: `/images/supplies/${type}.svg`,
       }),
     ]),
-    div_nodes(`supply --amount --${type}`, [
+    div_nodes(`supply _amount _${type}`, [
       amount,
     ]),
   ]);
@@ -71,10 +71,10 @@ function createSupply(
 }
 
 export function createSupplies() {
-  return div_nodes("panel__item", [
+  return div_nodes("panel_item", [
     div_nodes("supplies", [
-      div_empty("supplies__production"),
-      div_text("supplies__round", "0"),
+      div_empty("supplies_production"),
+      div_text("supplies_round", "0"),
       mapToFragment(resources, ({type}) => {
         const signal = new Signal(createResourceGroup(20));
         return createSupply({type, signal})

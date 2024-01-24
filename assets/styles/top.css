@@ -10,18 +10,18 @@
   width: 100%;
 }
 
-.top.--with-controller {
+.top._with-controller {
   justify-content: space-between;
 }
 
-.top__label {
+.top_label {
   align-self: center;
   line-height: 2;
   color: var(--color-text);
   text-wrap: nowrap;
 }
 
-.top__controller {
+.top_controller {
   display: flex;
   justify-content: flex-end;
   align-items: center;

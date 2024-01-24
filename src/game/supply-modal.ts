@@ -6,7 +6,7 @@ import { Resource, resourcesByType } from "../data/resources.ts";
 import { ResourceTarget, ResourceType } from "../data/resources.ts";
 
 export function createCalculatorButton(digit: number) {
-  const root = button_text('box --button --project', digit.toString())
+  const root = button_text('box _button _project', digit.toString())
   root.dataset.digit = digit.toString();
   return root;
 }
@@ -47,11 +47,11 @@ export function createSupplyModal(options: Resource) {
   const { target, type, count } = options;
   const min = resourcesByType[type].targets[target].min;
 
-  const input = div_text('box --counter --wide', "0");
-  const cancel = button_text('box --button', 'Cancel');
-  const confirm = button_text('box --button', 'Confirm');
-  const operator = button_text('box --button --project', '-');
-  const clear = button_text('box --button --project', 'C');
+  const input = div_text('box _counter _wide', "0");
+  const cancel = button_text('box _button', 'Cancel');
+  const confirm = button_text('box _button', 'Confirm');
+  const operator = button_text('box _button _project', '-');
+  const clear = button_text('box _button _project', 'C');
 
   const calculator = div_nodes('calculator', [
     mapToFragment([1, 2, 3, 4, 5, 6, 7, 8, 9], createCalculatorButton),
@@ -61,28 +61,28 @@ export function createSupplyModal(options: Resource) {
   ]);
 
   const root = div_nodes("modal", [
-    div_nodes("modal__background", [
-      div_nodes("modal__container", [
-        div_text('modal__title', `Change you ${target}:`),
-        div_nodes('modal__target', [
-          div_nodes(`modal__target-supply --${target}`, [
-            div_text('box --counter', count.toString()),
+    div_nodes("modal_background", [
+      div_nodes("modal_container", [
+        div_text('modal_title', `Change you ${target}:`),
+        div_nodes('modal_target', [
+          div_nodes(`modal_target-supply _${target}`, [
+            div_text('box _counter', count.toString()),
           ]),
           img_props({
-            className: 'modal__target-icon',
+            className: 'modal_target-icon',
             width: "64",
             height: "64",
             alt: "supply-icon",
             src: `/images/supplies/${type}.svg`,
           }),
         ]),
-        div_nodes('modal__count', [
-          span_text('modal__count-label --left', 'by'),
+        div_nodes('modal_count', [
+          span_text('modal_count-label _left', 'by'),
           input,
-          span_text('modal__count-label --right', 'units'),
+          span_text('modal_count-label _right', 'units'),
         ]),
         calculator,
-        div_nodes('modal__buttons', [
+        div_nodes('modal_buttons', [
           cancel,
           confirm,
         ]),

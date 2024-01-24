@@ -91,42 +91,42 @@ export function createHistoryHeader({ player, time, slot, }: {
   time: Date;
   slot: Node;
 }) {
-  return div_nodes("history__header", [
-    div_props({ className: "player-cube", style: `--background: var(--color-player-cube-${player.color})` }),
-    div_text("history__name", player.name),
+  return div_nodes("history_header", [
+    div_props({ className: "player-cube", style: `_background: var(--color-player-cube-${player.color})` }),
+    div_text("history_name", player.name),
     slot,
-    div_text("history__time", formatDate(time)),
+    div_text("history_time", formatDate(time)),
   ]);
 }
 
 export function createHistorySingleEntry(entry: HistorySingleEntry) {
   const { player, resource, time } = entry;
-  return div_nodes("history --background", [
-    div_nodes("history__header", [
-      div_props({ className: "player-cube", style: `--background: var(--color-player-cube-${player.color})` }),
-      div_text("history__name", player.name),
+  return div_nodes("history _background", [
+    div_nodes("history_header", [
+      div_props({ className: "player-cube", style: `_background: var(--color-player-cube-${player.color})` }),
+      div_text("history_name", player.name),
       createResource(resource),
-      div_text("history__time", formatDate(time)),
+      div_text("history_time", formatDate(time)),
     ]),
   ]);
 }
 
 export function createHistorySummaryEntry(entry: HistorySummaryEntry) {
   const { player, resources, time } = entry;
-  return div_nodes("history --background", [
-    div_nodes("history__header", [
-      div_props({ className: "player-cube", style: `--background: var(--color-player-cube-${player.color})` }),
-      div_text("history__name", player.name),
-      div_text("history__time", formatDate(time)),
+  return div_nodes("history _background", [
+    div_nodes("history_header", [
+      div_props({ className: "player-cube", style: `_background: var(--color-player-cube-${player.color})` }),
+      div_text("history_name", player.name),
+      div_text("history_time", formatDate(time)),
     ]),
-    div_nodes("history__body", resources.map(createResource)),
+    div_nodes("history_body", resources.map(createResource)),
   ]);
 }
 
 export function createHistoryGenerationEntry(entry: HistoryGenerationEntry) {
   const { count } = entry;
   return div_nodes("history", [
-    div_text("history__generation", count.toString()),
+    div_text("history_generation", count.toString()),
   ]);
 }
 

@@ -14,23 +14,23 @@
   user-select: none;
 }
 
-.box.--button {
+.box._button {
   border-image-slice: 1;
   border-image-source: var(--gradient-box-border);
   background: var(--color-box-primary);
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
 }
 
-.box.--button:disabled {
+.box._button:disabled {
   color: rgba(0, 0, 0, 0.2);
 }
 
-.box.--button:enabled:active {
+.box._button:enabled:active {
   background: var(--gradient-box-background);
   box-shadow: none;
 }
 
-.box.--counter {
+.box._counter {
   font-size: 2rem;
   border-image-slice: 1;
   border-image-source: var(--gradient-box-border);
@@ -38,11 +38,11 @@
   height: 40px;
 }
 
-.box.--wide {
+.box._wide {
   width: 120px;
 }
 
-.box.--action {
+.box._action {
   background: var(--color-box-primary);
   border-radius: 10px;
   border-color: var(--color-frame);
@@ -53,17 +53,17 @@
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
 }
 
-.box.--action:active {
+.box._action:active {
   background: var(--gradient-box-background);
   box-shadow: none;
 }
 
-.box.--project {
+.box._project {
   width: 40px;
   height: 40px;
   font-size: 1.5rem;
 }
 
-.box.--modal {
+.box._modal {
   
 }

@@ -4,21 +4,20 @@ import { createHistoriesPanel, examples, historyEntryCreatedChannel } from "./hi
 import { modalManager } from "./modal.ts";
 import { createProjectsPanel } from "./project.ts";
 import { createSettings } from "./settings.ts";
-import { createSupplyModal } from "./supply-modal.ts";
 import { createSuppliesPanel } from "./supply.ts";
 import { toolbarClickChannel } from "./toolbar.ts";
 import { createToolbar } from "./toolbar.ts";
 import { createTop } from "./top.ts";
 
 export function createQuestion() {
-  return div_nodes("app__content-overlay", [
+  return div_nodes("app_content-overlay", [
     div_nodes("modal", [
-      div_nodes("modal__background", [
-        div_nodes("modal__container", [
-          div_text('modal__title', "Do you want to quit the game?"),
-          div_nodes('modal__buttons', [
-            div_text('box --button', 'Cancel'),
-            div_text('box --button', 'Confirm'),
+      div_nodes("modal_background", [
+        div_nodes("modal_container", [
+          div_text('modal_title', "Do you want to quit the game?"),
+          div_nodes('modal_buttons', [
+            div_text('box _button', 'Cancel'),
+            div_text('box _button', 'Confirm'),
           ]),
         ]),
       ]),
@@ -29,15 +28,15 @@ export function createQuestion() {
 export function createScroll() {
   let content, detectorBottom, detectorTop, root, shadowBottom, shadowTop;
   const fragment = fragment_nodes([
-    root = div_nodes("app__main scroll", [
-      div_nodes("scroll__container", [
-        detectorTop = div_empty("scroll__detector --top"),
-        content = div_empty("app__content"),
-        detectorBottom = div_empty("scroll__detector --bottom"),
+    root = div_nodes("app_main scroll", [
+      div_nodes("scroll_container", [
+        detectorTop = div_empty("scroll_detector _top"),
+        content = div_empty("app_content"),
+        detectorBottom = div_empty("scroll_detector _bottom"),
       ]),
     ]),
-    shadowTop = div_empty("app__shadow --top"),
-    shadowBottom = div_empty("app__shadow --bottom"),
+    shadowTop = div_empty("app_shadow _top"),
+    shadowBottom = div_empty("app_shadow _bottom"),
   ]);
 
   const map = new WeakMap<Element, Element>([
@@ -49,7 +48,7 @@ export function createScroll() {
     for (const entry of entries) {
       const target = entry.target as Element;
       const shadow = map.get(target)!;
-      shadow.classList.toggle(`--enabled`, !entry.isIntersecting);
+      shadow.classList.toggle(`_enabled`, !entry.isIntersecting);
     }
   };
   const options = {
@@ -85,7 +84,7 @@ export function createApp() {
   });
   toolbarClickChannel.dispatch({ key: "supplies" });
 
-  return div_nodes("app --with-toolbar", [
+  return div_nodes("app _with-toolbar", [
     top,
     scroll.fragment,
     modalManager.root,
