@@ -9,13 +9,6 @@ export function createElement<TTag extends keyof HTMLElementTagNameMap>(
   return node;
 }
 
-export function appendChildren(node: Node, children: Node[]) {
-  const length = children.length;
-  for (let i = 0; i < length; i++) {
-    node.appendChild(children[i]);
-  }
-}
-
 function createTagEmpty<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
   return (className: string) => createElement(tag, className);
 }
@@ -31,7 +24,7 @@ function createTagText<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
 function createTagNodes<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
   return (className: string, children: Node[]) => {
     const node = createElement(tag, className);
-    appendChildren(node, children);
+    node.append(...children);
     return node;
   }
 }
@@ -48,7 +41,7 @@ function createTagAdvanced<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) 
   return (props: Properties, children: Node[]) => {
     const node = createElement(tag);
     Object.assign(node, props);
-    appendChildren(node, children);
+    node.append(...children);
     return node;
   }
 }
@@ -59,7 +52,7 @@ export function fragment() {
 
 export function fragment_nodes(children: Node[]) {
   const node = fragment();
-  appendChildren(node, children);
+  node.append(...children);
   return node;
 }
 

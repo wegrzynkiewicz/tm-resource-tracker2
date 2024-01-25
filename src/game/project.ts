@@ -1,4 +1,3 @@
-import { mapToFragment } from "../common.ts";
 import { button_text, div_nodes, div_text, img_props } from "../common/dom.ts";
 
 export interface Project {
@@ -36,14 +35,10 @@ export function createProject({ name }: Project) {
 
 export function createProjectsList() {
   return div_nodes("panel_item", [
-    div_nodes("projects", [
-      mapToFragment(projects, createProject),
-    ]),
+    div_nodes("projects", projects.map(createProject)),
   ]);
 }
 
 export function createProjectsPanel() {
-  return div_nodes("panel", [
-    mapToFragment([1, 2, 3, 4], createProjectsList),
-  ]);
+  return div_nodes("panel", [1, 2, 3, 4].map(createProjectsList));
 }

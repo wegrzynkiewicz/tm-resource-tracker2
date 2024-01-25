@@ -1,4 +1,3 @@
-import { mapToFragment } from "../common.ts";
 import { Channel } from "../common/store.ts";
 import { div_nodes, span_empty, span_text } from "../common/dom.ts";
 import { svg_icon } from "../common/svg.ts";
@@ -65,9 +64,7 @@ export function createSelector(options: SelectorOption[]) {
   const left = svg_icon("selector_icon", "arrow-left");
   const right = svg_icon("selector_icon", "arrow-right");
   const panel = div_nodes("selector_panel", [
-    div_nodes('selector_panel-container', [
-      mapToFragment(options, createSelectorOption),
-    ]),
+    div_nodes('selector_panel-container', options.map(createSelectorOption)),
   ]);
   const root = div_nodes("selector", [left, panel, right]);
 

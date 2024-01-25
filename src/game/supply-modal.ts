@@ -1,5 +1,4 @@
 import { assertRequiredString } from "../asserts.ts";
-import { mapToFragment } from "../common.ts";
 import { Store } from "../common/store.ts";
 import { button_text, div_nodes, div_text, img_props, span_text } from "../common/dom.ts";
 import { Resource, resourcesByType } from "../data/resources.ts";
@@ -54,7 +53,7 @@ export function createSupplyModal(options: Resource) {
   const clear = button_text('box _button _project', 'C');
 
   const calculator = div_nodes('calculator', [
-    mapToFragment([1, 2, 3, 4, 5, 6, 7, 8, 9], createCalculatorButton),
+    ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(createCalculatorButton),
     operator,
     createCalculatorButton(0),
     clear,

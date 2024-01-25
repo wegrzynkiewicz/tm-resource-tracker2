@@ -1,4 +1,3 @@
-import { mapToFragment } from "../common.ts";
 import { fragment_nodes, div_text, img_props, div_nodes, div_empty } from "../common/dom.ts";
 import { Signal } from "../common/store.ts";
 import { ResourceType, ResourceGroup, resources, createResourceGroup } from "../data/resources.ts";
@@ -75,7 +74,7 @@ export function createSupplies() {
     div_nodes("supplies", [
       div_empty("supplies_production"),
       div_text("supplies_round", "0"),
-      mapToFragment(resources, ({type}) => {
+      ...resources.map(({type}) => {
         const signal = new Signal(createResourceGroup(20));
         return createSupply({type, signal})
       }),
@@ -84,7 +83,5 @@ export function createSupplies() {
 }
 
 export function createSuppliesPanel() {
-  return div_nodes("panel", [
-    mapToFragment([1, 2, 3], createSupplies),
-  ]);
+  return div_nodes("panel", [1, 2, 3].map(createSupplies));
 }
