@@ -4,7 +4,7 @@
   gap: 0;
   grid-template-columns: [production] 1fr [icons] 1fr [amount] 1fr [end];
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  height: var(--app-content-height);
+  min-height: var(--app-content-height);
   justify-items: center;
   padding: 8px 16px 12px;
   width: 100%;

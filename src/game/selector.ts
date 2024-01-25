@@ -1,4 +1,4 @@
-import { Channel } from "../common/store.ts";
+import { Store } from "../common/store.ts";
 import { div_nodes, span_empty, span_text } from "../common/dom.ts";
 import { svg_icon } from "../common/svg.ts";
 
@@ -31,35 +31,32 @@ export interface SelectorSelected {
   key: string;
 }
 
-export class SelectorController {
-  public currentIndex = 0;
-  public readonly channel = new Channel<SelectorSelected>();
+export class SelectorStore extends Store {
+  public index = 0;
 
   public constructor(
     public readonly options: SelectorOption[]
-  ) { }
-
-  public setCurrent(index: number) {
-    const { key } = this.options[index];
-    this.currentIndex = index;
-    this.channel.dispatch({ index, key });
+  ) { 
+    super();
   }
 
   public dec() {
-    if (this.currentIndex > 0) {
-      this.setCurrent(this.currentIndex - 1);
+    if (this.index > 0) {
+      this.index -= 1;
+      this.update();
     }
   }
 
   public inc() {
-    if (this.currentIndex < this.options.length - 1) {
-      this.setCurrent(this.currentIndex + 1);
+    if (this.index < this.options.length - 1) {
+      this.index += 1;
+      this.update();
     }
   }
 }
 
 export function createSelector(options: SelectorOption[]) {
-  const controller = new SelectorController(options);
+  const store = new SelectorStore(options);
 
   const left = svg_icon("selector_icon", "arrow-left");
   const right = svg_icon("selector_icon", "arrow-right");
@@ -68,15 +65,15 @@ export function createSelector(options: SelectorOption[]) {
   ]);
   const root = div_nodes("selector", [left, panel, right]);
 
-  controller.channel.subscribers.add(({ index }) => {
-    panel.style.setProperty("_index", `${index}`);
+  store.updates.subscribers.add(({ index }) => {
+    panel.style.setProperty("--index", `${index}`);
     left.classList.toggle("_disabled", index === 0);
     right.classList.toggle("_disabled", index === options.length - 1);
   });
-  controller.setCurrent(0);
+  store.update();
 
-  left.addEventListener("click", () => controller.dec());
-  right.addEventListener("click", () => controller.inc());
+  left.addEventListener("click", () => store.dec());
+  right.addEventListener("click", () => store.inc());
 
-  return { controller, root };
+  return { root, store };
 }

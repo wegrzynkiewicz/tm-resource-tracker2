@@ -3,6 +3,7 @@ import { Store } from "../common/store.ts";
 import { button_text, div_nodes, div_text, img_props, span_text } from "../common/dom.ts";
 import { Resource, resourcesByType } from "../data/resources.ts";
 import { ResourceTarget, ResourceType } from "../data/resources.ts";
+import { onClick } from "../common.ts";
 
 export function createCalculatorButton(digit: number) {
   const root = button_text('box _button _project', digit.toString())
@@ -62,7 +63,7 @@ export function createSupplyModal(options: Resource) {
   const root = div_nodes("modal", [
     div_nodes("modal_background", [
       div_nodes("modal_container", [
-        div_text('modal_title', `Change you ${target}:`),
+        div_text('modal_title', `Change your ${target}:`),
         div_nodes('modal_target', [
           div_nodes(`modal_target-supply _${target}`, [
             div_text('box _counter', count.toString()),
@@ -98,7 +99,7 @@ export function createSupplyModal(options: Resource) {
     confirm.toggleAttribute('disabled', valid);
   });
 
-  calculator.addEventListener('click', (event) => {
+  onClick(calculator, (event) => {
     const target = event.target as HTMLElement;
     const digit = target.dataset.digit;
     assertRequiredString(digit, "required-dataset-digit");
@@ -106,28 +107,24 @@ export function createSupplyModal(options: Resource) {
     store.update();
   });
 
-  operator.addEventListener('click', (event) => {
+  onClick(operator, () => {
     store.positive = !store.positive;
     store.update();
-    event.stopPropagation();
   });
 
-  clear.addEventListener('click', (event) => {
+  onClick(clear, () => {
     store.positive = true;
     store.digits = "0";
     store.update();
-    event.stopPropagation();
   });
 
   const { promise, resolve } = Promise.withResolvers<SupplyModalResponse>();
 
-  cancel.addEventListener('click', (event) => {
-    event.stopPropagation();
+  onClick(cancel, () => {
     resolve({ type: 'cancel' });
   });
 
-  confirm.addEventListener('click', (event) => {
-    event.stopPropagation();
+  onClick(confirm, () => {
     resolve({
       type: 'confirm',
       value: store.getValue(),

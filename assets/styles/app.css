@@ -84,6 +84,7 @@ body {
 .app_shadow {
   grid-column: left / right;
   transition: box-shadow 0.3s linear;
+  z-index: 2;
 }
 
 .app_shadow._top {

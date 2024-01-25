@@ -79,14 +79,18 @@ export const resourcesByType: Record<ResourceType, ResourceDefinitionItem> = {
   heat: resources[6],
 }
 
+export function createResourceTargets(amount = 0, production = 0): ResourceTargets {
+  return { amount, production };
+}
+
 export function createResourceGroup(points: number): ResourceGroup {
   return {
-    points: { amount: points, production: 0 },
-    gold: { amount: 0, production: 0 },
-    steel: { amount: 0, production: 0 },
-    titan: { amount: 0, production: 0 },
-    plant: { amount: 0, production: 0 },
-    energy: { amount: 0, production: 0 },
-    heat: { amount: 0, production: 0 },
+    points: createResourceTargets(points),
+    gold: createResourceTargets(),
+    steel: createResourceTargets(),
+    titan: createResourceTargets(),
+    plant: createResourceTargets(),
+    energy: createResourceTargets(),
+    heat: createResourceTargets(),
   }
 }
