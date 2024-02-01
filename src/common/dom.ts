@@ -14,9 +14,9 @@ function createTagEmpty<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
 }
 
 function createTagText<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
-  return (className: string, textContent: string) => {
+  return (className: string, textContent: string | number) => {
     const node = createElement(tag, className);
-    node.textContent = textContent;
+    node.textContent = textContent.toString();
     return node;
   }
 }
