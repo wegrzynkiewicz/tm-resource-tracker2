@@ -2,7 +2,10 @@ export type Subscriber<TEvent> = (event: TEvent) => void;
 
 export class Channel<TEvent> {
   public readonly subscribers = new Set<Subscriber<TEvent>>();
-  public dispatch(event: TEvent) {
+  public on(subscriber: Subscriber<TEvent>) {
+    this.subscribers.add(subscriber);
+  }
+  public emit(event: TEvent) {
     for (const subscriber of this.subscribers) {
       subscriber(event);
     }
@@ -12,12 +15,18 @@ export class Channel<TEvent> {
 export class Store {
   public readonly updates = new Channel<this>();
   public update() {
-    this.updates.dispatch(this);
+    this.updates.emit(this);
   }
 }
 
-export class Signal<TValue> extends Store {
-  public constructor(public value: TValue) { 
-    super();
+export class Signal<TValue> {
+  public readonly updates = new Channel<TValue>();
+
+  public constructor(
+    public value: TValue
+  ) { }
+
+  public update() {
+    this.updates.emit(this.value);
   }
 }

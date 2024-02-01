@@ -28,9 +28,9 @@ export function createToolbarButton(button: ToolbarButton) {
     span_text("toolbar_label", name),
   ]);
   root.addEventListener("click", () => {
-    toolbarClickChannel.dispatch({ key });
+    toolbarClickChannel.emit({ key });
   });
-  toolbarClickChannel.subscribers.add(({ key }) => {
+  toolbarClickChannel.on(({ key }) => {
     root.classList.toggle("_active", button.key === key);
   });
   return root;

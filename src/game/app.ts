@@ -74,15 +74,15 @@ export function createApp() {
   switcher.elements.set("histories", createHistoriesPanel());
   switcher.elements.set("settings", createSettings());
 
-  historyEntryCreatedChannel.dispatch(examples[0]);
-  historyEntryCreatedChannel.dispatch(examples[1]);
-  historyEntryCreatedChannel.dispatch(examples[2]);
-  historyEntryCreatedChannel.dispatch(examples[3]);
+  historyEntryCreatedChannel.emit(examples[0]);
+  historyEntryCreatedChannel.emit(examples[1]);
+  historyEntryCreatedChannel.emit(examples[2]);
+  historyEntryCreatedChannel.emit(examples[3]);
 
-  toolbarClickChannel.subscribers.add(({ key }) => {
+  toolbarClickChannel.on(({ key }) => {
     switcher.switch(key);
   });
-  toolbarClickChannel.dispatch({ key: "supplies" });
+  toolbarClickChannel.emit({ key: "supplies" });
 
   return div_nodes("app _with-toolbar", [
     top,

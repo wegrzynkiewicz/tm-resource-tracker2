@@ -47,20 +47,20 @@ export function createSupplyModal(options: Resource) {
   const { target, type, count } = options;
   const min = resourcesByType[type].targets[target].min;
 
-  const input = div_text('box _counter _wide', "0");
-  const cancel = button_text('box _button', 'Cancel');
-  const confirm = button_text('box _button', 'Confirm');
-  const operator = button_text('box _button _project', '-');
-  const clear = button_text('box _button _project', 'C');
+  const $input = div_text('box _counter _wide', "0");
+  const $cancel = button_text('box _button', 'Cancel');
+  const $confirm = button_text('box _button', 'Confirm');
+  const $operator = button_text('box _button _project', '-');
+  const $clear = button_text('box _button _project', 'C');
 
-  const calculator = div_nodes('calculator', [
+  const $calculator = div_nodes('calculator', [
     ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(createCalculatorButton),
-    operator,
+    $operator,
     createCalculatorButton(0),
-    clear,
+    $clear,
   ]);
 
-  const root = div_nodes("modal", [
+  const $root = div_nodes("modal", [
     div_nodes("modal_background", [
       div_nodes("modal_container", [
         div_text('modal_title', `Change your ${target}:`),
@@ -78,41 +78,41 @@ export function createSupplyModal(options: Resource) {
         ]),
         div_nodes('modal_count', [
           span_text('modal_count-label _left', 'by'),
-          input,
+          $input,
           span_text('modal_count-label _right', 'units'),
         ]),
-        calculator,
+        $calculator,
         div_nodes('modal_buttons', [
-          cancel,
-          confirm,
+          $cancel,
+          $confirm,
         ]),
       ]),
     ]),
   ]);
 
   const store = new CalculatorStore();
-  store.updates.subscribers.add((store) => {
+  store.updates.on((store) => {
     const { digits, positive } = store;
-    input.textContent = `${positive ? '' : '-'}${digits}`;
-    operator.textContent = positive ? '-' : '+';
+    $input.textContent = `${positive ? '' : '-'}${digits}`;
+    $operator.textContent = positive ? '-' : '+';
     const valid = count + store.getValue() < min;
-    confirm.toggleAttribute('disabled', valid);
+    $confirm.toggleAttribute('disabled', valid);
   });
 
-  onClick(calculator, (event) => {
-    const target = event.target as HTMLElement;
-    const digit = target.dataset.digit;
+  onClick($calculator, (event) => {
+    const $target = event.target as HTMLElement;
+    const digit = $target.dataset.digit;
     assertRequiredString(digit, "required-dataset-digit");
     store.append(digit);
     store.update();
   });
 
-  onClick(operator, () => {
+  onClick($operator, () => {
     store.positive = !store.positive;
     store.update();
   });
 
-  onClick(clear, () => {
+  onClick($clear, () => {
     store.positive = true;
     store.digits = "0";
     store.update();
@@ -120,11 +120,11 @@ export function createSupplyModal(options: Resource) {
 
   const { promise, resolve } = Promise.withResolvers<SupplyModalResponse>();
 
-  onClick(cancel, () => {
+  onClick($cancel, () => {
     resolve({ type: 'cancel' });
   });
 
-  onClick(confirm, () => {
+  onClick($confirm, () => {
     resolve({
       type: 'confirm',
       value: store.getValue(),
@@ -132,5 +132,5 @@ export function createSupplyModal(options: Resource) {
     });
   });
 
-  return { promise, root, store };
+  return { promise, $root, store };
 }

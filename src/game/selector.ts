@@ -65,7 +65,7 @@ export function createSelector(options: SelectorOption[]) {
   ]);
   const root = div_nodes("selector", [left, panel, right]);
 
-  store.updates.subscribers.add(({ index }) => {
+  store.updates.on(({ index }) => {
     panel.style.setProperty("--index", `${index}`);
     left.classList.toggle("_disabled", index === 0);
     right.classList.toggle("_disabled", index === options.length - 1);
