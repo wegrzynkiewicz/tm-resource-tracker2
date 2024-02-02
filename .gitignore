@@ -1,2 +1,2 @@
 *.log
-assets/scripts/main.js
+./mods/client-public/scripts/main.js

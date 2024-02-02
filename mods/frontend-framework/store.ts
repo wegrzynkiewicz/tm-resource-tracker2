@@ -26,6 +26,11 @@ export class Signal<TValue> {
     public value: TValue
   ) { }
 
+  public on(subscriber: Subscriber<TValue>) {
+    this.updates.on(subscriber);
+    subscriber(this.value);
+  }
+
   public update() {
     this.updates.emit(this.value);
   }
