@@ -1,6 +1,7 @@
 import { Store } from "../../frontend-framework/store.ts";
 import { div_nodes, span_empty, span_text } from "../../frontend-framework/dom.ts";
 import { svg_icon } from "../../frontend-framework/svg.ts";
+import { onClick } from "./common.ts";
 
 export interface SelectorOption {
   color: string;
@@ -36,21 +37,21 @@ export class SelectorStore extends Store {
 
   public constructor(
     public readonly options: SelectorOption[]
-  ) { 
+  ) {
     super();
   }
 
   public dec() {
     if (this.index > 0) {
       this.index -= 1;
-      this.update();
+      this.emit();
     }
   }
 
   public inc() {
     if (this.index < this.options.length - 1) {
       this.index += 1;
-      this.update();
+      this.emit();
     }
   }
 }
@@ -58,22 +59,21 @@ export class SelectorStore extends Store {
 export function createSelector(options: SelectorOption[]) {
   const store = new SelectorStore(options);
 
-  const left = svg_icon("selector_icon", "arrow-left");
-  const right = svg_icon("selector_icon", "arrow-right");
-  const panel = div_nodes("selector_panel", [
+  const $left = svg_icon("selector_icon", "arrow-left");
+  const $right = svg_icon("selector_icon", "arrow-right");
+  const $panel = div_nodes("selector_panel", [
     div_nodes('selector_panel-container', options.map(createSelectorOption)),
   ]);
-  const root = div_nodes("selector", [left, panel, right]);
+  const $root = div_nodes("selector", [$left, $panel, $right]);
 
-  store.updates.on(({ index }) => {
-    panel.style.setProperty("--index", `${index}`);
-    left.classList.toggle("_disabled", index === 0);
-    right.classList.toggle("_disabled", index === options.length - 1);
+  store.on(({ index }) => {
+    $panel.style.setProperty("--index", `${index}`);
+    $left.classList.toggle("_disabled", index === 0);
+    $right.classList.toggle("_disabled", index === options.length - 1);
   });
-  store.update();
 
-  left.addEventListener("click", () => store.dec());
-  right.addEventListener("click", () => store.inc());
+  onClick($left, () => store.dec());
+  onClick($right, () => store.inc());
 
-  return { root, $root: root, store };
+  return { $root, store };
 }

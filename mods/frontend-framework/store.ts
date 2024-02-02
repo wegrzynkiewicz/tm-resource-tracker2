@@ -14,7 +14,13 @@ export class Channel<TEvent> {
 
 export class Store {
   public readonly updates = new Channel<this>();
-  public update() {
+
+  public on(subscriber: Subscriber<this>) {
+    this.updates.on(subscriber);
+    subscriber(this);
+  }
+
+  public emit() {
     this.updates.emit(this);
   }
 }
@@ -31,7 +37,7 @@ export class Signal<TValue> {
     subscriber(this.value);
   }
 
-  public update() {
+  public emit() {
     this.updates.emit(this.value);
   }
 }

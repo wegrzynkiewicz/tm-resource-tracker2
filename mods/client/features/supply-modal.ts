@@ -1,4 +1,3 @@
-import { assertRequiredString } from "../../common/asserts.ts";
 import { Store } from "../../frontend-framework/store.ts";
 import { button_text, div_nodes, div_text, img_props, span_text } from "../../frontend-framework/dom.ts";
 import { Resource, resourcesByType } from "../../common/resources.ts";
@@ -20,12 +19,26 @@ export interface SupplyModalOptions {
 export class CalculatorStore extends Store {
   public digits = "0";
   public positive = true;
+
   public append(digit: string) {
     if (this.digits.length >= 3) {
       return;
     }
     this.digits = this.digits === "0" ? digit : `${this.digits}${digit}`;
+    this.emit();
   }
+
+  public clear() {
+    this.digits = "0";
+    this.positive = true;
+    this.emit();
+  }
+
+  public reverse() {
+    this.positive = !this.positive;
+    this.emit();
+  }
+
   public getValue(): number {
     return parseInt(this.digits) * (this.positive ? 1 : -1);
   }
@@ -91,7 +104,7 @@ export function createSupplyModal(options: Resource) {
   ]);
 
   const store = new CalculatorStore();
-  store.updates.on((store) => {
+  store.on((store) => {
     const { digits, positive } = store;
     $input.textContent = `${positive ? '' : '-'}${digits}`;
     $operator.textContent = positive ? '-' : '+';
@@ -102,21 +115,14 @@ export function createSupplyModal(options: Resource) {
   onClick($calculator, (event) => {
     const $target = event.target as HTMLElement;
     const digit = $target.dataset.digit;
-    assertRequiredString(digit, "required-dataset-digit");
+    if (digit === undefined) {
+      return;
+    }
     store.append(digit);
-    store.update();
   });
 
-  onClick($operator, () => {
-    store.positive = !store.positive;
-    store.update();
-  });
-
-  onClick($clear, () => {
-    store.positive = true;
-    store.digits = "0";
-    store.update();
-  });
+  onClick($operator, () => store.reverse());
+  onClick($clear, () => store.clear());
 
   const { promise, resolve } = Promise.withResolvers<SupplyModalResponse>();
 

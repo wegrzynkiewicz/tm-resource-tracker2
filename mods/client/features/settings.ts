@@ -24,7 +24,7 @@ export function createPersonalInfo() {
         for: 'player-color',
         textContent: 'Color'
       }),
-      createSelector(colors).root,
+      createSelector(colors).$root,
     ]),
   ]);
 }

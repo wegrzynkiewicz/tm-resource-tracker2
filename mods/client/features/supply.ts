@@ -16,11 +16,10 @@ function createSupply(
   signal: Signal<ResourceGroup>,
   channel: Channel<SupplyClicked>,
 ) {
-  const { amount, production } = signal.value[type];
-  const $production = div_text('box _counter', production);
-  const $amount = div_text('box _counter', amount);
+  const $production = div_text('box _counter', '0');
+  const $amount = div_text('box _counter', '0');
 
-  const $root = fragment_nodes([
+  const $fragment = fragment_nodes([
     div_nodes(`supply _production _${type}`, [
       $production,
     ]),
@@ -38,8 +37,8 @@ function createSupply(
     ]),
   ]);
 
-  signal.updates.on(() => {
-    const { amount, production } = signal.value[type];
+  signal.on((value) => {
+    const { amount, production } = value[type];
     $amount.textContent = amount.toString();
     $production.textContent = production.toString();
   });
@@ -47,7 +46,7 @@ function createSupply(
   onClick($amount, () => channel.emit({ type, target: "amount" }));
   onClick($production, () => channel.emit({ type, target: "production" }));
 
-  return $root;
+  return $fragment;
 }
 
 export function createSupplies() {
@@ -62,7 +61,7 @@ export function createSupplies() {
       return;
     }
     signal.value[type][target] = result.value;
-    signal.update();
+    signal.emit();
   });
   return div_nodes("panel_item", [
     div_nodes("supplies", [

@@ -69,7 +69,7 @@ export function createJoinModal() {
             for: 'player-color',
             textContent: 'Color'
           }),
-          createSelector(colors).root,
+          createSelector(colors).$root,
         ]),
         div_nodes('modal_buttons', [
           $cancel,
