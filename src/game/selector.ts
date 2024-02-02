@@ -75,5 +75,5 @@ export function createSelector(options: SelectorOption[]) {
   left.addEventListener("click", () => store.dec());
   right.addEventListener("click", () => store.inc());
 
-  return { root, store };
+  return { root, $root: root, store };
 }

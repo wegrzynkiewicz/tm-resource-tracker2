@@ -1,6 +1,8 @@
 import { div_empty, div_text, div_nodes, fragment_nodes } from "../common/dom.ts";
 import { ElementSwitcher } from "../common/element-switcher.ts";
+import { Channel } from "../common/store.ts";
 import { createHistoriesPanel, examples, historyEntryCreatedChannel } from "./history.ts";
+import { createHomepage } from "./homepage/homepage.ts";
 import { modalManager } from "./modal.ts";
 import { createProjectsPanel } from "./project.ts";
 import { createSettings } from "./settings.ts";
@@ -63,12 +65,15 @@ export function createScroll() {
   return { fragment, content };
 }
 
+export const appState = new Channel<"homepage" | "work">();
+
 export function createApp() {
   const top = createTop();
   const scroll = createScroll();
-  const toolbar = createToolbar();
+  const $toolbar = createToolbar();
 
   const switcher = new ElementSwitcher(scroll.content);
+  switcher.elements.set("homepage", createHomepage());
   switcher.elements.set("supplies", createSuppliesPanel());
   switcher.elements.set("projects", createProjectsPanel());
   switcher.elements.set("histories", createHistoriesPanel());
@@ -82,12 +87,26 @@ export function createApp() {
   toolbarClickChannel.on(({ key }) => {
     switcher.switch(key);
   });
-  toolbarClickChannel.emit({ key: "supplies" });
 
-  return div_nodes("app _with-toolbar", [
+  const $root = div_nodes("app", [
     top,
     scroll.fragment,
     modalManager.root,
-    toolbar,
+    $toolbar,
   ]);
+
+  appState.on((state) => {
+    if (state === "homepage") {
+      $root.classList.remove('_with-toolbar');
+      $toolbar.classList.add('_hidden');
+      toolbarClickChannel.emit({ key: "homepage" });
+    } else if (state === "work") {
+      $root.classList.add('_with-toolbar');
+      $toolbar.classList.remove('_hidden');
+      toolbarClickChannel.emit({ key: "settings" });
+    }
+  });
+  appState.emit("homepage");
+
+  return $root;
 }

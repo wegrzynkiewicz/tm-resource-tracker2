@@ -64,14 +64,14 @@ body {
   color: var(--color-text);
   display: grid;
   grid-template-columns: [left] 100lvw [right];
-  grid-template-rows: [top] 32px [content] 10px [shadow-top-end] auto [shadow-bottom] 10px [end];
+  grid-template-rows: [top] 32px [content] 10px [shadow-top-end] 1fr [shadow-bottom] 10px [end];
   height: 100dvh;
   min-width: 380px;
   transition: background-position 0.5s ease-out;
 }
 
 .app._with-toolbar {
-  grid-template-rows: [top] 32px [content] 10px [shadow-top-end] auto [shadow-bottom] 10px [toolbar] 70px [end];
+  grid-template-rows: [top] 32px [content] 10px [shadow-top-end] 1fr [shadow-bottom] 10px [toolbar] 70px [end];
 }
 
 .app_main {
@@ -104,6 +104,14 @@ body {
   box-shadow: inset 0px -12px 12px -10px rgba(0, 0, 0, 0.6);
 }
 
+.app_content {
+  align-items: flex-start;
+  display: flex;
+  flex: 100%;
+  justify-content: center;
+  min-height: 100%;
+}
+
 .app_content-overlay {
   grid-column: left / right;
   grid-row: top / end;
@@ -133,7 +141,7 @@ body {
 }
 
 .modal_container {
-  align-items: center;
+  align-items: stretch;
   display: flex;
   flex-direction: column;
   gap: 24px 0;
@@ -208,6 +216,7 @@ body {
 }
 
 .calculator {
+  align-self: center;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
@@ -224,6 +233,9 @@ body {
 
 .scroll_container {
   min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .panel {
@@ -249,9 +261,13 @@ body {
   align-self: stretch;
 }
 
-.content._homepage {
-  padding: 40px 0px;
-  gap: 60px;
+.homepage {
+  align-items: center;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
 }
 
 .player-cube {
@@ -357,6 +373,7 @@ body {
   padding: 0px 12px;
   font-size: 1.2rem;
   align-self: center;
+  text-wrap: nowrap;
 }
 
 .edit-box_input {

@@ -1,5 +1,11 @@
-import { div_nodes, div_text, span_props, span_text } from "../common/dom.ts";
-import { svg_icon } from "../common/svg.ts";
+import { div_nodes, div_text } from "../common/dom.ts";
+import { Store } from "../common/store.ts";
+
+class TopStore extends Store {
+  constructor() {
+    super();
+  }
+}
 
 export function createTop() {
   return div_nodes("top _with-controller", [
