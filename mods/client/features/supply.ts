@@ -1,10 +1,11 @@
-import { fragment_nodes, div_text, img_props, div_nodes, div_empty } from "../../frontend-framework/dom.ts";
+import { div_text, img_props, div_nodes, div_empty } from "../../frontend-framework/dom.ts";
 import { onClick } from "./common.ts";
-import { Channel, Signal } from "../../frontend-framework/store.ts";
+import { Signal } from "../../frontend-framework/store.ts";
 import { ResourceGroup, ResourceTarget } from "../../common/resources.ts";
 import { ResourceType, resources, createResourceGroup } from "../../common/resources.ts";
 import { createSupplyModal } from "./supply-modal.ts";
 import { modalManager } from "./modal.ts";
+import { createPanel } from "./panel.ts";
 
 interface Supply {
   target: ResourceTarget;
@@ -17,12 +18,10 @@ export class Supplies {
 
   public constructor() {
     this.signal = new Signal(createResourceGroup(20));
-    this.$root = div_nodes("panel_item", [
-      div_nodes("supplies", [
-        div_empty("supplies_production"),
-        div_text("supplies_round", "0"),
-        ...this.generateSupplies(),
-      ]),
+    this.$root = div_nodes("supplies", [
+      div_empty("supplies_production"),
+      div_text("supplies_round", "0"),
+      ...this.generateSupplies(),
     ]);
   }
 
@@ -67,5 +66,5 @@ export class Supplies {
 }
 
 export function createSuppliesPanel() {
-  return div_nodes("panel", [1, 2, 3].map(() => new Supplies().$root));
+  return createPanel([1, 2, 3].map(() => new Supplies().$root));
 }
