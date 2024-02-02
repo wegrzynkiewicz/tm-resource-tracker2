@@ -3,8 +3,14 @@
     "lib": [
       "ESNext",
       "DOM",
-      "DOM.Iterable"
+      "DOM.Iterable",
+      "deno.ns"
     ]
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["require-await"]
+    }
   },
   "fmt": {
     "options": {
@@ -13,6 +19,7 @@
   },
   "tasks": {
     "bundle": "deno bundle --watch mods/client/main.ts mods/client-public/scripts/main.js",
+    "server": "deno run -A --watch mods/server/index.ts",
     "serve": "serve mods/client-public"
   }
 }
