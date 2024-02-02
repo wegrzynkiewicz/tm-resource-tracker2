@@ -1,5 +1,5 @@
-import { onClick } from "../../common.ts";
-import { div_text, div_nodes, input_props, label_props } from "../../common/dom.ts";
+import { onClick } from "../common.ts";
+import { div_text, div_nodes, input_props, label_props } from "../../../frontend-framework/dom.ts";
 import { createSelector, colors } from "../selector.ts";
 
 export interface JoinModalConfirmResponse {

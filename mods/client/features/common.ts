@@ -1,4 +1,4 @@
-import { assertNonNull } from "./asserts.ts";
+import { assertNonNull } from "../../common/asserts.ts";
 
 type WithQuerySelector = {
   querySelector: Element['querySelector'];

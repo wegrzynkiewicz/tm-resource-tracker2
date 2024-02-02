@@ -1,4 +1,4 @@
-import { div_empty } from "../common/dom.ts";
+import { div_empty } from "../../frontend-framework/dom.ts";
 
 export interface Modal {
   $root: HTMLElement;

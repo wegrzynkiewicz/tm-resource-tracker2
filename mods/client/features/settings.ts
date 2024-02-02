@@ -1,4 +1,4 @@
-import { button_text, div_nodes, fieldset, form, input_props, label_props, legend_text } from "../common/dom.ts";
+import { button_text, div_nodes, fieldset, form, input_props, label_props, legend_text } from "../../frontend-framework/dom.ts";
 import { createSelector, colors } from "./selector.ts";
 
 export function createPersonalInfo() {

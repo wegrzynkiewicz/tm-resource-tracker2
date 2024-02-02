@@ -1,6 +1,6 @@
-import { Channel } from "../common/store.ts";
-import { div_nodes, div_text, div_empty } from "../common/dom.ts";
-import { Resource } from "../data/resources.ts";
+import { Channel } from "../../frontend-framework/store.ts";
+import { div_nodes, div_text, div_empty } from "../../frontend-framework/dom.ts";
+import { Resource } from "../../common/resources.ts";
 import { createPanel } from "./panel.ts";
 import { createResource } from "./resource.ts";
 

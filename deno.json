@@ -12,6 +12,7 @@
     }
   },
   "tasks": {
-    "bundle": "deno bundle --watch src/main.ts assets/scripts/main.js"
+    "bundle": "deno bundle --watch mods/client/main.ts mods/client-public/scripts/main.js",
+    "serve": "serve mods/client-public"
   }
 }

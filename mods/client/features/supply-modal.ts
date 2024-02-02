@@ -1,9 +1,9 @@
-import { assertRequiredString } from "../asserts.ts";
-import { Store } from "../common/store.ts";
-import { button_text, div_nodes, div_text, img_props, span_text } from "../common/dom.ts";
-import { Resource, resourcesByType } from "../data/resources.ts";
-import { ResourceTarget, ResourceType } from "../data/resources.ts";
-import { onClick } from "../common.ts";
+import { assertRequiredString } from "../../common/asserts.ts";
+import { Store } from "../../frontend-framework/store.ts";
+import { button_text, div_nodes, div_text, img_props, span_text } from "../../frontend-framework/dom.ts";
+import { Resource, resourcesByType } from "../../common/resources.ts";
+import { ResourceTarget, ResourceType } from "../../common/resources.ts";
+import { onClick } from "./common.ts";
 
 export function createCalculatorButton(digit: number) {
   const root = button_text('box _button _project', digit.toString())

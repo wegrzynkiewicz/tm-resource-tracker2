@@ -1,5 +1,5 @@
-import { div_nodes, span_text, img_props } from "../common/dom.ts";
-import { Resource } from "../data/resources.ts";
+import { div_nodes, span_text, img_props } from "../../frontend-framework/dom.ts";
+import { Resource } from "../../common/resources.ts";
 
 export function formatCount(count: number) {
   if (count >= 0) {

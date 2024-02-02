@@ -1,15 +1,15 @@
-import { div_empty, div_text, div_nodes, fragment_nodes } from "../common/dom.ts";
-import { ElementSwitcher } from "../common/element-switcher.ts";
-import { Channel } from "../common/store.ts";
-import { createHistoriesPanel, examples, historyEntryCreatedChannel } from "./history.ts";
+import { div_empty, div_text, div_nodes, fragment_nodes } from "../../frontend-framework/dom.ts";
+import { ElementSwitcher } from "../../frontend-framework/element-switcher.ts";
+import { Channel } from "../../frontend-framework/store.ts";
+import { createHistoriesPanel, examples, historyEntryCreatedChannel } from "../features/history.ts";
 import { createHomepage } from "./homepage/homepage.ts";
-import { modalManager } from "./modal.ts";
-import { createProjectsPanel } from "./project.ts";
-import { createSettings } from "./settings.ts";
-import { createSuppliesPanel } from "./supply.ts";
-import { toolbarClickChannel } from "./toolbar.ts";
-import { createToolbar } from "./toolbar.ts";
-import { createTop } from "./top.ts";
+import { modalManager } from "../features/modal.ts";
+import { createProjectsPanel } from "../features/project.ts";
+import { createSettings } from "../features/settings.ts";
+import { createSuppliesPanel } from "../features/supply.ts";
+import { toolbarClickChannel } from "../features/toolbar.ts";
+import { createToolbar } from "../features/toolbar.ts";
+import { createTop } from "../features/top.ts";
 
 export function createQuestion() {
   return div_nodes("app_content-overlay", [

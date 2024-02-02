@@ -1,6 +1,6 @@
 import { appState } from "../app.ts";
-import { onClick } from "../../common.ts";
-import { button_text, div_nodes } from "../../common/dom.ts";
+import { onClick } from "../common.ts";
+import { button_text, div_nodes } from "../../../frontend-framework/dom.ts";
 import { createJoinModal } from "./join-modal.ts";
 import { modalManager } from "../modal.ts";
 

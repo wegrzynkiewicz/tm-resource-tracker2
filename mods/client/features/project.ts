@@ -1,4 +1,4 @@
-import { button_text, div_nodes, div_text, img_props } from "../common/dom.ts";
+import { button_text, div_nodes, div_text, img_props } from "../../frontend-framework/dom.ts";
 
 export interface Project {
   name: string;

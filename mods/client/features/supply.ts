@@ -1,8 +1,8 @@
-import { fragment_nodes, div_text, img_props, div_nodes, div_empty } from "../common/dom.ts";
-import { onClick } from "../common.ts";
-import { Channel, Signal } from "../common/store.ts";
-import { ResourceGroup, ResourceTarget } from "../data/resources.ts";
-import { ResourceType, resources, createResourceGroup } from "../data/resources.ts";
+import { fragment_nodes, div_text, img_props, div_nodes, div_empty } from "../../frontend-framework/dom.ts";
+import { onClick } from "./common.ts";
+import { Channel, Signal } from "../../frontend-framework/store.ts";
+import { ResourceGroup, ResourceTarget } from "../../common/resources.ts";
+import { ResourceType, resources, createResourceGroup } from "../../common/resources.ts";
 import { createSupplyModal } from "./supply-modal.ts";
 import { modalManager } from "./modal.ts";
 

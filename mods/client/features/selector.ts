@@ -1,6 +1,6 @@
-import { Store } from "../common/store.ts";
-import { div_nodes, span_empty, span_text } from "../common/dom.ts";
-import { svg_icon } from "../common/svg.ts";
+import { Store } from "../../frontend-framework/store.ts";
+import { div_nodes, span_empty, span_text } from "../../frontend-framework/dom.ts";
+import { svg_icon } from "../../frontend-framework/svg.ts";
 
 export interface SelectorOption {
   color: string;

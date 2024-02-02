@@ -1,4 +1,4 @@
-import { Breaker } from "../asserts.ts";
+import { Breaker } from "./asserts.ts";
 
 export interface Provider<TInstance> {
   (resolver: ServiceResolver): TInstance;

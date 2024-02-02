@@ -1,5 +1,5 @@
-import { div_nodes, div_text } from "../common/dom.ts";
-import { Store } from "../common/store.ts";
+import { div_nodes, div_text } from "../../frontend-framework/dom.ts";
+import { Store } from "../../frontend-framework/store.ts";
 
 class TopStore extends Store {
   constructor() {

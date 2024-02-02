@@ -1,4 +1,4 @@
-import { Breaker } from "../asserts.ts";
+import { Breaker } from "../common/asserts.ts";
 
 export class ElementSwitcher {
   private currentElement?: Element;

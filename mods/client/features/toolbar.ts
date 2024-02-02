@@ -1,6 +1,6 @@
-import { Channel } from "../common/store.ts";
-import { button_nodes, div_nodes, span_text } from "../common/dom.ts";
-import { svg_icon } from "../common/svg.ts";
+import { Channel } from "../../frontend-framework/store.ts";
+import { button_nodes, div_nodes, span_text } from "../../frontend-framework/dom.ts";
+import { svg_icon } from "../../frontend-framework/svg.ts";
 
 interface ToolbarButton {
   key: string;
