@@ -74,10 +74,10 @@ export function listener<TEvent extends keyof GlobalEventHandlersEventMap>(
   element.addEventListener(type, callback, options);
 }
 
-export function onClick(element: Element, listener: (event: MouseEvent)=> void) {
-  element.addEventListener('click', (event) => {
+export function onClick<TElement extends Element>(element: TElement, listener: (event: MouseEvent)=> void) {
+  element.addEventListener('click', function onClickWrapper(this: TElement, event) {
     event.preventDefault();
     event.stopPropagation();
-    listener(event as MouseEvent);
+    listener.call(this, event as MouseEvent);
   });
 }
