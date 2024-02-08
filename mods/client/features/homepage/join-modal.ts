@@ -1,7 +1,9 @@
 import { onClick } from "../common.ts";
-import { div_text, div_nodes, input_props, label_props } from "../../../frontend-framework/dom.ts";
-import { createSelector, colors } from "../selector.ts";
+import { div_text, div_nodes, label_props } from "../../../frontend-framework/dom.ts";
+import { createSelector } from "../selector.ts";
 import { withResolvers } from "../../../common/useful.ts";
+import { colors } from "../../../common/colors.ts";
+import { createEditBox } from "../../common/edit-box.ts";
 
 export interface JoinModalConfirmResponse {
   type: 'confirm',
@@ -19,31 +21,6 @@ export interface JoinModalCancelResponse {
 }
 
 export type JoinModalResponse = JoinModalConfirmResponse | JoinModalCancelResponse;
-
-export function createEditBox(
-  { label, name, placeholder }: {
-    label: string,
-    name: string,
-    placeholder?: string
-  }
-) {
-  const $input = input_props({
-    autocomplete: "off",
-    className: 'edit-box_input',
-    name,
-    type: 'text',
-    placeholder: placeholder ?? '',
-  });
-  const $root = div_nodes('edit-box _input', [
-    label_props({
-      className: 'edit-box_label',
-      for: name,
-      textContent: label,
-    }),
-    $input,
-  ]);
-  return { $root, $input }
-}
 
 export function createJoinModal() {
 

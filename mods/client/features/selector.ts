@@ -4,33 +4,19 @@ import { svg_icon } from "../../frontend-framework/svg.ts";
 import { onClick } from "./common.ts";
 
 export interface SelectorOption {
-  color: string;
   key: string;
   name: string;
 }
 
-export const colors: SelectorOption[] = [
-  { color: "green", key: "green", name: "Green" },
-  { color: "red", key: "red", name: "Red" },
-  { color: "blue", key: "blue", name: "Blue" },
-  { color: "yellow", key: "yellow", name: "Yellow" },
-  { color: "black", key: "black", name: "Black" },
-];
-
 export function createSelectorOption(option: SelectorOption) {
-  const { color, key, name } = option;
+  const { key, name } = option;
   const content = div_nodes("selector_panel-item", [
-    span_empty(`player-cube _${color}`),
+    span_empty(`player-cube _${key}`),
     span_text("text", name),
   ]);
   content.dataset.key = key;
   return content;
 };
-
-export interface SelectorSelected {
-  index: number;
-  key: string;
-}
 
 export class SelectorStore extends Store {
   public index = 0;
@@ -39,6 +25,10 @@ export class SelectorStore extends Store {
     public readonly options: SelectorOption[]
   ) {
     super();
+  }
+
+  public getValue(): SelectorOption {
+    return this.options[this.index];
   }
 
   public dec() {

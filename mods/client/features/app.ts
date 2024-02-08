@@ -2,7 +2,6 @@ import { div_empty, div_text, div_nodes, fragment_nodes } from "../../frontend-f
 import { ElementSwitcher } from "../../frontend-framework/element-switcher.ts";
 import { Channel } from "../../frontend-framework/store.ts";
 import { createHistoriesPanel, examples, historyEntryCreatedChannel } from "../features/history.ts";
-import { createHomepage } from "./homepage/homepage.ts";
 import { modalManager } from "../features/modal.ts";
 import { createProjectsPanel } from "../features/project.ts";
 import { createSettings } from "../features/settings.ts";
@@ -10,6 +9,7 @@ import { createSuppliesPanel } from "../features/supply.ts";
 import { toolbarClickChannel } from "../features/toolbar.ts";
 import { createToolbar } from "../features/toolbar.ts";
 import { createTop } from "../features/top.ts";
+import { HomepageView } from "./homepage/homepage.ts";
 
 export function createQuestion() {
   return div_nodes("app_content-overlay", [
@@ -73,7 +73,7 @@ export function createApp() {
   const $toolbar = createToolbar();
 
   const switcher = new ElementSwitcher(scroll.content);
-  switcher.elements.set("homepage", createHomepage());
+  switcher.elements.set("homepage", new HomepageView().$root);
   switcher.elements.set("supplies", createSuppliesPanel());
   switcher.elements.set("projects", createProjectsPanel());
   switcher.elements.set("histories", createHistoriesPanel());

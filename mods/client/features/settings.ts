@@ -1,5 +1,6 @@
+import { colors } from "../../common/colors.ts";
 import { button_text, div_nodes, fieldset, form, input_props, label_props, legend_text } from "../../frontend-framework/dom.ts";
-import { createSelector, colors } from "./selector.ts";
+import { createSelector } from "./selector.ts";
 
 export function createPersonalInfo() {
   return fieldset('settings_fieldset', [
