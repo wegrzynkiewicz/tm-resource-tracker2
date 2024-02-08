@@ -5,7 +5,7 @@ import { ResourceGroup, ResourceTarget } from "../../common/resources.ts";
 import { ResourceType, resources, createResourceGroup } from "../../common/resources.ts";
 import { createSupplyModal } from "./supply-modal.ts";
 import { modalManager } from "./modal.ts";
-import { createPanel } from "./panel.ts";
+import { createPanel } from "./app/panel.ts";
 
 interface Supply {
   target: ResourceTarget;

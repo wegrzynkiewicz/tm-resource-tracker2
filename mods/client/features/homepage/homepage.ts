@@ -3,7 +3,7 @@ import { button_text, div_nodes } from "../../../frontend-framework/dom.ts";
 import { createJoinModal } from "./join-modal.ts";
 import { modalManager } from "../modal.ts";
 import { createCreationGameModal } from "./creation-modal.ts";
-import { appState } from "../app.ts";
+import { appState } from "../app/app.ts";
 
 export class HomepageView {
   public readonly $root: HTMLDivElement;
