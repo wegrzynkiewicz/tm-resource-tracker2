@@ -1,6 +1,7 @@
 import { onClick } from "../common.ts";
 import { div_text, div_nodes, input_props, label_props } from "../../../frontend-framework/dom.ts";
 import { createSelector, colors } from "../selector.ts";
+import { withResolvers } from "../../../common/useful.ts";
 
 export interface JoinModalConfirmResponse {
   type: 'confirm',
@@ -79,7 +80,7 @@ export function createJoinModal() {
     ]),
   ]);
 
-  const { promise, resolve } = Promise.withResolvers<JoinModalResponse>();
+  const { promise, resolve } = withResolvers<JoinModalResponse>();
 
   onClick($cancel, () => {
     resolve({ type: 'cancel' });

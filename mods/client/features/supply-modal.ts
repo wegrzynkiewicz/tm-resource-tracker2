@@ -3,6 +3,7 @@ import { button_text, div_nodes, div_text, img_props, span_text } from "../../fr
 import { Resource, resourcesByType } from "../../common/resources.ts";
 import { ResourceTarget, ResourceType } from "../../common/resources.ts";
 import { onClick } from "./common.ts";
+import { withResolvers } from "../../common/useful.ts";
 
 export function createCalculatorButton(digit: number) {
   const root = button_text('box _button _project', digit.toString())
@@ -124,7 +125,7 @@ export function createSupplyModal(options: Resource) {
   onClick($operator, () => store.reverse());
   onClick($clear, () => store.clear());
 
-  const { promise, resolve } = Promise.withResolvers<SupplyModalResponse>();
+  const { promise, resolve } = withResolvers<SupplyModalResponse>();
 
   onClick($cancel, () => {
     resolve({ type: 'cancel' });
