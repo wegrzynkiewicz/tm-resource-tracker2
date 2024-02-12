@@ -11,8 +11,8 @@ import {
 import { createSelector } from "./selector.ts";
 
 export function createPersonalInfo() {
-  return fieldset("settings_fieldset", [
-    legend_text("settings_legend", "Personal info"),
+  return fieldset("space_container", [
+    legend_text("space_caption", "Personal info"),
     div_nodes("edit-box _input", [
       label_props({
         className: "edit-box_label",
@@ -40,8 +40,8 @@ export function createPersonalInfo() {
 
 export function createGenerals() {
   let quit;
-  const root = fieldset("settings_fieldset", [
-    legend_text("settings_legend", "Generals"),
+  const root = fieldset("space_container", [
+    legend_text("space_caption", "Generals"),
     div_nodes("edit-box _input", [
       label_props({
         className: "edit-box_label",
@@ -67,8 +67,8 @@ export function createGenerals() {
 
 export function createAdmin() {
   let production, subtract;
-  const root = fieldset("settings_fieldset", [
-    legend_text("settings_legend", "Admin settings"),
+  const root = fieldset("space_container", [
+    legend_text("space_caption", "Admin settings"),
     production = button_text("box _action", "Turn to production phase"),
     subtract = button_text("box _action", "Subtract each player's terraforming rate"),
   ]);
@@ -76,7 +76,7 @@ export function createAdmin() {
 }
 
 export function createSettings() {
-  return form({ className: "settings_form" }, [
+  return form({ className: "space" }, [
     createPersonalInfo(),
     createGenerals(),
     createAdmin(),

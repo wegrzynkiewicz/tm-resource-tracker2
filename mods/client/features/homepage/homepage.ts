@@ -4,12 +4,15 @@ import { createJoinModal } from "./join-modal.ts";
 import { modalManager } from "../modal.ts";
 import { createCreationGameModal } from "./creation-modal.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
-import { ClientGameManager, provideClientGameManager } from "../game/manager.ts";
+import { Channel } from "../../../frontend-framework/store.ts";
+import { CreateGame, JoinGame } from "../game/source.ts";
+import { provideJoinGameChannel, provideCreateGameChannel } from "../game/source.ts";
 
-export class Homepage {
+export class HomepageView {
   public readonly $root: HTMLDivElement;
   public constructor(
-    private readonly clientGameManager: ClientGameManager,
+    private createGameChannel: Channel<CreateGame>,
+    private joinGameChannel: Channel<JoinGame>,
   ) {
     const $create = button_text("box _action", "New Game");
     const $join = button_text("box _action", "Join the Game");
@@ -31,8 +34,7 @@ export class Homepage {
     if (result.type === "cancel") {
       return;
     }
-    const { colorKey, name } = result.value
-    this.clientGameManager.createGame({ colorKey, name });
+    this.createGameChannel.emit(result.value);
   }
 
   protected async whenJoinGameClicked() {
@@ -42,11 +44,13 @@ export class Homepage {
     if (result.type === "cancel") {
       return;
     }
+    this.joinGameChannel.emit(result.value);
   }
 }
 
-export function provideHomepage(resolver: ServiceResolver) {
-  return new Homepage(
-    resolver.resolve(provideClientGameManager),
+export function provideHomepageView(resolver: ServiceResolver) {
+  return new HomepageView(
+    resolver.resolve(provideCreateGameChannel),
+    resolver.resolve(provideJoinGameChannel),
   );
 }

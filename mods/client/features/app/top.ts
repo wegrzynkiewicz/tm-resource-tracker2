@@ -9,7 +9,7 @@ class TopStore extends Store {
   }
 }
 
-export class Top {
+export class TopView {
   public readonly $root: HTMLDivElement;
   protected readonly $label: HTMLDivElement;
   protected readonly $controller: HTMLDivElement;
@@ -31,6 +31,6 @@ export class Top {
   }
 }
 
-export function provideTop() {
-  return new TopStore();
+export function provideTopView() {
+  return new TopView();
 }

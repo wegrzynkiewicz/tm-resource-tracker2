@@ -8,12 +8,12 @@ import { createSettings } from "../settings.ts";
 import { createSuppliesPanel } from "../supply.ts";
 import { toolbarClickChannel } from "../toolbar.ts";
 import { createToolbar } from "../toolbar.ts";
-import { Homepage, provideHomepage } from "../homepage/homepage.ts";
-import { WaitingView } from "../waiting/waiting.ts";
 import { createScroll } from "./scroll.ts";
-import { Top } from "./top.ts";
+import { TopView, provideTopView } from "./top.ts";
 import { createLoading } from "./loading.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
+import { ClientConfig, provideClientConfig } from "../config.ts";
+import { HomepageView, provideHomepageView } from "../homepage/homepage.ts";
 
 export function createQuestion() {
   return div_nodes("app_content-overlay", [
@@ -35,19 +35,21 @@ export const appState = new Channel<"homepage" | "playing" | "waiting" | "loadin
 
 export class AppView {
   public readonly $root: HTMLDivElement;
+  protected readonly $content: HTMLDivElement;
   protected readonly $toolbar: HTMLDivElement;
+  protected readonly $loading = createLoading();
 
   public constructor(
-    homepage: Homepage,
+    private readonly clientConfig: ClientConfig,
+    private readonly homepageView: HomepageView,
+    public readonly top: TopView,
   ) {
-    const top = new Top();
     const scroll = createScroll();
+    this.$content = scroll.$content;
     this.$toolbar = createToolbar();
 
     const switcher = new ElementSwitcher(scroll.$content);
     switcher.elements.set("loading", createLoading());
-    switcher.elements.set("waiting", new WaitingView().$root);
-    switcher.elements.set("homepage", homepage.$root);
     switcher.elements.set("supplies", createSuppliesPanel());
     switcher.elements.set("projects", createProjectsPanel());
     switcher.elements.set("histories", createHistoriesPanel());
@@ -68,23 +70,16 @@ export class AppView {
       modalManager.root,
       this.$toolbar,
     ]);
+    this.loading();
+  }
 
-    appState.on((state) => {
-      if (state === "waiting") {
-        this.hideToolbar();
-        switcher.switch("waiting");
-      } else if (state === "loading") {
-        this.hideToolbar();
-        switcher.switch("loading");
-      } else if (state === "homepage") {
-        this.hideToolbar();
-        switcher.switch("homepage");
-      } else if (state === "playing") {
-        this.showToolbar();
-        switcher.switch("supplies");
-      }
-    });
-    appState.emit("loading");
+  public mount($element: HTMLElement) {
+    this.$content.replaceChildren($element);
+  }
+
+  public showToolbar() {
+    this.$root.classList.add("_with-toolbar");
+    this.$toolbar.classList.remove("_hidden");
   }
 
   public hideToolbar() {
@@ -92,14 +87,23 @@ export class AppView {
     this.$toolbar.classList.add("_hidden");
   }
 
-  public showToolbar() {
-    this.$root.classList.add("_with-toolbar");
-    this.$toolbar.classList.remove("_hidden");
+  public homepage() {
+    this.top.setLabel(this.clientConfig.title);
+    this.mount(this.homepageView.$root);
+    this.hideToolbar();
+  }
+
+  public loading() {
+    this.top.setLabel(this.clientConfig.title);
+    this.mount(this.$loading);
+    this.hideToolbar();
   }
 }
 
 export function provideAppView(resolver: ServiceResolver) {
   return new AppView(
-    resolver.resolve(provideHomepage),
+    resolver.resolve(provideClientConfig),
+    resolver.resolve(provideHomepageView),
+    resolver.resolve(provideTopView),
   );
 }

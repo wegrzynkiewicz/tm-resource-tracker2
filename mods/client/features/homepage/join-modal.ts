@@ -4,23 +4,13 @@ import { createSelector } from "../selector.ts";
 import { withResolvers } from "../../../common/useful.ts";
 import { colors } from "../../../common/colors.ts";
 import { createEditBox } from "../../common/edit-box.ts";
+import { ModalResponse } from "../modal.ts";
 
-export interface JoinModalConfirmResponse {
-  type: "confirm";
-  value: {
-    player: {
-      name: string;
-      color: string;
-    };
-    gameId: string;
-  };
+export interface CreationModalResponse {
+  colorKey: string;
+  gameId: string;
+  name: string;
 }
-
-export interface JoinModalCancelResponse {
-  type: "cancel";
-}
-
-export type JoinModalResponse = JoinModalConfirmResponse | JoinModalCancelResponse;
 
 export function createJoinModal() {
   const $cancel = div_text("box _button", "Cancel");
@@ -56,7 +46,7 @@ export function createJoinModal() {
     ]),
   ]);
 
-  const { promise, resolve } = withResolvers<JoinModalResponse>();
+  const { promise, resolve } = withResolvers<ModalResponse<CreationModalResponse>>();
 
   onClick($cancel, () => {
     resolve({ type: "cancel" });
@@ -66,11 +56,9 @@ export function createJoinModal() {
     resolve({
       type: "confirm",
       value: {
-        player: {
-          name: "John",
-          color: "red",
-        },
+        colorKey: "red",
         gameId: "12345",
+        name: "John",
       },
     });
   });

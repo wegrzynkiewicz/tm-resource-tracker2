@@ -8,8 +8,10 @@ import { EPContext, EPHandler, EPRoute } from "../web/endpoint.ts";
 
 export interface ReadGameEPResponse {
   gameId: string;
+  isAdmin: boolean;
   myPlayerId: number;
   stateType: GameState["type"];
+  token: string;
 }
 
 export const readGameEPRoute = new EPRoute("GET", "/games");
@@ -27,12 +29,16 @@ export class ReadGameEPHandler implements EPHandler {
     const { gameId, playerId } = data;
     const game = this.gameManager.games.get(gameId);
     assertObject(game, 'not-found-game-with-this-token', { status: 404 });
-    const { state } = game;
+    const { state, playerManager } = game;
+    const player = playerManager.players.get(playerId);
+    assertObject(player, 'not-found-player-with-this-token', { status: 404 });
 
     const payload: ReadGameEPResponse = {
       gameId,
       myPlayerId: playerId,
       stateType: state.type,
+      token,
+      isAdmin: player.isAdmin,
     };
     const response = Response.json(payload);
     return response;

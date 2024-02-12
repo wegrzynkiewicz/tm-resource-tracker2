@@ -1,24 +1,36 @@
 import { ServiceResolver } from "../../../common/dependency.ts";
+import { Channel } from "../../../frontend-framework/store.ts";
 import { CreateGameEPRequest, CreateGameEPResponse } from "../../../server/features/create-game-ep.ts";
 import { ReadGameEPResponse } from "../../../server/features/read-game-ep.ts";
-import { appState } from "../app/app.ts";
+import { AppView, provideAppView } from "../app/app.ts";
 import { ClientConfig, provideClientConfig } from "../config.ts";
-import { ClientGameContext } from "./client-game.ts";
+import { HomepageView, provideHomepageView } from "../homepage/homepage.ts";
+import { provideWaitingView } from "../waiting/waiting.ts";
+import { ClientGameContext, ClientGameContextInput, provideClientGameContext } from "./client-game.ts";
+import { provideCreateGameChannel, provideJoinGameChannel } from "./source.ts";
+import { CreateGame, JoinGame } from "./source.ts";
 
 export class ClientGameManager {
 
   public constructor(
+    private appView: AppView,
+    private homepageView: HomepageView,
     private config: ClientConfig,
-  ) { }
+    createGameChannel: Channel<CreateGame>,
+    joinGameChannel: Channel<JoinGame>,
+  ) {
+    createGameChannel.on((input) => this.createGame(input));
+    // joinGameChannel.on((input) => this.createGame(input));
+  }
 
   public async bootstrap() {
-    const isCurrentGame = await this.currentGame()
-    if (isCurrentGame === false) {
-      appState.emit('homepage');
+    const result = await this.loadCurrentGame();
+    if (result === null) {
+      this.appView.homepage();
     }
   }
 
-  public async createGame(request: CreateGameEPRequest) {
+  private async createGame(request: CreateGameEPRequest) {
     const { apiUrl } = this.config;
     const envelope = await fetch(`${apiUrl}/games`, {
       method: "POST",
@@ -29,17 +41,16 @@ export class ClientGameManager {
     });
     const data = await envelope.json();
     const response = data as CreateGameEPResponse;
-    const { gameId, myPlayerId, stateType, token } = response;
+    const { token } = response;
     sessionStorage.setItem("token", token);
-    this.createClientGameContext(gameId, myPlayerId);
-    appState.emit(stateType);
+    this.createClientGameContext(response);
   }
 
-  protected async currentGame() {
+  private async loadCurrentGame() {
     const { apiUrl } = this.config;
     const token = sessionStorage.getItem('token');
     if (token === null) {
-      return false;
+      return null;
     }
     const envelope = await fetch(`${apiUrl}/games`, {
       method: "GET",
@@ -49,20 +60,24 @@ export class ClientGameManager {
     });
     const data = await envelope.json();
     if (data.error) {
-      return false;
+      return null;
     }
     const response = data as ReadGameEPResponse;
-    const { gameId, myPlayerId, stateType } = response;
-    this.createClientGameContext(gameId, myPlayerId);
-    appState.emit(stateType);
+    this.createClientGameContext(response);
   }
 
-  public createClientGameContext(gameId: string, myPlayerId: number): ClientGameContext {
+  public createClientGameContext(input: ClientGameContextInput): ClientGameContext {
+    const { stateType } = input;
     const resolver = new ServiceResolver();
     const context: ClientGameContext = {
-      gameId,
-      myPlayerId,
+      ...input,
       resolver,
+    }
+    resolver.inject(provideClientGameContext, context);
+    if (stateType === "waiting") {
+      const waitingView = resolver.resolve(provideWaitingView);
+      this.appView.mount(waitingView.$root);
+      this.appView.hideToolbar();
     }
     return context;
   }
@@ -70,6 +85,10 @@ export class ClientGameManager {
 
 export function provideClientGameManager(resolver: ServiceResolver) {
   return new ClientGameManager(
+    resolver.resolve(provideAppView),
+    resolver.resolve(provideHomepageView),
     resolver.resolve(provideClientConfig),
+    resolver.resolve(provideCreateGameChannel),
+    resolver.resolve(provideJoinGameChannel),
   );
 }

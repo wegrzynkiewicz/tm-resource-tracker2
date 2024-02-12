@@ -391,20 +391,20 @@ body {
   width: 100%;
 }
 
-.settings_form {
+.space {
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 20px 0;
 }
 
-.settings_legend {
+.space_caption {
   font-size: 1.4rem;
   text-align: center;
   color: var(--color-text);
 }
 
-.settings_fieldset {
+.space_container {
   border: none;
   display: flex;
   flex-direction: column;

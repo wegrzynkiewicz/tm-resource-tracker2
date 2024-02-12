@@ -3,16 +3,18 @@ import { ServiceResolver } from "../../common/dependency.ts";
 import { provideTokenManager, Token, TokenManager } from "./token.ts";
 
 export interface Player {
+  color: Color;
+  readonly isAdmin: boolean;
   name: string;
   readonly playerId: number;
-  readonly color: Color;
   readonly token: Token;
 }
 
 export interface PlayerDTO {
-  playerId: number;
-  colorKey: string;
-  name: string;
+  readonly playerId: number;
+  readonly colorKey: string;
+  readonly name: string;
+  readonly isAdmin: boolean;
 }
 
 export let playerIdCounter = 0;
@@ -25,14 +27,15 @@ export class PlayerManager {
     public readonly gameId: string,
   ) { }
 
-  public createPlayer(name: string, color: Color): Player {
+  public createPlayer(name: string, color: Color, isAdmin: boolean): Player {
     const playerId = ++playerIdCounter;
     const token = this.tokenManager.createToken(playerId, this.gameId);
 
     const player: Player = {
+      color,
+      isAdmin,
       name,
       playerId,
-      color,
       token,
     };
 
@@ -42,11 +45,12 @@ export class PlayerManager {
 
   public *fetchPlayers(): Generator<PlayerDTO, void, unknown> {
     for (const player of this.players.values()) {
-      const { playerId, color: { key }, name } = player;
+      const { playerId, color: { key }, name, isAdmin } = player;
       yield {
-        playerId,
         colorKey: key,
         name,
+        isAdmin,
+        playerId,
       }
     }
   }
