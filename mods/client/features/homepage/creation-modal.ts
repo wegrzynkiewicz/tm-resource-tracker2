@@ -6,8 +6,8 @@ import { ModalResponse } from "../modal.ts";
 import { createColorSelectorBox } from "../../common/color-selector.ts";
 
 export interface CreationModalResponse {
+  colorKey: string;
   name: string;
-  color: string;
 }
 
 export function createCreationGameModal() {
@@ -43,7 +43,7 @@ export function createCreationGameModal() {
   onClick($create, () => {
     const value: CreationModalResponse = {
       name: name.$input.value,
-      color: color.store.getValue().key,
+      colorKey: color.store.getValue().key,
     };
     resolve({
       type: "confirm",

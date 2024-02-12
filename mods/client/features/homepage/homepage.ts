@@ -3,11 +3,14 @@ import { button_text, div_nodes } from "../../../frontend-framework/dom.ts";
 import { createJoinModal } from "./join-modal.ts";
 import { modalManager } from "../modal.ts";
 import { createCreationGameModal } from "./creation-modal.ts";
-import { appState } from "../app/app.ts";
+import { ServiceResolver } from "../../../common/dependency.ts";
+import { ClientGameManager, provideClientGameManager } from "../game/manager.ts";
 
-export class HomepageView {
+export class Homepage {
   public readonly $root: HTMLDivElement;
-  public constructor() {
+  public constructor(
+    private readonly clientGameManager: ClientGameManager,
+  ) {
     const $create = button_text("box _action", "New Game");
     const $join = button_text("box _action", "Join the Game");
     const $about = button_text("box _action", "About");
@@ -28,7 +31,8 @@ export class HomepageView {
     if (result.type === "cancel") {
       return;
     }
-    appState.emit("work");
+    const { colorKey, name } = result.value
+    this.clientGameManager.createGame({ colorKey, name });
   }
 
   protected async whenJoinGameClicked() {
@@ -39,4 +43,10 @@ export class HomepageView {
       return;
     }
   }
+}
+
+export function provideHomepage(resolver: ServiceResolver) {
+  return new Homepage(
+    resolver.resolve(provideClientGameManager),
+  );
 }

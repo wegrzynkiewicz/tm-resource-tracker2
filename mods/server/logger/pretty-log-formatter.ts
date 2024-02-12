@@ -21,7 +21,7 @@ export class PrettyLogFormatter {
       msg += `${indent(json, "  ")}\n`;
     }
     if (error instanceof Error) {
-      msg += `${indent(error.stack ?? "", "   ")}\n`;
+      msg += `${indent(error.stack ?? "", "  ")}\n`;
     }
     return msg;
   }

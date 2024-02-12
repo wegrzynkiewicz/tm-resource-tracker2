@@ -1,4 +1,4 @@
-import { Color, colors } from "../../common/colors.ts";
+import { Color } from "../../common/colors.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { provideTokenManager, Token, TokenManager } from "./token.ts";
 
@@ -9,6 +9,12 @@ export interface Player {
   readonly token: Token;
 }
 
+export interface PlayerDTO {
+  playerId: number;
+  colorKey: string;
+  name: string;
+}
+
 export let playerIdCounter = 0;
 
 export class PlayerManager {
@@ -17,10 +23,10 @@ export class PlayerManager {
   public constructor(
     public readonly tokenManager: TokenManager,
     public readonly gameId: string,
-  ) {}
+  ) { }
 
   public createPlayer(name: string, color: Color): Player {
-    const playerId = playerIdCounter++;
+    const playerId = ++playerIdCounter;
     const token = this.tokenManager.createToken(playerId, this.gameId);
 
     const player: Player = {
@@ -33,12 +39,23 @@ export class PlayerManager {
     this.players.set(playerId, player);
     return player;
   }
+
+  public *fetchPlayers(): Generator<PlayerDTO, void, unknown> {
+    for (const player of this.players.values()) {
+      const { playerId, color: { key }, name } = player;
+      yield {
+        playerId,
+        colorKey: key,
+        name,
+      }
+    }
+  }
 }
 
 export class PlayerManagerFactory {
   public constructor(
     public readonly tokenManager: TokenManager,
-  ) {}
+  ) { }
 
   public createPlayerManager(gameId: string): PlayerManager {
     return new PlayerManager(

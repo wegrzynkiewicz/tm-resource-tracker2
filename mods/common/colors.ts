@@ -10,3 +10,7 @@ export const colors: Color[] = [
   { key: "yellow", name: "Yellow" },
   { key: "black", name: "Black" },
 ];
+
+export const colorByKeys = new Map<string, Color>(
+  colors.map((color) => [color.key, color])
+);

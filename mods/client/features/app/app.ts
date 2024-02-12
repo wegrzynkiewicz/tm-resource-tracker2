@@ -8,10 +8,12 @@ import { createSettings } from "../settings.ts";
 import { createSuppliesPanel } from "../supply.ts";
 import { toolbarClickChannel } from "../toolbar.ts";
 import { createToolbar } from "../toolbar.ts";
-import { HomepageView } from "../homepage/homepage.ts";
+import { Homepage, provideHomepage } from "../homepage/homepage.ts";
 import { WaitingView } from "../waiting/waiting.ts";
 import { createScroll } from "./scroll.ts";
 import { Top } from "./top.ts";
+import { createLoading } from "./loading.ts";
+import { ServiceResolver } from "../../../common/dependency.ts";
 
 export function createQuestion() {
   return div_nodes("app_content-overlay", [
@@ -34,19 +36,23 @@ export const appState = new Channel<"homepage" | "work">();
 export class AppView {
   public readonly $root: HTMLDivElement;
   protected readonly $toolbar: HTMLDivElement;
-  public constructor() {
+
+  public constructor(
+    private homepage: Homepage,
+  ) {
     const top = new Top();
     const scroll = createScroll();
     this.$toolbar = createToolbar();
 
     const switcher = new ElementSwitcher(scroll.$content);
+    switcher.elements.set("loading", createLoading());
     switcher.elements.set("waiting", new WaitingView().$root);
-    switcher.elements.set("homepage", new HomepageView().$root);
+    switcher.elements.set("homepage", homepage.$root);
     switcher.elements.set("supplies", createSuppliesPanel());
     switcher.elements.set("projects", createProjectsPanel());
     switcher.elements.set("histories", createHistoriesPanel());
     switcher.elements.set("settings", createSettings());
-    switcher.switch("homepage");
+    switcher.switch("loading");
 
     historyEntryCreatedChannel.emit(examples[0]);
     historyEntryCreatedChannel.emit(examples[1]);
@@ -67,6 +73,7 @@ export class AppView {
     appState.on((state) => {
       if (state === "homepage") {
         this.hideToolbar();
+        switcher.switch("homepage");
       } else if (state === "work") {
         this.showToolbar();
         switcher.switch("settings");
@@ -86,6 +93,8 @@ export class AppView {
   }
 }
 
-export function provideAppView() {
-  return new AppView();
+export function provideAppView(resolver: ServiceResolver) {
+  return new AppView(
+    resolver.resolve(provideHomepage),
+  );
 }
