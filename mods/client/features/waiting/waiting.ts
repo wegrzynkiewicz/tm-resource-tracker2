@@ -6,4 +6,3 @@ export class WaitingView {
     this.$root = div_nodes("waiting", []);
   }
 }
-

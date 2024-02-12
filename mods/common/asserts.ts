@@ -75,9 +75,9 @@ export function assertHTMLElement<TKey extends keyof HTMLElementTagNameMap>(
   value: unknown,
   tag: TKey,
   message?: string,
-  data?: Data
+  data?: Data,
 ): asserts value is HTMLElementTagNameMap[TKey] {
-  if (typeof value !== "object" || value === null || !('tagName' in value) || value.tagName !== tag.toUpperCase()) {
-    throws(message ?? 'invalid-html-tag', data);
+  if (typeof value !== "object" || value === null || !("tagName" in value) || value.tagName !== tag.toUpperCase()) {
+    throws(message ?? "invalid-html-tag", data);
   }
 }

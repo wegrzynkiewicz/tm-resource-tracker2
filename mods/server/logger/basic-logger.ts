@@ -1,13 +1,12 @@
-import { LogSeverity, Logger, LoggerData } from "./global.ts";
+import { Logger, LoggerData, LogSeverity } from "./global.ts";
 import { LogBus } from "./log-bus.ts";
 
 export class BasicLogger implements Logger {
-
   public constructor(
     private readonly channel: string,
     private readonly logBus: LogBus,
     private readonly params: LoggerData,
-  ) { }
+  ) {}
 
   private log(severity: LogSeverity, message: string, data: LoggerData = {}) {
     this.logBus.dispatch({

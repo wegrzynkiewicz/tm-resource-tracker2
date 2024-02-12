@@ -2,7 +2,7 @@ export type Properties = { [key: string]: unknown };
 
 export function createElement<TTag extends keyof HTMLElementTagNameMap>(
   tag: TTag,
-  className = '',
+  className = "",
 ): HTMLElementTagNameMap[TTag] {
   const node = document.createElement(tag);
   node.className = className;
@@ -18,7 +18,7 @@ function createTagText<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
     const node = createElement(tag, className);
     node.textContent = textContent.toString();
     return node;
-  }
+  };
 }
 
 function createTagNodes<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
@@ -26,7 +26,7 @@ function createTagNodes<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
     const node = createElement(tag, className);
     node.append(...children);
     return node;
-  }
+  };
 }
 
 function createTagProps<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
@@ -34,7 +34,7 @@ function createTagProps<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
     const node = createElement(tag);
     Object.assign(node, props);
     return node;
-  }
+  };
 }
 
 function createTagAdvanced<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
@@ -43,7 +43,7 @@ function createTagAdvanced<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) 
     Object.assign(node, props);
     node.append(...children);
     return node;
-  }
+  };
 }
 
 export function fragment() {
@@ -56,25 +56,23 @@ export function fragment_nodes(children: Node[]) {
   return node;
 }
 
-export const button_nodes = createTagNodes('button');
-export const button_text = createTagText('button');
+export const button_nodes = createTagNodes("button");
+export const button_text = createTagText("button");
 
-export const div_empty = createTagEmpty('div');
-export const div_text = createTagText('div');
-export const div_nodes = createTagNodes('div');
-export const div_props = createTagProps('div');
-export const div = createTagAdvanced('div');
+export const div_empty = createTagEmpty("div");
+export const div_text = createTagText("div");
+export const div_nodes = createTagNodes("div");
+export const div_props = createTagProps("div");
+export const div = createTagAdvanced("div");
 
-export const form = createTagAdvanced('form');
-export const fieldset = createTagNodes('fieldset');
-export const input_props = createTagProps('input');
-export const label_props = createTagProps('label');
-export const legend_text = createTagText('legend');
+export const form = createTagAdvanced("form");
+export const fieldset = createTagNodes("fieldset");
+export const input_props = createTagProps("input");
+export const label_props = createTagProps("label");
+export const legend_text = createTagText("legend");
 
-export const img_props = createTagProps('img');
+export const img_props = createTagProps("img");
 
-export const span_empty = createTagEmpty('span');
-export const span_props = createTagProps('span');
-export const span_text = createTagText('span');
-
-
+export const span_empty = createTagEmpty("span");
+export const span_props = createTagProps("span");
+export const span_text = createTagText("span");

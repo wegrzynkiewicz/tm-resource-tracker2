@@ -1,4 +1,4 @@
-import { div_text, div_nodes } from "../../../frontend-framework/dom.ts";
+import { div_nodes, div_text } from "../../../frontend-framework/dom.ts";
 import { ElementSwitcher } from "../../../frontend-framework/element-switcher.ts";
 import { Channel } from "../../../frontend-framework/store.ts";
 import { createHistoriesPanel, examples, historyEntryCreatedChannel } from "../history.ts";
@@ -18,10 +18,10 @@ export function createQuestion() {
     div_nodes("modal", [
       div_nodes("modal_background", [
         div_nodes("modal_container", [
-          div_text('modal_title', "Do you want to quit the game?"),
-          div_nodes('modal_buttons', [
-            div_text('box _button', 'Cancel'),
-            div_text('box _button', 'Confirm'),
+          div_text("modal_title", "Do you want to quit the game?"),
+          div_nodes("modal_buttons", [
+            div_text("box _button", "Cancel"),
+            div_text("box _button", "Confirm"),
           ]),
         ]),
       ]),
@@ -69,20 +69,20 @@ export class AppView {
         this.hideToolbar();
       } else if (state === "work") {
         this.showToolbar();
-        switcher.switch('settings');
+        switcher.switch("settings");
       }
     });
     appState.emit("homepage");
   }
 
   public hideToolbar() {
-    this.$root.classList.remove('_with-toolbar');
-    this.$toolbar.classList.add('_hidden');
+    this.$root.classList.remove("_with-toolbar");
+    this.$toolbar.classList.add("_hidden");
   }
 
   public showToolbar() {
-    this.$root.classList.add('_with-toolbar');
-    this.$toolbar.classList.remove('_hidden');
+    this.$root.classList.add("_with-toolbar");
+    this.$toolbar.classList.remove("_hidden");
   }
 }
 

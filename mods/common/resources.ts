@@ -12,25 +12,25 @@ export interface Resource {
 }
 
 export interface ResourceDefinitionItem {
-  type: ResourceType,
+  type: ResourceType;
   targets: {
     production: {
-      min: number,
-      processor: ResourceProducer,
-    },
+      min: number;
+      processor: ResourceProducer;
+    };
     amount: {
-      min: number,
-    }
-  },
+      min: number;
+    };
+  };
 }
 
 export function createResourceDefinitionItem(
   { type, minAmount, minProd, processor }: {
-    type: ResourceType,
-    minAmount?: number,
-    minProd?: number,
-    processor?: ResourceProducer,
-  }
+    type: ResourceType;
+    minAmount?: number;
+    minProd?: number;
+    processor?: ResourceProducer;
+  },
 ) {
   return {
     type,
@@ -41,9 +41,9 @@ export function createResourceDefinitionItem(
       },
       amount: {
         min: minAmount ?? 0,
-      }
-    }
-  }
+      },
+    },
+  };
 }
 
 export function processNormalProduction(store: ResourceGroup, type: ResourceType) {
@@ -77,7 +77,7 @@ export const resourcesByType: Record<ResourceType, ResourceDefinitionItem> = {
   plant: resources[4],
   energy: resources[5],
   heat: resources[6],
-}
+};
 
 export function createResourceTargets(amount = 0, production = 0): ResourceTargets {
   return { amount, production };
@@ -92,5 +92,5 @@ export function createResourceGroup(points: number): ResourceGroup {
     plant: createResourceTargets(),
     energy: createResourceTargets(),
     heat: createResourceTargets(),
-  }
+  };
 }

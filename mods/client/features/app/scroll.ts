@@ -1,4 +1,4 @@
-import { fragment_nodes, div_nodes, div_empty } from "../../../frontend-framework/dom.ts";
+import { div_empty, div_nodes, fragment_nodes } from "../../../frontend-framework/dom.ts";
 
 export function createScroll() {
   const $detectorTop = div_empty("scroll_detector _top");

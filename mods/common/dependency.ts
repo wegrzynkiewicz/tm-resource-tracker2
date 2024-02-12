@@ -28,7 +28,7 @@ export class ServiceResolver {
   }
 
   public transfer<TInstance>(provider: Provider<TInstance>, destResolver: ServiceResolver): TInstance {
-    const instance = this.resolve(provider)
+    const instance = this.resolve(provider);
     destResolver.inject(provider, instance);
     return instance;
   }

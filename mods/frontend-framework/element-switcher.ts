@@ -4,7 +4,7 @@ export class ElementSwitcher {
   public readonly elements = new Map<string, Node>();
   public constructor(
     private readonly root: Element,
-  ) { }
+  ) {}
 
   public switch(key: string) {
     const element = this.elements.get(key);

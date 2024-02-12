@@ -1,26 +1,26 @@
-import { input_props, div_nodes, label_props } from "../../frontend-framework/dom.ts";
+import { div_nodes, input_props, label_props } from "../../frontend-framework/dom.ts";
 
 export function createEditBox(
   { label, name, placeholder }: {
-    label: string,
-    name: string,
-    placeholder?: string
-  }
+    label: string;
+    name: string;
+    placeholder?: string;
+  },
 ) {
   const $input = input_props({
     autocomplete: "off",
-    className: 'edit-box_input',
+    className: "edit-box_input",
     name,
-    type: 'text',
-    placeholder: placeholder ?? '',
+    type: "text",
+    placeholder: placeholder ?? "",
   });
-  const $root = div_nodes('edit-box _input', [
+  const $root = div_nodes("edit-box _input", [
     label_props({
-      className: 'edit-box_label',
+      className: "edit-box_label",
       for: name,
       textContent: label,
     }),
     $input,
   ]);
-  return { $root, $input }
+  return { $root, $input };
 }

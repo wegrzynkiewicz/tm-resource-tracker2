@@ -1,19 +1,19 @@
 import { assertNonNull } from "../../common/asserts.ts";
 
 type WithQuerySelector = {
-  querySelector: Element['querySelector'];
-  querySelectorAll: Element['querySelectorAll'];
-}
+  querySelector: Element["querySelector"];
+  querySelectorAll: Element["querySelectorAll"];
+};
 
-export function getElementById<T extends HTMLElement>(id: string,): T {
+export function getElementById<T extends HTMLElement>(id: string): T {
   const node = document.getElementById(id);
-  assertNonNull(node, '');
+  assertNonNull(node, "");
   return node as T;
 }
 
 export function querySelector<T extends HTMLElement>(parent: WithQuerySelector, query: string): T {
   const node = parent.querySelector(query);
-  assertNonNull(node, '');
+  assertNonNull(node, "");
   return node as T;
 }
 
@@ -30,7 +30,7 @@ export function cloneTemplate(templateId: string) {
 const regex = /{(\w+?)}/g;
 
 export function bindVariables(template: string, data: Record<string, unknown>) {
-  return template.replace(regex, (_, token) => (data[token] || '') as string);
+  return template.replace(regex, (_, token) => (data[token] || "") as string);
 }
 
 export function bindTemplate(templateId: string, data: Record<string, unknown>): string {
@@ -41,7 +41,7 @@ export function bindTemplate(templateId: string, data: Record<string, unknown>):
 
 export function ref(element: WithQuerySelector, name: string): HTMLElement {
   const node = querySelector(element, `[data-ref="${name}"]`);
-  assertNonNull(node, '');
+  assertNonNull(node, "");
   return node;
 }
 
@@ -65,17 +65,17 @@ export function listener<TEvent extends keyof GlobalEventHandlersEventMap>(
   element: HTMLElement,
   type: TEvent,
   listener: (this: HTMLElement, event: GlobalEventHandlersEventMap[TEvent]) => any,
-  options?: boolean | AddEventListenerOptions
+  options?: boolean | AddEventListenerOptions,
 ): void {
   const callback = function (this: HTMLElement, event: GlobalEventHandlersEventMap[TEvent]) {
     listener.call(this, event);
     event.preventDefault();
-  }
+  };
   element.addEventListener(type, callback, options);
 }
 
-export function onClick<TElement extends Element>(element: TElement, listener: (event: MouseEvent)=> void) {
-  element.addEventListener('click', function onClickWrapper(this: TElement, event) {
+export function onClick<TElement extends Element>(element: TElement, listener: (event: MouseEvent) => void) {
+  element.addEventListener("click", function onClickWrapper(this: TElement, event) {
     event.preventDefault();
     event.stopPropagation();
     listener.call(this, event as MouseEvent);

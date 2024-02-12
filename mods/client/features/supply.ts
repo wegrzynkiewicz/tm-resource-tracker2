@@ -1,8 +1,8 @@
-import { div_text, img_props, div_nodes, div_empty } from "../../frontend-framework/dom.ts";
+import { div_empty, div_nodes, div_text, img_props } from "../../frontend-framework/dom.ts";
 import { onClick } from "./common.ts";
 import { Signal } from "../../frontend-framework/store.ts";
 import { ResourceGroup, ResourceTarget } from "../../common/resources.ts";
-import { ResourceType, resources, createResourceGroup } from "../../common/resources.ts";
+import { createResourceGroup, resources, ResourceType } from "../../common/resources.ts";
 import { createSupplyModal } from "./supply-modal.ts";
 import { modalManager } from "./modal.ts";
 import { createPanel } from "./app/panel.ts";
@@ -35,14 +35,14 @@ export class Supplies {
     }
     this.signal.value[type][target] = result.value;
     this.signal.emit();
-  };
+  }
 
   protected *generateSupplies() {
     for (const { type } of resources) {
       yield this.createSupply("production", type);
       yield div_nodes(`supply _icon _${type}`, [
         img_props({
-          className: 'supply_icon',
+          className: "supply_icon",
           width: "64",
           height: "64",
           alt: "supply-icon",
@@ -53,8 +53,8 @@ export class Supplies {
     }
   }
 
-  protected createSupply(target: ResourceTarget, type: ResourceType,) {
-    const $counter = div_text('box _counter', '0');
+  protected createSupply(target: ResourceTarget, type: ResourceType) {
+    const $counter = div_text("box _counter", "0");
     const $root = div_nodes(`supply _${target} _${type}`, [$counter]);
     this.signal.on((value) => {
       const count = value[type][target];

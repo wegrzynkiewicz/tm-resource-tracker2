@@ -1,4 +1,4 @@
-import { EPRoute, EPHandler } from "../web/endpoint.ts";
+import { EPHandler, EPRoute } from "../web/endpoint.ts";
 
 export const corsOptionsEPRoute = new EPRoute("OPTIONS", "/*");
 

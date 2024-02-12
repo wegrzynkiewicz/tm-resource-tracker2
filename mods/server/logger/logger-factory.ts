@@ -10,7 +10,7 @@ export interface LoggerFactory {
 export class MainLoggerFactory implements LoggerFactory {
   public constructor(
     private readonly logBus: LogBus,
-  ) { }
+  ) {}
 
   public createLogger(channel: string, params: LoggerData = {}): Logger {
     return new BasicLogger(channel, this.logBus, params);

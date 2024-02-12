@@ -50,7 +50,7 @@ export class Router implements WebServerHandler {
             method,
             urlPattern: {
               pathname: urlPattern.pathname,
-            }
+            },
           });
         }
       }

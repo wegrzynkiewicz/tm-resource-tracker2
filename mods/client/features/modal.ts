@@ -1,12 +1,12 @@
 import { div_empty } from "../../frontend-framework/dom.ts";
 
 export interface ModalConfirmResponse<TValue> {
-  type: 'confirm',
-  value: TValue
+  type: "confirm";
+  value: TValue;
 }
 
 export interface ModalCancelResponse {
-  type: 'cancel',
+  type: "cancel";
 }
 
 export type ModalResponse<TValue> = ModalConfirmResponse<TValue> | ModalCancelResponse;
@@ -17,7 +17,7 @@ export interface Modal<TValue> {
 }
 
 export class ModalManager {
-  public readonly root = div_empty('app_content-overlay');
+  public readonly root = div_empty("app_content-overlay");
 
   public mount(modal: Modal<unknown>) {
     this.root.classList.add("_enabled");

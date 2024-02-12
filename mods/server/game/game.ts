@@ -6,7 +6,7 @@ export class Game {
   public constructor(
     public readonly gameId: string,
     public readonly playerManager: PlayerManager,
-  ) { }
+  ) {}
 }
 
 export class GameManager {
@@ -14,11 +14,11 @@ export class GameManager {
 
   public constructor(
     public readonly playerManagerFactory: PlayerManagerFactory,
-  ) { }
+  ) {}
 
   private generateGameId(): string {
     while (true) {
-      const gameId = cryptoRandomString({ length: 5, type: 'distinguishable' });
+      const gameId = cryptoRandomString({ length: 5, type: "distinguishable" });
       if (this.games.has(gameId)) {
         continue;
       }

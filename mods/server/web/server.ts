@@ -17,7 +17,7 @@ export class WebServer {
     private readonly config: WebServerConfig,
     private readonly handler: WebServerHandler,
     private readonly logger: Logger,
-  ) { }
+  ) {}
 
   public async listen(): Promise<void> {
     const promise = new Promise<void>((resolve) => {

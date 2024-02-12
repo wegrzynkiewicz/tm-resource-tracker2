@@ -1,12 +1,12 @@
 import { Color, colors } from "../../common/colors.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
-import { Token, TokenManager, provideTokenManager } from "./token.ts";
+import { provideTokenManager, Token, TokenManager } from "./token.ts";
 
 export interface Player {
-  name: string
-  readonly playerId: number,
-  readonly color: Color,
-  readonly token: Token,
+  name: string;
+  readonly playerId: number;
+  readonly color: Color;
+  readonly token: Token;
 }
 
 export let playerIdCounter = 0;
@@ -17,7 +17,7 @@ export class PlayerManager {
   public constructor(
     public readonly tokenManager: TokenManager,
     public readonly gameId: string,
-  ) { }
+  ) {}
 
   public createPlayer(name: string, color: Color): Player {
     const playerId = playerIdCounter++;
@@ -38,7 +38,7 @@ export class PlayerManager {
 export class PlayerManagerFactory {
   public constructor(
     public readonly tokenManager: TokenManager,
-  ) { }
+  ) {}
 
   public createPlayerManager(gameId: string): PlayerManager {
     return new PlayerManager(

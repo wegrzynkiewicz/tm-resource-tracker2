@@ -1,5 +1,5 @@
 import { Channel } from "../../frontend-framework/store.ts";
-import { div_nodes, div_text, div_empty } from "../../frontend-framework/dom.ts";
+import { div_empty, div_nodes, div_text } from "../../frontend-framework/dom.ts";
 import { Resource } from "../../common/resources.ts";
 import { createPanel } from "./app/panel.ts";
 import { createResource } from "./resource.ts";
@@ -12,18 +12,18 @@ export interface Player {
 
 export interface HistoryCommon {
   historyEntryId: string;
-  time: Date,
+  time: Date;
 }
 
 export interface HistorySingleEntry extends HistoryCommon {
   player: Player;
-  resource: Resource,
+  resource: Resource;
   type: "single";
 }
 
 export interface HistorySummaryEntry extends HistoryCommon {
   player: Player;
-  resources: Resource[],
+  resources: Resource[];
   type: "summary";
 }
 
@@ -86,7 +86,7 @@ export function formatDate(date: Date) {
   return date.toISOString().substring(11, 19);
 }
 
-export function createHistoryHeader({ player, time, slot, }: {
+export function createHistoryHeader({ player, time, slot }: {
   player: Player;
   time: Date;
   slot: Node;

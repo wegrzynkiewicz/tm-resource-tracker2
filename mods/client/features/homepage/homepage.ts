@@ -18,7 +18,7 @@ export class HomepageView {
     ]);
 
     onClick($create, () => this.whenCreateGameClicked());
-    onClick($join, () => this.whenJoinGameClicked()); 
+    onClick($join, () => this.whenJoinGameClicked());
   }
 
   protected async whenCreateGameClicked() {
@@ -28,7 +28,7 @@ export class HomepageView {
     if (result.type === "cancel") {
       return;
     }
-    appState.emit('work')
+    appState.emit("work");
   }
 
   protected async whenJoinGameClicked() {
@@ -40,4 +40,3 @@ export class HomepageView {
     }
   }
 }
-

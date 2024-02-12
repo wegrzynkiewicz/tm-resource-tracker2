@@ -33,6 +33,6 @@ export function provideWebServer(resolver: ServiceResolver) {
   return new WebServer(
     webServerConfig,
     globalMiddleware,
-    logger
+    logger,
   );
 }

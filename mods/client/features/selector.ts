@@ -16,13 +16,13 @@ export function createSelectorOption(option: SelectorOption) {
   ]);
   content.dataset.key = key;
   return content;
-};
+}
 
 export class SelectorStore extends Store {
   public index = 0;
 
   public constructor(
-    public readonly options: SelectorOption[]
+    public readonly options: SelectorOption[],
   ) {
     super();
   }
@@ -52,7 +52,7 @@ export function createSelector(options: SelectorOption[]) {
   const $left = svg_icon("selector_icon", "arrow-left");
   const $right = svg_icon("selector_icon", "arrow-right");
   const $panel = div_nodes("selector_panel", [
-    div_nodes('selector_panel-container', options.map(createSelectorOption)),
+    div_nodes("selector_panel-container", options.map(createSelectorOption)),
   ]);
   const $root = div_nodes("selector", [$left, $panel, $right]);
 

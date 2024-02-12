@@ -1,4 +1,4 @@
-import { LogFormatter, Log, logSeverityNames } from "./global.ts";
+import { Log, LogFormatter, logSeverityNames } from "./global.ts";
 
 export class JSONLogFormatter implements LogFormatter {
   public format(log: Log): string {
@@ -13,7 +13,7 @@ export class JSONLogFormatter implements LogFormatter {
       data: {
         ...others,
         error: errorStack,
-      }
+      },
     });
     return json;
   }

@@ -1,4 +1,4 @@
-import { div_nodes, span_text, img_props } from "../../frontend-framework/dom.ts";
+import { div_nodes, img_props, span_text } from "../../frontend-framework/dom.ts";
 import { Resource } from "../../common/resources.ts";
 
 export function formatCount(count: number) {
@@ -11,9 +11,9 @@ export function formatCount(count: number) {
 export function createResource(resource: Resource) {
   const { count, target, type } = resource;
   return div_nodes(`resource _${target}`, [
-    span_text('resource_label', formatCount(count)),
+    span_text("resource_label", formatCount(count)),
     img_props({
-      className: 'resource_icon',
+      className: "resource_icon",
       width: "32",
       height: "32",
       alt: `${type} icon`,
@@ -21,5 +21,3 @@ export function createResource(resource: Resource) {
     }),
   ]);
 }
-
-

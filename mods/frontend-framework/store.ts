@@ -30,8 +30,8 @@ export class Signal<TValue> {
   public readonly listeners = new Set<Listener<TValue>>();
 
   public constructor(
-    public value: TValue
-  ) { }
+    public value: TValue,
+  ) {}
 
   public on(listener: Listener<TValue>) {
     this.listeners.add(listener);

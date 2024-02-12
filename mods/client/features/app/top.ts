@@ -22,7 +22,7 @@ export class Top {
 
     this.$root = div_nodes("top", [
       this.$label,
-    //   this.$controller,
+      //   this.$controller,
     ]);
   }
 
