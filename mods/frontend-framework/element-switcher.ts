@@ -1,8 +1,7 @@
 import { Breaker } from "../common/asserts.ts";
 
 export class ElementSwitcher {
-  private currentElement?: Element;
-  public readonly elements = new Map<string, Element>();
+  public readonly elements = new Map<string, Node>();
   public constructor(
     private readonly root: Element,
   ) { }
@@ -12,13 +11,6 @@ export class ElementSwitcher {
     if (element === undefined) {
       throw new Breaker("not-found-element-to-switch", { key });
     }
-    if (this.currentElement === element) {
-      return;
-    }
-    if (this.currentElement) {
-      this.currentElement.remove();
-    }
-    this.root.appendChild(element);
-    this.currentElement = element;
+    this.root.replaceChildren(element);
   }
 }

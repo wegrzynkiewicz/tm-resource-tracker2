@@ -3,7 +3,7 @@ import { div_text, div_nodes, form } from "../../../frontend-framework/dom.ts";
 import { withResolvers } from "../../../common/useful.ts";
 import { createEditBox } from "../../common/edit-box.ts";
 import { ModalResponse } from "../modal.ts";
-import { createColorSelector } from "../../common/color-selector.ts";
+import { createColorSelectorBox } from "../../common/color-selector.ts";
 
 export interface CreationModalResponse {
   name: string,
@@ -16,7 +16,7 @@ export function createCreationGameModal() {
     name: 'name',
     placeholder: 'Your name'
   });
-  const color = createColorSelector();
+  const color = createColorSelectorBox();
   const $cancel = div_text('box _button', 'Cancel');
   const $create = div_text('box _button', 'Create');
 

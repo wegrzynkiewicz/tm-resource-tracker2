@@ -8,10 +8,10 @@ import { createSettings } from "../settings.ts";
 import { createSuppliesPanel } from "../supply.ts";
 import { toolbarClickChannel } from "../toolbar.ts";
 import { createToolbar } from "../toolbar.ts";
-import { createTop } from "../top.ts";
 import { HomepageView } from "../homepage/homepage.ts";
 import { WaitingView } from "../waiting/waiting.ts";
 import { createScroll } from "./scroll.ts";
+import { Top } from "./top.ts";
 
 export function createQuestion() {
   return div_nodes("app_content-overlay", [
@@ -33,11 +33,12 @@ export const appState = new Channel<"homepage" | "work">();
 
 export class AppView {
   public readonly $root: HTMLDivElement;
+  protected readonly $toolbar: HTMLDivElement;
   public constructor() {
-    const top = createTop();
+    const top = new Top();
     const scroll = createScroll();
-    const $toolbar = createToolbar();
-  
+    this.$toolbar = createToolbar();
+
     const switcher = new ElementSwitcher(scroll.$content);
     switcher.elements.set("waiting", new WaitingView().$root);
     switcher.elements.set("homepage", new HomepageView().$root);
@@ -45,35 +46,43 @@ export class AppView {
     switcher.elements.set("projects", createProjectsPanel());
     switcher.elements.set("histories", createHistoriesPanel());
     switcher.elements.set("settings", createSettings());
-  
+    switcher.switch("homepage");
+
     historyEntryCreatedChannel.emit(examples[0]);
     historyEntryCreatedChannel.emit(examples[1]);
     historyEntryCreatedChannel.emit(examples[2]);
     historyEntryCreatedChannel.emit(examples[3]);
-  
+
     toolbarClickChannel.on(({ key }) => {
       switcher.switch(key);
     });
-  
+
     this.$root = div_nodes("app", [
-      top,
+      top.$root,
       scroll.$fragment,
       modalManager.root,
-      $toolbar,
+      this.$toolbar,
     ]);
-  
+
     appState.on((state) => {
       if (state === "homepage") {
-        this.$root.classList.remove('_with-toolbar');
-        $toolbar.classList.add('_hidden');
-        toolbarClickChannel.emit({ key: "homepage" });
+        this.hideToolbar();
       } else if (state === "work") {
-        this.$root.classList.add('_with-toolbar');
-        $toolbar.classList.remove('_hidden');
-        toolbarClickChannel.emit({ key: "settings" });
+        this.showToolbar();
+        switcher.switch('settings');
       }
     });
     appState.emit("homepage");
+  }
+
+  public hideToolbar() {
+    this.$root.classList.remove('_with-toolbar');
+    this.$toolbar.classList.add('_hidden');
+  }
+
+  public showToolbar() {
+    this.$root.classList.add('_with-toolbar');
+    this.$toolbar.classList.remove('_hidden');
   }
 }
 
