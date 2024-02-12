@@ -11,7 +11,7 @@ export interface CreationModalResponse {
 }
 
 export function createCreationGameModal() {
-  const name = createEditBox({
+  const nameBox = createEditBox({
     label: "Name",
     name: "name",
     placeholder: "Your name",
@@ -24,7 +24,7 @@ export function createCreationGameModal() {
     div_nodes("modal_background", [
       div_nodes("modal_container", [
         div_text("modal_title", "Type your name and choose a color:"),
-        name.$root,
+        nameBox.$root,
         color.$root,
         div_nodes("modal_buttons", [
           $cancel,
@@ -41,10 +41,12 @@ export function createCreationGameModal() {
   });
 
   onClick($create, () => {
-    const value: CreationModalResponse = {
-      name: name.$input.value,
-      colorKey: color.store.getValue().key,
-    };
+    const name = nameBox.$input.value;
+    const colorKey = color.store.getValue().key;
+    if (name === "") {
+      return;
+    }
+    const value: CreationModalResponse = { colorKey, name };
     resolve({
       type: "confirm",
       value,

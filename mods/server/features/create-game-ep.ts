@@ -1,18 +1,19 @@
 import { assertObject, assertRequiredString } from "../../common/asserts.ts";
 import { colorByKeys } from "../../common/colors.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
-import { GameManager, provideGameManager } from "../game/game.ts";
+import { GameManager, GameState, provideGameManager } from "../game/game.ts";
 import { EPContext, EPHandler, EPRoute } from "../web/endpoint.ts";
-
-export interface CreateGameEPResponse {
-  gameId: string;
-  myPlayerId: number;
-  token: string;
-}
 
 export interface CreateGameEPRequest {
   colorKey: string;
   name: string;
+}
+
+export interface CreateGameEPResponse {
+  gameId: string;
+  myPlayerId: number;
+  stateType: GameState["type"];
+  token: string;
 }
 
 export function parseCreateGameEPRequest(data: unknown): CreateGameEPRequest {
@@ -36,7 +37,7 @@ export class CreateGameEPHandler implements EPHandler {
     const { colorKey, name } = data;
 
     const game = await this.gameManager.createGame();
-    const { gameId, playerManager } = game;
+    const { gameId, playerManager, state } = game;
 
     const color = colorByKeys.get(colorKey);
     assertObject(color, 'invalid-color-key');
@@ -45,6 +46,7 @@ export class CreateGameEPHandler implements EPHandler {
     const payload: CreateGameEPResponse = {
       gameId,
       myPlayerId: player.playerId,
+      stateType: state.type,
       token: player.token.key,
     };
     const response = Response.json(payload);

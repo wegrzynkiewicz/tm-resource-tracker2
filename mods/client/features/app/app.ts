@@ -31,14 +31,14 @@ export function createQuestion() {
   ]);
 }
 
-export const appState = new Channel<"homepage" | "work">();
+export const appState = new Channel<"homepage" | "playing" | "waiting" | "loading">();
 
 export class AppView {
   public readonly $root: HTMLDivElement;
   protected readonly $toolbar: HTMLDivElement;
 
   public constructor(
-    private homepage: Homepage,
+    homepage: Homepage,
   ) {
     const top = new Top();
     const scroll = createScroll();
@@ -52,7 +52,6 @@ export class AppView {
     switcher.elements.set("projects", createProjectsPanel());
     switcher.elements.set("histories", createHistoriesPanel());
     switcher.elements.set("settings", createSettings());
-    switcher.switch("loading");
 
     historyEntryCreatedChannel.emit(examples[0]);
     historyEntryCreatedChannel.emit(examples[1]);
@@ -71,15 +70,21 @@ export class AppView {
     ]);
 
     appState.on((state) => {
-      if (state === "homepage") {
+      if (state === "waiting") {
+        this.hideToolbar();
+        switcher.switch("waiting");
+      } else if (state === "loading") {
+        this.hideToolbar();
+        switcher.switch("loading");
+      } else if (state === "homepage") {
         this.hideToolbar();
         switcher.switch("homepage");
-      } else if (state === "work") {
+      } else if (state === "playing") {
         this.showToolbar();
-        switcher.switch("settings");
+        switcher.switch("supplies");
       }
     });
-    appState.emit("homepage");
+    appState.emit("loading");
   }
 
   public hideToolbar() {

@@ -1,5 +1,5 @@
 import { ServiceResolver } from "../../../common/dependency.ts";
-import { CreateGameEPRequest } from "../../../server/features/create-game-ep.ts";
+import { CreateGameEPRequest, CreateGameEPResponse } from "../../../server/features/create-game-ep.ts";
 import { ReadGameEPResponse } from "../../../server/features/read-game-ep.ts";
 import { appState } from "../app/app.ts";
 import { ClientConfig, provideClientConfig } from "../config.ts";
@@ -18,18 +18,21 @@ export class ClientGameManager {
     }
   }
 
-  public async createGame(payload: CreateGameEPRequest) {
+  public async createGame(request: CreateGameEPRequest) {
     const { apiUrl } = this.config;
-    const response = await fetch(`${apiUrl}/games`, {
+    const envelope = await fetch(`${apiUrl}/games`, {
       method: "POST",
       headers: {
         ["Content-Type"]: "application/json",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(request),
     });
-    const data = await response.json();
-    const { gameId, token } = data;
+    const data = await envelope.json();
+    const response = data as CreateGameEPResponse;
+    const { gameId, myPlayerId, stateType, token } = response;
     sessionStorage.setItem("token", token);
+    this.createClientGameContext(gameId, myPlayerId);
+    appState.emit(stateType);
   }
 
   protected async currentGame() {
@@ -38,27 +41,28 @@ export class ClientGameManager {
     if (token === null) {
       return false;
     }
-    const response = await fetch(`${apiUrl}/games`, {
+    const envelope = await fetch(`${apiUrl}/games`, {
       method: "GET",
       headers: {
         ["Authorization"]: `Bearer ${token}`,
       },
     });
-    const data = await response.json();
+    const data = await envelope.json();
     if (data.error) {
       return false;
     }
-    const payload = data as ReadGameEPResponse;
-    const { gameId, myPlayerId, players } = payload;
-    const context = this.createClientGameContext(gameId, myPlayerId);
+    const response = data as ReadGameEPResponse;
+    const { gameId, myPlayerId, stateType } = response;
+    this.createClientGameContext(gameId, myPlayerId);
+    appState.emit(stateType);
   }
 
   public createClientGameContext(gameId: string, myPlayerId: number): ClientGameContext {
     const resolver = new ServiceResolver();
     const context: ClientGameContext = {
       gameId,
-      resolver,
       myPlayerId,
+      resolver,
     }
     return context;
   }
