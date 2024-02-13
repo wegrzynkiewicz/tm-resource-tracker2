@@ -4,9 +4,7 @@ import { CreateGameEPRequest, CreateGameEPResponse } from "../../../server/featu
 import { ReadGameEPResponse } from "../../../server/features/read-game-ep.ts";
 import { AppView, provideAppView } from "../app/app.ts";
 import { ClientConfig, provideClientConfig } from "../config.ts";
-import { HomepageView, provideHomepageView } from "../homepage/homepage.ts";
-import { provideWaitingView } from "../waiting/waiting.ts";
-import { ClientGameContext, ClientGameContextInput, provideClientGameContext } from "./client-game.ts";
+import { ClientGameContextManager, provideClientGameContextManager } from "./context.ts";
 import { provideCreateGameChannel, provideJoinGameChannel } from "./source.ts";
 import { CreateGame, JoinGame } from "./source.ts";
 
@@ -14,20 +12,13 @@ export class ClientGameManager {
 
   public constructor(
     private appView: AppView,
-    private homepageView: HomepageView,
     private config: ClientConfig,
+    private clientGameContextManager: ClientGameContextManager,
     createGameChannel: Channel<CreateGame>,
     joinGameChannel: Channel<JoinGame>,
   ) {
     createGameChannel.on((input) => this.createGame(input));
     // joinGameChannel.on((input) => this.createGame(input));
-  }
-
-  public async bootstrap() {
-    const result = await this.loadCurrentGame();
-    if (result === null) {
-      this.appView.homepage();
-    }
   }
 
   private async createGame(request: CreateGameEPRequest) {
@@ -41,16 +32,16 @@ export class ClientGameManager {
     });
     const data = await envelope.json();
     const response = data as CreateGameEPResponse;
-    const { token } = response;
-    sessionStorage.setItem("token", token);
-    this.createClientGameContext(response);
+    sessionStorage.setItem("token", response.token);
+    this.clientGameContextManager.createClientGameContext(response);
   }
 
-  private async loadCurrentGame() {
+  public async bootstrap() {
     const { apiUrl } = this.config;
     const token = sessionStorage.getItem('token');
     if (token === null) {
-      return null;
+      this.appView.homepage();
+      return;
     }
     const envelope = await fetch(`${apiUrl}/games`, {
       method: "GET",
@@ -60,34 +51,20 @@ export class ClientGameManager {
     });
     const data = await envelope.json();
     if (data.error) {
-      return null;
+      sessionStorage.removeItem('token');
+      this.appView.homepage();
+      return;
     }
     const response = data as ReadGameEPResponse;
-    this.createClientGameContext(response);
-  }
-
-  public createClientGameContext(input: ClientGameContextInput): ClientGameContext {
-    const { stateType } = input;
-    const resolver = new ServiceResolver();
-    const context: ClientGameContext = {
-      ...input,
-      resolver,
-    }
-    resolver.inject(provideClientGameContext, context);
-    if (stateType === "waiting") {
-      const waitingView = resolver.resolve(provideWaitingView);
-      this.appView.mount(waitingView.$root);
-      this.appView.hideToolbar();
-    }
-    return context;
+    this.clientGameContextManager.createClientGameContext(response);
   }
 }
 
 export function provideClientGameManager(resolver: ServiceResolver) {
   return new ClientGameManager(
     resolver.resolve(provideAppView),
-    resolver.resolve(provideHomepageView),
     resolver.resolve(provideClientConfig),
+    resolver.resolve(provideClientGameContextManager),
     resolver.resolve(provideCreateGameChannel),
     resolver.resolve(provideJoinGameChannel),
   );

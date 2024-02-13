@@ -1,16 +1,12 @@
-import { assertObject } from "../../common/asserts.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
-import { GameState } from "../game/game.ts";
-import { GameManager, provideGameManager } from "../game/game.ts";
-import { TokenManager, provideTokenManager } from "../game/token.ts";
 import { parseAuthorizationToken } from "../useful.ts";
 import { EPContext, EPHandler, EPRoute } from "../web/endpoint.ts";
+import { ServerPlayerContextResolver, provideServerPlayerContextResolver } from "../player/resolver.ts";
 
 export interface ReadGameEPResponse {
   gameId: string;
   isAdmin: boolean;
-  myPlayerId: number;
-  stateType: GameState["type"];
+  playerId: number;
   token: string;
 }
 
@@ -18,27 +14,17 @@ export const readGameEPRoute = new EPRoute("GET", "/games");
 
 export class ReadGameEPHandler implements EPHandler {
   public constructor(
-    private tokenManager: TokenManager,
-    private gameManager: GameManager,
+    private resolver: ServerPlayerContextResolver,
   ) { }
 
   public async handle({ request }: EPContext): Promise<Response> {
     const token = parseAuthorizationToken(request);
-    const data = this.tokenManager.tokens.get(token);
-    assertObject(data, 'not-found-token', { status: 404 });
-    const { gameId, playerId } = data;
-    const game = this.gameManager.games.get(gameId);
-    assertObject(game, 'not-found-game-with-this-token', { status: 404 });
-    const { state, playerManager } = game;
-    const player = playerManager.players.get(playerId);
-    assertObject(player, 'not-found-player-with-this-token', { status: 404 });
-
+    const { gameContext, playerData } = this.resolver.resolvePlayer(token);
     const payload: ReadGameEPResponse = {
-      gameId,
-      myPlayerId: playerId,
-      stateType: state.type,
+      gameId: gameContext.identifier.gameId,
+      playerId: playerData.playerId,
       token,
-      isAdmin: player.isAdmin,
+      isAdmin: playerData.isAdmin,
     };
     const response = Response.json(payload);
     return response;
@@ -47,7 +33,6 @@ export class ReadGameEPHandler implements EPHandler {
 
 export function provideReadGameEPHandler(resolver: ServiceResolver) {
   return new ReadGameEPHandler(
-    resolver.resolve(provideTokenManager),
-    resolver.resolve(provideGameManager),
+    resolver.resolve(provideServerPlayerContextResolver),
   );
 }

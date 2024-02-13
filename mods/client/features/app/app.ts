@@ -12,8 +12,8 @@ import { createScroll } from "./scroll.ts";
 import { TopView, provideTopView } from "./top.ts";
 import { createLoading } from "./loading.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
-import { ClientConfig, provideClientConfig } from "../config.ts";
 import { HomepageView, provideHomepageView } from "../homepage/homepage.ts";
+import { ClientConfig, provideClientConfig } from "../config.ts";
 
 export function createQuestion() {
   return div_nodes("app_content-overlay", [

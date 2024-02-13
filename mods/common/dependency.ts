@@ -7,14 +7,30 @@ export interface Provider<TInstance> {
 export type AnyProvider = Provider<any>;
 
 export class ServiceResolver {
+
+  public constructor(
+    private readonly parent: ServiceResolver | null = null,
+  ) { }
+
   public readonly instances = new Map<AnyProvider, unknown>();
 
   public inject<TInstance>(provider: Provider<TInstance>, instance: TInstance): void {
     this.instances.set(provider, instance);
   }
 
-  public resolve<TInstance>(provider: Provider<TInstance>): TInstance {
+  public get<TInstance>(provider: Provider<TInstance>): TInstance | undefined {
     const existingInstances = this.instances.get(provider);
+    if (existingInstances) {
+      return existingInstances as TInstance;
+    }
+    if (this.parent) {
+      return this.parent.get(provider);
+    }
+    return undefined;
+  }
+
+  public resolve<TInstance>(provider: Provider<TInstance>): TInstance {
+    const existingInstances = this.get(provider);
     if (existingInstances) {
       return existingInstances as TInstance;
     }
@@ -25,11 +41,5 @@ export class ServiceResolver {
     } catch (error) {
       throw new Breaker("error-when-resolving-provider", { provider: provider.name, error });
     }
-  }
-
-  public transfer<TInstance>(provider: Provider<TInstance>, destResolver: ServiceResolver): TInstance {
-    const instance = this.resolve(provider);
-    destResolver.inject(provider, instance);
-    return instance;
   }
 }

@@ -1,7 +1,9 @@
 import { assertObject, assertRequiredString } from "../../common/asserts.ts";
-import { colorByKeys } from "../../common/colors.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
-import { GameManager, provideGameManager } from "../game/game.ts";
+import { provideServerGameContextManager } from "../game/game.ts";
+import { ServerGameContextManager } from "../game/game.ts";
+import { provideServerPlayerContextManager } from "../player/context.ts";
+import { providePlayerData } from "../player/data.ts";
 import { EPContext, EPHandler, EPRoute } from "../web/endpoint.ts";
 import { ReadGameEPResponse } from "./read-game-ep.ts";
 
@@ -24,7 +26,7 @@ export const createGameEPRoute = new EPRoute("POST", "/games");
 
 export class CreateGameEPHandler implements EPHandler {
   public constructor(
-    public readonly gameManager: GameManager,
+    public readonly manager: ServerGameContextManager,
   ) { }
 
   public async handle({ request }: EPContext): Promise<Response> {
@@ -32,20 +34,17 @@ export class CreateGameEPHandler implements EPHandler {
     const data = parseCreateGameEPRequest(body);
     const { colorKey, name } = data;
 
-    const game = await this.gameManager.createGame();
-    const { gameId, playerManager, state } = game;
+    const gameContext = this.manager.createServerGameContext();
+    const playerManager = gameContext.resolver.resolve(provideServerPlayerContextManager);
 
-    const color = colorByKeys.get(colorKey);
-    assertObject(color, 'invalid-color-key');
-    const player = playerManager.createPlayer(name, color, true);
-    const { isAdmin, token, playerId } = player;
+    const playerContext = playerManager.createServerPlayerContext({ colorKey, name, isAdmin: true });
+    const player = playerContext.resolver.resolve(providePlayerData);
 
     const payload: CreateGameEPResponse = {
-      gameId,
-      isAdmin,
-      myPlayerId: playerId,
-      stateType: state.type,
-      token: token.key,
+      gameId: gameContext.identifier.gameId,
+      isAdmin: player.isAdmin,
+      playerId: player.playerId,
+      token: player.token.key,
     };
     const response = Response.json(payload);
     return response;
@@ -54,6 +53,6 @@ export class CreateGameEPHandler implements EPHandler {
 
 export function provideCreateGameEPHandler(resolver: ServiceResolver) {
   return new CreateGameEPHandler(
-    resolver.resolve(provideGameManager),
+    resolver.resolve(provideServerGameContextManager),
   );
 }

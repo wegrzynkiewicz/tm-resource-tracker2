@@ -2,6 +2,7 @@ import { ServiceResolver } from "../common/dependency.ts";
 import { corsOptionsEPRoute, provideCorsOptionsEPHandler } from "./features/cors-options-ep.ts";
 import { createGameEPRoute, provideCreateGameEPHandler } from "./features/create-game-ep.ts";
 import { provideReadGameEPHandler, readGameEPRoute } from "./features/read-game-ep.ts";
+import { playerWebSocketEPRoute, providePlayerWebSocketEPHandler } from "./features/stream-game-ep.ts";
 import { provideMainLoggerFactory } from "./logger/logger-factory.ts";
 import { GlobalMiddleware } from "./web/global-middleware.ts";
 import { Router } from "./web/router.ts";
@@ -29,6 +30,7 @@ export function provideMainWebRouter(resolver: ServiceResolver) {
   router.add(corsOptionsEPRoute, resolver.resolve(provideCorsOptionsEPHandler));
   router.add(createGameEPRoute, resolver.resolve(provideCreateGameEPHandler));
   router.add(readGameEPRoute, resolver.resolve(provideReadGameEPHandler));
+  router.add(playerWebSocketEPRoute, resolver.resolve(providePlayerWebSocketEPHandler));
   return router;
 }
 
