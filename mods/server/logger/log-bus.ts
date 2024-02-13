@@ -25,13 +25,13 @@ export function provideMainLogBus() {
   const bus = new MainLogBus();
   if (typeof Deno === "object") {
     const subscriber = new BasicLogSubscriber(
-      new BasicLogFilter(LogSeverity.DEBUG),
+      new BasicLogFilter(LogSeverity.SILLY),
       new PrettyLogFormatter(),
     );
     bus.subscribers.add(subscriber);
   } else {
     const subscriber = new BrowserLogSubscriber(
-      new BasicLogFilter(LogSeverity.DEBUG),
+      new BasicLogFilter(LogSeverity.SILLY),
     );
     bus.subscribers.add(subscriber);
   }

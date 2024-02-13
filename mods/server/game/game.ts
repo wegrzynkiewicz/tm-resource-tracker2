@@ -4,16 +4,6 @@ import { ServiceResolver } from "../../common/dependency.ts";
 import { cryptoRandomString } from "../../deps.ts";
 import { GlobalContext, provideGlobalContext } from "../../common/global.ts";
 
-export interface WaitingGameState {
-  type: "waiting";
-}
-
-export interface PlayingGameState {
-  type: "playing";
-}
-
-export type GameState = PlayingGameState | WaitingGameState;
-
 export interface ServerGameContextIdentifier {
   gameId: string;
 }

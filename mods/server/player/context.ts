@@ -1,6 +1,9 @@
 import { Context } from "../../common/context.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { provideServerGameContext, ServerGameContext } from "../game/game.ts";
+import { provideLogger } from "../logger/global.ts";
+import { LoggerFactory } from "../logger/logger-factory.ts";
+import { provideMainLoggerFactory } from "../logger/logger-factory.ts";
 import { providePlayerData } from "./data.ts";
 import { PlayerDataManager, PlayerInput } from "./data.ts";
 import { providePlayerDataManager } from "./data.ts";
@@ -20,6 +23,7 @@ export class ServerPlayerContextManager {
   public readonly players = new Map<number, ServerPlayerContext>();
 
   public constructor(
+    public readonly loggerFactory: LoggerFactory,
     public readonly playerDataManager: PlayerDataManager,
     public readonly serverGameContext: ServerGameContext,
   ) { }
@@ -34,9 +38,11 @@ export class ServerPlayerContextManager {
       identifier: { gameId, playerId },
       resolver,
     };
+    const logger = this.loggerFactory.createLogger('PLAYER', { gameId, playerId });
 
     resolver.inject(provideServerPlayerContext, serverPlayerContext);
     resolver.inject(providePlayerData, player);
+    resolver.inject(provideLogger, logger);
 
     this.players.set(playerId, serverPlayerContext);
     return serverPlayerContext;
@@ -45,6 +51,7 @@ export class ServerPlayerContextManager {
 
 export function provideServerPlayerContextManager(resolver: ServiceResolver) {
   return new ServerPlayerContextManager(
+    resolver.resolve(provideMainLoggerFactory),
     resolver.resolve(providePlayerDataManager),
     resolver.resolve(provideServerGameContext),
   );

@@ -61,14 +61,6 @@ export interface LogFormatter {
   format(log: Log): string;
 }
 
-export function provideMainLogger(resolver: ServiceResolver) {
-  return new BasicLogger(
-    "GLOBAL",
-    resolver.resolve(provideMainLogBus),
-    {},
-  );
-}
-
 export function provideLogger(): Logger {
-  throw new Breaker("scoped-logger-must-be-injected");
+  throw new Breaker("logger-must-be-injected");
 }
