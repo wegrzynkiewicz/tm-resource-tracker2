@@ -1,4 +1,4 @@
-import { Channel } from "../../../frontend-framework/store.ts";
+import { Channel } from "../../../common/channel.ts";
 
 export interface CreateGame {
   colorKey: string;

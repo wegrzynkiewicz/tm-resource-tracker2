@@ -1,8 +1,8 @@
-import { Channel } from "../../frontend-framework/store.ts";
 import { div_empty, div_nodes, div_text } from "../../frontend-framework/dom.ts";
 import { Resource } from "../../common/resources.ts";
 import { createPanel } from "./app/panel.ts";
 import { createResource } from "./resource.ts";
+import { Channel } from "../../common/channel.ts";
 
 export interface Player {
   playerId: string;

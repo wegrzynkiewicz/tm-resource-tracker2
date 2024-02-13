@@ -4,9 +4,9 @@ import { createJoinModal } from "./join-modal.ts";
 import { modalManager } from "../modal.ts";
 import { createCreationGameModal } from "./creation-modal.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
-import { Channel } from "../../../frontend-framework/store.ts";
 import { CreateGame, JoinGame } from "../game/source.ts";
 import { provideJoinGameChannel, provideCreateGameChannel } from "../game/source.ts";
+import { Channel } from "../../../common/channel.ts";
 
 export class HomepageView {
   public readonly $root: HTMLDivElement;

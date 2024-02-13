@@ -1,5 +1,5 @@
+import { Channel } from "../../../common/channel.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
-import { Channel } from "../../../frontend-framework/store.ts";
 import { CreateGameEPRequest, CreateGameEPResponse } from "../../../server/features/create-game-ep.ts";
 import { ReadGameEPResponse } from "../../../server/features/read-game-ep.ts";
 import { AppView, provideAppView } from "../app/app.ts";

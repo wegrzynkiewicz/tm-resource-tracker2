@@ -1,4 +1,4 @@
-import { Channel } from "../../frontend-framework/store.ts";
+import { Channel } from "../../common/channel.ts";
 import { button_nodes, div_nodes, span_text } from "../../frontend-framework/dom.ts";
 import { svg_icon } from "../../frontend-framework/svg.ts";
 

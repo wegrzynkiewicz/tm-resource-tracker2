@@ -1,46 +1,34 @@
-export type Listener<TEvent> = (event: TEvent) => void;
-
-export class Channel<TEvent> {
-  public readonly listeners = new Set<Listener<TEvent>>();
-  public on(listener: Listener<TEvent>) {
-    this.listeners.add(listener);
-  }
-  public emit(event: TEvent) {
-    for (const listener of this.listeners) {
-      listener(event);
-    }
-  }
-}
+import { Handler } from "../common/channel.ts";
 
 export class Store {
-  public readonly listeners = new Set<Listener<this>>();
+  public readonly handlers = new Set<Handler<this>>();
 
-  public on(listener: Listener<this>) {
-    this.listeners.add(listener);
+  public on(handler: Handler<this>) {
+    this.handlers.add(handler);
   }
 
   public emit() {
-    for (const listener of this.listeners) {
-      listener(this);
+    for (const handler of this.handlers) {
+      handler(this);
     }
   }
 }
 
 export class Signal<TValue> {
-  public readonly listeners = new Set<Listener<TValue>>();
+  public readonly handlers = new Set<Handler<TValue>>();
 
   public constructor(
     public value: TValue,
   ) {}
 
-  public on(listener: Listener<TValue>) {
-    this.listeners.add(listener);
-    listener(this.value);
+  public on(handler: Handler<TValue>) {
+    this.handlers.add(handler);
+    handler(this.value);
   }
 
   public emit() {
-    for (const listener of this.listeners) {
-      listener(this.value);
+    for (const handler of this.handlers) {
+      handler(this.value);
     }
   }
 }

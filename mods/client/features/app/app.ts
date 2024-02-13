@@ -1,6 +1,5 @@
 import { div_nodes, div_text } from "../../../frontend-framework/dom.ts";
 import { ElementSwitcher } from "../../../frontend-framework/element-switcher.ts";
-import { Channel } from "../../../frontend-framework/store.ts";
 import { createHistoriesPanel, examples, historyEntryCreatedChannel } from "../history.ts";
 import { modalManager } from "../modal.ts";
 import { createProjectsPanel } from "../project.ts";
@@ -14,6 +13,7 @@ import { createLoading } from "./loading.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { HomepageView, provideHomepageView } from "../homepage/homepage.ts";
 import { ClientConfig, provideClientConfig } from "../config.ts";
+import { Channel } from "../../../common/channel.ts";
 
 export function createQuestion() {
   return div_nodes("app_content-overlay", [
