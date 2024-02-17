@@ -1,9 +1,9 @@
-import { Handler } from "../common/channel.ts";
+import { ShortHandler } from "../common/channel.ts";
 
 export class Store {
-  public readonly handlers = new Set<Handler<this>>();
+  public readonly handlers = new Set<ShortHandler<this>>();
 
-  public on(handler: Handler<this>) {
+  public on(handler: ShortHandler<this>) {
     this.handlers.add(handler);
   }
 
@@ -15,13 +15,13 @@ export class Store {
 }
 
 export class Signal<TValue> {
-  public readonly handlers = new Set<Handler<TValue>>();
+  public readonly handlers = new Set<ShortHandler<TValue>>();
 
   public constructor(
     public value: TValue,
   ) {}
 
-  public on(handler: Handler<TValue>) {
+  public on(handler: ShortHandler<TValue>) {
     this.handlers.add(handler);
     handler(this.value);
   }

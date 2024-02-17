@@ -1,13 +1,19 @@
-export type Handler<TEvent> = (event: TEvent) => void;
+export type ShortHandler<TEvent> = (event: TEvent) => void;
+
+export interface Handler<TEvent> {
+  handle(event: TEvent): void
+}
 
 export class Channel<TEvent> {
   public readonly handlers = new Set<Handler<TEvent>>();
-  public on(handler: Handler<TEvent>) {
-    this.handlers.add(handler);
+  
+  public on(handle: ShortHandler<TEvent>) {
+    this.handlers.add({ handle });
   }
+
   public emit(event: TEvent) {
     for (const handler of this.handlers) {
-      handler(event);
+      handler.handle(event);
     }
   }
 }
