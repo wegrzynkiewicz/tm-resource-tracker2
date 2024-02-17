@@ -51,7 +51,7 @@ export class WebSocketChannel {
     ws.addEventListener("message", (event: MessageEvent) => {
       const readyState = readyStateToString(ws.readyState);
       const data = typeof event.data === "string" ? event.data : "binary";
-      this.logger.silly("message-web-socket-channel", { data, readyState });
+      this.logger.silly("incoming-message-web-socket-channel", { data, readyState });
       try {
         this.messages.emit(event);
       } catch (error) {
@@ -68,6 +68,12 @@ export class WebSocketChannel {
         this.logger.error("error-inside-web-socket-channel-error-listener", { error, readyState });
       }
     });
+  }
+
+  public send(data: string): void {
+    const readyState = readyStateToString(this.ws.readyState);
+    this.logger.silly("outgoing-message-web-socket-channel", { readyState });
+    this.ws.send(data);
   }
 
   public close(): void {
