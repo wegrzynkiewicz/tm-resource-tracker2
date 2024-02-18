@@ -1,18 +1,19 @@
 import { onClick } from "../common.ts";
 import { button_text, div_nodes } from "../../../frontend-framework/dom.ts";
 import { createJoinModal } from "./join-modal.ts";
-import { modalManager } from "../modal.ts";
 import { createCreationGameModal } from "./creation-modal.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { CreateGame, JoinGame } from "../game/source.ts";
 import { provideJoinGameChannel, provideCreateGameChannel } from "../game/source.ts";
 import { Channel } from "../../../common/channel.ts";
+import { ModalManager, provideModalManager } from "../modal.ts";
 
 export class HomepageView {
   public readonly $root: HTMLDivElement;
   public constructor(
-    private createGameChannel: Channel<CreateGame>,
-    private joinGameChannel: Channel<JoinGame>,
+    private readonly modalManager: ModalManager,
+    private readonly createGameChannel: Channel<CreateGame>,
+    private readonly joinGameChannel: Channel<JoinGame>,
   ) {
     const $create = button_text("box _action", "New Game");
     const $join = button_text("box _action", "Join the Game");
@@ -29,7 +30,7 @@ export class HomepageView {
 
   protected async whenCreateGameClicked() {
     const modal = createCreationGameModal();
-    modalManager.mount(modal);
+    this.modalManager.mount(modal);
     const result = await modal.promise;
     if (result.type === "cancel") {
       return;
@@ -39,7 +40,7 @@ export class HomepageView {
 
   protected async whenJoinGameClicked() {
     const modal = createJoinModal();
-    modalManager.mount(modal);
+    this.modalManager.mount(modal);
     const result = await modal.promise;
     if (result.type === "cancel") {
       return;
@@ -50,6 +51,7 @@ export class HomepageView {
 
 export function provideHomepageView(resolver: ServiceResolver) {
   return new HomepageView(
+    resolver.resolve(provideModalManager),
     resolver.resolve(provideCreateGameChannel),
     resolver.resolve(provideJoinGameChannel),
   );

@@ -4,8 +4,8 @@ import { Signal } from "../../frontend-framework/store.ts";
 import { ResourceGroup, ResourceTarget } from "../../common/resources.ts";
 import { createResourceGroup, resources, ResourceType } from "../../common/resources.ts";
 import { createSupplyModal } from "./supply-modal.ts";
-import { modalManager } from "./modal.ts";
 import { createPanel } from "./app/panel.ts";
+import { ModalManager } from "./modal.ts";
 
 interface Supply {
   target: ResourceTarget;
@@ -16,7 +16,9 @@ export class Supplies {
   public readonly $root: HTMLDivElement;
   public readonly signal: Signal<ResourceGroup>;
 
-  public constructor() {
+  public constructor(
+    private readonly modalManager: ModalManager,
+  ) {
     this.signal = new Signal(createResourceGroup(20));
     this.$root = div_nodes("supplies", [
       div_empty("supplies_production"),
@@ -28,7 +30,7 @@ export class Supplies {
   public async whenSupplyClicked({ type, target }: Supply) {
     const count = this.signal.value[type][target];
     const modal = createSupplyModal({ type, target, count });
-    modalManager.mount(modal);
+    this.modalManager.mount(modal);
     const result = await modal.promise;
     if (result.type === "cancel") {
       return;
@@ -66,5 +68,6 @@ export class Supplies {
 }
 
 export function createSuppliesPanel() {
-  return createPanel([1, 2, 3].map(() => new Supplies().$root));
+  const modalManager = new ModalManager();
+  return createPanel([1, 2, 3].map(() => new Supplies(modalManager).$root));
 }

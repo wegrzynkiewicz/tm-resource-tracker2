@@ -1,7 +1,6 @@
 import { div_nodes, div_text } from "../../../frontend-framework/dom.ts";
 import { ElementSwitcher } from "../../../frontend-framework/element-switcher.ts";
 import { createHistoriesPanel, historyEntryCreatedChannel } from "../history.ts";
-import { modalManager } from "../modal.ts";
 import { createProjectsPanel } from "../project.ts";
 import { createSettings } from "../settings.ts";
 import { createSuppliesPanel } from "../supply.ts";
@@ -15,6 +14,7 @@ import { HomepageView, provideHomepageView } from "../homepage/homepage.ts";
 import { ClientConfig, provideClientConfig } from "../config.ts";
 import { Channel } from "../../../common/channel.ts";
 import { examples } from "../../../common/history.ts";
+import { ModalManager, provideModalManager } from "../modal.ts";
 
 export function createQuestion() {
   return div_nodes("app_content-overlay", [
@@ -43,6 +43,7 @@ export class AppView {
   public constructor(
     private readonly clientConfig: ClientConfig,
     private readonly homepageView: HomepageView,
+    private readonly modalManager: ModalManager,
     public readonly top: TopView,
   ) {
     const scroll = createScroll();
@@ -68,7 +69,7 @@ export class AppView {
     this.$root = div_nodes("app", [
       top.$root,
       scroll.$fragment,
-      modalManager.root,
+      this.modalManager.root,
       this.$toolbar,
     ]);
     this.loading();
@@ -105,6 +106,7 @@ export function provideAppView(resolver: ServiceResolver) {
   return new AppView(
     resolver.resolve(provideClientConfig),
     resolver.resolve(provideHomepageView),
+    resolver.resolve(provideModalManager),
     resolver.resolve(provideTopView),
   );
 }

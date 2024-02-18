@@ -4,6 +4,7 @@ import { EPContext, EPHandler, EPRoute } from "../web/endpoint.ts";
 import { ServerPlayerContextResolver, provideServerPlayerContextResolver } from "../player/resolver.ts";
 
 export interface ReadGameEPResponse {
+  colorKey: string;
   gameId: string;
   isAdmin: boolean;
   playerId: number;
@@ -21,6 +22,7 @@ export class ReadGameEPHandler implements EPHandler {
     const token = parseAuthorizationToken(request);
     const { gameContext, playerData } = this.resolver.resolvePlayer(token);
     const payload: ReadGameEPResponse = {
+      colorKey: playerData.color.key,
       gameId: gameContext.identifier.gameId,
       playerId: playerData.playerId,
       token,

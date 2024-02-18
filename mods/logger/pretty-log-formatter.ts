@@ -1,4 +1,4 @@
-import { indent } from "../../common/useful.ts";
+import { indent } from "../common/useful.ts";
 import { Log, LoggerData, logSeverityNames } from "./global.ts";
 
 export class PrettyLogFormatter {

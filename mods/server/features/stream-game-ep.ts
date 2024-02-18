@@ -2,7 +2,8 @@ import { assertObject, assertRequiredString } from "../../common/asserts.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { EPRoute, EPHandler, EPContext } from "../web/endpoint.ts";
 import { ServerPlayerContextResolver, provideServerPlayerContextResolver } from "../player/resolver.ts";
-import { provideServerPlayerWebSocket, provideServerPlayerWebSocketChannel } from "../player/socket.ts";
+import { provideWebSocket } from "../../communication/socket.ts";
+import { providePlayerConnector } from "../player/connector.ts";
 
 export interface PlayerWebSocketEPParams {
   token: string;
@@ -24,16 +25,11 @@ export class PlayerWebSocketEPHandler implements EPHandler {
 
   public async handle({ params, request }: EPContext): Promise<Response> {
     const { token } = parsePlayerWebSocketEPRequest(params);
-    const { playerContext } = this.resolver.resolvePlayer(token);
+    const { gameContext, playerContext } = this.resolver.resolvePlayer(token);
     const { response, socket } = Deno.upgradeWebSocket(request);
-    playerContext.resolver.inject(provideServerPlayerWebSocket, socket);
-
-    const webSocketChannel = playerContext.resolver.resolve(provideServerPlayerWebSocketChannel);
-    {
-      webSocketChannel.opens.on(() => {
-        socket.send("hello world!")
-      });
-    }
+    playerContext.resolver.inject(provideWebSocket, socket);
+    const playerConnector = gameContext.resolver.resolve(providePlayerConnector);
+    playerConnector.connectPlayerContext(playerContext);
     return response;
   }
 }

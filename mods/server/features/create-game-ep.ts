@@ -3,7 +3,7 @@ import { ServiceResolver } from "../../common/dependency.ts";
 import { provideServerGameContextManager } from "../game/game.ts";
 import { ServerGameContextManager } from "../game/game.ts";
 import { provideServerPlayerContextManager } from "../player/context.ts";
-import { providePlayerData } from "../player/data.ts";
+import { providePlayerData } from "../../player/data.ts";
 import { EPContext, EPHandler, EPRoute } from "../web/endpoint.ts";
 import { ReadGameEPResponse } from "./read-game-ep.ts";
 
@@ -38,13 +38,14 @@ export class CreateGameEPHandler implements EPHandler {
     const playerManager = gameContext.resolver.resolve(provideServerPlayerContextManager);
 
     const playerContext = playerManager.createServerPlayerContext({ colorKey, name, isAdmin: true });
-    const player = playerContext.resolver.resolve(providePlayerData);
+    const playerData = playerContext.resolver.resolve(providePlayerData);
 
     const payload: CreateGameEPResponse = {
+      colorKey: playerData.color.key,
       gameId: gameContext.identifier.gameId,
-      isAdmin: player.isAdmin,
-      playerId: player.playerId,
-      token: player.token.key,
+      isAdmin: playerData.isAdmin,
+      playerId: playerData.playerId,
+      token: playerData.token.key,
     };
     const response = Response.json(payload);
     return response;

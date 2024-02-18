@@ -1,4 +1,4 @@
-import { ServiceResolver } from "../../common/dependency.ts";
+import { ServiceResolver } from "../common/dependency.ts";
 import { BasicLogger } from "./basic-logger.ts";
 import { Logger, LoggerData } from "./global.ts";
 import { LogBus, provideMainLogBus } from "./log-bus.ts";
@@ -7,7 +7,7 @@ export interface LoggerFactory {
   createLogger(channel: string, params?: LoggerData): Logger;
 }
 
-export class MainLoggerFactory implements LoggerFactory {
+export class LoggerFactory implements LoggerFactory {
   public constructor(
     private readonly logBus: LogBus,
   ) {}
@@ -17,8 +17,8 @@ export class MainLoggerFactory implements LoggerFactory {
   }
 }
 
-export function provideMainLoggerFactory(resolver: ServiceResolver) {
-  return new MainLoggerFactory(
+export function provideLoggerFactory(resolver: ServiceResolver) {
+  return new LoggerFactory(
     resolver.resolve(provideMainLogBus),
   );
 }

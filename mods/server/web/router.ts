@@ -1,5 +1,5 @@
 import { Breaker } from "../../common/asserts.ts";
-import { Logger } from "../logger/global.ts";
+import { Logger } from "../../logger/global.ts";
 import { EPContext } from "./endpoint.ts";
 import { EPHandler, EPRoute } from "./endpoint.ts";
 import { WebServerHandler } from "./server.ts";

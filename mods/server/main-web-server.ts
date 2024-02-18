@@ -3,7 +3,7 @@ import { corsOptionsEPRoute, provideCorsOptionsEPHandler } from "./features/cors
 import { createGameEPRoute, provideCreateGameEPHandler } from "./features/create-game-ep.ts";
 import { provideReadGameEPHandler, readGameEPRoute } from "./features/read-game-ep.ts";
 import { playerWebSocketEPRoute, providePlayerWebSocketEPHandler } from "./features/stream-game-ep.ts";
-import { provideMainLoggerFactory } from "./logger/logger-factory.ts";
+import { provideLoggerFactory } from "../logger/logger-factory.ts";
 import { GlobalMiddleware } from "./web/global-middleware.ts";
 import { Router } from "./web/router.ts";
 import { WebServer } from "./web/server.ts";
@@ -17,7 +17,7 @@ export function provideMainWebServerConfig() {
 }
 
 export function provideMainWebLogger(resolver: ServiceResolver) {
-  const loggerFactory = resolver.resolve(provideMainLoggerFactory);
+  const loggerFactory = resolver.resolve(provideLoggerFactory);
   const webServerConfig = resolver.resolve(provideMainWebServerConfig);
   const logger = loggerFactory.createLogger("WEB", { webServerConfig });
   return logger;

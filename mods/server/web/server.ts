@@ -1,5 +1,5 @@
 import { Breaker } from "../../common/asserts.ts";
-import { Logger } from "../logger/global.ts";
+import { Logger } from "../../logger/global.ts";
 
 export interface WebServerConfig {
   hostname: string;

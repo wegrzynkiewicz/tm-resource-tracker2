@@ -3,6 +3,8 @@ import { Context } from "../../common/context.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { cryptoRandomString } from "../../deps.ts";
 import { GlobalContext, provideGlobalContext } from "../../common/global.ts";
+import { LoggerFactory, provideLoggerFactory } from "../../logger/logger-factory.ts";
+import { provideLogger } from "../../logger/global.ts";
 
 export interface ServerGameContextIdentifier {
   gameId: string;
@@ -19,6 +21,7 @@ export class ServerGameContextManager {
 
   public constructor(
     private globalContext: GlobalContext,
+    private loggerFactory: LoggerFactory,
   ) { }
 
   private generateGameId(): string {
@@ -39,7 +42,12 @@ export class ServerGameContextManager {
       identifier: { gameId },
       resolver,
     };
+
+    const logger = this.loggerFactory.createLogger('GAME', { gameId });
+
     resolver.inject(provideServerGameContext, serverGameContext);
+    resolver.inject(provideLogger, logger);
+    
     this.games.set(gameId, serverGameContext);
     return serverGameContext;
   }
@@ -48,5 +56,6 @@ export class ServerGameContextManager {
 export function provideServerGameContextManager(resolver: ServiceResolver) {
   return new ServerGameContextManager(
     resolver.resolve(provideGlobalContext),
+    resolver.resolve(provideLoggerFactory),
   );
 }

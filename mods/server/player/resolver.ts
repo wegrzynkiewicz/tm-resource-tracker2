@@ -4,7 +4,7 @@ import { ServerGameContext, ServerGameContextManager, provideServerGameContextMa
 import { ServerPlayerContext, provideServerPlayerContextManager } from "./context.ts";
 import { TokenManager, provideTokenManager } from "../game/token.ts";
 import { providePlayerDataManager } from "./data.ts";
-import { Player } from "./data.ts";
+import { Player } from "../../player/data.ts";
 
 export interface ServerPlayerContextResolverResult {
   readonly gameContext: ServerGameContext;

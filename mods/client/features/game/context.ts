@@ -1,11 +1,20 @@
-import { Breaker } from "../../../common/asserts.ts";
+import { feedClientGAProcessor } from "../../../action/client-procesor.ts";
+import { Breaker, assertObject } from "../../../common/asserts.ts";
+import { colorByKeys } from "../../../common/colors.ts";
 import { Context } from "../../../common/context.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { GlobalContext, provideGlobalContext } from "../../../common/global.ts";
+import { provideGADecoder } from "../../../communication/decoder.ts";
+import { provideReceivingGABus } from "../../../communication/define.ts";
+import { provideGAProcessor } from "../../../communication/processor.ts";
+import { provideWebSocket, provideWebSocketChannel } from "../../../communication/socket.ts";
+import { provideLogger } from "../../../logger/global.ts";
+import { LoggerFactory, provideLoggerFactory } from "../../../logger/logger-factory.ts";
+import { Player, providePlayerData } from "../../../player/data.ts";
 import { ClientConfig, provideClientConfig } from "../config.ts";
-import { provideWebSocket } from "./web-socket.ts";
 
 export interface ClientGameContextInput {
+  readonly colorKey: string,
   readonly gameId: string,
   readonly isAdmin: boolean,
   readonly playerId: number,
@@ -28,10 +37,11 @@ export class ClientGameContextManager {
   public constructor(
     private config: ClientConfig,
     private globalContext: GlobalContext,
+    private loggerFactory: LoggerFactory,
   ) { }
 
   public createClientGameContext(input: ClientGameContextInput): ClientGameContext {
-    const { gameId, playerId, token } = input;
+    const { colorKey, gameId, isAdmin, playerId, token } = input;
     const resolver = new ServiceResolver(this.globalContext.resolver);
     const context: ClientGameContext = {
       descriptor: `/client-game/${gameId}/player/${playerId}`,
@@ -41,10 +51,37 @@ export class ClientGameContextManager {
 
     const url = new URL(this.config.wsURL);
     url.pathname = `/player-web-socket/${token}`;
+    url.searchParams.set('time', Date.now().toString());
     const socket = new WebSocket(url.toString());
 
+    const logger = this.loggerFactory.createLogger('CLIENT', { gameId, playerId });
+
+    const color = colorByKeys.get(colorKey);
+    assertObject(color, 'invalid-color-key');
+    const player = {
+      color,
+      isAdmin,
+      name: "TODO",
+      playerId,
+    } as Player; // TODO: get player data from server
+
     resolver.inject(provideClientGameContext, context);
+    resolver.inject(provideLogger, logger);
     resolver.inject(provideWebSocket, socket);
+    resolver.inject(providePlayerData, player);
+
+    const webSocketChannel = resolver.resolve(provideWebSocketChannel);
+    {
+      const gaDecoder = resolver.resolve(provideGADecoder);
+      webSocketChannel.messages.handlers.add(gaDecoder);
+    }
+
+    const receivingGABus = resolver.resolve(provideReceivingGABus);
+    {
+      const gaProcessor = resolver.resolve(provideGAProcessor);
+      feedClientGAProcessor(resolver, gaProcessor);
+      receivingGABus.handlers.add(gaProcessor);
+    }
 
     return context;
   }
@@ -54,5 +91,6 @@ export function provideClientGameContextManager(resolver: ServiceResolver) {
   return new ClientGameContextManager(
     resolver.resolve(provideClientConfig),
     resolver.resolve(provideGlobalContext),
+    resolver.resolve(provideLoggerFactory),
   );
 }

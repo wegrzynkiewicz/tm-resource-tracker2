@@ -29,4 +29,6 @@ export class ModalManager {
   }
 }
 
-export const modalManager = new ModalManager();
+export function provideModalManager() {
+  return new ModalManager();
+}

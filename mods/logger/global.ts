@@ -1,5 +1,5 @@
-import { Breaker } from "../../common/asserts.ts";
-import { ServiceResolver } from "../../common/dependency.ts";
+import { Breaker } from "../common/asserts.ts";
+import { ServiceResolver } from "../common/dependency.ts";
 import { BasicLogger } from "./basic-logger.ts";
 import { provideMainLogBus } from "./log-bus.ts";
 

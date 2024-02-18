@@ -1,4 +1,4 @@
-import { Channel } from "../../common/channel.ts";
+import { Channel } from "../common/channel.ts";
 import { Logger } from "../logger/global.ts";
 
 export function readyStateToString(readyState: number): string {

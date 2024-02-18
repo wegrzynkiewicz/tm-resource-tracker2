@@ -1,30 +1,9 @@
-import { Breaker, assertObject } from "../../common/asserts.ts";
-import { Color, colorByKeys } from "../../common/colors.ts";
+import { assertObject } from "../../common/asserts.ts";
+import { colorByKeys } from "../../common/colors.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { provideServerGameContext, ServerGameContext } from "../game/game.ts";
-import { provideTokenManager, Token, TokenManager } from "../game/token.ts";
-
-export interface Player {
-  color: Color;
-  readonly isAdmin: boolean;
-  name: string;
-  readonly playerId: number;
-  readonly token: Token;
-}
-
-export function providePlayerData(): Player {
-  throw new Breaker('player-must-be-injected');
-}
-
-export interface PlayerInput {
-  readonly colorKey: string;
-  readonly name: string;
-  readonly isAdmin: boolean;
-}
-
-export interface PlayerDTO extends PlayerInput {
-  readonly playerId: number;
-}
+import { provideTokenManager, TokenManager } from "../game/token.ts";
+import { Player, PlayerInput, PlayerDTO } from "../../player/data.ts";
 
 export let playerIdCounter = 0;
 
