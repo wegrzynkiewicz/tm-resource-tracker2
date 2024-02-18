@@ -2,10 +2,9 @@ import { assertObject, assertRequiredString } from "../../common/asserts.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { provideServerGameContextManager } from "../game/game.ts";
 import { ServerGameContextManager } from "../game/game.ts";
-import { provideServerPlayerContextManager } from "../player/context.ts";
-import { providePlayerData } from "../../player/data.ts";
 import { EPContext, EPHandler, EPRoute } from "../web/endpoint.ts";
 import { ReadGameEPResponse } from "./read-game-ep.ts";
+import { provideServerPlayerDataManager } from "../player/data.ts";
 
 export interface CreateGameEPRequest {
   colorKey: string;
@@ -33,20 +32,16 @@ export class CreateGameEPHandler implements EPHandler {
     const body = await request.json();
     const data = parseCreateGameEPRequest(body);
     const { colorKey, name } = data;
+    const isAdmin = true;
 
     const gameContext = this.manager.createServerGameContext();
-    const playerManager = gameContext.resolver.resolve(provideServerPlayerContextManager);
+    const { identifier: { gameId }, resolver } = gameContext;
 
-    const playerContext = playerManager.createServerPlayerContext({ colorKey, name, isAdmin: true });
-    const playerData = playerContext.resolver.resolve(providePlayerData);
+    const playerDataManager = resolver.resolve(provideServerPlayerDataManager);
+    const playerData = playerDataManager.createPlayerData({ colorKey, name, isAdmin });
+    const { playerId, token: { key: token } } = playerData;
 
-    const payload: CreateGameEPResponse = {
-      colorKey: playerData.color.key,
-      gameId: gameContext.identifier.gameId,
-      isAdmin: playerData.isAdmin,
-      playerId: playerData.playerId,
-      token: playerData.token.key,
-    };
+    const payload: CreateGameEPResponse = { colorKey, gameId, isAdmin, playerId, token };
     const response = Response.json(payload);
     return response;
   }

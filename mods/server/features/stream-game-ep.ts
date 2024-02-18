@@ -1,9 +1,11 @@
 import { assertObject, assertRequiredString } from "../../common/asserts.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { EPRoute, EPHandler, EPContext } from "../web/endpoint.ts";
-import { ServerPlayerContextResolver, provideServerPlayerContextResolver } from "../player/resolver.ts";
 import { provideWebSocket } from "../../communication/socket.ts";
 import { providePlayerConnector } from "../player/connector.ts";
+import { ServerGameContextManager, provideServerGameContextManager } from "../game/game.ts";
+import { TokenManager, provideTokenManager } from "../game/token.ts";
+import { provideServerPlayerContextManager } from "../player/context.ts";
 
 export interface PlayerWebSocketEPParams {
   token: string;
@@ -20,22 +22,33 @@ export const playerWebSocketEPRoute = new EPRoute("GET", "/player-web-socket/:to
 
 export class PlayerWebSocketEPHandler implements EPHandler {
   public constructor(
-    private readonly resolver: ServerPlayerContextResolver,
+    protected readonly gameManager: ServerGameContextManager,
+    protected readonly tokenManager: TokenManager,
   ) { }
 
   public async handle({ params, request }: EPContext): Promise<Response> {
     const { token } = parsePlayerWebSocketEPRequest(params);
-    const { gameContext, playerContext } = this.resolver.resolvePlayer(token);
+
+    const data = this.tokenManager.tokens.get(token);
+    assertObject(data, 'not-found-token', { status: 404 });
+    const { gameId, playerId } = data.identifier;
+
+    const gameContext = this.gameManager.games.get(gameId);
+    assertObject(gameContext, 'not-found-game-with-this-token', { status: 404 });
+    const { resolver } = gameContext;
+
     const { response, socket } = Deno.upgradeWebSocket(request);
-    playerContext.resolver.inject(provideWebSocket, socket);
-    const playerConnector = gameContext.resolver.resolve(providePlayerConnector);
-    playerConnector.connectPlayerContext(playerContext);
+
+    const playerContextManager = resolver.resolve(provideServerPlayerContextManager);
+    playerContextManager.createServerPlayerContext({ playerId, socket});
+    
     return response;
   }
 }
 
 export function providePlayerWebSocketEPHandler(resolver: ServiceResolver) {
   return new PlayerWebSocketEPHandler(
-    resolver.resolve(provideServerPlayerContextResolver),
+    resolver.resolve(provideServerGameContextManager),
+    resolver.resolve(provideTokenManager),
   );
 }

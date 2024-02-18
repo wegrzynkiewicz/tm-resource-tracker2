@@ -7,7 +7,7 @@ import { Player, PlayerInput, PlayerDTO } from "../../player/data.ts";
 
 export let playerIdCounter = 0;
 
-export class PlayerDataManager {
+export class ServerPlayerDataManager {
   public readonly players = new Map<number, Player>();
 
   public constructor(
@@ -51,8 +51,8 @@ export class PlayerDataManager {
   }
 }
 
-export function providePlayerDataManager(resolver: ServiceResolver) {
-  return new PlayerDataManager(
+export function provideServerPlayerDataManager(resolver: ServiceResolver) {
+  return new ServerPlayerDataManager(
     resolver.resolve(provideServerGameContext),
     resolver.resolve(provideTokenManager),
   );

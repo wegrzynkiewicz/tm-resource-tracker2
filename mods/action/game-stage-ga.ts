@@ -8,7 +8,7 @@ export interface GameStageGA {
 }
 
 export const gameStageGADef: GADefinition<GameStageGA> = {
-  kind: 'game-stage-request'
+  kind: 'game-stage'
 };
 
 export class GameStageGAHandler implements GAHandler<GameStageGA>{
