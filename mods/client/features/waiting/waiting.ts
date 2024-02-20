@@ -3,6 +3,26 @@ import { button_text, div_empty, div_nodes, div_text } from "../../../frontend-f
 import { Player, providePlayerData } from "../../../player/data.ts";
 import { createEditBox } from "../../common/edit-box.ts";
 import { ClientGameContext, provideClientGameContext } from "../game/context.ts";
+import { Collection } from "../../../frontend-framework/store.ts";
+import { ComponentFactory, Loop } from "../../../frontend-framework/loop.ts";
+import { WaitingPlayer } from "../../../domain/waiting-players.ts";
+
+export class WaitingPlayerFactory implements ComponentFactory<WaitingPlayer> {
+  public create(player: WaitingPlayer): HTMLElement {
+    const { name, colorKey } = player;
+    const $root = div_nodes("history _background", [
+      div_nodes("history_header", [
+        div_empty(`player-cube _${colorKey}`),
+        div_text("history_name", name),
+      ]),
+    ]);
+    return $root;
+  }
+}
+
+export function provideWaitingPlayersCollection() {
+  return new Collection<WaitingPlayer>([]);
+}
 
 export class WaitingView {
   public readonly $root: HTMLDivElement;
@@ -10,6 +30,7 @@ export class WaitingView {
   public constructor(
     gameContext: ClientGameContext,
     player: Player,
+    players: Collection<WaitingPlayer>,
   ) {
     const gameIdBox = createEditBox({
       label: "GameID",
@@ -22,6 +43,8 @@ export class WaitingView {
     const $change = button_text("box _action", "Change name or color...");
     const $quitGame = button_text("box _action", "Quit game");
     const $start = button_text("box _action", "Start game");
+
+    const loop = Loop.create<WaitingPlayer>(players, new WaitingPlayerFactory());
 
     this.$root = div_nodes("waiting", [
       div_nodes("space", [
@@ -37,12 +60,7 @@ export class WaitingView {
         ]),
         div_nodes("space_container", [
           div_text("space_caption", "Joining players:"),
-          div_nodes("history _background", [
-            div_nodes("history_header", [
-              div_empty(`player-cube _red`),
-              div_text("history_name", "Łukasz"),
-            ]),
-          ]),
+          loop.$root,
         ]),
       ]),
     ]);
@@ -53,5 +71,6 @@ export function provideWaitingView(resolver: ServiceResolver) {
   return new WaitingView(
     resolver.resolve(provideClientGameContext),
     resolver.resolve(providePlayerData),
+    resolver.resolve(provideWaitingPlayersCollection),
   );
 }

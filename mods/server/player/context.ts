@@ -14,6 +14,7 @@ import { provideReceivingGABus } from "../../communication/define.ts";
 import { provideGADispatcher } from "../../communication/dispatcher.ts";
 import { provideGAProcessor } from "../../communication/processor.ts";
 import { feedServerGAProcessor } from "./processor.ts";
+import { withResolvers } from "../../common/useful.ts";
 
 export interface ServerPlayerContextIdentifier {
   gameId: string;
@@ -35,12 +36,12 @@ export class ServerPlayerContextManager {
     private readonly serverGameContext: ServerGameContext,
   ) { }
 
-  public createServerPlayerContext(
+  public async createServerPlayerContext(
     { playerId, socket }: {
       playerId: number;
       socket: WebSocket;
     }
-  ): ServerPlayerContext {
+  ): Promise<ServerPlayerContext> {
     const player = this.playerDataManager.players.get(playerId);
     assertObject(player, 'not-found-player-data', { status: 404 });
 
@@ -72,13 +73,15 @@ export class ServerPlayerContextManager {
     }
 
     const gaDispatcher = resolver.resolve(provideGADispatcher);
+    const { promise, resolve } = withResolvers<ServerPlayerContext>();
 
     webSocketChannel.opens.on(() => {
-      gaDispatcher.send(gameStageGADef, { stage: 'waiting' })
+      gaDispatcher.send(gameStageGADef, { stage: 'waiting' });
+      resolve(serverPlayerContext);
     });
 
     this.players.set(playerId, serverPlayerContext);
-    return serverPlayerContext;
+    return promise;
   }
 }
 

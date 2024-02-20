@@ -1,11 +1,10 @@
 import { assertObject, assertRequiredString } from "../../common/asserts.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { EPRoute, EPHandler, EPContext } from "../web/endpoint.ts";
-import { provideWebSocket } from "../../communication/socket.ts";
-import { providePlayerConnector } from "../player/connector.ts";
 import { ServerGameContextManager, provideServerGameContextManager } from "../game/game.ts";
 import { TokenManager, provideTokenManager } from "../game/token.ts";
 import { provideServerPlayerContextManager } from "../player/context.ts";
+import { providePlayerBroadcast } from "../player/broadcast.ts";
 
 export interface PlayerWebSocketEPParams {
   token: string;
@@ -40,8 +39,11 @@ export class PlayerWebSocketEPHandler implements EPHandler {
     const { response, socket } = Deno.upgradeWebSocket(request);
 
     const playerContextManager = resolver.resolve(provideServerPlayerContextManager);
-    playerContextManager.createServerPlayerContext({ playerId, socket});
-    
+    await playerContextManager.createServerPlayerContext({ playerId, socket });
+
+    const playerBroadcast = resolver.resolve(providePlayerBroadcast);
+    playerBroadcast.sendWaitingPlayers();
+
     return response;
   }
 }
