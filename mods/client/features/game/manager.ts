@@ -33,7 +33,7 @@ export class ClientGameManager {
     });
     const data = await envelope.json();
     const response = data as CreateGameEPResponse;
-    sessionStorage.setItem("token", response.token);
+    localStorage.setItem("token", response.token);
     this.clientGameContextManager.createClientGameContext(response);
   }
 
@@ -48,13 +48,13 @@ export class ClientGameManager {
     });
     const data = await envelope.json();
     const response = data as JoinGameEPResponse;
-    sessionStorage.setItem("token", response.token);
+    localStorage.setItem("token", response.token);
     this.clientGameContextManager.createClientGameContext(response);
   }
 
   public async bootstrap() {
     const { apiUrl } = this.config;
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (token === null) {
       this.appView.homepage();
       return;
@@ -67,7 +67,7 @@ export class ClientGameManager {
     });
     const data = await envelope.json();
     if (data.error) {
-      sessionStorage.removeItem('token');
+      localStorage.removeItem('token');
       this.appView.homepage();
       return;
     }

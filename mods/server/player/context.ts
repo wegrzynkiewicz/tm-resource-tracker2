@@ -8,13 +8,12 @@ import { providePlayerData } from "../../player/data.ts";
 import { provideServerPlayerDataManager, ServerPlayerDataManager } from "./data.ts";
 import { assertObject } from "../../common/asserts.ts";
 import { provideWebSocket, provideWebSocketChannel } from "../../communication/socket.ts";
-import { gameStageGADef } from "../../action/game-stage-ga.ts";
 import { provideGADecoder } from "../../communication/decoder.ts";
 import { provideReceivingGABus } from "../../communication/define.ts";
-import { provideGADispatcher } from "../../communication/dispatcher.ts";
 import { provideGAProcessor } from "../../communication/processor.ts";
 import { feedServerGAProcessor } from "./processor.ts";
 import { withResolvers } from "../../common/useful.ts";
+import { Channel } from "../../common/channel.ts";
 
 export interface ServerPlayerContextIdentifier {
   gameId: string;
@@ -29,6 +28,8 @@ export function provideServerPlayerContext(): ServerPlayerContext {
 
 export class ServerPlayerContextManager {
   public readonly players = new Map<number, ServerPlayerContext>();
+  public readonly creates = new Channel<ServerPlayerContext>;
+  public readonly deletes = new Channel<ServerPlayerContext>;
 
   public constructor(
     private readonly loggerFactory: LoggerFactory,
@@ -72,16 +73,34 @@ export class ServerPlayerContextManager {
       receivingGABus.handlers.add(gaProcesor);
     }
 
-    const gaDispatcher = resolver.resolve(provideGADispatcher);
-    const { promise, resolve } = withResolvers<ServerPlayerContext>();
+    const { promise, resolve } = withResolvers<null>();
 
     webSocketChannel.opens.on(() => {
-      gaDispatcher.send(gameStageGADef, { stage: 'waiting' });
-      resolve(serverPlayerContext);
+      resolve(null);
     });
+    webSocketChannel.closes.on(() => {
+      this.deletePlayerContext(playerId);
+    });
+    await promise;
+
+    this.creates.emit(serverPlayerContext);
 
     this.players.set(playerId, serverPlayerContext);
-    return promise;
+    return serverPlayerContext;
+  }
+
+  public async deletePlayerContext(playerId: number) {
+    const serverPlayerContext = this.players.get(playerId);
+    if (serverPlayerContext === undefined) {
+      return;
+    }
+    const { resolver } = serverPlayerContext;
+    const socket = resolver.resolve(provideWebSocket);
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.close();
+    }
+    this.players.delete(playerId);
+    this.deletes.emit(serverPlayerContext);
   }
 }
 

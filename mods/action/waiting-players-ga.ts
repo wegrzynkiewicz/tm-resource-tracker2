@@ -1,12 +1,8 @@
 import { provideWaitingPlayersCollection } from "../client/features/waiting/waiting.ts";
 import { ServiceResolver } from "../common/dependency.ts";
 import { GADefinition, GAHandler } from "../communication/define.ts";
+import { WaitingPlayer } from "../domain/waiting-players.ts";
 import { Collection } from "../frontend-framework/store.ts";
-
-export interface WaitingPlayer {
-  readonly name: string;
-  readonly colorKey: string;
-}
 
 export interface WaitingPlayersGA {
   players: WaitingPlayer[];

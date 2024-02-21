@@ -72,7 +72,7 @@ export class WebSocketChannel {
 
   public send(data: string): void {
     const readyState = readyStateToString(this.ws.readyState);
-    this.logger.silly("outgoing-message-web-socket-channel", { readyState });
+    this.logger.silly("outgoing-message-web-socket-channel", { data, readyState });
     this.ws.send(data);
   }
 

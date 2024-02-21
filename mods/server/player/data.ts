@@ -38,6 +38,15 @@ export class ServerPlayerDataManager {
     return player;
   }
 
+  public deletePlayerData(playerId: number) {
+    const playerData = this.players.get(playerId);
+    if (playerData === undefined) {
+      return;
+    }
+    this.tokenManager.deleteToken(playerData.token.key);
+    this.players.delete(playerId);
+  }
+
   public *fetchPlayers(): Generator<PlayerDTO, void, unknown> {
     for (const player of this.players.values()) {
       const { playerId, color: { key }, name, isAdmin } = player;

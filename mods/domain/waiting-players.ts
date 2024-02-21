@@ -1,4 +1,6 @@
 export interface WaitingPlayer {
-  readonly name: string;
   readonly colorKey: string;
+  readonly isAdmin: boolean;
+  readonly name: string;
+  readonly playerId: number;
 }

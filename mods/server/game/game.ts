@@ -5,6 +5,9 @@ import { cryptoRandomString } from "../../deps.ts";
 import { GlobalContext, provideGlobalContext } from "../../common/global.ts";
 import { LoggerFactory, provideLoggerFactory } from "../../logger/logger-factory.ts";
 import { provideLogger } from "../../logger/global.ts";
+import { providePlayerBroadcast } from "../player/broadcast.ts";
+import { provideServerPlayerContextManager } from "../player/context.ts";
+import { provideGameStateBroadcast } from "./state.ts";
 
 export interface ServerGameContextIdentifier {
   gameId: string;
@@ -26,7 +29,7 @@ export class ServerGameContextManager {
 
   private generateGameId(): string {
     while (true) {
-      const gameId = cryptoRandomString({ length: 5, type: "distinguishable" });
+      const gameId = cryptoRandomString({ length: 1, type: "distinguishable" });
       if (this.games.has(gameId)) {
         continue;
       }
@@ -47,7 +50,17 @@ export class ServerGameContextManager {
 
     resolver.inject(provideServerGameContext, serverGameContext);
     resolver.inject(provideLogger, logger);
-    
+
+    const serverPlayerContextManager = resolver.resolve(provideServerPlayerContextManager);
+    {
+      const playerBroadcast = resolver.resolve(providePlayerBroadcast);
+      serverPlayerContextManager.creates.handlers.add(playerBroadcast);
+      serverPlayerContextManager.deletes.handlers.add(playerBroadcast);
+
+      const gameStateBroadcast = resolver.resolve(provideGameStateBroadcast);
+      serverPlayerContextManager.creates.handlers.add(gameStateBroadcast);
+    }
+
     this.games.set(gameId, serverGameContext);
     return serverGameContext;
   }

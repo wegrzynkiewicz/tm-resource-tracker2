@@ -15,6 +15,10 @@ export class TokenManager {
     this.tokens.set(key, token);
     return token;
   }
+
+  public deleteToken(key: string) {
+    this.tokens.delete(key);
+  }
 }
 
 export function provideTokenManager() {
