@@ -1,6 +1,6 @@
 import { feedClientGAProcessor } from "../../../action/client-procesor.ts";
-import { Breaker, assertObject } from "../../../common/asserts.ts";
-import { colorByKeys } from "../../../common/colors.ts";
+import { Breaker } from "../../../common/asserts.ts";
+import { obtainColor } from "../../../common/colors.ts";
 import { Context } from "../../../common/context.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { GlobalContext, provideGlobalContext } from "../../../common/global.ts";
@@ -58,8 +58,7 @@ export class ClientGameContextManager {
 
     const logger = this.loggerFactory.createLogger('CLIENT', { gameId, playerId });
 
-    const color = colorByKeys.get(colorKey);
-    assertObject(color, 'invalid-color-key');
+    const color = obtainColor(colorKey);
     const player = {
       color,
       isAdmin,

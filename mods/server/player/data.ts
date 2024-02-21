@@ -1,9 +1,8 @@
-import { assertObject } from "../../common/asserts.ts";
-import { colorByKeys } from "../../common/colors.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { provideServerGameContext, ServerGameContext } from "../game/game.ts";
 import { provideTokenManager, TokenManager } from "../game/token.ts";
 import { Player, PlayerInput, PlayerDTO } from "../../player/data.ts";
+import { obtainColor } from "../../common/colors.ts";
 
 export let playerIdCounter = 0;
 
@@ -19,8 +18,7 @@ export class ServerPlayerDataManager {
     { colorKey, name, isAdmin }: PlayerInput
   ): Player {
     const playerId = ++playerIdCounter;
-    const color = colorByKeys.get(colorKey);
-    assertObject(color, 'invalid-color-key');
+    const color = obtainColor(colorKey);
 
     const { gameId } = this.gameContext.identifier;
 

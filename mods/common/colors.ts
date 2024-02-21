@@ -1,3 +1,5 @@
+import { assertObject } from "./asserts.ts";
+
 export interface Color {
   key: string;
   name: string;
@@ -14,3 +16,9 @@ export const colors: Color[] = [
 export const colorByKeys = new Map<string, Color>(
   colors.map((color) => [color.key, color])
 );
+
+export function obtainColor(key: string): Color {
+  const color = colorByKeys.get(key);
+  assertObject(color, 'invalid-color-key');
+  return color;
+} 
