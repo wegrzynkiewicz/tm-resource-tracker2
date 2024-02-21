@@ -42,7 +42,7 @@ export class PlayerWebSocketEPHandler implements EPHandler {
     await playerContextManager.createServerPlayerContext({ playerId, socket });
 
     const playerBroadcast = resolver.resolve(providePlayerBroadcast);
-    playerBroadcast.sendWaitingPlayers();
+    playerBroadcast.sendPlayersData();
 
     return response;
   }

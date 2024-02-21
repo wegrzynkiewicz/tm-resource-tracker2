@@ -14,10 +14,10 @@ export class PlayerBroadcast implements Handler<ServerPlayerContext> {
   ) { }
 
   public handle() {
-    this.sendWaitingPlayers();
+    this.sendPlayersData();
   }
 
-  public sendWaitingPlayers() {
+  public sendPlayersData() {
     const players = [...this.fetchOnlinePlayers()];
     this.send(waitingPlayersGADef, { players });
   }
