@@ -9,6 +9,8 @@ import { Router } from "./web/router.ts";
 import { WebServer } from "./web/server.ts";
 import { joinGameEPRoute } from "./features/join-game-ep.ts";
 import { provideJoinGameEPHandler } from "./features/join-game-ep.ts";
+import { quitGameEPRoute } from "./features/quit-game-ep.ts";
+import { provideQuitGameEPHandler } from "./features/quit-game-ep.ts";
 
 export function provideMainWebServerConfig() {
   return {
@@ -33,6 +35,7 @@ export function provideMainWebRouter(resolver: ServiceResolver) {
   router.add(createGameEPRoute, resolver.resolve(provideCreateGameEPHandler));
   router.add(readGameEPRoute, resolver.resolve(provideReadGameEPHandler));
   router.add(joinGameEPRoute, resolver.resolve(provideJoinGameEPHandler));
+  router.add(quitGameEPRoute, resolver.resolve(provideQuitGameEPHandler));
   router.add(playerWebSocketEPRoute, resolver.resolve(providePlayerWebSocketEPHandler));
   return router;
 }

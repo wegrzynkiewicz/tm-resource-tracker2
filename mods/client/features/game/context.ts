@@ -34,6 +34,8 @@ export function provideClientGameContext(): ClientGameContext {
 
 export class ClientGameContextManager {
 
+  public context: ClientGameContext | null = null;
+
   public constructor(
     private config: ClientConfig,
     private globalContext: GlobalContext,
@@ -83,7 +85,21 @@ export class ClientGameContextManager {
       receivingGABus.handlers.add(gaProcessor);
     }
 
+    this.context = context;
+
     return context;
+  }
+
+  public deleteClientGameContext() {
+    if (this.context === null) {
+      return;
+    }
+    const { resolver } = this.context;
+    const socket = resolver.resolve(provideWebSocket);
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.close();
+    }
+    this.context = null;
   }
 }
 

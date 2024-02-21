@@ -5,6 +5,7 @@ import { JoinGameEPRequest, JoinGameEPResponse } from "../../../server/features/
 import { ReadGameEPResponse } from "../../../server/features/read-game-ep.ts";
 import { AppView, provideAppView } from "../app/app.ts";
 import { ClientConfig, provideClientConfig } from "../config.ts";
+import { provideQuitGameChannel } from "../quit-modal.ts";
 import { ClientGameContextManager, provideClientGameContextManager } from "./context.ts";
 import { provideCreateGameChannel, provideJoinGameChannel } from "./source.ts";
 import { CreateGame, JoinGame } from "./source.ts";
@@ -17,9 +18,11 @@ export class ClientGameManager {
     private clientGameContextManager: ClientGameContextManager,
     createGameChannel: Channel<CreateGame>,
     joinGameChannel: Channel<JoinGame>,
+    quitGameChannel: Channel<null>,
   ) {
     createGameChannel.on((input) => this.createGame(input));
     joinGameChannel.on((input) => this.joinGame(input));
+    quitGameChannel.on(() => this.quitGame());
   }
 
   private async createGame(request: CreateGameEPRequest) {
@@ -50,6 +53,24 @@ export class ClientGameManager {
     const response = data as JoinGameEPResponse;
     localStorage.setItem("token", response.token);
     this.clientGameContextManager.createClientGameContext(response);
+  }
+
+  private async quitGame() {
+    this.clientGameContextManager.deleteClientGameContext();
+    const token = localStorage.getItem('token');
+    if (token === null) {
+      this.appView.homepage();
+      return;
+    }
+    const { apiUrl } = this.config;
+    await fetch(`${apiUrl}/games/quit`, {
+      method: "POST",
+      headers: {
+        ["Authorization"]: `Bearer ${token}`,
+      },
+    });
+    localStorage.removeItem('token');
+    this.appView.homepage();
   }
 
   public async bootstrap() {
@@ -83,5 +104,6 @@ export function provideClientGameManager(resolver: ServiceResolver) {
     resolver.resolve(provideClientGameContextManager),
     resolver.resolve(provideCreateGameChannel),
     resolver.resolve(provideJoinGameChannel),
+    resolver.resolve(provideQuitGameChannel),
   );
 }

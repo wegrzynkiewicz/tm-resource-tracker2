@@ -6,6 +6,10 @@ import { ClientGameContext, provideClientGameContext } from "../game/context.ts"
 import { Collection } from "../../../frontend-framework/store.ts";
 import { ComponentFactory, Loop } from "../../../frontend-framework/loop.ts";
 import { WaitingPlayer } from "../../../domain/waiting-players.ts";
+import { onClick } from "../common.ts";
+import { createQuitGameModal, provideQuitGameChannel } from "../quit-modal.ts";
+import { ModalManager, provideModalManager } from "../modal.ts";
+import { Channel } from "../../../common/channel.ts";
 
 export class WaitingPlayerFactory implements ComponentFactory<WaitingPlayer> {
   public create(player: WaitingPlayer): HTMLElement {
@@ -31,6 +35,8 @@ export class WaitingView {
     gameContext: ClientGameContext,
     player: Player,
     players: Collection<WaitingPlayer>,
+    private readonly modalManager: ModalManager,
+    private readonly quitGameChannel: Channel<null>,
   ) {
     const gameIdBox = createEditBox({
       label: "GameID",
@@ -65,6 +71,18 @@ export class WaitingView {
         ]),
       ]),
     ]);
+
+    onClick($quitGame, () => { this.whenQuidGameClicked(); })
+  }
+
+  protected async whenQuidGameClicked() {
+    const modal = createQuitGameModal();
+    this.modalManager.mount(modal);
+    const result = await modal.promise;
+    if (result.type === "cancel") {
+      return;
+    }
+    this.quitGameChannel.emit(result.value);
   }
 }
 
@@ -73,5 +91,7 @@ export function provideWaitingView(resolver: ServiceResolver) {
     resolver.resolve(provideClientGameContext),
     resolver.resolve(providePlayerData),
     resolver.resolve(provideWaitingPlayersCollection),
+    resolver.resolve(provideModalManager),
+    resolver.resolve(provideQuitGameChannel),
   );
 }

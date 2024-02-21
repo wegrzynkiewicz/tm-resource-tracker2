@@ -16,22 +16,6 @@ import { Channel } from "../../../common/channel.ts";
 import { examples } from "../../../common/history.ts";
 import { ModalManager, provideModalManager } from "../modal.ts";
 
-export function createQuestion() {
-  return div_nodes("app_content-overlay", [
-    div_nodes("modal", [
-      div_nodes("modal_background", [
-        div_nodes("modal_container", [
-          div_text("modal_title", "Do you want to quit the game?"),
-          div_nodes("modal_buttons", [
-            div_text("box _button", "Cancel"),
-            div_text("box _button", "Confirm"),
-          ]),
-        ]),
-      ]),
-    ]),
-  ]);
-}
-
 export const appState = new Channel<"homepage" | "playing" | "waiting" | "loading">();
 
 export class AppView {
