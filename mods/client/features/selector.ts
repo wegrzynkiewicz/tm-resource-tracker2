@@ -27,6 +27,14 @@ export class SelectorStore extends Store {
     super();
   }
 
+  public setValue(value: string) {
+    const index = this.options.findIndex((option) => option.key === value);
+    if (index !== -1) {
+      this.index = index;
+      this.emit();
+    }
+  }
+
   public getValue(): SelectorOption {
     return this.options[this.index];
   }

@@ -16,6 +16,7 @@ import { ClientConfig, provideClientConfig } from "../config.ts";
 export interface ClientGameContextInput {
   readonly colorKey: string,
   readonly gameId: string,
+  readonly name: string,
   readonly isAdmin: boolean,
   readonly playerId: number,
   readonly token: string,
@@ -43,7 +44,7 @@ export class ClientGameContextManager {
   ) { }
 
   public createClientGameContext(input: ClientGameContextInput): ClientGameContext {
-    const { colorKey, gameId, isAdmin, playerId, token } = input;
+    const { colorKey, gameId, isAdmin, name, playerId, token } = input;
     const resolver = new ServiceResolver(this.globalContext.resolver);
     const context: ClientGameContext = {
       descriptor: `/client-game/${gameId}/player/${playerId}`,
@@ -62,7 +63,7 @@ export class ClientGameContextManager {
     const player = {
       color,
       isAdmin,
-      name: "TODO",
+      name,
       playerId,
     } as Player; // TODO: get player data from server
 

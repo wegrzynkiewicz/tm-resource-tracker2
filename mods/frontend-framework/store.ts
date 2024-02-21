@@ -5,6 +5,7 @@ export class Store {
 
   public on(handler: ShortHandler<this>) {
     this.handlers.add(handler);
+    handler(this);
   }
 
   public emit() {

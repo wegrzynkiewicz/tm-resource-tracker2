@@ -9,6 +9,7 @@ import { EPContext, EPHandler, EPRoute } from "../web/endpoint.ts";
 export interface ReadGameEPResponse {
   colorKey: string;
   gameId: string;
+  name: string;
   isAdmin: boolean;
   playerId: number;
   token: string;
@@ -36,9 +37,9 @@ export class ReadGameEPHandler implements EPHandler {
     const playerDataManager = resolver.resolve(provideServerPlayerDataManager);
     const playerData = playerDataManager.players.get(playerId);
     assertObject(playerData, 'not-found-player-data', { status: 404 });
-    const { color: { key: colorKey }, isAdmin } = playerData;
+    const { color: { key: colorKey }, isAdmin, name } = playerData;
 
-    const payload: ReadGameEPResponse = { colorKey, gameId, playerId, token, isAdmin };
+    const payload: ReadGameEPResponse = { colorKey, gameId, isAdmin, name, playerId, token };
     const response = Response.json(payload);
     return response;
   }

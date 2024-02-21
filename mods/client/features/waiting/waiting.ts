@@ -10,6 +10,8 @@ import { onClick } from "../common.ts";
 import { createQuitGameModal, provideQuitGameChannel } from "../quit-modal.ts";
 import { ModalManager, provideModalManager } from "../modal.ts";
 import { Channel } from "../../../common/channel.ts";
+import { createPlayerDataModal } from "../player-data-updates/modal.ts";
+import { PlayerDataUpdater, providePlayerDataUpdater } from "../player-data-updates/service.ts";
 
 export class WaitingPlayerFactory implements ComponentFactory<WaitingPlayer> {
   public create(player: WaitingPlayer): HTMLElement {
@@ -33,10 +35,11 @@ export class WaitingView {
 
   public constructor(
     gameContext: ClientGameContext,
-    player: Player,
+    private readonly player: Player,
     players: Collection<WaitingPlayer>,
     private readonly modalManager: ModalManager,
     private readonly quitGameChannel: Channel<null>,
+    private readonly playerDataUpdater: PlayerDataUpdater,
   ) {
     const gameIdBox = createEditBox({
       label: "GameID",
@@ -73,6 +76,7 @@ export class WaitingView {
     ]);
 
     onClick($quitGame, () => { this.whenQuidGameClicked(); })
+    onClick($change, () => { this.whenChanged(); })
   }
 
   protected async whenQuidGameClicked() {
@@ -84,6 +88,20 @@ export class WaitingView {
     }
     this.quitGameChannel.emit(result.value);
   }
+
+  protected async whenChanged() {
+    const { name, color } = this.player;
+    const modal = createPlayerDataModal({
+      colorKey: color.key,
+      name,
+    });
+    this.modalManager.mount(modal);
+    const result = await modal.promise;
+    if (result.type === "cancel") {
+      return;
+    }
+    this.playerDataUpdater.updatePlayerData(result.value);
+  }
 }
 
 export function provideWaitingView(resolver: ServiceResolver) {
@@ -93,5 +111,6 @@ export function provideWaitingView(resolver: ServiceResolver) {
     resolver.resolve(provideWaitingPlayersCollection),
     resolver.resolve(provideModalManager),
     resolver.resolve(provideQuitGameChannel),
+    resolver.resolve(providePlayerDataUpdater),
   );
 }

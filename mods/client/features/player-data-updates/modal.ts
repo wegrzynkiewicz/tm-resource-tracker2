@@ -1,22 +1,23 @@
-import { onClick } from "../common.ts";
-import { div_nodes, div_text, form } from "../../../frontend-framework/dom.ts";
 import { withResolvers } from "../../../common/useful.ts";
-import { createEditBox } from "../../common/edit-box.ts";
-import { ModalResponse } from "../modal.ts";
+import { div_text, form, div_nodes } from "../../../frontend-framework/dom.ts";
+import { PlayerDataUpdateDTO } from "../../../player/data.ts";
 import { createColorSelectorBox } from "../../common/color-selector.ts";
+import { createEditBox } from "../../common/edit-box.ts";
+import { onClick } from "../common.ts";
+import { ModalResponse } from "../modal.ts";
 
-export interface CreationModalResponse {
-  colorKey: string;
-  name: string;
-}
+export type PlayerDataModalResponse = PlayerDataUpdateDTO;
 
-export function createCreationGameModal() {
+export function createPlayerDataModal(input: PlayerDataUpdateDTO) {
+  const { name, colorKey } = input;
   const nameBox = createEditBox({
     label: "Name",
     name: "name",
     placeholder: "Your name",
   });
+  nameBox.$input.value = name;
   const color = createColorSelectorBox();
+  color.store.setValue(colorKey);
   const $cancel = div_text("box _button", "Cancel");
   const $create = div_text("box _button", "Create");
 
@@ -34,7 +35,7 @@ export function createCreationGameModal() {
     ]),
   ]);
 
-  const { promise, resolve } = withResolvers<ModalResponse<CreationModalResponse>>();
+  const { promise, resolve } = withResolvers<ModalResponse<PlayerDataModalResponse>>();
 
   onClick($cancel, () => {
     resolve({ type: "cancel" });
@@ -46,7 +47,7 @@ export function createCreationGameModal() {
     if (name === "") {
       return;
     }
-    const value: CreationModalResponse = { colorKey, name };
+    const value: PlayerDataModalResponse = { colorKey, name };
     resolve({
       type: "confirm",
       value,

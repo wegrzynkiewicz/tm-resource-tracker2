@@ -41,7 +41,7 @@ export class CreateGameEPHandler implements EPHandler {
     const playerData = playerDataManager.createPlayerData({ colorKey, name, isAdmin });
     const { playerId, token: { key: token } } = playerData;
 
-    const payload: CreateGameEPResponse = { colorKey, gameId, isAdmin, playerId, token };
+    const payload: CreateGameEPResponse = { colorKey, gameId, isAdmin, name, playerId, token };
     const response = Response.json(payload);
     return response;
   }

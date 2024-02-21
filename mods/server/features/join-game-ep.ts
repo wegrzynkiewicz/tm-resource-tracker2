@@ -43,7 +43,7 @@ export class JoinGameEPHandler implements EPHandler {
     const playerData = playerDataManager.createPlayerData({ colorKey, name, isAdmin });
     const { playerId, token: { key: token } } = playerData;
 
-    const payload: JoinGameEPResponse = { colorKey, gameId, playerId, token, isAdmin };
+    const payload: JoinGameEPResponse = { colorKey, gameId, name, isAdmin, playerId, token };
     const response = Response.json(payload);
     return response;
   }

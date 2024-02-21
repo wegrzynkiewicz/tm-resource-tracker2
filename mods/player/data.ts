@@ -23,3 +23,8 @@ export interface PlayerInput {
 export interface PlayerDTO extends PlayerInput {
   readonly playerId: number;
 }
+
+export interface PlayerDataUpdateDTO {
+  colorKey: string;
+  name: string;
+}
