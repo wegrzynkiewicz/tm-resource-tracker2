@@ -53,7 +53,7 @@ export class AppView {
     this.$root = div_nodes("app", [
       top.$root,
       scroll.$fragment,
-      this.modalManager.root,
+      this.modalManager.$root,
       this.$toolbar,
     ]);
     this.loading();

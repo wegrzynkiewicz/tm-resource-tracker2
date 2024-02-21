@@ -1,4 +1,5 @@
-import { div_empty } from "../../frontend-framework/dom.ts";
+import { sleep } from "../../common/useful.ts";
+import { comment, div_empty } from "../../frontend-framework/dom.ts";
 
 export interface ModalConfirmResponse<TValue> {
   type: "confirm";
@@ -17,15 +18,21 @@ export interface Modal<TValue> {
 }
 
 export class ModalManager {
-  public readonly root = div_empty("app_content-overlay");
+  public readonly $root = comment('modal-manager-anchor');
+  public readonly $overlay = div_empty("app_content-overlay");
+  public readonly style = getComputedStyle(this.$overlay);
 
-  public mount(modal: Modal<unknown>) {
-    this.root.classList.add("_enabled");
-    this.root.appendChild(modal.$root);
-    modal.promise.then(() => {
-      this.root.removeChild(modal.$root);
-      this.root.classList.remove("_enabled");
-    });
+  public async mount(modal: Modal<unknown>) {
+    const { $root, $overlay } = this;
+    $root.after($overlay);
+    await sleep(1);
+    $overlay.classList.add("_enabled");
+    $overlay.appendChild(modal.$root);
+    await modal.promise;
+    $overlay.classList.remove("_enabled");
+    await sleep(200);
+    $overlay.replaceChildren();
+    $overlay.remove();
   }
 }
 

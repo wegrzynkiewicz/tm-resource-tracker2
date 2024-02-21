@@ -22,6 +22,8 @@
   --animate-parallax-current: 0;
   --animate-parallax-total: 1;
 
+  --transition-opacity-duration: 0.2s;
+
   --color-text: #222222;
   --color-text-inactive: rgba(0, 0, 0, 0.30);
   --color-box-primary: #CDB39A;
@@ -117,11 +119,12 @@ body {
   grid-row: top / end;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 2;
-  display: none;
+  opacity: 0;
+  transition: opacity var(--transition-opacity-duration) linear;
 }
 
 .app_content-overlay._enabled {
-  display: initial;
+  opacity: 1;
 }
 
 .modal {

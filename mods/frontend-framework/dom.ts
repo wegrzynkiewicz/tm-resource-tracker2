@@ -46,6 +46,10 @@ function createTagAdvanced<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) 
   };
 }
 
+export function comment(data: string): Comment {
+  return document.createComment(data);
+}
+
 export function fragment() {
   return document.createDocumentFragment();
 }
