@@ -17,7 +17,7 @@ export function parsePlayerWebSocketEPRequest(value: unknown): PlayerWebSocketEP
   return { token };
 }
 
-export const playerWebSocketEPRoute = new EPRoute("GET", "/player-web-socket/:token");
+export const playerWebSocketEPRoute = new EPRoute("GET", "/games/socket/:token");
 
 export class PlayerWebSocketEPHandler implements EPHandler {
   public constructor(

@@ -44,7 +44,8 @@ export class WaitingView {
     const $quitGame = button_text("box _action", "Quit game");
     const $start = button_text("box _action", "Start game");
 
-    const loop = Loop.create<WaitingPlayer>(players, new WaitingPlayerFactory());
+    const $loop = div_empty("waiting_players");
+    new Loop<WaitingPlayer>($loop, players, new WaitingPlayerFactory());
 
     this.$root = div_nodes("waiting", [
       div_nodes("space", [
@@ -60,7 +61,7 @@ export class WaitingView {
         ]),
         div_nodes("space_container", [
           div_text("space_caption", "Joining players:"),
-          loop.$root,
+          $loop,
         ]),
       ]),
     ]);

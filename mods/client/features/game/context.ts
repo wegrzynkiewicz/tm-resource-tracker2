@@ -50,7 +50,7 @@ export class ClientGameContextManager {
     }
 
     const url = new URL(this.config.wsURL);
-    url.pathname = `/player-web-socket/${token}`;
+    url.pathname = `/games/socket/${token}`;
     url.searchParams.set('time', Date.now().toString());
     const socket = new WebSocket(url.toString());
 

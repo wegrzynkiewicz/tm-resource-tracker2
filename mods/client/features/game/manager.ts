@@ -1,6 +1,7 @@
 import { Channel } from "../../../common/channel.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { CreateGameEPRequest, CreateGameEPResponse } from "../../../server/features/create-game-ep.ts";
+import { JoinGameEPRequest, JoinGameEPResponse } from "../../../server/features/join-game-ep.ts";
 import { ReadGameEPResponse } from "../../../server/features/read-game-ep.ts";
 import { AppView, provideAppView } from "../app/app.ts";
 import { ClientConfig, provideClientConfig } from "../config.ts";
@@ -18,12 +19,12 @@ export class ClientGameManager {
     joinGameChannel: Channel<JoinGame>,
   ) {
     createGameChannel.on((input) => this.createGame(input));
-    // joinGameChannel.on((input) => this.createGame(input));
+    joinGameChannel.on((input) => this.joinGame(input));
   }
 
   private async createGame(request: CreateGameEPRequest) {
     const { apiUrl } = this.config;
-    const envelope = await fetch(`${apiUrl}/games`, {
+    const envelope = await fetch(`${apiUrl}/games/create`, {
       method: "POST",
       headers: {
         ["Content-Type"]: "application/json",
@@ -36,6 +37,21 @@ export class ClientGameManager {
     this.clientGameContextManager.createClientGameContext(response);
   }
 
+  private async joinGame(request: JoinGameEPRequest) {
+    const { apiUrl } = this.config;
+    const envelope = await fetch(`${apiUrl}/games/join`, {
+      method: "POST",
+      headers: {
+        ["Content-Type"]: "application/json",
+      },
+      body: JSON.stringify(request),
+    });
+    const data = await envelope.json();
+    const response = data as JoinGameEPResponse;
+    sessionStorage.setItem("token", response.token);
+    this.clientGameContextManager.createClientGameContext(response);
+  }
+
   public async bootstrap() {
     const { apiUrl } = this.config;
     const token = sessionStorage.getItem('token');
@@ -43,7 +59,7 @@ export class ClientGameManager {
       this.appView.homepage();
       return;
     }
-    const envelope = await fetch(`${apiUrl}/games`, {
+    const envelope = await fetch(`${apiUrl}/games/read`, {
       method: "GET",
       headers: {
         ["Authorization"]: `Bearer ${token}`,

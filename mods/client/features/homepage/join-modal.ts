@@ -1,18 +1,28 @@
 import { onClick } from "../common.ts";
-import { div_nodes, div_text, label_props } from "../../../frontend-framework/dom.ts";
-import { createSelector } from "../selector.ts";
+import { div_nodes, div_text } from "../../../frontend-framework/dom.ts";
 import { withResolvers } from "../../../common/useful.ts";
-import { colors } from "../../../common/colors.ts";
 import { createEditBox } from "../../common/edit-box.ts";
 import { ModalResponse } from "../modal.ts";
+import { createColorSelectorBox } from "../../common/color-selector.ts";
 
-export interface CreationModalResponse {
+export interface JoinModalResponse {
   colorKey: string;
   gameId: string;
   name: string;
 }
 
 export function createJoinModal() {
+  const gameBox = createEditBox({
+    label: "Game ID",
+    name: "gameId",
+    placeholder: "Ask your friend",
+  });
+  const nameBox = createEditBox({
+    label: "Name",
+    name: "player-name",
+    placeholder: "Your name",
+  });
+  const color = createColorSelectorBox();
   const $cancel = div_text("box _button", "Cancel");
   const $join = div_text("box _button", "Join");
 
@@ -20,24 +30,9 @@ export function createJoinModal() {
     div_nodes("modal_background", [
       div_nodes("modal_container", [
         div_text("modal_title", "Type game ID and your details:"),
-        createEditBox({
-          label: "Game ID",
-          name: "gameId",
-          placeholder: "Ask your friend",
-        }).$root,
-        createEditBox({
-          label: "Name",
-          name: "player-name",
-          placeholder: "Your name",
-        }).$root,
-        div_nodes("edit-box _selector", [
-          label_props({
-            className: "edit-box_label",
-            for: "player-color",
-            textContent: "Color",
-          }),
-          createSelector(colors).$root,
-        ]),
+        gameBox.$root,
+        nameBox.$root,
+        color.$root,
         div_nodes("modal_buttons", [
           $cancel,
           $join,
@@ -46,20 +41,23 @@ export function createJoinModal() {
     ]),
   ]);
 
-  const { promise, resolve } = withResolvers<ModalResponse<CreationModalResponse>>();
+  const { promise, resolve } = withResolvers<ModalResponse<JoinModalResponse>>();
 
   onClick($cancel, () => {
     resolve({ type: "cancel" });
   });
 
   onClick($join, () => {
+    const gameId = gameBox.$input.value;
+    const name = nameBox.$input.value;
+    const colorKey = color.store.getValue().key;
+    if (name === "" || gameId === "") {
+      return;
+    }
+    const value: JoinModalResponse = { colorKey, gameId, name };
     resolve({
       type: "confirm",
-      value: {
-        colorKey: "red",
-        gameId: "12345",
-        name: "John",
-      },
+      value,
     });
   });
 

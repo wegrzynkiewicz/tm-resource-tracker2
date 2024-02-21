@@ -411,3 +411,9 @@ body {
   padding: 12px;
   gap: 12px;
 }
+
+.waiting_players {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

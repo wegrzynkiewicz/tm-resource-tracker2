@@ -14,7 +14,7 @@ export interface ReadGameEPResponse {
   token: string;
 }
 
-export const readGameEPRoute = new EPRoute("GET", "/games");
+export const readGameEPRoute = new EPRoute("GET", "/games/read");
 
 export class ReadGameEPHandler implements EPHandler {
   public constructor(

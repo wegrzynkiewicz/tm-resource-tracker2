@@ -7,6 +7,8 @@ import { provideLoggerFactory } from "../logger/logger-factory.ts";
 import { GlobalMiddleware } from "./web/global-middleware.ts";
 import { Router } from "./web/router.ts";
 import { WebServer } from "./web/server.ts";
+import { joinGameEPRoute } from "./features/join-game-ep.ts";
+import { provideJoinGameEPHandler } from "./features/join-game-ep.ts";
 
 export function provideMainWebServerConfig() {
   return {
@@ -30,6 +32,7 @@ export function provideMainWebRouter(resolver: ServiceResolver) {
   router.add(corsOptionsEPRoute, resolver.resolve(provideCorsOptionsEPHandler));
   router.add(createGameEPRoute, resolver.resolve(provideCreateGameEPHandler));
   router.add(readGameEPRoute, resolver.resolve(provideReadGameEPHandler));
+  router.add(joinGameEPRoute, resolver.resolve(provideJoinGameEPHandler));
   router.add(playerWebSocketEPRoute, resolver.resolve(providePlayerWebSocketEPHandler));
   return router;
 }

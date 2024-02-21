@@ -21,7 +21,7 @@ export function parseCreateGameEPRequest(data: unknown): CreateGameEPRequest {
   return { colorKey, name };
 }
 
-export const createGameEPRoute = new EPRoute("POST", "/games");
+export const createGameEPRoute = new EPRoute("POST", "/games/create");
 
 export class CreateGameEPHandler implements EPHandler {
   public constructor(
