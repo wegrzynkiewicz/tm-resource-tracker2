@@ -1,11 +1,11 @@
 import { provideWaitingPlayersCollection } from "../client/features/waiting/waiting.ts";
 import { ServiceResolver } from "../common/dependency.ts";
 import { GADefinition, GAHandler } from "../communication/define.ts";
-import { WaitingPlayer } from "../domain/waiting-players.ts";
+import { Player } from "../domain/player.ts";
 import { Collection } from "../frontend-framework/store.ts";
 
 export interface WaitingPlayersGA {
-  players: WaitingPlayer[];
+  players: Player[];
 }
 
 export const waitingPlayersGADef: GADefinition<WaitingPlayersGA> = {
@@ -14,7 +14,7 @@ export const waitingPlayersGADef: GADefinition<WaitingPlayersGA> = {
 
 export class WaitingPlayersGAHandler implements GAHandler<WaitingPlayersGA>{
   public constructor(
-    private readonly players: Collection<WaitingPlayer>,
+    private readonly players: Collection<Player>,
   ) { }
 
   public async handle(action: WaitingPlayersGA): Promise<void> {

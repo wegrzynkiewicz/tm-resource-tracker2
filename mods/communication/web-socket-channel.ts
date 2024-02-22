@@ -1,4 +1,5 @@
 import { Channel } from "../common/channel.ts";
+import { withResolvers } from "../common/useful.ts";
 import { Logger } from "../logger/global.ts";
 
 export function readyStateToString(readyState: number): string {
@@ -18,6 +19,8 @@ export function readyStateToString(readyState: number): string {
 
 export class WebSocketChannel {
 
+  public readonly ready: Promise<void>;
+
   public readonly opens = new Channel();
   public readonly closes = new Channel();
   public readonly messages = new Channel();
@@ -27,9 +30,14 @@ export class WebSocketChannel {
     public readonly logger: Logger,
     public readonly ws: WebSocket,
   ) {
+
+    const open = withResolvers<void>();
+    this.ready = open.promise;
+    
     ws.addEventListener("open", (event: Event) => {
       const readyState = readyStateToString(ws.readyState);
       this.logger.silly("open-web-socket-channel", { readyState });
+      open.resolve();
       try {
         this.opens.emit(event);
       } catch (error) {
@@ -61,7 +69,7 @@ export class WebSocketChannel {
 
     ws.addEventListener("error", (event: Event) => {
       const readyState = readyStateToString(ws.readyState);
-      this.logger.silly("error-web-socket-channel", { event, readyState });
+      this.logger.silly("error-web-socket-channel", { readyState });
       try {
         this.errors.emit(event);
       } catch (error) {

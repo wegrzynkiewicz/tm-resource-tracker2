@@ -4,16 +4,15 @@ import { provideServerGameContext, ServerGameContext } from "../game/game.ts";
 import { provideLogger } from "../../logger/global.ts";
 import { LoggerFactory } from "../../logger/logger-factory.ts";
 import { provideLoggerFactory } from "../../logger/logger-factory.ts";
-import { providePlayerData } from "../../player/data.ts";
-import { provideServerPlayerDataManager, ServerPlayerDataManager } from "./data.ts";
+import { providePlayer } from "../../domain/player.ts";
 import { assertObject } from "../../common/asserts.ts";
 import { provideWebSocket, provideWebSocketChannel } from "../../communication/socket.ts";
 import { provideGADecoder } from "../../communication/decoder.ts";
 import { provideReceivingGABus } from "../../communication/define.ts";
 import { provideGAProcessor } from "../../communication/processor.ts";
 import { feedServerGAProcessor } from "./processor.ts";
-import { withResolvers } from "../../common/useful.ts";
 import { Channel } from "../../common/channel.ts";
+import { ServerPlayerManager, provideServerPlayerManager } from "./data.ts";
 
 export interface ServerPlayerContextIdentifier {
   gameId: string;
@@ -33,7 +32,7 @@ export class ServerPlayerContextManager {
 
   public constructor(
     private readonly loggerFactory: LoggerFactory,
-    private readonly playerDataManager: ServerPlayerDataManager,
+    private readonly playerManager: ServerPlayerManager,
     private readonly serverGameContext: ServerGameContext,
   ) { }
 
@@ -43,7 +42,7 @@ export class ServerPlayerContextManager {
       socket: WebSocket;
     }
   ): Promise<ServerPlayerContext> {
-    const player = this.playerDataManager.players.get(playerId);
+    const player = this.playerManager.players.get(playerId);
     assertObject(player, 'not-found-player-data', { status: 404 });
 
     const gameId = this.serverGameContext.identifier.gameId;
@@ -57,7 +56,7 @@ export class ServerPlayerContextManager {
 
     resolver.inject(provideWebSocket, socket);
     resolver.inject(provideServerPlayerContext, serverPlayerContext);
-    resolver.inject(providePlayerData, player);
+    resolver.inject(providePlayer, player);
     resolver.inject(provideLogger, logger);
 
     const webSocketChannel = resolver.resolve(provideWebSocketChannel);
@@ -73,15 +72,10 @@ export class ServerPlayerContextManager {
       receivingGABus.handlers.add(gaProcesor);
     }
 
-    const { promise, resolve } = withResolvers<null>();
-
-    webSocketChannel.opens.on(() => {
-      resolve(null);
-    });
     webSocketChannel.closes.on(() => {
       this.deletePlayerContext(playerId);
     });
-    await promise;
+    await webSocketChannel.ready;
 
     this.creates.emit(serverPlayerContext);
 
@@ -107,7 +101,7 @@ export class ServerPlayerContextManager {
 export function provideServerPlayerContextManager(resolver: ServiceResolver) {
   return new ServerPlayerContextManager(
     resolver.resolve(provideLoggerFactory),
-    resolver.resolve(provideServerPlayerDataManager),
+    resolver.resolve(provideServerPlayerManager),
     resolver.resolve(provideServerGameContext),
   );
 }

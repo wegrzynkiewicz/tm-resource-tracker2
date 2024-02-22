@@ -1,18 +1,9 @@
 import { Channel } from "../../../common/channel.ts";
-
-export interface CreateGame {
-  colorKey: string;
-  name: string;
-}
+import { JoinGame } from "../../../domain/game.ts";
+import { PlayerUpdateDTO } from "../../../domain/player.ts";
 
 export function provideCreateGameChannel() {
-  return new Channel<CreateGame>();
-}
-
-export interface JoinGame {
-  colorKey: string;
-  gameId: string;
-  name: string;
+  return new Channel<PlayerUpdateDTO>();
 }
 
 export function provideJoinGameChannel() {

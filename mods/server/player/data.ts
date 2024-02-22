@@ -1,66 +1,34 @@
-import { ServiceResolver } from "../../common/dependency.ts";
-import { provideServerGameContext, ServerGameContext } from "../game/game.ts";
-import { provideTokenManager, TokenManager } from "../game/token.ts";
-import { Player, PlayerInput, PlayerDTO } from "../../player/data.ts";
-import { obtainColor } from "../../common/colors.ts";
+import { Player, PlayerInput } from "../../domain/player.ts";
 
 export let playerIdCounter = 0;
 
-export class ServerPlayerDataManager {
+export class ServerPlayerManager {
   public readonly players = new Map<number, Player>();
 
-  public constructor(
-    private readonly gameContext: ServerGameContext,
-    private readonly tokenManager: TokenManager,
-  ) { }
-
-  public createPlayerData(
-    { colorKey, name, isAdmin }: PlayerInput
-  ): Player {
+  public createPlayer(input: PlayerInput): Player {
+    const { color, isAdmin, name } = input;
     const playerId = ++playerIdCounter;
-    const color = obtainColor(colorKey);
-
-    const { gameId } = this.gameContext.identifier;
-
-    const token = this.tokenManager.createToken({ gameId, playerId });
 
     const player: Player = {
       color,
       isAdmin,
       name,
       playerId,
-      token,
     };
 
     this.players.set(playerId, player);
     return player;
   }
 
-  public deletePlayerData(playerId: number) {
+  public deletePlayer(playerId: number) {
     const playerData = this.players.get(playerId);
     if (playerData === undefined) {
       return;
     }
-    this.tokenManager.deleteToken(playerData.token.key);
     this.players.delete(playerId);
-  }
-
-  public *fetchPlayers(): Generator<PlayerDTO, void, unknown> {
-    for (const player of this.players.values()) {
-      const { playerId, color: { key }, name, isAdmin } = player;
-      yield {
-        colorKey: key,
-        name,
-        isAdmin,
-        playerId,
-      }
-    }
   }
 }
 
-export function provideServerPlayerDataManager(resolver: ServiceResolver) {
-  return new ServerPlayerDataManager(
-    resolver.resolve(provideServerGameContext),
-    resolver.resolve(provideTokenManager),
-  );
+export function provideServerPlayerManager() {
+  return new ServerPlayerManager();
 }

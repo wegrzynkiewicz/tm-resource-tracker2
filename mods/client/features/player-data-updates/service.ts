@@ -1,20 +1,20 @@
 import { playerDataUpdateGADef } from "../../../action/player-data-update.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { GADispatcher, provideGADispatcher } from "../../../communication/dispatcher.ts";
-import { PlayerDataUpdateDTO } from "../../../player/data.ts";
+import { PlayerUpdateDTO } from "../../../domain/player.ts";
 
-export class PlayerDataUpdater {
+export class PlayerUpdater {
   public constructor(
     private readonly dispatcher: GADispatcher,
   ) { }
 
-  public updatePlayerData(data: PlayerDataUpdateDTO) {
+  public updatePlayer(data: PlayerUpdateDTO) {
     this.dispatcher.send(playerDataUpdateGADef, data);
   }
 }
 
-export function providePlayerDataUpdater(resolver: ServiceResolver) {
-  return new PlayerDataUpdater(
+export function providePlayerUpdater(resolver: ServiceResolver) {
+  return new PlayerUpdater(
     resolver.resolve(provideGADispatcher),
   );
 }

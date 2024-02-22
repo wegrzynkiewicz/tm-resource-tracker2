@@ -1,24 +1,23 @@
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { button_text, div_empty, div_nodes, div_text } from "../../../frontend-framework/dom.ts";
-import { Player, providePlayerData } from "../../../player/data.ts";
+import { Player, providePlayer } from "../../../domain/player.ts";
 import { createEditBox } from "../../common/edit-box.ts";
 import { ClientGameContext, provideClientGameContext } from "../game/context.ts";
 import { Collection } from "../../../frontend-framework/store.ts";
 import { ComponentFactory, Loop } from "../../../frontend-framework/loop.ts";
-import { WaitingPlayer } from "../../../domain/waiting-players.ts";
 import { onClick } from "../common.ts";
 import { createQuitGameModal, provideQuitGameChannel } from "../quit-modal.ts";
 import { ModalManager, provideModalManager } from "../modal.ts";
 import { Channel } from "../../../common/channel.ts";
-import { createPlayerDataModal } from "../player-data-updates/modal.ts";
-import { PlayerDataUpdater, providePlayerDataUpdater } from "../player-data-updates/service.ts";
+import { createPlayerModal } from "../player-data-updates/modal.ts";
+import { PlayerUpdater, providePlayerUpdater } from "../player-data-updates/service.ts";
 
-export class WaitingPlayerFactory implements ComponentFactory<WaitingPlayer> {
-  public create(player: WaitingPlayer): HTMLElement {
-    const { name, colorKey } = player;
+export class WaitingPlayerFactory implements ComponentFactory<Player> {
+  public create(player: Player): HTMLElement {
+    const { name, color } = player;
     const $root = div_nodes("history _background", [
       div_nodes("history_header", [
-        div_empty(`player-cube _${colorKey}`),
+        div_empty(`player-cube _${color}`),
         div_text("history_name", name),
       ]),
     ]);
@@ -27,7 +26,7 @@ export class WaitingPlayerFactory implements ComponentFactory<WaitingPlayer> {
 }
 
 export function provideWaitingPlayersCollection() {
-  return new Collection<WaitingPlayer>([]);
+  return new Collection<Player>([]);
 }
 
 export class WaitingView {
@@ -36,10 +35,10 @@ export class WaitingView {
   public constructor(
     gameContext: ClientGameContext,
     private readonly player: Player,
-    players: Collection<WaitingPlayer>,
+    players: Collection<Player>,
     private readonly modalManager: ModalManager,
     private readonly quitGameChannel: Channel<null>,
-    private readonly playerDataUpdater: PlayerDataUpdater,
+    private readonly playerDataUpdater: PlayerUpdater,
   ) {
     const gameIdBox = createEditBox({
       label: "GameID",
@@ -54,7 +53,7 @@ export class WaitingView {
     const $start = button_text("box _action", "Start game");
 
     const $loop = div_empty("waiting_players");
-    new Loop<WaitingPlayer>($loop, players, new WaitingPlayerFactory());
+    new Loop<Player>($loop, players, new WaitingPlayerFactory());
 
     this.$root = div_nodes("waiting", [
       div_nodes("space", [
@@ -90,27 +89,23 @@ export class WaitingView {
   }
 
   protected async whenChanged() {
-    const { name, color } = this.player;
-    const modal = createPlayerDataModal({
-      colorKey: color.key,
-      name,
-    });
+    const modal = createPlayerModal(this.player);
     this.modalManager.mount(modal);
     const result = await modal.promise;
     if (result.type === "cancel") {
       return;
     }
-    this.playerDataUpdater.updatePlayerData(result.value);
+    this.playerDataUpdater.updatePlayer(result.value);
   }
 }
 
 export function provideWaitingView(resolver: ServiceResolver) {
   return new WaitingView(
     resolver.resolve(provideClientGameContext),
-    resolver.resolve(providePlayerData),
+    resolver.resolve(providePlayer),
     resolver.resolve(provideWaitingPlayersCollection),
     resolver.resolve(provideModalManager),
     resolver.resolve(provideQuitGameChannel),
-    resolver.resolve(providePlayerDataUpdater),
+    resolver.resolve(providePlayerUpdater),
   );
 }

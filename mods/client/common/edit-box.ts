@@ -10,6 +10,7 @@ export function createEditBox(
   const $input = input_props({
     autocomplete: "off",
     className: "edit-box_input",
+    id: name,
     name,
     type: "text",
     placeholder: placeholder ?? "",
@@ -17,8 +18,9 @@ export function createEditBox(
   const $root = div_nodes("edit-box _input", [
     label_props({
       className: "edit-box_label",
-      for: name,
       textContent: label,
+    }, {
+      for: name,
     }),
     $input,
   ]);

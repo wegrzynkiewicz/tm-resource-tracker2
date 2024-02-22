@@ -1,10 +1,9 @@
-import { obtainColor } from "../common/colors.ts";
 import { ServiceResolver } from "../common/dependency.ts";
 import { GADefinition, GAHandler } from "../communication/define.ts";
-import { Player, PlayerDataUpdateDTO, providePlayerData } from "../player/data.ts";
+import { Player, PlayerUpdateDTO, providePlayer } from "../domain/player.ts";
 import { PlayerBroadcast, providePlayerBroadcast } from "../server/player/broadcast.ts";
 
-export type PlayerDataUpdateGA = PlayerDataUpdateDTO;
+export type PlayerDataUpdateGA = PlayerUpdateDTO;
 
 export const playerDataUpdateGADef: GADefinition<PlayerDataUpdateGA> = {
   kind: 'player-data-update',
@@ -17,15 +16,16 @@ export class PlayerDataUpdateGAHandler implements GAHandler<PlayerDataUpdateGA>{
   ) { }
 
   public async handle(action: PlayerDataUpdateGA): Promise<void> {
-    this.player.color = obtainColor(action.colorKey);
-    this.player.name = action.name;
+    const { color, name } = action;
+    this.player.color = color
+    this.player.name = name;
     this.playerBroadcast.sendPlayersData();
   }
 }
 
 export function providePlayerDataUpdateGAHandler(resolver: ServiceResolver) {
   return new PlayerDataUpdateGAHandler(
-    resolver.resolve(providePlayerData),
+    resolver.resolve(providePlayer),
     resolver.resolve(providePlayerBroadcast),
   );
 }

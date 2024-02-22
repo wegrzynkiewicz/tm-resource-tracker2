@@ -9,11 +9,11 @@ export interface Token {
 export class TokenManager {
   public readonly tokens = new Map<string, Token>();
 
-  public createToken(identifier: ServerPlayerContextIdentifier): Token {
+  public createToken(identifier: ServerPlayerContextIdentifier): string {
     const key = cryptoRandomString({ length: 64, type: "url-safe" });
     const token = { key, identifier };
     this.tokens.set(key, token);
-    return token;
+    return key;
   }
 
   public deleteToken(key: string) {

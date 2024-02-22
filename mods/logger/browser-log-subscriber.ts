@@ -11,7 +11,7 @@ export class BrowserLogSubscriber implements LogBusSubscriber {
       return;
     }
     const { channel, data, severity, message } = log;
-    const consoleLog = mapSeverityToConsoleMethod[severity];
-    consoleLog(`[${channel}] ${message}`, data);
+    const method = mapSeverityToConsoleMethod[severity];
+    method.call(console, `[${channel}] ${message}`, data);
   }
 }

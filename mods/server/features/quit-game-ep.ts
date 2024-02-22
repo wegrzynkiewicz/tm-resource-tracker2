@@ -3,7 +3,7 @@ import { ServiceResolver } from "../../common/dependency.ts";
 import { ServerGameContextManager, provideServerGameContextManager } from "../game/game.ts";
 import { TokenManager, provideTokenManager } from "../game/token.ts";
 import { provideServerPlayerContextManager } from "../player/context.ts";
-import { provideServerPlayerDataManager } from "../player/data.ts";
+import { provideServerPlayerManager } from "../player/data.ts";
 import { parseAuthorizationToken } from "../useful.ts";
 import { EPContext, EPHandler, EPRoute } from "../web/endpoint.ts";
 
@@ -26,8 +26,8 @@ export class QuitGameEPHandler implements EPHandler {
     assertObject(gameContext, 'not-found-game-with-this-token', { status: 404 });
     const { resolver } = gameContext;
 
-    const playerDataManager = resolver.resolve(provideServerPlayerDataManager);
-    playerDataManager.deletePlayerData(playerId);
+    const playerManager = resolver.resolve(provideServerPlayerManager);
+    playerManager.deletePlayer(playerId);
 
     const playerContextManager = resolver.resolve(provideServerPlayerContextManager);
     await playerContextManager.deletePlayerContext(playerId);

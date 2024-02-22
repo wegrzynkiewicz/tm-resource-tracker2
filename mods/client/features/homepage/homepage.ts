@@ -2,17 +2,18 @@ import { onClick } from "../common.ts";
 import { button_text, div_nodes } from "../../../frontend-framework/dom.ts";
 import { createJoinModal } from "./join-modal.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
-import { CreateGame, JoinGame } from "../game/source.ts";
 import { provideJoinGameChannel, provideCreateGameChannel } from "../game/source.ts";
 import { Channel } from "../../../common/channel.ts";
 import { ModalManager, provideModalManager } from "../modal.ts";
-import { createPlayerDataModal } from "../player-data-updates/modal.ts";
+import { createPlayerModal } from "../player-data-updates/modal.ts";
+import { PlayerUpdateDTO } from "../../../domain/player.ts";
+import { JoinGame } from "../../../domain/game.ts";
 
 export class HomepageView {
   public readonly $root: HTMLDivElement;
   public constructor(
     private readonly modalManager: ModalManager,
-    private readonly createGameChannel: Channel<CreateGame>,
+    private readonly createGameChannel: Channel<PlayerUpdateDTO>,
     private readonly joinGameChannel: Channel<JoinGame>,
   ) {
     const $create = button_text("box _action", "New Game");
@@ -29,10 +30,7 @@ export class HomepageView {
   }
 
   protected async whenCreateGameClicked() {
-    const modal = createPlayerDataModal({
-      colorKey: "",
-      name: "",
-    });
+    const modal = createPlayerModal();
     this.modalManager.mount(modal);
     const result = await modal.promise;
     if (result.type === "cancel") {

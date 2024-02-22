@@ -3,8 +3,7 @@ import { Handler } from "../../common/channel.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { GADefinition } from "../../communication/define.ts";
 import { provideGADispatcher } from "../../communication/dispatcher.ts";
-import { WaitingPlayer } from "../../domain/waiting-players.ts";
-import { providePlayerData } from "../../player/data.ts";
+import { Player, providePlayer } from "../../domain/player.ts";
 import { ServerPlayerContext, ServerPlayerContextManager } from "./context.ts";
 import { provideServerPlayerContextManager } from "./context.ts";
 
@@ -22,17 +21,10 @@ export class PlayerBroadcast implements Handler<ServerPlayerContext> {
     this.send(waitingPlayersGADef, { players });
   }
 
-  public *fetchOnlinePlayers(): Generator<WaitingPlayer, void, unknown> {
+  public *fetchOnlinePlayers(): Generator<Player, void, unknown> {
     for (const { resolver } of this.manager.players.values()) {
-      const player = resolver.resolve(providePlayerData);
-      const { color, isAdmin, name, playerId } = player;
-      const waitingPlayer: WaitingPlayer = {
-        colorKey: color.key,
-        isAdmin,
-        name,
-        playerId,
-      };
-      yield waitingPlayer;
+      const player = resolver.resolve(providePlayer);
+      yield player;
     }
   }
 

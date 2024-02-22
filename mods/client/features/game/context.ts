@@ -1,6 +1,5 @@
 import { feedClientGAProcessor } from "../../../action/client-procesor.ts";
 import { Breaker } from "../../../common/asserts.ts";
-import { obtainColor } from "../../../common/colors.ts";
 import { Context } from "../../../common/context.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { GlobalContext, provideGlobalContext } from "../../../common/global.ts";
@@ -10,17 +9,9 @@ import { provideGAProcessor } from "../../../communication/processor.ts";
 import { provideWebSocket, provideWebSocketChannel } from "../../../communication/socket.ts";
 import { provideLogger } from "../../../logger/global.ts";
 import { LoggerFactory, provideLoggerFactory } from "../../../logger/logger-factory.ts";
-import { Player, providePlayerData } from "../../../player/data.ts";
+import { Player, providePlayer } from "../../../domain/player.ts";
 import { ClientConfig, provideClientConfig } from "../config.ts";
-
-export interface ClientGameContextInput {
-  readonly colorKey: string,
-  readonly gameId: string,
-  readonly name: string,
-  readonly isAdmin: boolean,
-  readonly playerId: number,
-  readonly token: string,
-}
+import { GameResponse } from "../../../domain/game.ts";
 
 export interface ClientGameContextIdentifier {
   gameId: string;
@@ -43,8 +34,9 @@ export class ClientGameContextManager {
     private loggerFactory: LoggerFactory,
   ) { }
 
-  public createClientGameContext(input: ClientGameContextInput): ClientGameContext {
-    const { colorKey, gameId, isAdmin, name, playerId, token } = input;
+  public createClientGameContext(input: GameResponse): ClientGameContext {
+    const { gameId, player, token } = input;
+    const { playerId } = player;
     const resolver = new ServiceResolver(this.globalContext.resolver);
     const context: ClientGameContext = {
       descriptor: `/client-game/${gameId}/player/${playerId}`,
@@ -59,18 +51,10 @@ export class ClientGameContextManager {
 
     const logger = this.loggerFactory.createLogger('CLIENT', { gameId, playerId });
 
-    const color = obtainColor(colorKey);
-    const player = {
-      color,
-      isAdmin,
-      name,
-      playerId,
-    } as Player; // TODO: get player data from server
-
     resolver.inject(provideClientGameContext, context);
     resolver.inject(provideLogger, logger);
     resolver.inject(provideWebSocket, socket);
-    resolver.inject(providePlayerData, player);
+    resolver.inject(providePlayer, player);
 
     const webSocketChannel = resolver.resolve(provideWebSocketChannel);
     {

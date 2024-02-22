@@ -1,23 +1,25 @@
+import { assertRequiredString } from "../../../common/asserts.ts";
 import { withResolvers } from "../../../common/useful.ts";
+import { assertColor } from "../../../domain/colors.ts";
+import { PlayerUpdateDTO } from "../../../domain/player.ts";
 import { div_text, form, div_nodes } from "../../../frontend-framework/dom.ts";
-import { PlayerDataUpdateDTO } from "../../../player/data.ts";
 import { createColorSelectorBox } from "../../common/color-selector.ts";
 import { createEditBox } from "../../common/edit-box.ts";
 import { onClick } from "../common.ts";
 import { ModalResponse } from "../modal.ts";
 
-export type PlayerDataModalResponse = PlayerDataUpdateDTO;
+export type PlayerModalResponse = PlayerUpdateDTO;
 
-export function createPlayerDataModal(input: PlayerDataUpdateDTO) {
-  const { name, colorKey } = input;
+export function createPlayerModal(input?: PlayerUpdateDTO) {
+  const { name, color } = input ?? {};
   const nameBox = createEditBox({
     label: "Name",
     name: "name",
     placeholder: "Your name",
   });
-  nameBox.$input.value = name;
-  const color = createColorSelectorBox();
-  color.store.setValue(colorKey);
+  nameBox.$input.value = name ?? '';
+  const colorBox = createColorSelectorBox();
+  color && colorBox.store.setValue(color);
   const $cancel = div_text("box _button", "Cancel");
   const $create = div_text("box _button", "Create");
 
@@ -26,7 +28,7 @@ export function createPlayerDataModal(input: PlayerDataUpdateDTO) {
       div_nodes("modal_container", [
         div_text("modal_title", "Type your name and choose a color:"),
         nameBox.$root,
-        color.$root,
+        colorBox.$root,
         div_nodes("modal_buttons", [
           $cancel,
           $create,
@@ -35,7 +37,7 @@ export function createPlayerDataModal(input: PlayerDataUpdateDTO) {
     ]),
   ]);
 
-  const { promise, resolve } = withResolvers<ModalResponse<PlayerDataModalResponse>>();
+  const { promise, resolve } = withResolvers<ModalResponse<PlayerModalResponse>>();
 
   onClick($cancel, () => {
     resolve({ type: "cancel" });
@@ -43,11 +45,10 @@ export function createPlayerDataModal(input: PlayerDataUpdateDTO) {
 
   onClick($create, () => {
     const name = nameBox.$input.value;
-    const colorKey = color.store.getValue().key;
-    if (name === "") {
-      return;
-    }
-    const value: PlayerDataModalResponse = { colorKey, name };
+    const color = colorBox.store.getValue().key;
+    assertColor(color, "color-must-be-valid-key");
+    assertRequiredString(name, "name-must-be-required-string");
+    const value: PlayerModalResponse = { color, name };
     resolve({
       type: "confirm",
       value,

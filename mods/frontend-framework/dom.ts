@@ -1,4 +1,5 @@
 export type Properties = { [key: string]: unknown };
+export type Attributes = { [key: string]: string | number };
 
 export function createElement<TTag extends keyof HTMLElementTagNameMap>(
   tag: TTag,
@@ -30,9 +31,14 @@ function createTagNodes<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
 }
 
 function createTagProps<TTag extends keyof HTMLElementTagNameMap>(tag: TTag) {
-  return (props: Properties) => {
+  return (props: Properties, attributes?: Attributes) => {
     const node = createElement(tag);
     Object.assign(node, props);
+    if (attributes) {
+      for (const [attribute, value] of Object.entries(attributes)) {
+        node.setAttribute(attribute, value.toString());
+      }
+    }
     return node;
   };
 }

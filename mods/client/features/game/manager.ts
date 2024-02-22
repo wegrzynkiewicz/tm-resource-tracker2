@@ -1,14 +1,13 @@
 import { Channel } from "../../../common/channel.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
-import { CreateGameEPRequest, CreateGameEPResponse } from "../../../server/features/create-game-ep.ts";
-import { JoinGameEPRequest, JoinGameEPResponse } from "../../../server/features/join-game-ep.ts";
-import { ReadGameEPResponse } from "../../../server/features/read-game-ep.ts";
+import { GameResponse } from "../../../domain/game.ts";
+import { JoinGame } from "../../../domain/game.ts";
+import { PlayerUpdateDTO } from "../../../domain/player.ts";
 import { AppView, provideAppView } from "../app/app.ts";
 import { ClientConfig, provideClientConfig } from "../config.ts";
 import { provideQuitGameChannel } from "../quit-modal.ts";
 import { ClientGameContextManager, provideClientGameContextManager } from "./context.ts";
 import { provideCreateGameChannel, provideJoinGameChannel } from "./source.ts";
-import { CreateGame, JoinGame } from "./source.ts";
 
 export class ClientGameManager {
 
@@ -16,7 +15,7 @@ export class ClientGameManager {
     private appView: AppView,
     private config: ClientConfig,
     private clientGameContextManager: ClientGameContextManager,
-    createGameChannel: Channel<CreateGame>,
+    createGameChannel: Channel<PlayerUpdateDTO>,
     joinGameChannel: Channel<JoinGame>,
     quitGameChannel: Channel<null>,
   ) {
@@ -25,7 +24,7 @@ export class ClientGameManager {
     quitGameChannel.on(() => this.quitGame());
   }
 
-  private async createGame(request: CreateGameEPRequest) {
+  private async createGame(request: PlayerUpdateDTO) {
     const { apiUrl } = this.config;
     const envelope = await fetch(`${apiUrl}/games/create`, {
       method: "POST",
@@ -35,12 +34,12 @@ export class ClientGameManager {
       body: JSON.stringify(request),
     });
     const data = await envelope.json();
-    const response = data as CreateGameEPResponse;
+    const response = data as GameResponse;
     localStorage.setItem("token", response.token);
     this.clientGameContextManager.createClientGameContext(response);
   }
 
-  private async joinGame(request: JoinGameEPRequest) {
+  private async joinGame(request: JoinGame) {
     const { apiUrl } = this.config;
     const envelope = await fetch(`${apiUrl}/games/join`, {
       method: "POST",
@@ -50,7 +49,7 @@ export class ClientGameManager {
       body: JSON.stringify(request),
     });
     const data = await envelope.json();
-    const response = data as JoinGameEPResponse;
+    const response = data as GameResponse;
     localStorage.setItem("token", response.token);
     this.clientGameContextManager.createClientGameContext(response);
   }
@@ -92,7 +91,7 @@ export class ClientGameManager {
       this.appView.homepage();
       return;
     }
-    const response = data as ReadGameEPResponse;
+    const response = data as GameResponse;
     this.clientGameContextManager.createClientGameContext(response);
   }
 }

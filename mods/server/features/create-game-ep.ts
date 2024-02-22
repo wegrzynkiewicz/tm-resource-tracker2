@@ -1,47 +1,36 @@
-import { assertObject, assertRequiredString } from "../../common/asserts.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { provideServerGameContextManager } from "../game/game.ts";
 import { ServerGameContextManager } from "../game/game.ts";
 import { EPContext, EPHandler, EPRoute } from "../web/endpoint.ts";
-import { ReadGameEPResponse } from "./read-game-ep.ts";
-import { provideServerPlayerDataManager } from "../player/data.ts";
-
-export interface CreateGameEPRequest {
-  colorKey: string;
-  name: string;
-}
-
-export type CreateGameEPResponse = ReadGameEPResponse
-
-export function parseCreateGameEPRequest(data: unknown): CreateGameEPRequest {
-  assertObject<CreateGameEPRequest>(data, 'payload-must-be-object');
-  const { colorKey, name } = data;
-  assertRequiredString(colorKey, 'color-must-be-required-string');
-  assertRequiredString(name, 'name-must-be-required-string');
-  return { colorKey, name };
-}
+import { provideServerPlayerManager } from "../player/data.ts";
+import { parsePlayerUpdateDTO } from "../../domain/player.ts";
+import { GameResponse } from "../../domain/game.ts";
+import { TokenManager, provideTokenManager } from "../game/token.ts";
 
 export const createGameEPRoute = new EPRoute("POST", "/games/create");
 
 export class CreateGameEPHandler implements EPHandler {
   public constructor(
-    public readonly manager: ServerGameContextManager,
+    public readonly gameContextManager: ServerGameContextManager,
+    public readonly tokenManager: TokenManager,
   ) { }
 
   public async handle({ request }: EPContext): Promise<Response> {
     const body = await request.json();
-    const data = parseCreateGameEPRequest(body);
-    const { colorKey, name } = data;
+    const data = parsePlayerUpdateDTO(body);
+    const { color, name } = data;
     const isAdmin = true;
 
-    const gameContext = this.manager.createServerGameContext();
+    const gameContext = this.gameContextManager.createServerGameContext();
     const { identifier: { gameId }, resolver } = gameContext;
 
-    const playerDataManager = resolver.resolve(provideServerPlayerDataManager);
-    const playerData = playerDataManager.createPlayerData({ colorKey, name, isAdmin });
-    const { playerId, token: { key: token } } = playerData;
+    const playerDataManager = resolver.resolve(provideServerPlayerManager);
+    const player = playerDataManager.createPlayer({ color, name, isAdmin });
+    const { playerId } = player;
 
-    const payload: CreateGameEPResponse = { colorKey, gameId, isAdmin, name, playerId, token };
+    const token = this.tokenManager.createToken({ gameId, playerId });
+
+    const payload: GameResponse = { gameId, player, token};
     const response = Response.json(payload);
     return response;
   }
@@ -50,5 +39,6 @@ export class CreateGameEPHandler implements EPHandler {
 export function provideCreateGameEPHandler(resolver: ServiceResolver) {
   return new CreateGameEPHandler(
     resolver.resolve(provideServerGameContextManager),
+    resolver.resolve(provideTokenManager),
   );
 }

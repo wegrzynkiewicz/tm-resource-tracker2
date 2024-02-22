@@ -4,12 +4,9 @@ import { withResolvers } from "../../../common/useful.ts";
 import { createEditBox } from "../../common/edit-box.ts";
 import { ModalResponse } from "../modal.ts";
 import { createColorSelectorBox } from "../../common/color-selector.ts";
-
-export interface JoinModalResponse {
-  colorKey: string;
-  gameId: string;
-  name: string;
-}
+import { JoinGame } from "../../../domain/game.ts";
+import { assertColor } from "../../../domain/colors.ts";
+import { assertRequiredString } from "../../../common/asserts.ts";
 
 export function createJoinModal() {
   const gameBox = createEditBox({
@@ -22,7 +19,7 @@ export function createJoinModal() {
     name: "player-name",
     placeholder: "Your name",
   });
-  const color = createColorSelectorBox();
+  const colorBox = createColorSelectorBox();
   const $cancel = div_text("box _button", "Cancel");
   const $join = div_text("box _button", "Join");
 
@@ -32,7 +29,7 @@ export function createJoinModal() {
         div_text("modal_title", "Type game ID and your details:"),
         gameBox.$root,
         nameBox.$root,
-        color.$root,
+        colorBox.$root,
         div_nodes("modal_buttons", [
           $cancel,
           $join,
@@ -41,7 +38,7 @@ export function createJoinModal() {
     ]),
   ]);
 
-  const { promise, resolve } = withResolvers<ModalResponse<JoinModalResponse>>();
+  const { promise, resolve } = withResolvers<ModalResponse<JoinGame>>();
 
   onClick($cancel, () => {
     resolve({ type: "cancel" });
@@ -50,11 +47,11 @@ export function createJoinModal() {
   onClick($join, () => {
     const gameId = gameBox.$input.value;
     const name = nameBox.$input.value;
-    const colorKey = color.store.getValue().key;
-    if (name === "" || gameId === "") {
-      return;
-    }
-    const value: JoinModalResponse = { colorKey, gameId, name };
+    const color = colorBox.store.getValue().key;
+    assertColor(color, "color-must-be-valid-key");
+    assertRequiredString(name, "name-must-be-required-string");
+    assertRequiredString(gameId, "game-id-must-be-required-string");
+    const value: JoinGame = { color, gameId, name };
     resolve({
       type: "confirm",
       value,
