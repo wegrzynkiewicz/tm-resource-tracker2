@@ -1,4 +1,4 @@
-import { gameStageGADef } from "../../game-stage-ga.ts";
+import { gameStageGADef } from "../stage/common.ts";
 import { Handler } from "../../../common/channel.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { createResourceGroup } from "../../../common/resources.ts";

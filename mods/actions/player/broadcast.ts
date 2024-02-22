@@ -1,4 +1,3 @@
-import { waitingPlayersGADef } from "./waiting/action-handler.ts";
 import { Handler } from "../../common/channel.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { GADefinition } from "../../common/communication/define.ts";
@@ -6,6 +5,7 @@ import { provideGADispatcher } from "../../common/communication/dispatcher.ts";
 import { Player, providePlayer } from "./common.ts";
 import { ServerPlayerContext, ServerPlayerContextManager } from "./server/context.ts";
 import { provideServerPlayerContextManager } from "./server/context.ts";
+import { waitingPlayersGADef } from "./waiting/common.ts";
 
 export class PlayerBroadcast implements Handler<ServerPlayerContext> {
   public constructor(

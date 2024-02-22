@@ -1,15 +1,8 @@
-import { AppView, provideAppView } from "../apps/client/features/app/app.ts";
-import { WaitingView, provideWaitingView } from "./player/waiting/view.ts";
-import { ServiceResolver } from "../common/dependency.ts";
-import { GADefinition, GAHandler } from "../common/communication/define.ts";
-
-export interface GameStageGA {
-  stage: string;
-}
-
-export const gameStageGADef: GADefinition<GameStageGA> = {
-  kind: 'game-stage'
-};
+import { AppView, provideAppView } from "../../../apps/client/features/app/app.ts";
+import { WaitingView, provideWaitingView } from "../../player/waiting/view.ts";
+import { ServiceResolver } from "../../../common/dependency.ts";
+import { GAHandler } from "../../../common/communication/define.ts";
+import { GameStageGA } from "./common.ts";
 
 export class GameStageGAHandler implements GAHandler<GameStageGA>{
   public constructor(
