@@ -1,32 +1,20 @@
-import { assertObject, assertRequiredString } from "../../../common/asserts.ts";
+import { assertObject } from "../../../common/asserts.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
-import { EPRoute, EPHandler, EPContext } from "../../../common/web/endpoint.ts";
+import { EPHandler, EPContext } from "../../../common/web/endpoint.ts";
 import { ServerGameContextManager, provideServerGameContextManager } from "../server/context.ts";
 import { TokenManager, provideTokenManager } from "../../token/manager.ts";
 import { provideServerPlayerContextManager } from "../../player/server/context.ts";
 import { providePlayerBroadcast } from "../../player/broadcast.ts";
+import { parseGameSocketEPRequest } from "./common.ts";
 
-export interface PlayerWebSocketEPParams {
-  token: string;
-}
-
-export function parsePlayerWebSocketEPRequest(value: unknown): PlayerWebSocketEPParams {
-  assertObject<PlayerWebSocketEPParams>(value, "player-web-socket-params-must-be-object");
-  const { token } = value;
-  assertRequiredString(token, "player-web-socket-params-token-must-be-string");
-  return { token };
-}
-
-export const playerWebSocketEPRoute = new EPRoute("GET", "/games/socket/:token");
-
-export class PlayerWebSocketEPHandler implements EPHandler {
+export class GameSocketEPHandler implements EPHandler {
   public constructor(
     protected readonly gameManager: ServerGameContextManager,
     protected readonly tokenManager: TokenManager,
   ) { }
 
   public async handle({ params, request }: EPContext): Promise<Response> {
-    const { token } = parsePlayerWebSocketEPRequest(params);
+    const { token } = parseGameSocketEPRequest(params);
 
     const data = this.tokenManager.tokens.get(token);
     assertObject(data, 'not-found-token', { status: 404 });
@@ -48,8 +36,8 @@ export class PlayerWebSocketEPHandler implements EPHandler {
   }
 }
 
-export function providePlayerWebSocketEPHandler(resolver: ServiceResolver) {
-  return new PlayerWebSocketEPHandler(
+export function provideSocketGameEPHandler(resolver: ServiceResolver) {
+  return new GameSocketEPHandler(
     resolver.resolve(provideServerGameContextManager),
     resolver.resolve(provideTokenManager),
   );

@@ -1,13 +1,11 @@
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { provideServerGameContextManager } from "../server/context.ts";
 import { ServerGameContextManager } from "../server/context.ts";
-import { EPContext, EPHandler, EPRoute } from "../../../common/web/endpoint.ts";
+import { EPContext, EPHandler } from "../../../common/web/endpoint.ts";
 import { provideServerPlayerManager } from "../../player/server/manager.ts";
 import { parsePlayerUpdateDTO } from "../../player/common.ts";
 import { GameResponse } from "../game.ts";
 import { TokenManager, provideTokenManager } from "../../token/manager.ts";
-
-export const createGameEPRoute = new EPRoute("POST", "/games/create");
 
 export class CreateGameEPHandler implements EPHandler {
   public constructor(
