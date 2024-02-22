@@ -1,4 +1,4 @@
-import { colors } from "../../../domain/colors.ts";
+import { colors } from "../../../actions/color/color.ts";
 import {
   button_text,
   div_nodes,

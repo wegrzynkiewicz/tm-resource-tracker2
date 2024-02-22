@@ -1,16 +1,15 @@
 import { ServiceResolver } from "../../common/dependency.ts";
-import { corsOptionsEPRoute, provideCorsOptionsEPHandler } from "./features/cors-options-ep.ts";
-import { createGameEPRoute, provideCreateGameEPHandler } from "./features/create-game-ep.ts";
-import { provideReadGameEPHandler, readGameEPRoute } from "./features/read-game-ep.ts";
-import { playerWebSocketEPRoute, providePlayerWebSocketEPHandler } from "./features/stream-game-ep.ts";
+import { corsOptionsEPRoute, provideCorsOptionsEPHandler } from "./cors-options-ep.ts";
+import { createGameEPRoute, provideCreateGameEPHandler } from "../../actions/game/create/ep.ts";
+import { provideReadGameEPHandler, readGameEPRoute } from "../../actions/game/read/ep.ts";
+import { playerWebSocketEPRoute, providePlayerWebSocketEPHandler } from "../../actions/game/socket/ep.ts";
 import { provideLoggerFactory } from "../../common/logger/logger-factory.ts";
-import { GlobalMiddleware } from "./web/global-middleware.ts";
-import { Router } from "./web/router.ts";
-import { WebServer } from "./web/server.ts";
-import { joinGameEPRoute } from "./features/join-game-ep.ts";
-import { provideJoinGameEPHandler } from "./features/join-game-ep.ts";
-import { quitGameEPRoute } from "./features/quit-game-ep.ts";
-import { provideQuitGameEPHandler } from "./features/quit-game-ep.ts";
+import { GlobalMiddleware } from "../../common/web/global-middleware.ts";
+import { Router } from "../../common/web/router.ts";
+import { WebServer } from "../../common/web/server.ts";
+import { quitGameEPRoute } from "../../actions/game/quit/ep.ts";
+import { provideQuitGameEPHandler } from "../../actions/game/quit/ep.ts";
+import { joinGameEPRoute, provideJoinGameEPHandler } from "../../actions/game/join/ep.ts";
 
 export function provideMainWebServerConfig() {
   return {

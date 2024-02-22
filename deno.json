@@ -18,8 +18,8 @@
     }
   },
   "tasks": {
-    "bundle": "deno bundle --watch mods/client/main.ts mods/client-public/scripts/main.js",
-    "server": "deno run -A --watch mods/server/index.ts",
-    "serve": "serve mods/client-public"
+    "bundle": "deno bundle --watch mods/apps/client/main.ts mods/pages/client/scripts/main.js",
+    "server": "deno run -A --watch mods/apps/server/index.ts",
+    "serve": "serve mods/pages/client"
   }
 }

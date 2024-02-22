@@ -10,7 +10,7 @@ import { createScroll } from "./scroll.ts";
 import { TopView, provideTopView } from "./top.ts";
 import { createLoading } from "./loading.ts";
 import { ServiceResolver } from "../../../../common/dependency.ts";
-import { HomepageView, provideHomepageView } from "../homepage/homepage.ts";
+import { HomepageView, provideHomepageView } from "../homepage.ts";
 import { ClientConfig, provideClientConfig } from "../config.ts";
 import { Channel } from "../../../../common/channel.ts";
 import { examples } from "../../../../common/history.ts";

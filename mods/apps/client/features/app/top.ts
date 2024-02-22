@@ -1,4 +1,4 @@
-import { colors } from "../../../../domain/colors.ts";
+import { colors } from "../../../../actions/color/color.ts";
 import { div_nodes, div_text } from "../../../../common/frontend-framework/dom.ts";
 import { Store } from "../../../../common/frontend-framework/store.ts";
 import { createSelector } from "../selector.ts";

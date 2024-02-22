@@ -1,5 +1,5 @@
 import { AppView, provideAppView } from "../apps/client/features/app/app.ts";
-import { WaitingView, provideWaitingView } from "../apps/client/features/waiting/waiting.ts";
+import { WaitingView, provideWaitingView } from "./player/waiting/view.ts";
 import { ServiceResolver } from "../common/dependency.ts";
 import { GADefinition, GAHandler } from "../common/communication/define.ts";
 

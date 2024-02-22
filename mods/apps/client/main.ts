@@ -1,6 +1,6 @@
 import { createGlobalContext } from "../../common/global.ts";
 import { provideAppView } from "./features/app/app.ts";
-import { provideClientGameManager } from "./features/game/manager.ts";
+import { provideClientGameManager } from "../../actions/game/client/manager.ts";
 
 async function start() {
   const { resolver } = createGlobalContext();
