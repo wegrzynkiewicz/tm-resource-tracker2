@@ -1,7 +1,7 @@
-import { ServiceResolver } from "../../../common/dependency.ts";
-import { button_nodes, div_nodes, span_text } from "../../../common/frontend-framework/dom.ts";
-import { Signal } from "../../../common/frontend-framework/store.ts";
-import { svg_icon } from "../../../common/frontend-framework/svg.ts";
+import { ServiceResolver } from "../../common/dependency.ts";
+import { button_nodes, div_nodes, span_text } from "../../common/frontend-framework/dom.ts";
+import { Signal } from "../../common/frontend-framework/store.ts";
+import { svg_icon } from "../../common/frontend-framework/svg.ts";
 
 const buttons = [
   { key: "supplies", icon: "box", name: "Supplies" },
@@ -22,7 +22,7 @@ export function provideToolbarSwitcher() {
   return new Signal<ToolbarKey>('supplies');
 }
 
-export class Toolbar {
+export class ToolbarView {
   public readonly $root: HTMLDivElement;
   public constructor(
     public readonly signal: Signal<ToolbarKey>,
@@ -54,8 +54,8 @@ export class Toolbar {
   }
 }
 
-export function provideToolbar(resolver: ServiceResolver) {
-  return new Toolbar(
+export function provideToolbarView(resolver: ServiceResolver) {
+  return new ToolbarView(
     resolver.resolve(provideToolbarSwitcher),
   );
 }

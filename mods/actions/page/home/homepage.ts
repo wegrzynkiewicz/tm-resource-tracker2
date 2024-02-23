@@ -8,10 +8,13 @@ import { ModalManager, provideModalManager } from "../../../apps/client/features
 import { createPlayerModal } from "../../player/update/modal.ts";
 import { PlayerUpdateDTO } from "../../player/common.ts";
 import { JoinGame } from "../../game/join/common.ts";
+import { provideIntroAppView } from "../intro/intro-app.ts";
+import { IntroAppView } from "../intro/intro-app.ts";
 
 export class HomepageView {
   public readonly $root: HTMLDivElement;
   public constructor(
+    private readonly app: IntroAppView,
     private readonly modalManager: ModalManager,
     private readonly createGameChannel: Channel<PlayerUpdateDTO>,
     private readonly joinGameChannel: Channel<JoinGame>,
@@ -27,6 +30,10 @@ export class HomepageView {
 
     onClick($create, () => this.whenCreateGameClicked());
     onClick($join, () => this.whenJoinGameClicked());
+  }
+
+  public render() {
+    this.app.render(this.$root);
   }
 
   protected async whenCreateGameClicked() {
@@ -52,6 +59,7 @@ export class HomepageView {
 
 export function provideHomepageView(resolver: ServiceResolver) {
   return new HomepageView(
+    resolver.resolve(provideIntroAppView),
     resolver.resolve(provideModalManager),
     resolver.resolve(provideCreateGameChannel),
     resolver.resolve(provideJoinGameChannel),

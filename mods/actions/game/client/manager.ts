@@ -7,7 +7,7 @@ import { ClientGameContextManager, provideClientGameContextManager } from "./con
 import { provideCreateGameChannel, provideJoinGameChannel } from "./source.ts";
 import { JoinGame } from "../join/common.ts";
 import { provideQuitGameChannel } from "../quit/modal.ts";
-import { HomepageViewRenderer, provideHomepageViewRenderer } from "../../page/home/homepage-view-renderer.ts";
+import { HomepageView, provideHomepageView } from "../../page/home/homepage.ts";
 
 export class ClientGameManager {
 
@@ -15,7 +15,7 @@ export class ClientGameManager {
     private config: ClientConfig,
     private clientGameContextManager: ClientGameContextManager,
     createGameChannel: Channel<PlayerUpdateDTO>,
-    private homepageRenderer: HomepageViewRenderer,
+    private homepage: HomepageView,
     joinGameChannel: Channel<JoinGame>,
     quitGameChannel: Channel<null>,
   ) {
@@ -58,7 +58,7 @@ export class ClientGameManager {
     this.clientGameContextManager.deleteClientGameContext();
     const token = localStorage.getItem('token');
     if (token === null) {
-      this.homepageRenderer.render();
+      this.homepage.render();
       return;
     }
     const { apiUrl } = this.config;
@@ -69,14 +69,14 @@ export class ClientGameManager {
       },
     });
     localStorage.removeItem('token');
-    this.homepageRenderer.render();
+    this.homepage.render();
   }
 
   public async bootstrap() {
     const { apiUrl } = this.config;
     const token = localStorage.getItem('token');
     if (token === null) {
-      this.homepageRenderer.render();
+      this.homepage.render();
       return;
     }
     const envelope = await fetch(`${apiUrl}/games/read`, {
@@ -88,7 +88,7 @@ export class ClientGameManager {
     const data = await envelope.json();
     if (data.error) {
       localStorage.removeItem('token');
-      this.homepageRenderer.render();
+      this.homepage.render();
       return;
     }
     const response = data as GameResponse;
@@ -101,7 +101,7 @@ export function provideClientGameManager(resolver: ServiceResolver) {
     resolver.resolve(provideClientConfig),
     resolver.resolve(provideClientGameContextManager),
     resolver.resolve(provideCreateGameChannel),
-    resolver.resolve(provideHomepageViewRenderer),
+    resolver.resolve(provideHomepageView),
     resolver.resolve(provideJoinGameChannel),
     resolver.resolve(provideQuitGameChannel),
   );

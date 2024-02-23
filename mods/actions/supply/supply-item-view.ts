@@ -7,7 +7,7 @@ import { createSupplyModal } from "./supply-modal.ts";
 import { ModalManager } from "../../apps/client/features/modal.ts";
 import { Supply } from "./common.ts";
 
-export class SupplyPanelItemView {
+export class SupplyItemView {
   public readonly $root: HTMLDivElement;
   public readonly signal: Signal<ResourceGroup>;
 

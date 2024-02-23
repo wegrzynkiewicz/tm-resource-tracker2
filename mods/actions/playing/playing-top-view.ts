@@ -1,15 +1,8 @@
-import { colors } from "../../../../actions/color/color.ts";
-import { div_nodes, div_text } from "../../../../common/frontend-framework/dom.ts";
-import { Store } from "../../../../common/frontend-framework/store.ts";
-import { createSelector } from "../selector.ts";
+import { colors } from "../color/color.ts";
+import { div_nodes, div_text } from "../../common/frontend-framework/dom.ts";
+import { createSelector } from "../../apps/client/features/selector.ts";
 
-class TopStore extends Store {
-  constructor() {
-    super();
-  }
-}
-
-export class TopView {
+export class PlayingTopView {
   public readonly $root: HTMLDivElement;
   protected readonly $label: HTMLDivElement;
   protected readonly $controller: HTMLDivElement;
@@ -31,6 +24,6 @@ export class TopView {
   }
 }
 
-export function provideTopView() {
-  return new TopView();
+export function providePlayingTopView() {
+  return new PlayingTopView();
 }

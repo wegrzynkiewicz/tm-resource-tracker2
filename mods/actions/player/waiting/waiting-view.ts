@@ -12,6 +12,7 @@ import { createPlayerModal } from "../update/modal.ts";
 import { PlayerUpdater, providePlayerUpdater } from "../update/updater.ts";
 import { createEditBox } from "../../../apps/client/edit-box.ts";
 import { GameStarter, provideGameStarter } from "../../game/start/starter.ts";
+import { IntroAppView, provideIntroAppView } from "../../page/intro/intro-app.ts";
 
 export class WaitingPlayerFactory implements ComponentFactory<Player> {
   public create(player: Player): HTMLElement {
@@ -41,6 +42,7 @@ export class WaitingView {
     private readonly quitGameChannel: Channel<null>,
     private readonly playerDataUpdater: PlayerUpdater,
     private readonly gameStarter: GameStarter,
+    private readonly app: IntroAppView,
   ) {
     const gameIdBox = createEditBox({
       label: "GameID",
@@ -81,6 +83,10 @@ export class WaitingView {
     onClick($start, () => { this.gameStarter.modal(); })
   }
 
+  public render() {
+    this.app.render(this.$root);
+  }
+
   protected async whenQuidGameClicked() {
     const modal = createQuitGameModal();
     this.modalManager.mount(modal);
@@ -111,5 +117,6 @@ export function provideWaitingView(resolver: ServiceResolver) {
     resolver.resolve(provideQuitGameChannel),
     resolver.resolve(providePlayerUpdater),
     resolver.resolve(provideGameStarter),
+    resolver.resolve(provideIntroAppView),
   );
 }
