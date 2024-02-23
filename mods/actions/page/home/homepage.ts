@@ -1,13 +1,13 @@
-import { onClick } from "./common.ts";
+import { onClick } from "../../../apps/client/features/common.ts";
 import { button_text, div_nodes } from "../../../common/frontend-framework/dom.ts";
-import { createJoinModal } from "../../../actions/game/join/modal.ts";
+import { createJoinModal } from "../../game/join/modal.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
-import { provideJoinGameChannel, provideCreateGameChannel } from "../../../actions/game/client/source.ts";
+import { provideJoinGameChannel, provideCreateGameChannel } from "../../game/client/source.ts";
 import { Channel } from "../../../common/channel.ts";
-import { ModalManager, provideModalManager } from "./modal.ts";
-import { createPlayerModal } from "../../../actions/player/update/modal.ts";
-import { PlayerUpdateDTO } from "../../../actions/player/common.ts";
-import { JoinGame } from "../../../actions/game/join/common.ts";
+import { ModalManager, provideModalManager } from "../../../apps/client/features/modal.ts";
+import { createPlayerModal } from "../../player/update/modal.ts";
+import { PlayerUpdateDTO } from "../../player/common.ts";
+import { JoinGame } from "../../game/join/common.ts";
 
 export class HomepageView {
   public readonly $root: HTMLDivElement;

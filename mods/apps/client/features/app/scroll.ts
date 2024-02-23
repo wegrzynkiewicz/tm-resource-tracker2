@@ -1,21 +1,23 @@
-import { div_empty, div_nodes, fragment_nodes } from "../../../../common/frontend-framework/dom.ts";
+import { div_empty, div_nodes } from "../../../../common/frontend-framework/dom.ts";
 
-export function createScroll() {
+export function createScroll(
+  $root: HTMLElement,
+  $content: HTMLElement,
+) {
   const $detectorTop = div_empty("scroll_detector _top");
-  const $content = div_empty("app_content");
   const $detectorBottom = div_empty("scroll_detector _bottom");
-
-  const $root = div_nodes("app_main scroll", [
+  $root.classList.add("scroll");
+  $root.replaceChildren(
     div_nodes("scroll_container", [
       $detectorTop,
       $content,
       $detectorBottom,
     ]),
-  ]);
+  );
   const $shadowTop = div_empty("app_shadow _top");
   const $shadowBottom = div_empty("app_shadow _bottom");
 
-  const $fragment = fragment_nodes([$root, $shadowTop, $shadowBottom]);
+  const nodes = [$root, $shadowTop, $shadowBottom];
 
   const map = new WeakMap<Element, Element>([
     [$detectorTop, $shadowTop],
@@ -38,5 +40,5 @@ export function createScroll() {
   observer.observe($detectorTop);
   observer.observe($detectorBottom);
 
-  return { $fragment, $content };
+  return nodes;
 }

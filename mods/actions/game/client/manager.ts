@@ -2,20 +2,20 @@ import { Channel } from "../../../common/channel.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { GameResponse } from "../game.ts";
 import { PlayerUpdateDTO } from "../../player/common.ts";
-import { AppView, provideAppView } from "../../../apps/client/features/app/app.ts";
 import { ClientConfig, provideClientConfig } from "../../../apps/client/features/config.ts";
 import { ClientGameContextManager, provideClientGameContextManager } from "./context.ts";
 import { provideCreateGameChannel, provideJoinGameChannel } from "./source.ts";
 import { JoinGame } from "../join/common.ts";
 import { provideQuitGameChannel } from "../quit/modal.ts";
+import { HomepageViewRenderer, provideHomepageViewRenderer } from "../../page/home/homepage-view-renderer.ts";
 
 export class ClientGameManager {
 
   public constructor(
-    private appView: AppView,
     private config: ClientConfig,
     private clientGameContextManager: ClientGameContextManager,
     createGameChannel: Channel<PlayerUpdateDTO>,
+    private homepageRenderer: HomepageViewRenderer,
     joinGameChannel: Channel<JoinGame>,
     quitGameChannel: Channel<null>,
   ) {
@@ -58,7 +58,7 @@ export class ClientGameManager {
     this.clientGameContextManager.deleteClientGameContext();
     const token = localStorage.getItem('token');
     if (token === null) {
-      this.appView.homepage();
+      this.homepageRenderer.render();
       return;
     }
     const { apiUrl } = this.config;
@@ -69,14 +69,14 @@ export class ClientGameManager {
       },
     });
     localStorage.removeItem('token');
-    this.appView.homepage();
+    this.homepageRenderer.render();
   }
 
   public async bootstrap() {
     const { apiUrl } = this.config;
     const token = localStorage.getItem('token');
     if (token === null) {
-      this.appView.homepage();
+      this.homepageRenderer.render();
       return;
     }
     const envelope = await fetch(`${apiUrl}/games/read`, {
@@ -88,7 +88,7 @@ export class ClientGameManager {
     const data = await envelope.json();
     if (data.error) {
       localStorage.removeItem('token');
-      this.appView.homepage();
+      this.homepageRenderer.render();
       return;
     }
     const response = data as GameResponse;
@@ -98,10 +98,10 @@ export class ClientGameManager {
 
 export function provideClientGameManager(resolver: ServiceResolver) {
   return new ClientGameManager(
-    resolver.resolve(provideAppView),
     resolver.resolve(provideClientConfig),
     resolver.resolve(provideClientGameContextManager),
     resolver.resolve(provideCreateGameChannel),
+    resolver.resolve(provideHomepageViewRenderer),
     resolver.resolve(provideJoinGameChannel),
     resolver.resolve(provideQuitGameChannel),
   );

@@ -37,6 +37,11 @@ export class Signal<TValue> {
     handler(this.value);
   }
 
+  public update(value: TValue) {
+    this.value = value;
+    this.emit();
+  }
+
   public emit() {
     for (const handler of this.handlers) {
       handler(this.value);

@@ -1,25 +1,25 @@
-import { AppView, provideAppView } from "../../../apps/client/features/app/app.ts";
-import { WaitingView, provideWaitingView } from "../../player/waiting/view.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { GAHandler } from "../../../common/communication/define.ts";
 import { GameStageGA } from "./common.ts";
+import { WaitingViewRenderer, provideWaitingViewRenderer } from "../../player/waiting/waiting-view-renderer.ts";
 
 export class GameStageGAHandler implements GAHandler<GameStageGA>{
   public constructor(
-    private readonly appView: AppView,
-    private readonly waitingView: WaitingView,
+    private readonly waitingRenderer: WaitingViewRenderer,
   ) { }
 
   public async handle(action: GameStageGA): Promise<void> {
-    if (action.stage === 'waiting') {
-      this.appView.mount(this.waitingView.$root);
+    switch (action.stage) {
+      case 'waiting':
+        return this.waitingRenderer.render();
+      case 'playing':
+        return this.waitingRenderer.render();
     }
   }
 }
 
 export function provideGameStageGAHandler(resolver: ServiceResolver) {
   return new GameStageGAHandler(
-    resolver.resolve(provideAppView),
-    resolver.resolve(provideWaitingView),
+    resolver.resolve(provideWaitingViewRenderer),
   );
 }

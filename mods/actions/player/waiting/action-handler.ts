@@ -1,4 +1,4 @@
-import { provideWaitingPlayersCollection } from "./view.ts";
+import { provideWaitingPlayersCollection } from "./waiting-view.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { GAHandler } from "../../../common/communication/define.ts";
 import { Player } from "../common.ts";
