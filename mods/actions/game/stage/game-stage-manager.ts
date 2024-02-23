@@ -2,7 +2,7 @@ import { Channel } from "../../../common/channel.ts";
 import { GameStage } from "./common.ts";
 
 export class GameStageManager {
-  public stage: GameStage = { kind: 'waiting' };
+  public stage: GameStage = 'waiting';
   public updates = new Channel<GameStage>();
 
   public setStage(stage: GameStage) {

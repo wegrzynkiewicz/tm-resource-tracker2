@@ -13,7 +13,7 @@ export class StartGameGAHandler implements GAHandler<StartGameGA>{
 
   public async handle(): Promise<void> {
     assertTrue(this.player.isAdmin, "player-must-be-admin-to-start-game");
-    this.gameStageManager.setStage({ kind: "playing" });
+    this.gameStageManager.setStage("playing");
   }
 }
 

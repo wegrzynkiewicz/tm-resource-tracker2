@@ -2,7 +2,7 @@ import { playerDataUpdateGADef, providePlayerDataUpdateGAHandler } from "./playe
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { GAProcessor } from "../../../common/communication/processor.ts";
 import { startGameGADef } from "../../game/start/common.ts";
-import { provideStartGameGAHandler } from "../../game/start/action-handler.ts";
+import { provideStartGameGAHandler } from "../../game/start/start-action-handler.ts";
 
 export function feedServerGAProcessor(resolver: ServiceResolver, processor: GAProcessor) {
   const handlers = processor.handlers;

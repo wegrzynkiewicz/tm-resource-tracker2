@@ -19,10 +19,6 @@ export class AppView {
     const $main = div_empty("app_main");
     const scrollNodes = createScroll($main, this.$content);
 
-    toolbar.signal.on((key) => {
-    //   this.switcher.switch(key);
-    });
-
     this.$root = div_nodes("app", [
       top.$root,
       ...scrollNodes,

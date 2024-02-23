@@ -11,7 +11,7 @@ export class GameStageBroadcast {
   ) { }
 
   public sendToPlayers(stage: GameStage) {
-    this.playerBroadcast.send(gameStageGADef, { stage: stage.kind });
+    this.playerBroadcast.send(gameStageGADef, { stage });
   }
 
   public sendToPlayerWithContext(playerContext: ServerPlayerContext) {
