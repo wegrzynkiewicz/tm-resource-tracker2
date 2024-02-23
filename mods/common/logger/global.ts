@@ -1,7 +1,5 @@
 import { Breaker } from "../asserts.ts";
-import { ServiceResolver } from "../dependency.ts";
-import { BasicLogger } from "./basic-logger.ts";
-import { provideMainLogBus } from "./log-bus.ts";
+import { brightCyan, brightRed, brightYellow, dim } from "./deps.ts";
 
 export type LoggerData = Record<string, unknown>;
 
@@ -33,6 +31,18 @@ export const mapSeverityToConsoleMethod: Record<LogSeverity, (...args: unknown[]
   [LogSeverity.WARN]: console.warn,
   [LogSeverity.ERROR]: console.error,
   [LogSeverity.FATAL]: console.error,
+} as const;
+
+export type ColorLog = (message: string) => string;
+
+export const mapSeverityToConsoleColor: Record<LogSeverity, ColorLog> = {
+  [LogSeverity.SILLY]: dim,
+  [LogSeverity.DEBUG]: dim,
+  [LogSeverity.INFO]: brightCyan,
+  [LogSeverity.NOTICE]: brightCyan,
+  [LogSeverity.WARN]: brightYellow,
+  [LogSeverity.ERROR]: brightRed,
+  [LogSeverity.FATAL]: brightRed,
 } as const;
 
 export interface Logger {

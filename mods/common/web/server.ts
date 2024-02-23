@@ -44,7 +44,7 @@ export class WebServer {
   private async handle(req: Request): Promise<Response> {
     const { method, url } = req;
     const headers = Object.fromEntries([...req.headers]);
-    this.logger.debug("web-server-handling", { headers, method, url });
+    this.logger.silly("web-server-handling", { headers, method, url });
     try {
       const response = await this.handler.handle(req);
       return response;
