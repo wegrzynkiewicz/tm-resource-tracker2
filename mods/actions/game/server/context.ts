@@ -7,7 +7,8 @@ import { LoggerFactory, provideLoggerFactory } from "../../../common/logger/logg
 import { provideLogger } from "../../../common/logger/global.ts";
 import { providePlayerBroadcast } from "../../player/broadcast.ts";
 import { provideServerPlayerContextManager } from "../../player/server/context.ts";
-import { provideGameStateBroadcast } from "./state.ts";
+import { provideGameStageBroadcast } from "../stage/game-stage-broadcast.ts";
+import { provideGameStageManager } from "../stage/game-stage-manager.ts";
 
 export interface ServerGameContextIdentifier {
   gameId: string;
@@ -54,11 +55,17 @@ export class ServerGameContextManager {
     const serverPlayerContextManager = resolver.resolve(provideServerPlayerContextManager);
     {
       const playerBroadcast = resolver.resolve(providePlayerBroadcast);
-      serverPlayerContextManager.creates.handlers.add(playerBroadcast);
-      serverPlayerContextManager.deletes.handlers.add(playerBroadcast);
+      serverPlayerContextManager.creates.on(() => playerBroadcast.sendPlayersData());
+      serverPlayerContextManager.deletes.on(() => playerBroadcast.sendPlayersData());
 
-      const gameStateBroadcast = resolver.resolve(provideGameStateBroadcast);
-      serverPlayerContextManager.creates.handlers.add(gameStateBroadcast);
+      const gameStageBroadcast = resolver.resolve(provideGameStageBroadcast);
+      serverPlayerContextManager.creates.on((ctx) => gameStageBroadcast.sendToPlayerWithContext(ctx));
+    }
+
+    const gameStageManager = resolver.resolve(provideGameStageManager);
+    {
+      const gameStageBroadcast = resolver.resolve(provideGameStageBroadcast);
+      gameStageManager.updates.on((stage) => gameStageBroadcast.sendToPlayers(stage));
     }
 
     this.games.set(gameId, serverGameContext);

@@ -7,3 +7,13 @@ export interface GameStageGA {
 export const gameStageGADef: GADefinition<GameStageGA> = {
   kind: 'game-stage'
 };
+
+export interface WaitingGameStage {
+  kind: 'waiting';
+}
+
+export interface PlayingGameStage {
+  kind: 'playing';
+}
+
+export type GameStage = WaitingGameStage | PlayingGameStage;

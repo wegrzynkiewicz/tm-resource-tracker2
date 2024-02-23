@@ -1,20 +1,15 @@
-import { Handler } from "../../common/channel.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { GADefinition } from "../../common/communication/define.ts";
 import { provideGADispatcher } from "../../common/communication/dispatcher.ts";
 import { Player, providePlayer } from "./common.ts";
-import { ServerPlayerContext, ServerPlayerContextManager } from "./server/context.ts";
+import { ServerPlayerContextManager } from "./server/context.ts";
 import { provideServerPlayerContextManager } from "./server/context.ts";
 import { waitingPlayersGADef } from "./waiting/common.ts";
 
-export class PlayerBroadcast implements Handler<ServerPlayerContext> {
+export class PlayerBroadcast {
   public constructor(
     private readonly manager: ServerPlayerContextManager,
   ) { }
-
-  public handle() {
-    this.sendPlayersData();
-  }
 
   public sendPlayersData() {
     const players = [...this.fetchOnlinePlayers()];
