@@ -1,4 +1,4 @@
-import { div_nodes, input_props, label_props } from "../../../common/frontend-framework/dom.ts";
+import { div_nodes, input_props, label_props } from "../../common/frontend-framework/dom.ts";
 
 export function createEditBox(
   { label, name, placeholder }: {

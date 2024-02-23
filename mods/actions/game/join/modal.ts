@@ -1,7 +1,7 @@
 import { onClick } from "../../../apps/client/features/common.ts";
 import { div_nodes, div_text } from "../../../common/frontend-framework/dom.ts";
 import { withResolvers } from "../../../common/useful.ts";
-import { createEditBox } from "../../../apps/client/common/edit-box.ts";
+import { createEditBox } from "../../../apps/client/edit-box.ts";
 import { ModalResponse } from "../../../apps/client/features/modal.ts";
 import { createColorSelectorBox } from "../../color/color-selector.ts";
 import { assertColor } from "../../color/color.ts";

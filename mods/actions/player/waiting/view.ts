@@ -1,7 +1,6 @@
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { button_text, div_empty, div_nodes, div_text } from "../../../common/frontend-framework/dom.ts";
 import { Player, providePlayer } from "../common.ts";
-import { createEditBox } from "../../../apps/client/common/edit-box.ts";
 import { ClientGameContext, provideClientGameContext } from "../../game/client/context.ts";
 import { Collection } from "../../../common/frontend-framework/store.ts";
 import { ComponentFactory, Loop } from "../../../common/frontend-framework/loop.ts";
@@ -11,6 +10,8 @@ import { ModalManager, provideModalManager } from "../../../apps/client/features
 import { Channel } from "../../../common/channel.ts";
 import { createPlayerModal } from "../update/modal.ts";
 import { PlayerUpdater, providePlayerUpdater } from "../update/updater.ts";
+import { createEditBox } from "../../../apps/client/edit-box.ts";
+import { GameStarter, provideGameStarter } from "../../game/start/starter.ts";
 
 export class WaitingPlayerFactory implements ComponentFactory<Player> {
   public create(player: Player): HTMLElement {
@@ -39,6 +40,7 @@ export class WaitingView {
     private readonly modalManager: ModalManager,
     private readonly quitGameChannel: Channel<null>,
     private readonly playerDataUpdater: PlayerUpdater,
+    private readonly gameStarter: GameStarter,
   ) {
     const gameIdBox = createEditBox({
       label: "GameID",
@@ -76,6 +78,7 @@ export class WaitingView {
 
     onClick($quitGame, () => { this.whenQuidGameClicked(); })
     onClick($change, () => { this.whenChanged(); })
+    onClick($start, () => { this.gameStarter.modal(); })
   }
 
   protected async whenQuidGameClicked() {
@@ -107,5 +110,6 @@ export function provideWaitingView(resolver: ServiceResolver) {
     resolver.resolve(provideModalManager),
     resolver.resolve(provideQuitGameChannel),
     resolver.resolve(providePlayerUpdater),
+    resolver.resolve(provideGameStarter),
   );
 }

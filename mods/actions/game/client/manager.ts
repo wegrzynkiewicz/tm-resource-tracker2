@@ -4,10 +4,10 @@ import { GameResponse } from "../game.ts";
 import { PlayerUpdateDTO } from "../../player/common.ts";
 import { AppView, provideAppView } from "../../../apps/client/features/app/app.ts";
 import { ClientConfig, provideClientConfig } from "../../../apps/client/features/config.ts";
-import { provideQuitGameChannel } from "../quit/modal.ts";
 import { ClientGameContextManager, provideClientGameContextManager } from "./context.ts";
 import { provideCreateGameChannel, provideJoinGameChannel } from "./source.ts";
 import { JoinGame } from "../join/common.ts";
+import { provideQuitGameChannel } from "../quit/modal.ts";
 
 export class ClientGameManager {
 

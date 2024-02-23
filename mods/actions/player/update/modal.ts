@@ -4,7 +4,7 @@ import { assertColor } from "../../color/color.ts";
 import { PlayerUpdateDTO } from "../common.ts";
 import { div_text, form, div_nodes } from "../../../common/frontend-framework/dom.ts";
 import { createColorSelectorBox } from "../../color/color-selector.ts";
-import { createEditBox } from "../../../apps/client/common/edit-box.ts";
+import { createEditBox } from "../../../apps/client/edit-box.ts";
 import { onClick } from "../../../apps/client/features/common.ts";
 import { ModalResponse } from "../../../apps/client/features/modal.ts";
 
