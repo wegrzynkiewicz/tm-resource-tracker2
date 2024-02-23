@@ -4,7 +4,7 @@ import { div_empty, div_nodes } from "../../common/frontend-framework/dom.ts";
 import { createScroll } from "../../apps/client/features/app/scroll.ts";
 import { PlayingTopView, providePlayingTopView } from "./playing-top-view.ts";
 import { ModalManager, provideModalManager } from "../../apps/client/features/modal.ts";
-import { ToolbarView, provideToolbarView } from "./toolbar-view.ts";
+import { ToolbarView, provideToolbarView } from "./toolbar.ts";
 
 export class PlayingAppView {
   private readonly $root: HTMLDivElement;
@@ -13,7 +13,7 @@ export class PlayingAppView {
 
   public constructor(
     private readonly modalManager: ModalManager,
-    private readonly top: PlayingTopView,
+    public readonly top: PlayingTopView,
     private readonly toolbar: ToolbarView,
   ) {
     const $main = div_empty("app_main");

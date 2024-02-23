@@ -1,8 +1,10 @@
 import { GAHandler } from "../../common/communication/define.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { ClientGameContext, provideClientGameContext } from "../game/client/context.ts";
+import { provideProjectsView } from "../projects/projects-view.ts";
 import { provideSupplyView } from "../supply/supply-view.ts";
 import { PlayingGameGA, providePlayingGame } from "./common.ts";
+import { provideToolbarSwitcher } from "./toolbar.ts";
 
 export class ServerPlayingGameGAHandler implements GAHandler<PlayingGameGA>{
   public constructor(
@@ -12,8 +14,17 @@ export class ServerPlayingGameGAHandler implements GAHandler<PlayingGameGA>{
   public async handle(input: PlayingGameGA): Promise<void> {
     const { resolver } = this.clientGameContext;
     resolver.inject(providePlayingGame, input);
-    const supply = resolver.resolve(provideSupplyView);
-    supply.render();
+
+    const signal = resolver.resolve(provideToolbarSwitcher);
+    const supplies = resolver.resolve(provideSupplyView);
+    const projects = resolver.resolve(provideProjectsView);
+    signal.on((key) => {
+      switch (key) {
+        case "supplies": return supplies.render();
+        case "projects": return projects.render();
+      }
+    });
+    supplies.render();
   }
 }
 
