@@ -1,9 +1,9 @@
-import { Store } from "../../../common/frontend-framework/store.ts";
-import { button_text, div_nodes, div_text, img_props, span_text } from "../../../common/frontend-framework/dom.ts";
-import { Resource, resourcesByType } from "../../../common/resources.ts";
-import { ResourceTarget, ResourceType } from "../../../common/resources.ts";
-import { onClick } from "./common.ts";
-import { withResolvers } from "../../../common/useful.ts";
+import { Store } from "../../common/frontend-framework/store.ts";
+import { button_text, div_nodes, div_text, img_props, span_text } from "../../common/frontend-framework/dom.ts";
+import { Resource, resourcesByType } from "../../common/resources.ts";
+import { ResourceTarget, ResourceType } from "../../common/resources.ts";
+import { onClick } from "../../apps/client/features/common.ts";
+import { withResolvers } from "../../common/useful.ts";
 
 export function createCalculatorButton(digit: number) {
   const root = button_text("box _button _project", digit.toString());

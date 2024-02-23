@@ -1,18 +1,13 @@
-import { div_empty, div_nodes, div_text, img_props } from "../../../common/frontend-framework/dom.ts";
-import { onClick } from "./common.ts";
-import { Signal } from "../../../common/frontend-framework/store.ts";
-import { ResourceGroup, ResourceTarget } from "../../../common/resources.ts";
-import { createResourceGroup, resources, ResourceType } from "../../../common/resources.ts";
+import { div_empty, div_nodes, div_text, img_props } from "../../common/frontend-framework/dom.ts";
+import { onClick } from "../../apps/client/features/common.ts";
+import { Signal } from "../../common/frontend-framework/store.ts";
+import { ResourceGroup, ResourceTarget } from "../../common/resources.ts";
+import { createResourceGroup, resources, ResourceType } from "../../common/resources.ts";
 import { createSupplyModal } from "./supply-modal.ts";
-import { createPanel } from "./app/panel.ts";
-import { ModalManager } from "./modal.ts";
+import { ModalManager } from "../../apps/client/features/modal.ts";
+import { Supply } from "./common.ts";
 
-interface Supply {
-  target: ResourceTarget;
-  type: ResourceType;
-}
-
-export class Supplies {
+export class SupplyPanelItemView {
   public readonly $root: HTMLDivElement;
   public readonly signal: Signal<ResourceGroup>;
 
@@ -65,9 +60,4 @@ export class Supplies {
     onClick($counter, () => this.whenSupplyClicked({ type, target }));
     return $root;
   }
-}
-
-export function createSuppliesPanel() {
-  const modalManager = new ModalManager();
-  return createPanel([1, 2, 3].map(() => new Supplies(modalManager).$root));
 }

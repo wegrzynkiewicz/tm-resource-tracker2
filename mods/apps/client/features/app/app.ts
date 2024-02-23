@@ -3,7 +3,6 @@ import { ChildSwitcher } from "../../../../common/frontend-framework/child-switc
 import { createScroll } from "./scroll.ts";
 import { TopView, provideTopView } from "./top.ts";
 import { ServiceResolver } from "../../../../common/dependency.ts";
-import { ClientConfig, provideClientConfig } from "../config.ts";
 import { ModalManager, provideModalManager } from "../modal.ts";
 import { Toolbar, provideToolbar } from "../toolbar.ts";
 
@@ -13,7 +12,6 @@ export class AppView {
   public readonly switcher = new ChildSwitcher(this.$content);
 
   public constructor(
-    private readonly clientConfig: ClientConfig,
     modalManager: ModalManager,
     public readonly top: TopView,
     public readonly toolbar: Toolbar,
@@ -50,7 +48,6 @@ export class AppView {
 
 export function provideAppView(resolver: ServiceResolver) {
   return new AppView(
-    resolver.resolve(provideClientConfig),
     resolver.resolve(provideModalManager),
     resolver.resolve(provideTopView),
     resolver.resolve(provideToolbar),

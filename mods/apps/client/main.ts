@@ -4,7 +4,6 @@ import { provideClientGameManager } from "../../actions/game/client/manager.ts";
 import { createHistoriesPanel, historyEntryCreatedChannel } from "./features/history.ts";
 import { createProjectsPanel } from "./features/project.ts";
 import { createSettings } from "./features/settings.ts";
-import { createSuppliesPanel } from "./features/supply.ts";
 import { examples } from "../../common/history.ts";
 import { provideLoadingViewRenderer } from "../../actions/page/loading/loading-view-renderer.ts";
 
@@ -12,7 +11,6 @@ async function start() {
   const { resolver } = createGlobalContext();
   const app = resolver.resolve(provideAppView);
   {
-    app.switcher.nodes.set("supplies", createSuppliesPanel());
     app.switcher.nodes.set("projects", createProjectsPanel());
     app.switcher.nodes.set("histories", createHistoriesPanel());
     app.switcher.nodes.set("settings", createSettings());
