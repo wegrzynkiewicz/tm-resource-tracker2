@@ -1,4 +1,4 @@
-import { playerDataUpdateGADef } from "../server/player-data-update.ts";
+import { clientUpdatingMyPlayerGADef } from "./client-update-my-player.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { GADispatcher, provideGADispatcher } from "../../../common/communication/dispatcher.ts";
 import { PlayerUpdateDTO } from "../common.ts";
@@ -9,7 +9,7 @@ export class PlayerUpdater {
   ) { }
 
   public updatePlayer(data: PlayerUpdateDTO) {
-    this.dispatcher.send(playerDataUpdateGADef, data);
+    this.dispatcher.send(clientUpdatingMyPlayerGADef, data);
   }
 }
 

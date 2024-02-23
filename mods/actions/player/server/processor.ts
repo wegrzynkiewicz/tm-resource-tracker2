@@ -1,4 +1,4 @@
-import { playerDataUpdateGADef, providePlayerDataUpdateGAHandler } from "./player-data-update.ts";
+import { clientUpdatingMyPlayerGADef, provideClientUpdatingMyPlayerGAHandler } from "../update/client-update-my-player.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { GAProcessor } from "../../../common/communication/processor.ts";
 import { startGameGADef } from "../../game/start/common.ts";
@@ -6,6 +6,6 @@ import { provideStartGameGAHandler } from "../../game/start/start-action-handler
 
 export function feedServerGAProcessor(resolver: ServiceResolver, processor: GAProcessor) {
   const handlers = processor.handlers;
-  handlers.set(playerDataUpdateGADef.kind, resolver.resolve(providePlayerDataUpdateGAHandler));
   handlers.set(startGameGADef.kind, resolver.resolve(provideStartGameGAHandler));
+  handlers.set(clientUpdatingMyPlayerGADef.kind, resolver.resolve(provideClientUpdatingMyPlayerGAHandler));
 }
