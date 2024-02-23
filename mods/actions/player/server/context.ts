@@ -77,9 +77,9 @@ export class ServerPlayerContextManager {
     });
     await webSocketChannel.ready;
 
-    this.creates.emit(serverPlayerContext);
-
     this.players.set(playerId, serverPlayerContext);
+    this.creates.emit(serverPlayerContext);
+    
     return serverPlayerContext;
   }
 

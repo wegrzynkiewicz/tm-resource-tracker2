@@ -19,7 +19,7 @@ export class PlayingAppView {
     const $main = div_empty("app_main");
     const scrollNodes = createScroll($main, this.$content);
 
-    this.$root = div_nodes("app", [
+    this.$root = div_nodes("app _with-toolbar", [
       top.$root,
       ...scrollNodes,
       modalManager.$root,
@@ -32,17 +32,8 @@ export class PlayingAppView {
     this.$root.appendChild(this.modalManager.$root);
     document.body.replaceChildren(this.$root);
   }
-
-  public showToolbar() {
-    this.$root.classList.add("_with-toolbar");
-    this.toolbar.show();
-  }
-
-  public hideToolbar() {
-    this.$root.classList.remove("_with-toolbar");
-    this.toolbar.hide();
-  }
 }
+
 
 export function providePlayingAppView(resolver: ServiceResolver) {
   return new PlayingAppView(

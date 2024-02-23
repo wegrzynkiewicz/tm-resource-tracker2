@@ -5,9 +5,7 @@ import { cryptoRandomString } from "../../../apps/server/deps.ts";
 import { GlobalContext, provideGlobalContext } from "../../../common/global.ts";
 import { LoggerFactory, provideLoggerFactory } from "../../../common/logger/logger-factory.ts";
 import { provideLogger } from "../../../common/logger/global.ts";
-import { providePlayerBroadcast } from "../../player/broadcast.ts";
 import { provideServerPlayerContextManager } from "../../player/server/context.ts";
-import { provideGameStageBroadcast } from "../stage/game-stage-broadcast.ts";
 import { provideGameStageManager } from "../stage/game-stage-manager.ts";
 
 export interface ServerGameContextIdentifier {
@@ -52,20 +50,11 @@ export class ServerGameContextManager {
     resolver.inject(provideServerGameContext, serverGameContext);
     resolver.inject(provideLogger, logger);
 
-    const serverPlayerContextManager = resolver.resolve(provideServerPlayerContextManager);
-    {
-      const playerBroadcast = resolver.resolve(providePlayerBroadcast);
-      serverPlayerContextManager.creates.on(() => playerBroadcast.sendPlayersData());
-      serverPlayerContextManager.deletes.on(() => playerBroadcast.sendPlayersData());
-
-      const gameStageBroadcast = resolver.resolve(provideGameStageBroadcast);
-      serverPlayerContextManager.creates.on((ctx) => gameStageBroadcast.sendToPlayerWithContext(ctx));
-    }
-
     const gameStageManager = resolver.resolve(provideGameStageManager);
     {
-      const gameStageBroadcast = resolver.resolve(provideGameStageBroadcast);
-      gameStageManager.updates.on((stage) => gameStageBroadcast.sendToPlayers(stage));
+      const serverPlayerContextManager = resolver.resolve(provideServerPlayerContextManager);
+      serverPlayerContextManager.creates.on((ctx) => gameStageManager.handlePlayerContextCreation(ctx));
+      serverPlayerContextManager.deletes.on((ctx) => gameStageManager.handlePlayerContextDeletion(ctx));
     }
 
     this.games.set(gameId, serverGameContext);

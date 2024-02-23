@@ -4,7 +4,7 @@ import { Player } from "../player/common.ts";
 
 export interface PlayingGame {
   players: Player[];
-  generation: number;
+  initPoints: number;
 }
 
 export function providePlayingGame(): PlayingGame {

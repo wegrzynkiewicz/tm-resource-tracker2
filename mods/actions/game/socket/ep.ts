@@ -4,7 +4,6 @@ import { EPHandler, EPContext } from "../../../common/web/endpoint.ts";
 import { ServerGameContextManager, provideServerGameContextManager } from "../server/context.ts";
 import { TokenManager, provideTokenManager } from "../../token/manager.ts";
 import { provideServerPlayerContextManager } from "../../player/server/context.ts";
-import { providePlayerBroadcast } from "../../player/broadcast.ts";
 import { parseGameSocketEPRequest } from "./common.ts";
 
 export class GameSocketEPHandler implements EPHandler {
@@ -28,9 +27,6 @@ export class GameSocketEPHandler implements EPHandler {
 
     const playerContextManager = resolver.resolve(provideServerPlayerContextManager);
     await playerContextManager.createServerPlayerContext({ playerId, socket });
-
-    const playerBroadcast = resolver.resolve(providePlayerBroadcast);
-    playerBroadcast.sendPlayersData();
 
     return response;
   }
