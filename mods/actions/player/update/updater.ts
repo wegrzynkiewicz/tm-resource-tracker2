@@ -1,7 +1,7 @@
-import { clientUpdatingMyPlayerGADef } from "./client-update-my-player.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { GADispatcher, provideGADispatcher } from "../../../common/communication/dispatcher.ts";
 import { PlayerUpdateDTO } from "../common.ts";
+import { clientUpdatingMyPlayerGADef } from "./common.ts";
 
 export class PlayerUpdater {
   public constructor(
