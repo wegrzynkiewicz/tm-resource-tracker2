@@ -1,6 +1,9 @@
+import { provideGADispatcher } from "../../../common/communication/dispatcher.ts";
 import { ServiceResolver } from "../../../common/dependency.ts";
 import { GameStage } from "../../game/stage/common.ts";
 import { PlayerBroadcast, providePlayerBroadcast } from "../player-broadcast.ts";
+import { ServerPlayerContext } from "../server/context.ts";
+import { waitingGameStageGADef } from "./common.ts";
 import { waitingPlayersGADef } from "./common.ts";
 
 export class WaitingGameStage implements GameStage {
@@ -10,7 +13,10 @@ export class WaitingGameStage implements GameStage {
     private readonly playerBroadcast: PlayerBroadcast,
   ) { }
 
-  public handlePlayerContextCreation() {
+  public handlePlayerContextCreation(context: ServerPlayerContext) {
+    const { resolver } = context;
+    const dispatcher = resolver.resolve(provideGADispatcher);
+    dispatcher.send(waitingGameStageGADef, null);
     this.broadcastPlayers();
   }
 
@@ -24,6 +30,7 @@ export class WaitingGameStage implements GameStage {
   }
 
   public run() {
+    this.playerBroadcast.send(waitingGameStageGADef, null);
     this.broadcastPlayers();
   }
 }

@@ -7,7 +7,8 @@ import { ClientGameContextManager, provideClientGameContextManager } from "./con
 import { provideCreateGameChannel, provideJoinGameChannel } from "./source.ts";
 import { JoinGame } from "../join/common.ts";
 import { provideQuitGameChannel } from "../quit/modal.ts";
-import { HomepageView, provideHomepageView } from "../../page/home/homepage.ts";
+import { provideHomepageView } from "../../page/home/homepage.ts";
+import { GlobalContext, provideGlobalContext } from "../../../common/global.ts";
 
 export class ClientGameManager {
 
@@ -15,7 +16,7 @@ export class ClientGameManager {
     private config: ClientConfig,
     private clientGameContextManager: ClientGameContextManager,
     createGameChannel: Channel<PlayerUpdateDTO>,
-    private homepage: HomepageView,
+    private globalContext: GlobalContext,
     joinGameChannel: Channel<JoinGame>,
     quitGameChannel: Channel<null>,
   ) {
@@ -58,7 +59,7 @@ export class ClientGameManager {
     this.clientGameContextManager.deleteClientGameContext();
     const token = localStorage.getItem('token');
     if (token === null) {
-      this.homepage.render();
+      this.renderHomepage();
       return;
     }
     const { apiUrl } = this.config;
@@ -69,14 +70,14 @@ export class ClientGameManager {
       },
     });
     localStorage.removeItem('token');
-    this.homepage.render();
+    this.renderHomepage();
   }
 
   public async bootstrap() {
     const { apiUrl } = this.config;
     const token = localStorage.getItem('token');
     if (token === null) {
-      this.homepage.render();
+      this.renderHomepage();
       return;
     }
     const envelope = await fetch(`${apiUrl}/games/read`, {
@@ -88,11 +89,15 @@ export class ClientGameManager {
     const data = await envelope.json();
     if (data.error) {
       localStorage.removeItem('token');
-      this.homepage.render();
+      this.renderHomepage();
       return;
     }
     const response = data as GameResponse;
     this.clientGameContextManager.createClientGameContext(response);
+  }
+
+  private renderHomepage() {
+    this.globalContext.resolver.resolve(provideHomepageView).render();
   }
 }
 
@@ -101,7 +106,7 @@ export function provideClientGameManager(resolver: ServiceResolver) {
     resolver.resolve(provideClientConfig),
     resolver.resolve(provideClientGameContextManager),
     resolver.resolve(provideCreateGameChannel),
-    resolver.resolve(provideHomepageView),
+    resolver.resolve(provideGlobalContext),
     resolver.resolve(provideJoinGameChannel),
     resolver.resolve(provideQuitGameChannel),
   );

@@ -9,7 +9,7 @@ import { provideGAProcessor } from "../../../common/communication/processor.ts";
 import { provideWebSocket, provideWebSocketChannel } from "../../../common/communication/socket.ts";
 import { provideLogger } from "../../../common/logger/global.ts";
 import { LoggerFactory, provideLoggerFactory } from "../../../common/logger/logger-factory.ts";
-import { Player, providePlayer } from "../../player/common.ts";
+import { providePlayer } from "../../player/common.ts";
 import { ClientConfig, provideClientConfig } from "../../../apps/client/features/config.ts";
 import { GameResponse } from "../game.ts";
 

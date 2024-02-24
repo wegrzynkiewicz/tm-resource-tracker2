@@ -1,6 +1,12 @@
 import { GADefinition } from "../../../common/communication/define.ts";
 import { Player } from "../common.ts";
 
+export type WaitingGameStageGA = null
+
+export const waitingGameStageGADef: GADefinition<WaitingGameStageGA> = {
+  kind: 'waiting-game-stage',
+};
+
 export interface WaitingPlayersGA {
   players: Player[];
 }
