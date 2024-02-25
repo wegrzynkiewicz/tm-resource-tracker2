@@ -61,7 +61,7 @@ body {
   --app-content-height: calc(100dvh - 32px - 70px - 10px);
   align-items: stretch;
   background-image: url(../images/bg-portrait.jpg);
-  background-position: calc(100% * var(--animate-parallax-current) / var(--animate-parallax-total)) center;
+  background-position: calc(50% + 15% * var(--animate-parallax-current) / var(--animate-parallax-total)) center;
   background-repeat: no-repeat;
   color: var(--color-text);
   display: grid;
@@ -248,6 +248,7 @@ body {
   transition: margin 0.5s ease-out;
   height: 100%;
   overflow-x: hidden;
+  touch-action: pan-y;
 }
 
 .panel_item {
