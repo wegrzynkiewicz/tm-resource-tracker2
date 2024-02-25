@@ -1,8 +1,8 @@
-import { div_empty, div_nodes, div_text } from "../../../common/frontend-framework/dom.ts";
-import { createPanel } from "./app/panel.ts";
-import { createResource } from "./resource.ts";
-import { Channel } from "../../../common/channel.ts";
-import { HistoryEntry, HistoryGenerationEntry, HistorySingleEntry, HistorySummaryEntry, Player } from "../../../common/history.ts";
+import { createResource } from "../../apps/client/features/resource.ts";
+import { Channel } from "../../common/channel.ts";
+import { div_nodes, div_empty, div_text } from "../../common/frontend-framework/dom.ts";
+import { HistoryEntry, HistorySingleEntry, HistorySummaryEntry, HistoryGenerationEntry } from "./common.ts";
+import { Player } from "../player/common.ts";
 
 export const historyEntryCreatedChannel = new Channel<HistoryEntry>();
 
@@ -89,9 +89,9 @@ export function createPlayerHistory(panelPlayerId: string | null) {
   return container;
 }
 
-export function createHistoriesPanel() {
-  return createPanel([
-    createPlayerHistory(null),
-    ...["1"].map(createPlayerHistory),
-  ]);
+export class HistoryItemView {
+  public readonly $root: HTMLDivElement;
+  public constructor() {
+    this.$root = createPlayerHistory(null);
+  }
 }

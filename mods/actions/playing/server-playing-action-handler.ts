@@ -1,6 +1,9 @@
 import { GAHandler } from "../../common/communication/define.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
+import { examples } from "../history/common.ts";
 import { ClientGameContext, provideClientGameContext } from "../game/client/context.ts";
+import { historyEntryCreatedChannel } from "../history/history-item.ts";
+import { provideHistoryView } from "../history/history-view.ts";
 import { provideProjectsView } from "../projects/projects-view.ts";
 import { provideSupplyView } from "../supply/supply-view.ts";
 import { PlayingGameGA, providePlayingGame } from "./common.ts";
@@ -18,12 +21,20 @@ export class ServerPlayingGameGAHandler implements GAHandler<PlayingGameGA>{
     const signal = resolver.resolve(provideToolbarSwitcher);
     const supplies = resolver.resolve(provideSupplyView);
     const projects = resolver.resolve(provideProjectsView);
+    const histories = resolver.resolve(provideHistoryView);
     signal.on((key) => {
       switch (key) {
         case "supplies": return supplies.render();
         case "projects": return projects.render();
+        case "histories": return histories.render();
       }
     });
+
+    historyEntryCreatedChannel.emit(examples[0]);
+    historyEntryCreatedChannel.emit(examples[1]);
+    historyEntryCreatedChannel.emit(examples[2]);
+    historyEntryCreatedChannel.emit(examples[3]);
+    
     supplies.render();
   }
 }

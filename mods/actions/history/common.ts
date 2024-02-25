@@ -1,4 +1,4 @@
-import { Resource } from "./resources.ts";
+import { Resource } from "../../common/resources.ts";
 
 export interface Player {
   playerId: string;
