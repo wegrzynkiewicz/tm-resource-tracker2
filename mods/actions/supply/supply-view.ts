@@ -3,6 +3,8 @@ import { ModalManager, provideModalManager } from "../../apps/client/features/mo
 import { ServiceResolver } from "../../common/dependency.ts";
 import { PlayingAppView } from "../playing/playing-app-view.ts";
 import { providePlayingAppView } from "../playing/playing-app-view.ts";
+import { PlayingTop } from "../playing/playing-top.ts";
+import { providePlayingTop } from "../playing/playing-top.ts";
 import { SupplyItemView } from "./supply-item.ts";
 
 export class SupplyView {
@@ -11,6 +13,7 @@ export class SupplyView {
 
   public constructor(
     private readonly modalManager: ModalManager,
+    private readonly top: PlayingTop,
     private readonly app: PlayingAppView,
   ) {
     this.items = [1, 2, 3].map(() => new SupplyItemView(modalManager));
@@ -19,13 +22,18 @@ export class SupplyView {
   }
 
   public render() {
-    this.app.render(this.$root);
+    this.top.setLabel("Supplies");
+    this.app.render(
+      this.top.$root,
+      this.$root,
+    );
   }
 }
 
 export function provideSupplyView(resolver: ServiceResolver) {
   return new SupplyView(
     resolver.resolve(provideModalManager),
+    resolver.resolve(providePlayingTop),
     resolver.resolve(providePlayingAppView),
   );
 }
