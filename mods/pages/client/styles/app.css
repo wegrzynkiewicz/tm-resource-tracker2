@@ -60,16 +60,12 @@ body {
 .app {
   --app-content-height: calc(100dvh - 32px - 70px - 10px);
   align-items: stretch;
-  background-image: url(../images/bg-portrait.jpg);
-  background-position: calc(50% + 15% * var(--animate-parallax-current) / var(--animate-parallax-total)) center;
-  background-repeat: no-repeat;
   color: var(--color-text);
   display: grid;
   grid-template-columns: [left] 100lvw [right];
   grid-template-rows: [top] 32px [content] 10px [shadow-top-end] 1fr [shadow-bottom] 10px [end];
   height: 100dvh;
   min-width: 380px;
-  transition: background-position 0.5s ease-out;
 }
 
 .app._with-toolbar {
@@ -77,9 +73,12 @@ body {
 }
 
 .app_main {
+  background-image: url(../images/bg-portrait.jpg);
+  background-position: calc(50% + 15% * var(--animate-parallax-current) / var(--animate-parallax-total)) center;
+  background-repeat: no-repeat;
   grid-column: left / right;
   grid-row: content / toolbar;
-  background-color: var(--color-background);
+  transition: background-position 0.5s ease-out;
   z-index: 1;
 }
 
@@ -136,19 +135,13 @@ body {
   padding: 16px;
 }
 
-.modal_background {
-  background-image: url(../images/bg-portrait.jpg);
-  background-repeat: no-repeat;
-  background-position: 50%;
-  border-radius: 20px;
-}
-
 .modal_container {
   align-items: stretch;
   display: flex;
   flex-direction: column;
   gap: 24px 0;
-  background-color: var(--color-background);
+  background-image: url(../images/bg-portrait.jpg);
+  background-position: 50%;
   background-repeat: no-repeat;
   border-color: var(--color-frame);
   border-radius: 20px;

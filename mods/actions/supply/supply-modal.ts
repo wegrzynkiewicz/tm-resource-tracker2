@@ -75,31 +75,29 @@ export function createSupplyModal(options: Resource) {
   ]);
 
   const $root = div_nodes("modal", [
-    div_nodes("modal_background", [
-      div_nodes("modal_container", [
-        div_text("modal_title", `Change your ${target}:`),
-        div_nodes("modal_target", [
-          div_nodes(`modal_target-supply _${target}`, [
-            div_text("box _counter", count.toString()),
-          ]),
-          img_props({
-            className: "modal_target-icon",
-            width: "64",
-            height: "64",
-            alt: "supply-icon",
-            src: `/images/supplies/${type}.svg`,
-          }),
+    div_nodes("modal_container", [
+      div_text("modal_title", `Change your ${target}:`),
+      div_nodes("modal_target", [
+        div_nodes(`modal_target-supply _${target}`, [
+          div_text("box _counter", count.toString()),
         ]),
-        div_nodes("modal_count", [
-          span_text("modal_count-label _left", "by"),
-          $input,
-          span_text("modal_count-label _right", "units"),
-        ]),
-        $calculator,
-        div_nodes("modal_buttons", [
-          $cancel,
-          $confirm,
-        ]),
+        img_props({
+          className: "modal_target-icon",
+          width: "64",
+          height: "64",
+          alt: "supply-icon",
+          src: `/images/supplies/${type}.svg`,
+        }),
+      ]),
+      div_nodes("modal_count", [
+        span_text("modal_count-label _left", "by"),
+        $input,
+        span_text("modal_count-label _right", "units"),
+      ]),
+      $calculator,
+      div_nodes("modal_buttons", [
+        $cancel,
+        $confirm,
       ]),
     ]),
   ]);

@@ -24,15 +24,13 @@ export function createPlayerModal(input?: PlayerUpdateDTO) {
   const $create = div_text("box _button", "Create");
 
   const $root = form({ className: "modal" }, [
-    div_nodes("modal_background", [
-      div_nodes("modal_container", [
-        div_text("modal_title", "Type your name and choose a color:"),
-        nameBox.$root,
-        colorBox.$root,
-        div_nodes("modal_buttons", [
-          $cancel,
-          $create,
-        ]),
+    div_nodes("modal_container", [
+      div_text("modal_title", "Type your name and choose a color:"),
+      nameBox.$root,
+      colorBox.$root,
+      div_nodes("modal_buttons", [
+        $cancel,
+        $create,
       ]),
     ]),
   ]);

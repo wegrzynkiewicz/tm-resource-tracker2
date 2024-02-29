@@ -19,13 +19,11 @@ export function createQuestionModal(input: QuestionModalInput) {
   const $confirm = div_text("box _button", confirmText);
 
   const $root = form({ className: "modal" }, [
-    div_nodes("modal_background", [
-      div_nodes("modal_container", [
-        div_text("modal_title", titleText),
-        div_nodes("modal_buttons", [
-          $cancel,
-          $confirm,
-        ]),
+    div_nodes("modal_container", [
+      div_text("modal_title", titleText),
+      div_nodes("modal_buttons", [
+        $cancel,
+        $confirm,
       ]),
     ]),
   ]);

@@ -24,16 +24,14 @@ export function createJoinModal() {
   const $join = div_text("box _button", "Join");
 
   const $root = div_nodes("modal", [
-    div_nodes("modal_background", [
-      div_nodes("modal_container", [
-        div_text("modal_title", "Type game ID and your details:"),
-        gameBox.$root,
-        nameBox.$root,
-        colorBox.$root,
-        div_nodes("modal_buttons", [
-          $cancel,
-          $join,
-        ]),
+    div_nodes("modal_container", [
+      div_text("modal_title", "Type game ID and your details:"),
+      gameBox.$root,
+      nameBox.$root,
+      colorBox.$root,
+      div_nodes("modal_buttons", [
+        $cancel,
+        $join,
       ]),
     ]),
   ]);
