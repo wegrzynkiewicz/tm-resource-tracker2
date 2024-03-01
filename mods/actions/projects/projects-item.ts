@@ -3,13 +3,13 @@ import { Project, projects } from "./common.ts";
 
 export function createProject({ name }: Project) {
   return div_nodes("project", [
-    button_text("box _button _project", "-"),
     img_props({
       className: "project_icon",
       width: "40",
       height: "40",
       src: `/images/projects/${name}.png`,
     }),
+    button_text("box _button _project", "-"),
     div_text("box _counter", "0"),
     button_text("box _button _project", "+"),
   ]);

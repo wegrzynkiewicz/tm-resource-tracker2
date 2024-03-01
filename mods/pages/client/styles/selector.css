@@ -9,7 +9,7 @@
 
 .selector_panel {
   --index: 0;
-  --panel-width: 80px;
+  --panel-width: 120px;
   overflow-x: hidden;
   width: var(--panel-width);
   max-width: var(--panel-width);

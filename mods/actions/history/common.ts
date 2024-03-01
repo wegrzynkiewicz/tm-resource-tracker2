@@ -1,10 +1,5 @@
 import { Resource } from "../../common/resources.ts";
-
-export interface Player {
-  playerId: string;
-  name: string;
-  color: string;
-}
+import { Player } from "../player/common.ts";
 
 export interface HistoryCommon {
   historyEntryId: string;
@@ -34,9 +29,10 @@ export const examples: HistoryEntry[] = [
   {
     historyEntryId: "1",
     player: {
-      playerId: "1",
+      playerId: 1,
       name: "Player 1",
       color: "red",
+      isAdmin: true,
     },
     type: "single",
     resource: { count: -22, target: "amount", type: "gold" },
@@ -45,9 +41,10 @@ export const examples: HistoryEntry[] = [
   {
     historyEntryId: "2",
     player: {
-      playerId: "2",
+      playerId: 2,
       name: "Player 2",
       color: "blue",
+      isAdmin: false,
     },
     type: "summary",
     resources: [
@@ -66,9 +63,10 @@ export const examples: HistoryEntry[] = [
   {
     historyEntryId: "3",
     player: {
-      playerId: "3",
+      playerId: 3,
       name: "Bardzo długie imię gracza, żę jooo i trochę",
       color: "green",
+      isAdmin: false,
     },
     type: "single",
     resource: { count: -11, target: "production", type: "titan" },
