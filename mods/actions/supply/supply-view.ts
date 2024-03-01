@@ -1,9 +1,10 @@
 import { createPanel } from "../../apps/client/features/app/panel.ts";
 import { ModalManager, provideModalManager } from "../../apps/client/features/modal.ts";
+import { SelectorStore } from "../../apps/client/features/selector.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { PlayingAppView } from "../playing/playing-app-view.ts";
 import { providePlayingAppView } from "../playing/playing-app-view.ts";
-import { PlayingTop } from "../playing/playing-top.ts";
+import { PlayingTop, providePlayingPlayerStore } from "../playing/playing-top.ts";
 import { providePlayingTop } from "../playing/playing-top.ts";
 import { SupplyItemView } from "./supply-item.ts";
 
@@ -15,10 +16,11 @@ export class SupplyView {
     private readonly modalManager: ModalManager,
     private readonly top: PlayingTop,
     private readonly app: PlayingAppView,
+    private readonly playerIndex: SelectorStore,
   ) {
     this.items = [1, 2, 3].map(() => new SupplyItemView(modalManager));
     const roots = this.items.map(({ $root }) => $root);
-    this.$root = createPanel(roots);
+    this.$root = createPanel(playerIndex, roots);
   }
 
   public render() {
@@ -35,5 +37,6 @@ export function provideSupplyView(resolver: ServiceResolver) {
     resolver.resolve(provideModalManager),
     resolver.resolve(providePlayingTop),
     resolver.resolve(providePlayingAppView),
+    resolver.resolve(providePlayingPlayerStore),
   );
 }

@@ -1,27 +1,27 @@
 import { div_nodes, div_text } from "../../common/frontend-framework/dom.ts";
-import { SelectorOption, createSelector } from "../../apps/client/features/selector.ts";
+import { SelectorOption, SelectorStore, createSelector } from "../../apps/client/features/selector.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
-import { PlayingGame, providePlayingGame } from "../playing/common.ts";
+import { providePlayingGame } from "../playing/common.ts";
+
+export function provideHistoryPlayerStore(resolver: ServiceResolver) {
+  const playingGame = resolver.resolve(providePlayingGame);
+  const options: SelectorOption[] = [];
+  options.push({ key: "all", name: "All players" });
+  for (const { color, name } of playingGame.players) {
+    options.push({ key: color, name });
+  }
+  return new SelectorStore(options);
+}
 
 export class HistoryTop {
   public readonly $root: HTMLDivElement;
-  private readonly $label: HTMLDivElement;
   public constructor(
-    readonly playingGame: PlayingGame
+    readonly historyPlayerStore: SelectorStore
   ) {
-    this.$label = div_text("top_label", "History");
-    
-    const options: SelectorOption[] = [];
-    options.push({ key: "all", name: "All players" });
-    for (const { color, name } of playingGame.players) {
-      options.push({ key: color, name });
-    }
-    const color = createSelector(options);
-
     this.$root = div_nodes("top _with-controller", [
-      this.$label,
+      div_text("top_label", "History"),
       div_nodes("top_controller", [
-        color.$root,
+        createSelector(historyPlayerStore),
       ]),
     ]);
   }
@@ -29,6 +29,6 @@ export class HistoryTop {
 
 export function provideHistoryTop(resolver: ServiceResolver) {
   return new HistoryTop(
-    resolver.resolve(providePlayingGame),
+    resolver.resolve(provideHistoryPlayerStore)
   );
 }

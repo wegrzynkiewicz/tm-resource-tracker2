@@ -27,6 +27,13 @@ export class SelectorStore extends Store {
     super();
   }
 
+  public setIndex(index: number) {
+    if (index >= 0 && index < this.options.length) {
+      this.index = index;
+      this.emit();
+    }
+  }
+
   public setValue(value: string) {
     const index = this.options.findIndex((option) => option.key === value);
     if (index !== -1) {
@@ -54,24 +61,22 @@ export class SelectorStore extends Store {
   }
 }
 
-export function createSelector(options: SelectorOption[]) {
-  const store = new SelectorStore(options);
-
+export function createSelector(store: SelectorStore) {
   const $left = svg_icon("selector_icon", "arrow-left");
   const $right = svg_icon("selector_icon", "arrow-right");
   const $panel = div_nodes("selector_panel", [
-    div_nodes("selector_panel-container", options.map(createSelectorOption)),
+    div_nodes("selector_panel-container", store.options.map(createSelectorOption)),
   ]);
   const $root = div_nodes("selector", [$left, $panel, $right]);
 
   store.on(({ index }) => {
     $panel.style.setProperty("--index", `${index}`);
     $left.classList.toggle("_disabled", index === 0);
-    $right.classList.toggle("_disabled", index === options.length - 1);
+    $right.classList.toggle("_disabled", index === store.options.length - 1);
   });
 
   onClick($left, () => store.dec());
   onClick($right, () => store.inc());
 
-  return { $root, store };
+  return $root;
 }

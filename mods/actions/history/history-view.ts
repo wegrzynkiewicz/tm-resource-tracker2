@@ -1,4 +1,5 @@
 import { createPanel } from "../../apps/client/features/app/panel.ts";
+import { SelectorStore } from "../../apps/client/features/selector.ts";
 import { Channel } from "../../common/channel.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
 import { PlayingGame, providePlayingGame } from "../playing/common.ts";
@@ -7,7 +8,7 @@ import { providePlayingAppView } from "../playing/playing-app-view.ts";
 import { HistoryEntry } from "./common.ts";
 import { HistoryShowAll, HistoryShowPlayer } from "./history-item.ts";
 import { HistoryItemView, provideHistoryChannel } from "./history-item.ts";
-import { HistoryTop, provideHistoryTop } from "./history-top.ts";
+import { HistoryTop, provideHistoryPlayerStore, provideHistoryTop } from "./history-top.ts";
 
 export class HistoryView {
   public readonly items: HistoryItemView[];
@@ -18,6 +19,7 @@ export class HistoryView {
     private readonly top: HistoryTop,
     private readonly playingGame: PlayingGame,
     private readonly historyChannel: Channel<HistoryEntry>,
+    private readonly historyPlayerStore: SelectorStore,
   ) {
     this.items = [];
     const all = new HistoryItemView(
@@ -33,7 +35,7 @@ export class HistoryView {
       this.items.push(item);
     }
     const roots = this.items.map(({ $root }) => $root);
-    this.$root = createPanel(roots);
+    this.$root = createPanel(historyPlayerStore, roots);
   }
 
   public render() {
@@ -50,5 +52,6 @@ export function provideHistoryView(resolver: ServiceResolver) {
     resolver.resolve(provideHistoryTop),
     resolver.resolve(providePlayingGame),
     resolver.resolve(provideHistoryChannel),
+    resolver.resolve(provideHistoryPlayerStore),
   );
 }

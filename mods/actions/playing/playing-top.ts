@@ -1,25 +1,28 @@
 import { div_nodes, div_text } from "../../common/frontend-framework/dom.ts";
-import { createSelector } from "../../apps/client/features/selector.ts";
+import { SelectorOption, SelectorStore, createSelector } from "../../apps/client/features/selector.ts";
 import { ServiceResolver } from "../../common/dependency.ts";
-import { PlayingGame, providePlayingGame } from "./common.ts";
+import { providePlayingGame } from "./common.ts";
+
+export function providePlayingPlayerStore(resolver: ServiceResolver) {
+  const playingGame = resolver.resolve(providePlayingGame);
+  const options: SelectorOption[] = [];
+  for (const { color, name } of playingGame.players) {
+    options.push({ key: color, name });
+  }
+  return new SelectorStore(options);
+}
 
 export class PlayingTop {
   public readonly $root: HTMLDivElement;
   private readonly $label: HTMLDivElement;
   public constructor(
-    readonly playingGame: PlayingGame
+    readonly playerIndex: SelectorStore,
   ) {
     this.$label = div_text("top_label", "TM Resource Tracker v2");
-    const options = playingGame.players.map(({ color, name }) => ({
-      key: color,
-      name
-    }));
-    const color = createSelector(options);
-
     this.$root = div_nodes("top _with-controller", [
       this.$label,
       div_nodes("top_controller", [
-        color.$root,
+        createSelector(playerIndex),
       ]),
     ]);
   }
@@ -31,6 +34,6 @@ export class PlayingTop {
 
 export function providePlayingTop(resolver: ServiceResolver) {
   return new PlayingTop(
-    resolver.resolve(providePlayingGame),
+    resolver.resolve(providePlayingPlayerStore),
   );
 }
