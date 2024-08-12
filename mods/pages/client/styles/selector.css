@@ -19,7 +19,7 @@
   display: grid;
   grid-auto-flow: column;
   margin-left: calc(-1 * var(--panel-width) * var(--index));
-  transition: margin 0.5s ease-out;
+  transition: margin 0.3s ease-out;
   width: 100%;
 }
 

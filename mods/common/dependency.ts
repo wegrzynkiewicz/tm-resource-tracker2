@@ -4,7 +4,7 @@ export interface Provider<TInstance> {
   (resolver: ServiceResolver): TInstance;
 }
 
-export type AnyProvider = Provider<any>;
+export type UnknownProvider = Provider<unknown>;
 
 export class ServiceResolver {
 
@@ -12,7 +12,7 @@ export class ServiceResolver {
     private readonly parent: ServiceResolver | null = null,
   ) { }
 
-  public readonly instances = new Map<AnyProvider, unknown>();
+  public readonly instances = new Map<UnknownProvider, unknown>();
 
   public inject<TInstance>(provider: Provider<TInstance>, instance: TInstance): void {
     this.instances.set(provider, instance);
