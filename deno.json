@@ -18,8 +18,7 @@
     }
   },
   "tasks": {
-    "bundle": "deno bundle --watch mods/apps/client/main.ts mods/pages/client/scripts/main.js",
-    "server": "deno run -A --watch mods/apps/server/index.ts",
-    "serve": "serve mods/pages/client"
+    "server": "deno run -A --watch app-server/entry.ts",
+    "serve": "deno run -A --watch app-client/bin/esbuild-dev.ts"
   }
 }

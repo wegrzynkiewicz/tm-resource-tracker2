@@ -1,0 +1,42 @@
+.edit-box {
+  align-items: stretch;
+  background: var(--color-box-primary);
+  border-color: var(--color-box-border);
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  display: flex;
+  height: 50px;
+}
+
+.edit-box._input {
+  justify-content: start;
+}
+
+.edit-box._selector {
+  justify-content: space-between;
+  padding-right: 12px;
+}
+
+.edit-box_label {
+  padding: 0px 12px;
+  font-size: 1.2rem;
+  align-self: center;
+  text-wrap: nowrap;
+}
+
+.edit-box_input {
+  background: var(--gradient-box-background);
+  border-right: none;
+  border-top: none;
+  border-bottom: none;
+  border-bottom-right-radius: 8px;
+  border-left: 2px solid var(--color-frame);
+  border-top-right-radius: 8px;
+  font-size: 1.2rem;
+  justify-content: center;
+  outline: none;
+  padding: 0 12px;
+  width: 100%;
+}

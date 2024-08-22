@@ -1,2 +1,2 @@
 *.log
-mods/pages/client/scripts/main.js
+app-client/public/dist
