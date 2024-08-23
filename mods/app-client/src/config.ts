@@ -5,7 +5,7 @@ export interface ClientConfig {
 
 export function provideClientConfig() {
   return {
-    apiUrl: "http://192.168.1.105:3008",
+    apiUrl: "http://localhost:3008",
     wsURL: "ws://192.168.1.105:3008",
   };
 }

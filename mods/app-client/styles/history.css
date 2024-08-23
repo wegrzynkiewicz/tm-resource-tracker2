@@ -50,7 +50,7 @@
 
 .history_generation {
   align-items: center;
-  background-image: url('../images/mars-generation.png');
+  background-image: url('/images/mars-generation.png');
   background-repeat: no-repeat;
   color: white;
   display: flex;

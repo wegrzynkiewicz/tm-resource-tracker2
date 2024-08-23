@@ -28,7 +28,7 @@
   --size: 60px;
   -webkit-text-stroke: 1px black;
   align-items: center;
-  background-image: url('../images/mars-generation.png');
+  background-image: url('/images/mars-generation.png');
   background-repeat: no-repeat;
   background-size: var(--size);
   color: white;

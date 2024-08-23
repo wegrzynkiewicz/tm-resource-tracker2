@@ -53,7 +53,7 @@ body {
 }
 
 .app_main {
-  background-image: url(../images/bg-portrait.jpg);
+  background-image: url(/images/bg-portrait.jpg);
   background-position: calc(50% + 15% * var(--animate-parallax-current) / var(--animate-parallax-total)) center;
   background-repeat: no-repeat;
   grid-column: left / right;
@@ -120,7 +120,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px 0;
-  background-image: url(../images/bg-portrait.jpg);
+  background-image: url(/images/bg-portrait.jpg);
   background-position: 50%;
   background-repeat: no-repeat;
   border-color: var(--color-frame);

@@ -1,0 +1,3 @@
+[submodule "mods/qcmf5"]
+	path = mods/qcmf5
+	url = ../qcmf5/

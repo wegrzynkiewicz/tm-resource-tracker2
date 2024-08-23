@@ -1,6 +1,6 @@
 {
   "imports": {
-    "@acme/": "./qcmf5/src/"
+    "@acme/": "./mods/qcmf5/mods/"
   },
   "compilerOptions": {
     
@@ -27,7 +27,7 @@
     }
   },
   "tasks": {
-    "server": "deno run -A --watch app-server/entry.ts",
-    "serve": "deno run -A --watch app-client/bin/esbuild-dev.ts"
+    "server": "deno run -A --watch mods/app-server/entry.ts",
+    "serve": "deno run -A --watch mods/app-client/bin/esbuild-dev.ts"
   }
 }
