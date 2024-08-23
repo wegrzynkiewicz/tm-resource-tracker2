@@ -1,5 +1,9 @@
 {
+  "imports": {
+    "@acme/": "./qcmf5/src/"
+  },
   "compilerOptions": {
+    
     "lib": [
       "ESNext",
       "DOM",
@@ -8,8 +12,13 @@
     ]
   },
   "lint": {
+    "exclude": [
+      "**/dist/*.js"
+    ],
     "rules": {
-      "exclude": ["require-await"]
+      "exclude": [
+        "require-await"
+      ]
     }
   },
   "fmt": {

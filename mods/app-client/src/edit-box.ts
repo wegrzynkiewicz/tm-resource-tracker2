@@ -1,4 +1,3 @@
-import { editBox } from "./edit-box.css";
 import { div_nodes, input_props, label_props } from "../../core/frontend-framework/dom.ts";
 
 export function createEditBox(

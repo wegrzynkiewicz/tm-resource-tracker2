@@ -10,7 +10,6 @@ import { PlayerUpdateDTO } from "../../../common/player/common.ts";
 import { JoinGame } from "../../../common/game/join/common.ts";
 import { provideIntroAppView } from "../../../common/page/intro/intro-app.ts";
 import { IntroAppView } from "../../../common/page/intro/intro-app.ts";
-import { box } from "../../styles/box.module.css"; 
 
 export class HomepageView {
   public readonly $root: HTMLDivElement;
@@ -20,7 +19,7 @@ export class HomepageView {
     private readonly createGameChannel: Channel<PlayerUpdateDTO>,
     private readonly joinGameChannel: Channel<JoinGame>,
   ) {
-    const $create = button_text(`${box}`, "New Game");
+    const $create = button_text(`box _action`, "New Game");
     const $join = button_text("box _action", "Join the Game");
     const $about = button_text("box _action", "About");
     this.$root = div_nodes("homepage", [
