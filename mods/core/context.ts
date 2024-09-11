@@ -1,7 +1,7 @@
-import { ServiceResolver } from "./dependency.ts";
+import { DependencyResolver } from "@acme/dependency/injection.ts";
 
 export interface Context<TIdentifier> {
   descriptor: string;
   identifier: TIdentifier;
-  resolver: ServiceResolver;
+  resolver: DependencyResolver;
 }

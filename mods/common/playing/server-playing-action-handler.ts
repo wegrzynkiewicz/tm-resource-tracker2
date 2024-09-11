@@ -1,6 +1,6 @@
 import { GAHandler } from "../../core/communication/define.ts";
-import { ServiceResolver } from "../../core/dependency.ts";
-import { HistoryEntry, examples } from "../history/common.ts";
+import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { examples, HistoryEntry } from "../history/common.ts";
 import { ClientGameContext, provideClientGameContext } from "../game/client/context.ts";
 import { provideHistoryChannel } from "../history/history-item.ts";
 import { provideHistoryView } from "../history/history-view.ts";
@@ -10,25 +10,28 @@ import { PlayingGameGA, providePlayingGame } from "./common.ts";
 import { provideToolbarSwitcher } from "./toolbar.ts";
 import { Channel } from "../../core/channel.ts";
 
-export class ServerPlayingGameGAHandler implements GAHandler<PlayingGameGA>{
+export class ServerPlayingGameGAHandler implements GAHandler<PlayingGameGA> {
   public constructor(
     private readonly clientGameContext: ClientGameContext,
     private readonly historyChannel: Channel<HistoryEntry>,
-  ) { }
+  ) {}
 
   public async handle(input: PlayingGameGA): Promise<void> {
     const { resolver } = this.clientGameContext;
-    resolver.inject(providePlayingGame, input);
+    resolver.inject(playingGameDependency, input);
 
-    const signal = resolver.resolve(provideToolbarSwitcher);
-    const supplies = resolver.resolve(provideSupplyView);
-    const projects = resolver.resolve(provideProjectsView);
-    const histories = resolver.resolve(provideHistoryView);
+    const signal = resolver.resolve(toolbarSwitcherDependency);
+    const supplies = resolver.resolve(supplyViewDependency);
+    const projects = resolver.resolve(projectsViewDependency);
+    const histories = resolver.resolve(historyViewDependency);
     signal.on((key) => {
       switch (key) {
-        case "supplies": return supplies.render();
-        case "projects": return projects.render();
-        case "histories": return histories.render();
+        case "supplies":
+          return supplies.render();
+        case "projects":
+          return projects.render();
+        case "histories":
+          return histories.render();
       }
     });
 
@@ -36,14 +39,14 @@ export class ServerPlayingGameGAHandler implements GAHandler<PlayingGameGA>{
     this.historyChannel.emit(examples[1]);
     this.historyChannel.emit(examples[2]);
     this.historyChannel.emit(examples[3]);
-    
+
     supplies.render();
   }
 }
 
-export function provideServerPlayingGameGAHandler(resolver: ServiceResolver) {
+export function provideServerPlayingGameGAHandler(resolver: DependencyResolver) {
   return new ServerPlayingGameGAHandler(
-    resolver.resolve(provideClientGameContext),
-    resolver.resolve(provideHistoryChannel),
+    resolver.resolve(clientGameContextDependency),
+    resolver.resolve(historyChannelDependency),
   );
 }

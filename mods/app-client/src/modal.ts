@@ -1,5 +1,6 @@
 import { sleep } from "../../core/useful.ts";
-import { comment, div_empty } from "../../core/frontend-framework/dom.ts";
+import { defineDependency } from "@acme/dependency/injection.ts";
+import { comment, div } from "@acme/dom/nodes.ts";
 
 export interface ModalConfirmResponse<TValue> {
   type: "confirm";
@@ -14,12 +15,12 @@ export type ModalResponse<TValue> = ModalConfirmResponse<TValue> | ModalCancelRe
 
 export interface Modal<TValue> {
   $root: HTMLElement;
-  promise: Promise<ModalResponse<TValue>>;
+  ready: Promise<ModalResponse<TValue>>;
 }
 
 export class ModalManager {
-  public readonly $root = comment('modal-manager-anchor');
-  public readonly $overlay = div_empty("app_content-overlay");
+  public readonly $root = comment("modal-manager-anchor");
+  public readonly $overlay = div("app_content-overlay");
   public readonly style = getComputedStyle(this.$overlay);
 
   public async mount(modal: Modal<unknown>) {
@@ -28,7 +29,7 @@ export class ModalManager {
     await sleep(1);
     $overlay.classList.add("_enabled");
     $overlay.appendChild(modal.$root);
-    await modal.promise;
+    await modal.ready;
     $overlay.classList.remove("_enabled");
     await sleep(200);
     $overlay.replaceChildren();
@@ -39,3 +40,7 @@ export class ModalManager {
 export function provideModalManager() {
   return new ModalManager();
 }
+export const modalManagerDependency = defineDependency({
+  kind: "modal-manager",
+  provider: provideModalManager,
+});

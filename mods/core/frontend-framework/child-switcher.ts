@@ -5,7 +5,7 @@ export class ChildSwitcher {
 
   public constructor(
     private readonly root: Element,
-  ) { }
+  ) {}
 
   public switch(key: string) {
     const element = this.nodes.get(key);

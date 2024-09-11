@@ -1,18 +1,10 @@
-import { ServiceResolver } from "../../../core/dependency.ts";
 import { GAProcessor } from "../../../core/communication/processor.ts";
-import { provideWaitingPlayersGAHandler } from "../../player/waiting/waiting-players-action-handler.ts";
-import { waitingPlayersGADef } from "../../player/waiting/common.ts";
-import { provideServerUpdatedMyPlayerGAHandler } from "../../player/update/server-updated-my-player.ts";
-import { serverUpdatedMyPlayerGADef } from "../../player/update/server-updated-my-player.ts";
-import { provideServerPlayingGameGAHandler } from "../../playing/server-playing-action-handler.ts";
-import { playingGameGADef } from "../../playing/common.ts";
-import { provideWaitingGameStageGAHandler } from "../../player/waiting/waiting-game-stage-action-handler.ts";
-import { waitingGameStageGADef } from "../../player/waiting/common.ts";
+import { DependencyResolver } from "@acme/dependency/injection.ts";
 
-export function feedClientGAProcessor(resolver: ServiceResolver, gaProcessor: GAProcessor) {
+export function feedClientGAProcessor(resolver: DependencyResolver, gaProcessor: GAProcessor) {
   const handlers = gaProcessor.handlers;
-  handlers.set(waitingGameStageGADef.kind, resolver.resolve(provideWaitingGameStageGAHandler));
-  handlers.set(waitingPlayersGADef.kind, resolver.resolve(provideWaitingPlayersGAHandler));
-  handlers.set(serverUpdatedMyPlayerGADef.kind, resolver.resolve(provideServerUpdatedMyPlayerGAHandler));
-  handlers.set(playingGameGADef.kind, resolver.resolve(provideServerPlayingGameGAHandler));
+  // handlers.set(waitingGameStageGADef.kind, resolver.resolve(waitingGameStageGAHandler)Dependency);
+  // handlers.set(waitingPlayersGADef.kind, resolver.resolve(waitingPlayersGAHandler)Dependency);
+  // handlers.set(serverUpdatedMyPlayerGADef.kind, resolver.resolve(serverUpdatedMyPlayerGAHandler)Dependency);
+  // handlers.set(playingGameGADef.kind, resolver.resolve(serverPlayingGameGAHandler)Dependency);
 }

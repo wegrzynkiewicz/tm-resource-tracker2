@@ -16,7 +16,6 @@ export interface GADefinition<TData> {
 }
 export type AnyGADefinition = GADefinition<any>;
 
-
 export function provideReceivingGABus() {
   return new Channel<AnyGAEnvelope>();
 }

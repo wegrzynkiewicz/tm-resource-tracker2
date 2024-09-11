@@ -1,4 +1,3 @@
-import { button_text, div_nodes, div_text, img_props } from "../../core/frontend-framework/dom.ts";
 import { Project, projects } from "./common.ts";
 
 export function createProject({ name }: Project) {
@@ -9,9 +8,9 @@ export function createProject({ name }: Project) {
       height: "40",
       src: `/images/projects/${name}.png`,
     }),
-    button_text("box _button _project", "-"),
-    div_text("box _counter", "0"),
-    button_text("box _button _project", "+"),
+    button("box _button _project", "-"),
+    div("box _counter", "0"),
+    button("box _button _project", "+"),
   ]);
 }
 

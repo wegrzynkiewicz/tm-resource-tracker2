@@ -1,15 +1,12 @@
 import { colors } from "./color.ts";
-import { div_nodes, span_props } from "../../core/frontend-framework/dom.ts";
-import { SelectorStore, createSelector } from "../../app-client/src/selector.ts";
+import { createSelector, SelectorStore } from "../../app-client/src/utils/selector.ts";
+import { div_nodes, span } from "@acme/dom/nodes.ts";
 
-export function createColorSelectorBox() {
-  const store = new SelectorStore(colors);
-  const $selector = createSelector(store);
+export function createColorSelectorBox(name: string) {
+  const store = new SelectorStore([...colors]);
+  const $selector = createSelector(name, store);
   const $root = div_nodes("edit-box _selector", [
-    span_props({
-      className: "edit-box_label",
-      textContent: "Color",
-    }),
+    span("edit-box_label", "Color"),
     $selector,
   ]);
   return { $root, store };

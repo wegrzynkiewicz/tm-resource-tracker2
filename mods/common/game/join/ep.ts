@@ -1,11 +1,12 @@
 import { assertObject, assertRequiredString } from "../../../core/asserts.ts";
-import { ColorKey, assertColor } from "../../color/color.ts";
-import { ServiceResolver } from "../../../core/dependency.ts";
-import { ServerGameContextManager, provideServerGameContextManager } from "../server/context.ts";
-import { TokenManager, provideTokenManager } from "../../token/manager.ts";
+import { assertColor, ColorKey } from "../../color/color.ts";
+import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { provideServerGameContextManager, ServerGameContextManager } from "../server/context.ts";
+import { provideTokenManager, TokenManager } from "../../token/manager.ts";
 import { provideServerPlayerManager } from "../../player/server/manager.ts";
-import { EPRoute, EPHandler, EPContext } from "../../../core/web/endpoint.ts";
+import { EPContext, EPHandler, EPRoute } from "../../../core/web/endpoint.ts";
 import { GameResponse } from "../game.ts";
+import { defineDependency } from "@acme/dependency/injection.ts";
 
 export interface JoinGameEPRequest {
   color: ColorKey;
@@ -14,11 +15,11 @@ export interface JoinGameEPRequest {
 }
 
 export function parseJoinGameEPRequest(data: unknown): JoinGameEPRequest {
-  assertObject<JoinGameEPRequest>(data, 'payload-must-be-object');
+  assertObject<JoinGameEPRequest>(data, "payload-must-be-object");
   const { color, name, gameId } = data;
-  assertColor(color, 'color-must-be-required-string');
-  assertRequiredString(gameId, 'game-id-must-be-required-string');
-  assertRequiredString(name, 'name-must-be-required-string');
+  assertColor(color, "color-must-be-required-string");
+  assertRequiredString(gameId, "game-id-must-be-required-string");
+  assertRequiredString(name, "name-must-be-required-string");
   return { color, name, gameId };
 }
 
@@ -28,7 +29,7 @@ export class JoinGameEPHandler implements EPHandler {
   public constructor(
     protected readonly gameManager: ServerGameContextManager,
     protected readonly tokenManager: TokenManager,
-  ) { }
+  ) {}
 
   public async handle({ request }: EPContext): Promise<Response> {
     const body = await request.json();
@@ -37,10 +38,10 @@ export class JoinGameEPHandler implements EPHandler {
     const isAdmin = false;
 
     const gameContext = this.gameManager.games.get(gameId);
-    assertObject(gameContext, 'not-found-game-with-this-token', { status: 404 });
+    assertObject(gameContext, "not-found-game-with-this-token", { status: 404 });
     const { resolver } = gameContext;
 
-    const playerManager = resolver.resolve(provideServerPlayerManager);
+    const playerManager = resolver.resolve(serverPlayerManagerDependency);
     const player = playerManager.createPlayer({ color, name, isAdmin });
     const { playerId } = player;
 
@@ -52,9 +53,13 @@ export class JoinGameEPHandler implements EPHandler {
   }
 }
 
-export function provideJoinGameEPHandler(resolver: ServiceResolver) {
+export function provideJoinGameEPHandler(resolver: DependencyResolver) {
   return new JoinGameEPHandler(
-    resolver.resolve(provideServerGameContextManager),
-    resolver.resolve(provideTokenManager),
+    resolver.resolve(serverGameContextManagerDependency),
+    resolver.resolve(tokenManagerDependency),
   );
 }
+export const joinGameEPHandlerDependency = defineDependency({
+  kind: "join-game-ep-handler",
+  provider: provideJoinGameEPHandler,
+});

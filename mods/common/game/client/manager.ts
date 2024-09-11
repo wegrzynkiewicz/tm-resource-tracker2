@@ -1,22 +1,20 @@
+import { ClientConfig, clientConfigDependency } from "../../../app-client/src/config.ts";
 import { Channel } from "../../../core/channel.ts";
-import { ServiceResolver } from "../../../core/dependency.ts";
-import { GameResponse } from "../game.ts";
-import { PlayerUpdateDTO } from "../../player/common.ts";
-import { ClientConfig, provideClientConfig } from "../../../app-client/src/config.ts";
-import { ClientGameContextManager, provideClientGameContextManager } from "./context.ts";
-import { provideCreateGameChannel, provideJoinGameChannel } from "./source.ts";
+import { defineDependency, DependencyResolver, Scope, scopeDependency } from "@acme/dependency/injection.ts";
+import { MyPlayerDTO } from "../../player/common.ts";
+import { Game } from "../create/common.ts";
 import { JoinGame } from "../join/common.ts";
-import { provideQuitGameChannel } from "../quit/modal.ts";
-import { provideHomepageView } from "../../../app-client/src/homepage/homepage.ts";
-import { GlobalContext, provideGlobalContext } from "../../../core/global.ts";
+import { quitGameChannelDependency } from "../quit/modal.ts";
+import { ClientGameContextManager, clientGameContextManagerDependency } from "./context.ts";
+import { createGameChannelDependency, joinGameChannelDependency } from "./source.ts";
+import { HomeView, homepageViewDependency } from "../../../app-client/src/home/home-view.ts";
 
 export class ClientGameManager {
-
   public constructor(
     private config: ClientConfig,
     private clientGameContextManager: ClientGameContextManager,
-    createGameChannel: Channel<PlayerUpdateDTO>,
-    private globalContext: GlobalContext,
+    createGameChannel: Channel<MyPlayerDTO>,
+    private homepageView: HomeView,
     joinGameChannel: Channel<JoinGame>,
     quitGameChannel: Channel<null>,
   ) {
@@ -25,7 +23,7 @@ export class ClientGameManager {
     quitGameChannel.on(() => this.quitGame());
   }
 
-  private async createGame(request: PlayerUpdateDTO) {
+  private async createGame(request: MyPlayerDTO) {
     const { apiUrl } = this.config;
     const envelope = await fetch(`${apiUrl}/games/create`, {
       method: "POST",
@@ -34,8 +32,9 @@ export class ClientGameManager {
       },
       body: JSON.stringify(request),
     });
-    const data = await envelope.json();
-    const response = data as GameResponse;
+    const data = await envelope.text();
+    console.log(data);
+    const response = data as Game;
     localStorage.setItem("token", response.token);
     this.clientGameContextManager.createClientGameContext(response);
   }
@@ -57,7 +56,7 @@ export class ClientGameManager {
 
   private async quitGame() {
     this.clientGameContextManager.deleteClientGameContext();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token === null) {
       this.renderHomepage();
       return;
@@ -69,13 +68,13 @@ export class ClientGameManager {
         ["Authorization"]: `Bearer ${token}`,
       },
     });
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     this.renderHomepage();
   }
 
   public async bootstrap() {
     const { apiUrl } = this.config;
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token === null) {
       this.renderHomepage();
       return;
@@ -88,26 +87,30 @@ export class ClientGameManager {
     });
     const data = await envelope.json();
     if (data.error) {
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
       this.renderHomepage();
       return;
     }
-    const response = data as GameResponse;
+    const response = data as Game;
     this.clientGameContextManager.createClientGameContext(response);
   }
 
   private renderHomepage() {
-    this.globalContext.resolver.resolve(provideHomepageView).render();
+    this.homepageView.render();
   }
 }
 
-export function provideClientGameManager(resolver: ServiceResolver) {
+export function provideClientGameManager(resolver: DependencyResolver) {
   return new ClientGameManager(
-    resolver.resolve(provideClientConfig),
-    resolver.resolve(provideClientGameContextManager),
-    resolver.resolve(provideCreateGameChannel),
-    resolver.resolve(provideGlobalContext),
-    resolver.resolve(provideJoinGameChannel),
-    resolver.resolve(provideQuitGameChannel),
+    resolver.resolve(clientConfigDependency),
+    resolver.resolve(clientGameContextManagerDependency),
+    resolver.resolve(createGameChannelDependency),
+    resolver.resolve(homepageViewDependency),
+    resolver.resolve(joinGameChannelDependency),
+    resolver.resolve(quitGameChannelDependency),
   );
 }
+export const clientGameManagerDependency = defineDependency({
+  kind: "client-game-manager",
+  provider: provideClientGameManager,
+});

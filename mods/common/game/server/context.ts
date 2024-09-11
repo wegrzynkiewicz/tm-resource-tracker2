@@ -1,12 +1,10 @@
+import { cryptoRandomString } from "../../../app-server/deps.ts";
 import { Breaker } from "../../../core/asserts.ts";
 import { Context } from "../../../core/context.ts";
-import { ServiceResolver } from "../../../core/dependency.ts";
-import { cryptoRandomString } from "../../../app-server/deps.ts";
-import { GlobalContext, provideGlobalContext } from "../../../core/global.ts";
-import { LoggerFactory, provideLoggerFactory } from "../../../core/logger/logger-factory.ts";
-import { provideLogger } from "../../../core/logger/global.ts";
-import { provideServerPlayerContextManager } from "../../player/server/context.ts";
-import { provideGameStageManager } from "../stage/game-stage-manager.ts";
+import { defineDependency, DependencyResolver, Scope, scopeDependency } from "@acme/dependency/injection.ts";
+import { loggerDependency } from "@acme/logger/defs.ts";
+import { LoggerFactory, loggerFactoryDependency } from "@acme/logger/factory.ts";
+import { globalScopeContract } from "@acme/dependency/scopes.ts";
 
 export interface ServerGameContextIdentifier {
   gameId: string;
@@ -15,16 +13,20 @@ export interface ServerGameContextIdentifier {
 export type ServerGameContext = Context<ServerGameContextIdentifier>;
 
 export function provideServerGameContext(): ServerGameContext {
-  throw new Breaker('server-game-context-must-be-injected');
+  throw new Breaker("server-game-context-must-be-injected");
 }
+export const serverGameContextDependency = defineDependency({
+  kind: "server-game-context",
+  provider: provideServerGameContext,
+});
 
 export class ServerGameContextManager {
   public readonly games = new Map<string, ServerGameContext>();
 
   public constructor(
-    private globalContext: GlobalContext,
+    private scope: Scope,
     private loggerFactory: LoggerFactory,
-  ) { }
+  ) {}
 
   private generateGameId(): string {
     while (true) {
@@ -38,21 +40,21 @@ export class ServerGameContextManager {
 
   public createServerGameContext(): ServerGameContext {
     const gameId = this.generateGameId();
-    const resolver = new ServiceResolver(this.globalContext.resolver);
+    const resolver = new DependencyResolver();
     const serverGameContext: ServerGameContext = {
       descriptor: `/game/${gameId}`,
       identifier: { gameId },
       resolver,
     };
 
-    const logger = this.loggerFactory.createLogger('GAME', { gameId });
+    const logger = this.loggerFactory.createLogger("GAME", { gameId });
 
-    resolver.inject(provideServerGameContext, serverGameContext);
-    resolver.inject(provideLogger, logger);
+    resolver.inject(serverGameContextDependency, serverGameContext);
+    resolver.inject(loggerDependency, logger);
 
-    const gameStageManager = resolver.resolve(provideGameStageManager);
+    const gameStageManager = resolver.resolve(gameStageManagerDependency);
     {
-      const serverPlayerContextManager = resolver.resolve(provideServerPlayerContextManager);
+      const serverPlayerContextManager = resolver.resolve(serverPlayerContextManagerDependency);
       serverPlayerContextManager.creates.on((ctx) => gameStageManager.handlePlayerContextCreation(ctx));
       serverPlayerContextManager.deletes.on((ctx) => gameStageManager.handlePlayerContextDeletion(ctx));
     }
@@ -62,9 +64,14 @@ export class ServerGameContextManager {
   }
 }
 
-export function provideServerGameContextManager(resolver: ServiceResolver) {
+export function provideServerGameContextManager(resolver: DependencyResolver) {
   return new ServerGameContextManager(
-    resolver.resolve(provideGlobalContext),
-    resolver.resolve(provideLoggerFactory),
+    resolver.resolve(scopeDependency),
+    resolver.resolve(loggerFactoryDependency),
   );
 }
+export const serverGameContextManagerDependency = defineDependency({
+  kind: "server-game-context-manager",
+  provider: provideServerGameContextManager,
+  scope: globalScopeContract,
+});

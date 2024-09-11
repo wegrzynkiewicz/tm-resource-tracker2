@@ -1,7 +1,7 @@
 import { createPanel } from "../../app-client/src/app/panel.ts";
 import { ModalManager, provideModalManager } from "../../app-client/src/modal.ts";
-import { SelectorStore } from "../../app-client/src/selector.ts";
-import { ServiceResolver } from "../../core/dependency.ts";
+import { SelectorStore } from "../../app-client/src/utils/selector.ts";
+import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 import { PlayingAppView } from "../playing/playing-app-view.ts";
 import { providePlayingAppView } from "../playing/playing-app-view.ts";
 import { PlayingTop, providePlayingPlayerStore } from "../playing/playing-top.ts";
@@ -32,11 +32,11 @@ export class SupplyView {
   }
 }
 
-export function provideSupplyView(resolver: ServiceResolver) {
+export function provideSupplyView(resolver: DependencyResolver) {
   return new SupplyView(
-    resolver.resolve(provideModalManager),
-    resolver.resolve(providePlayingTop),
-    resolver.resolve(providePlayingAppView),
-    resolver.resolve(providePlayingPlayerStore),
+    resolver.resolve(modalManagerDependency),
+    resolver.resolve(playingTopDependency),
+    resolver.resolve(playingAppViewDependency),
+    resolver.resolve(playingPlayerStoreDependency),
   );
 }

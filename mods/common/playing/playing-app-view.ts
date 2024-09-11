@@ -1,22 +1,22 @@
-import { ServiceResolver } from "../../core/dependency.ts";
-import { div_empty, div_nodes } from "../../core/frontend-framework/dom.ts";
+import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+
 import { createScroll } from "../../app-client/src/app/scroll.ts";
 import { ModalManager, provideModalManager } from "../../app-client/src/modal.ts";
-import { ToolbarView, provideToolbarView } from "./toolbar.ts";
-import { Place, provideAppPlace } from "../../app-client/src/place.ts";
+import { provideToolbarView, ToolbarView } from "./toolbar.ts";
+import { Slot, provideAppPlace } from "../../app-client/src/place.ts";
 
 export class PlayingAppView {
-  public readonly topPlace = new Place('top');
-  public readonly modalManagerPlace = new Place('modal-manager');
-  public readonly contentPlace = new Place('modal-manager');
+  public readonly topPlace = new Slot("top");
+  public readonly modalManagerPlace = new Slot("modal-manager");
+  public readonly contentPlace = new Slot("modal-manager");
   private readonly $root: HTMLDivElement;
 
   public constructor(
-    private readonly appPlace: Place,
+    private readonly appPlace: Slot,
     private readonly modalManager: ModalManager,
     private readonly toolbar: ToolbarView,
   ) {
-    const $main = div_empty("app_main");
+    const $main = div("app_main");
     const $content = div_nodes("app_content", [this.contentPlace.$root]);
     const scrollNodes = createScroll($main, $content);
 
@@ -39,10 +39,10 @@ export class PlayingAppView {
   }
 }
 
-export function providePlayingAppView(resolver: ServiceResolver) {
+export function providePlayingAppView(resolver: DependencyResolver) {
   return new PlayingAppView(
-    resolver.resolve(provideAppPlace),
-    resolver.resolve(provideModalManager),
-    resolver.resolve(provideToolbarView),
+    resolver.resolve(appPlaceDependency),
+    resolver.resolve(modalManagerDependency),
+    resolver.resolve(toolbarViewDependency),
   );
 }

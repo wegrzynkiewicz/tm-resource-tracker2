@@ -1,4 +1,4 @@
-import { div_empty } from "./dom.ts";
+import { div } from "./dom.ts";
 import { Collection } from "./store.ts";
 
 export interface ComponentFactory<TItem> {
@@ -12,7 +12,9 @@ export class Loop<TItem extends WeakKey> {
     public readonly collection: Collection<TItem>,
     public readonly factory: ComponentFactory<TItem>,
   ) {
-    collection.updates.on(() => { this.update(); });
+    collection.updates.on(() => {
+      this.update();
+    });
     this.update();
   }
 
@@ -33,7 +35,7 @@ export class Loop<TItem extends WeakKey> {
     collection: Collection<TItem>,
     factory: ComponentFactory<TItem>,
   ) {
-    const $root = div_empty("");
+    const $root = div("");
     return new Loop($root, collection, factory);
   }
 }

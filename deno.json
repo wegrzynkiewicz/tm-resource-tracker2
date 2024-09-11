@@ -3,7 +3,6 @@
     "@acme/": "./mods/qcmf5/mods/"
   },
   "compilerOptions": {
-    
     "lib": [
       "ESNext",
       "DOM",
@@ -27,7 +26,8 @@
     }
   },
   "tasks": {
-    "server": "deno run -A --watch mods/app-server/entry.ts",
-    "serve": "deno run -A --watch mods/app-client/bin/esbuild-dev.ts"
+    "server": "deno run --allow-all --check --watch mods/app-server/server-entry.ts",
+    "serve": "deno run --allow-all --watch mods/app-client/bin/esbuild-dev.ts",
+    "lint": "deno test && deno fmt mods && deno lint && deno check mods/app-client/entry.ts && deno check mods/app-server/server-entry.ts"
   }
 }

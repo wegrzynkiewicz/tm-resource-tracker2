@@ -1,4 +1,3 @@
-import { div_text, form, div_nodes } from "../../core/frontend-framework/dom.ts";
 import { withResolvers } from "../../core/useful.ts";
 import { onClick } from "./common.ts";
 import { ModalResponse } from "./modal.ts";
@@ -13,14 +12,14 @@ export function createQuestionModal(input: QuestionModalInput) {
   const {
     titleText,
     confirmText = "Confirm",
-    cancelText = "Cancel"
+    cancelText = "Cancel",
   } = input;
-  const $cancel = div_text("box _button", cancelText);
-  const $confirm = div_text("box _button", confirmText);
+  const $cancel = div("box _button", cancelText);
+  const $confirm = div("box _button", confirmText);
 
   const $root = form({ className: "modal" }, [
     div_nodes("modal_container", [
-      div_text("modal_title", titleText),
+      div("modal_title", titleText),
       div_nodes("modal_buttons", [
         $cancel,
         $confirm,

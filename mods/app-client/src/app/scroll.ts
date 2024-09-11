@@ -1,11 +1,11 @@
-import { div_empty, div_nodes } from "../../../core/frontend-framework/dom.ts";
+import { div, div_nodes } from "@acme/dom/nodes.ts";
 
 export function createScroll(
   $root: HTMLElement,
   $content: HTMLElement,
 ) {
-  const $detectorTop = div_empty("scroll_detector _top");
-  const $detectorBottom = div_empty("scroll_detector _bottom");
+  const $detectorTop = div("scroll_detector _top");
+  const $detectorBottom = div("scroll_detector _bottom");
   $root.classList.add("scroll");
   $root.replaceChildren(
     div_nodes("scroll_container", [
@@ -14,10 +14,10 @@ export function createScroll(
       $detectorBottom,
     ]),
   );
-  const $shadowTop = div_empty("app_shadow _top");
-  const $shadowBottom = div_empty("app_shadow _bottom");
+  const $shadowTop = div("app_shadow _top");
+  const $shadowBottom = div("app_shadow _bottom");
 
-  const nodes = [$root, $shadowTop, $shadowBottom];
+  const nodes = [$shadowTop, $root, $shadowBottom];
 
   const map = new WeakMap<Element, Element>([
     [$detectorTop, $shadowTop],

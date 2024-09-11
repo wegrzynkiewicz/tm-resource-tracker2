@@ -1,11 +1,12 @@
 import { assertObject } from "../../../core/asserts.ts";
-import { ServiceResolver } from "../../../core/dependency.ts";
-import { ServerGameContextManager, provideServerGameContextManager } from "../server/context.ts";
-import { TokenManager, provideTokenManager } from "../../token/manager.ts";
+import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { provideServerGameContextManager, ServerGameContextManager } from "../server/context.ts";
+import { provideTokenManager, TokenManager } from "../../token/manager.ts";
 import { provideServerPlayerContextManager } from "../../player/server/context.ts";
 import { provideServerPlayerManager } from "../../player/server/manager.ts";
 import { parseAuthorizationToken } from "../../token/common.ts";
 import { EPContext, EPHandler, EPRoute } from "../../../core/web/endpoint.ts";
+import { defineDependency } from "@acme/dependency/injection.ts";
 
 export const quitGameEPRoute = new EPRoute("POST", "/games/quit");
 
@@ -13,32 +14,36 @@ export class QuitGameEPHandler implements EPHandler {
   public constructor(
     protected readonly gameManager: ServerGameContextManager,
     protected readonly tokenManager: TokenManager,
-  ) { }
+  ) {}
 
   public async handle({ request }: EPContext): Promise<Response> {
     const token = parseAuthorizationToken(request);
 
     const data = this.tokenManager.tokens.get(token);
-    assertObject(data, 'not-found-token', { status: 404 });
+    assertObject(data, "not-found-token", { status: 404 });
     const { gameId, playerId } = data.identifier;
 
     const gameContext = this.gameManager.games.get(gameId);
-    assertObject(gameContext, 'not-found-game-with-this-token', { status: 404 });
+    assertObject(gameContext, "not-found-game-with-this-token", { status: 404 });
     const { resolver } = gameContext;
 
-    const playerManager = resolver.resolve(provideServerPlayerManager);
+    const playerManager = resolver.resolve(serverPlayerManagerDependency);
     playerManager.deletePlayer(playerId);
 
-    const playerContextManager = resolver.resolve(provideServerPlayerContextManager);
+    const playerContextManager = resolver.resolve(serverPlayerContextManagerDependency);
     await playerContextManager.deletePlayerContext(playerId);
 
     return new Response(null, { status: 204 });
   }
 }
 
-export function provideQuitGameEPHandler(resolver: ServiceResolver) {
+export function provideQuitGameEPHandler(resolver: DependencyResolver) {
   return new QuitGameEPHandler(
-    resolver.resolve(provideServerGameContextManager),
-    resolver.resolve(provideTokenManager),
+    resolver.resolve(serverGameContextManagerDependency),
+    resolver.resolve(tokenManagerDependency),
   );
 }
+export const quitGameEPHandlerDependency = defineDependency({
+  kind: "quit-game-ep-handler",
+  provider: provideQuitGameEPHandler,
+});

@@ -1,11 +1,12 @@
-import { assertObject, assertRequiredString } from "../../core/asserts.ts";
+import { EnumLayout } from "@acme/layout/types/enum-layout.ts";
+import { InferLayout } from "@acme/layout/common.ts";
 
 export interface Color {
   key: string;
   name: string;
 }
 
-export const colors: Color[] = [
+export const colors = [
   { key: "black", name: "Black" },
   { key: "blue", name: "Blue" },
   { key: "green", name: "Green" },
@@ -13,14 +14,9 @@ export const colors: Color[] = [
   { key: "yellow", name: "Yellow" },
 ] as const;
 
-export type ColorKey = "black" | "blue" | "green" | "red" | "yellow";
-
-export const colorByKeys = new Map<string, Color>(
-  colors.map((color) => [color.key, color])
+export const colorLayout = new EnumLayout(
+  { id: "color", summary: "One of the five colors" },
+  colors.map((color) => color.key),
 );
 
-export function assertColor(key: unknown, msg: string): asserts key is ColorKey {
-  assertRequiredString(key, 'color-must-be-required-string');
-  const color = colorByKeys.get(key);
-  assertObject(color, msg);
-} 
+export type ColorKey = InferLayout<typeof colorLayout>;

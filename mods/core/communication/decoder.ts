@@ -1,12 +1,12 @@
-import { Breaker, assertRequiredString } from "../asserts.ts";
+import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { assertRequiredString, Breaker } from "../asserts.ts";
 import { Channel, Handler } from "../channel.ts";
-import { ServiceResolver } from "../dependency.ts";
 import { AnyGAEnvelope, provideReceivingGABus } from "./define.ts";
 
 export class GADecoder implements Handler<MessageEvent> {
   public constructor(
     public readonly gaBus: Channel<AnyGAEnvelope>,
-  ) { }
+  ) {}
 
   public handle(event: MessageEvent<unknown>): void {
     const { data } = event;
@@ -22,8 +22,8 @@ export class GADecoder implements Handler<MessageEvent> {
   }
 }
 
-export function provideGADecoder(resolver: ServiceResolver) {
+export function provideGADecoder(resolver: DependencyResolver) {
   return new GADecoder(
-    resolver.resolve(provideReceivingGABus),
+    resolver.resolve(receivingGABusDependency),
   );
 }

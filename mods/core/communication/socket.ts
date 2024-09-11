@@ -1,14 +1,22 @@
-import { ServiceResolver } from "../dependency.ts";
-import { provideLogger } from "../logger/global.ts";
+import { loggerDependency } from "@acme/logger/defs.ts";
 import { WebSocketChannel } from "./web-socket-channel.ts";
+import { defineDependency, DependencyResolver } from "@acme/dependency/injection.ts";
 
 export function provideWebSocket(): WebSocket {
-  throw new Error('web-socket-must-be-injected');
+  throw new Error("web-socket-must-be-injected");
 }
+export const webSocketDependency = defineDependency({
+  kind: "web-socket",
+  provider: provideWebSocket,
+});
 
-export function provideWebSocketChannel(resolver: ServiceResolver) {
+export function provideWebSocketChannel(resolver: DependencyResolver) {
   return new WebSocketChannel(
-    resolver.resolve(provideLogger),
-    resolver.resolve(provideWebSocket),
+    resolver.resolve(loggerDependency),
+    resolver.resolve(webSocketDependency),
   );
 }
+export const webSocketChannelDependency = defineDependency({
+  kind: "web-socket-channel",
+  provider: provideWebSocketChannel,
+});

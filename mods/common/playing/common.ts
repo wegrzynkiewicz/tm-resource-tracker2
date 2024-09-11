@@ -8,11 +8,11 @@ export interface PlayingGame {
 }
 
 export function providePlayingGame(): PlayingGame {
-  throw new Breaker('playing-game-must-be-injected');
+  throw new Breaker("playing-game-must-be-injected");
 }
 
 export type PlayingGameGA = PlayingGame;
 
 export const playingGameGADef: GADefinition<PlayingGameGA> = {
-  kind: 'playing-game',
+  kind: "playing-game",
 };

@@ -1,3 +1,5 @@
+import { defineDependency } from "@acme/dependency/injection.ts";
+
 export interface ClientConfig {
   readonly apiUrl: string;
   readonly wsURL: string;
@@ -9,7 +11,7 @@ export function provideClientConfig() {
     wsURL: "ws://192.168.1.105:3008",
   };
 }
-
-export function provideTitle() {
-  return "TM Resource Tracker v2";
-}
+export const clientConfigDependency = defineDependency({
+  kind: "client-config",
+  provider: provideClientConfig,
+});

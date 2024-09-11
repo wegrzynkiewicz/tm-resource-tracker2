@@ -1,7 +1,4 @@
-import { ServiceResolver } from "../../core/dependency.ts";
-import { button_nodes, div_nodes, span_text } from "../../core/frontend-framework/dom.ts";
-import { Signal } from "../../core/frontend-framework/store.ts";
-import { svg_icon } from "../../core/frontend-framework/svg.ts";
+import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 
 const buttons = [
   { key: "supplies", icon: "box", name: "Supplies" },
@@ -19,7 +16,7 @@ interface ToolbarButton {
 }
 
 export function provideToolbarSwitcher() {
-  return new Signal<ToolbarKey>('supplies');
+  return new Signal<ToolbarKey>("supplies");
 }
 
 export class ToolbarView {
@@ -34,7 +31,7 @@ export class ToolbarView {
     const { key, icon, name } = button;
     const $button = button_nodes("toolbar_item", [
       svg_icon("toolbar_icon", icon),
-      span_text("toolbar_label", name),
+      span("toolbar_label", name),
     ]);
     $button.addEventListener("click", () => {
       this.signal.update(key);
@@ -54,8 +51,8 @@ export class ToolbarView {
   }
 }
 
-export function provideToolbarView(resolver: ServiceResolver) {
+export function provideToolbarView(resolver: DependencyResolver) {
   return new ToolbarView(
-    resolver.resolve(provideToolbarSwitcher),
+    resolver.resolve(toolbarSwitcherDependency),
   );
 }

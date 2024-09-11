@@ -27,7 +27,7 @@ export class Router implements WebServerHandler {
 
   public constructor(
     private readonly logger: Logger,
-  ) { }
+  ) {}
 
   public add(route: EPRoute, handler: EPHandler): void {
     const binding: RouteBinding = { handler, route };
@@ -54,7 +54,7 @@ export class Router implements WebServerHandler {
           if (error instanceof Breaker) {
             const status = error.options.status ?? 500;
             const response = Response.json({ error: error.message }, { status });
-            this.logger.debug('breaker-inside-router', { error });
+            this.logger.debug("breaker-inside-router", { error });
             return response;
           }
           throw new Breaker("error-inside-router", {

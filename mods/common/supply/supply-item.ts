@@ -1,6 +1,5 @@
-import { div_empty, div_nodes, div_text, img_props } from "../../core/frontend-framework/dom.ts";
 import { onClick } from "../../app-client/src/common.ts";
-import { Signal } from "../../core/frontend-framework/store.ts";
+
 import { ResourceGroup, ResourceTarget } from "../../core/resources.ts";
 import { createResourceGroup, resources, ResourceType } from "../../core/resources.ts";
 import { createSupplyModal } from "./supply-modal.ts";
@@ -16,8 +15,8 @@ export class SupplyItemView {
   ) {
     this.signal = new Signal(createResourceGroup(20));
     this.$root = div_nodes("supplies", [
-      div_empty("supplies_production"),
-      div_text("supplies_round", "0"),
+      div("supplies_production"),
+      div("supplies_round", "0"),
       ...this.generateSupplies(),
     ]);
   }
@@ -51,7 +50,7 @@ export class SupplyItemView {
   }
 
   protected createSupply(target: ResourceTarget, type: ResourceType) {
-    const $counter = div_text("box _counter", "0");
+    const $counter = div("box _counter", "0");
     const $root = div_nodes(`supply _${target} _${type}`, [$counter]);
     this.signal.on((value) => {
       const count = value[type][target];

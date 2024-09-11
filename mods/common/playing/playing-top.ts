@@ -1,10 +1,9 @@
-import { div_nodes, div_text } from "../../core/frontend-framework/dom.ts";
-import { SelectorOption, SelectorStore, createSelector } from "../../app-client/src/selector.ts";
-import { ServiceResolver } from "../../core/dependency.ts";
+import { createSelector, SelectorOption, SelectorStore } from "../../app-client/src/utils/selector.ts";
+import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 import { providePlayingGame } from "./common.ts";
 
-export function providePlayingPlayerStore(resolver: ServiceResolver) {
-  const playingGame = resolver.resolve(providePlayingGame);
+export function providePlayingPlayerStore(resolver: DependencyResolver) {
+  const playingGame = resolver.resolve(playingGameDependency);
   const options: SelectorOption[] = [];
   for (const { color, name } of playingGame.players) {
     options.push({ key: color, name });
@@ -18,7 +17,7 @@ export class PlayingTop {
   public constructor(
     readonly playerIndex: SelectorStore,
   ) {
-    this.$label = div_text("top_label", "TM Resource Tracker v2");
+    this.$label = div("top_label", "TM Resource Tracker v2");
     this.$root = div_nodes("top _with-controller", [
       this.$label,
       div_nodes("top_controller", [
@@ -32,8 +31,8 @@ export class PlayingTop {
   }
 }
 
-export function providePlayingTop(resolver: ServiceResolver) {
+export function providePlayingTop(resolver: DependencyResolver) {
   return new PlayingTop(
-    resolver.resolve(providePlayingPlayerStore),
+    resolver.resolve(playingPlayerStoreDependency),
   );
 }

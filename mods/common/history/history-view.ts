@@ -1,7 +1,7 @@
 import { createPanel } from "../../app-client/src/app/panel.ts";
-import { SelectorStore } from "../../app-client/src/selector.ts";
+import { SelectorStore } from "../../app-client/src/utils/selector.ts";
 import { Channel } from "../../core/channel.ts";
-import { ServiceResolver } from "../../core/dependency.ts";
+import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 import { PlayingGame, providePlayingGame } from "../playing/common.ts";
 import { PlayingAppView } from "../playing/playing-app-view.ts";
 import { providePlayingAppView } from "../playing/playing-app-view.ts";
@@ -41,17 +41,17 @@ export class HistoryView {
   public render() {
     this.app.render(
       this.top.$root,
-      this.$root
+      this.$root,
     );
   }
 }
 
-export function provideHistoryView(resolver: ServiceResolver) {
+export function provideHistoryView(resolver: DependencyResolver) {
   return new HistoryView(
-    resolver.resolve(providePlayingAppView),
-    resolver.resolve(provideHistoryTop),
-    resolver.resolve(providePlayingGame),
-    resolver.resolve(provideHistoryChannel),
-    resolver.resolve(provideHistoryPlayerStore),
+    resolver.resolve(playingAppViewDependency),
+    resolver.resolve(historyTopDependency),
+    resolver.resolve(playingGameDependency),
+    resolver.resolve(historyChannelDependency),
+    resolver.resolve(historyPlayerStoreDependency),
   );
 }

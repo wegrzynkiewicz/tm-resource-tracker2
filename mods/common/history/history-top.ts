@@ -1,10 +1,9 @@
-import { div_nodes, div_text } from "../../core/frontend-framework/dom.ts";
-import { SelectorOption, SelectorStore, createSelector } from "../../app-client/src/selector.ts";
-import { ServiceResolver } from "../../core/dependency.ts";
+import { createSelector, SelectorOption, SelectorStore } from "../../app-client/src/utils/selector.ts";
+import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 import { providePlayingGame } from "../playing/common.ts";
 
-export function provideHistoryPlayerStore(resolver: ServiceResolver) {
-  const playingGame = resolver.resolve(providePlayingGame);
+export function provideHistoryPlayerStore(resolver: DependencyResolver) {
+  const playingGame = resolver.resolve(playingGameDependency);
   const options: SelectorOption[] = [];
   options.push({ key: "all", name: "All players" });
   for (const { color, name } of playingGame.players) {
@@ -16,10 +15,10 @@ export function provideHistoryPlayerStore(resolver: ServiceResolver) {
 export class HistoryTop {
   public readonly $root: HTMLDivElement;
   public constructor(
-    readonly historyPlayerStore: SelectorStore
+    readonly historyPlayerStore: SelectorStore,
   ) {
     this.$root = div_nodes("top _with-controller", [
-      div_text("top_label", "History"),
+      div("top_label", "History"),
       div_nodes("top_controller", [
         createSelector(historyPlayerStore),
       ]),
@@ -27,8 +26,8 @@ export class HistoryTop {
   }
 }
 
-export function provideHistoryTop(resolver: ServiceResolver) {
+export function provideHistoryTop(resolver: DependencyResolver) {
   return new HistoryTop(
-    resolver.resolve(provideHistoryPlayerStore)
+    resolver.resolve(historyPlayerStoreDependency),
   );
 }

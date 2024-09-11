@@ -1,9 +1,46 @@
-import { Breaker, assertObject, assertRequiredString } from "../../core/asserts.ts";
-import { ColorKey, assertColor } from "../color/color.ts";
+import { StringLayout } from "@acme/layout/types/string-layout.ts";
+import { ColorKey, colorLayout } from "../color/color.ts";
+import { StringMinLengthTrait } from "@acme/layout/types/string-min-length.ts";
+import { StringMaxLengthTrait } from "@acme/layout/types/string-max-length.ts";
+import { ObjectLayout } from "@acme/layout/types/object-layout.ts";
+import { InferLayout } from "@acme/layout/common.ts";
+import { BooleanLayout } from "@acme/layout/types/boolean-layout.ts";
+import { NumberLayout } from "@acme/layout/types/number-layout.ts";
+import { NumberIntegerTrait } from "@acme/layout/types/number-integer.ts";
+import { NumberGreaterThanTrait } from "@acme/layout/types/number-greater-than.ts";
 
-export function providePlayer(): Player {
-  throw new Breaker('player-must-be-injected');
-}
+export const playerIdLayout = new NumberLayout(
+  {},
+  [
+    new NumberGreaterThanTrait(0),
+    new NumberIntegerTrait(),
+  ],
+);
+
+export const playerNameLayout = new StringLayout(
+  {},
+  [
+    new StringMinLengthTrait(1),
+    new StringMaxLengthTrait(32),
+  ],
+);
+
+export const isAdminLayout = new BooleanLayout(
+  { summary: "Determines if the player is an admin" }
+);
+
+export const playerLayout = new ObjectLayout(
+  { id: "player" },
+  {
+    color: colorLayout,
+    name: playerNameLayout,
+    isAdmin: isAdminLayout,
+    playerId: playerIdLayout,
+  },
+  [],
+);
+
+export type Player = InferLayout<typeof playerLayout>;
 
 export interface PlayerInput {
   color: ColorKey;
@@ -11,19 +48,19 @@ export interface PlayerInput {
   isAdmin: boolean;
 }
 
-export interface Player extends PlayerInput {
-  playerId: number;
-}
+export const myPlayerUpdateLayout = new ObjectLayout(
+  { summary: "My player update object" },
+  {
+    color: colorLayout,
+    name: new StringLayout(
+      { summary: "Player name" },
+      [
+        new StringMinLengthTrait(1),
+        new StringMaxLengthTrait(32),
+      ],
+    ),
+  },
+  [],
+);
 
-export interface PlayerUpdateDTO {
-  color: ColorKey;
-  name: string;
-}
-
-export function parsePlayerUpdateDTO(data: unknown): PlayerUpdateDTO {
-  assertObject<PlayerUpdateDTO>(data, 'payload-must-be-object');
-  const { color, name } = data;
-  assertColor(color, 'color-must-be-required-string');
-  assertRequiredString(name, 'name-must-be-required-string');
-  return { color, name };
-}
+export type MyPlayerDTO = InferLayout<typeof myPlayerUpdateLayout>;

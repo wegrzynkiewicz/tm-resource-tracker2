@@ -1,25 +1,32 @@
-import { comment } from "../../core/frontend-framework/dom.ts";
+import { comment } from "@acme/dom/nodes.ts";
+import { Channel } from "@acme/dependency/channel.ts";
 
-export class Place {
-  public $root: Comment | Element;
+export type SlotNode = Comment | Element | Text;
+
+export class Slot {
+  public readonly $anchor: Comment;
+  public $root: SlotNode;
+  public readonly attached = new Channel<[SlotNode, Slot]>();
+  public readonly detached = new Channel<[SlotNode, Slot]>();
 
   public constructor(
-    public readonly description: string
+    public readonly description: string,
   ) {
-    this.$root = comment(description);
+    this.$anchor = comment(description);
+    this.$root = this.$anchor;
   }
 
-  public attach($root: Comment | Element) {
-    if (this.$root === $root) {
+  public attach($node: Comment | Element) {
+    if (this.$root === $node) {
       return;
     }
-    this.$root.replaceWith($root);
-    this.$root = $root;
+    this.$root.replaceWith($node);
+    this.detached.emit(this.$root, this);
+    this.$root = $node;
+    this.attached.emit($node, this);
   }
-}
 
-export function provideAppPlace() {
-  const place = new Place('body')
-  document.body.appendChild(place.$root)
-  return place;
+  public detach() {
+    this.attach(this.$anchor);
+  }
 }

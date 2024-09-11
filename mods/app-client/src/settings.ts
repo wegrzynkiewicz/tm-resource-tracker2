@@ -1,18 +1,18 @@
 import { colors } from "../../common/color/color.ts";
 import {
-  button_text,
+  button,
   div_nodes,
   fieldset,
   form,
   input_props,
   label_props,
-  legend_text,
+  legend,
 } from "../../core/frontend-framework/dom.ts";
-import { createSelector } from "./selector.ts";
+import { createSelector } from "./utils/selector.ts";
 
 export function createPersonalInfo() {
   return fieldset("space_container", [
-    legend_text("space_caption", "Personal info"),
+    legend("space_caption", "Personal info"),
     div_nodes("edit-box _input", [
       label_props({
         className: "edit-box_label",
@@ -41,7 +41,7 @@ export function createPersonalInfo() {
 export function createGenerals() {
   let quit;
   const root = fieldset("space_container", [
-    legend_text("space_caption", "Generals"),
+    legend("space_caption", "Generals"),
     div_nodes("edit-box _input", [
       label_props({
         className: "edit-box_label",
@@ -57,7 +57,7 @@ export function createGenerals() {
         placeholder: "GameID",
       }),
     ]),
-    quit = button_text("box _action", "Quit game"),
+    quit = button("box _action", "Quit game"),
   ]);
   quit.addEventListener("click", (event) => {
     event.preventDefault();
@@ -68,9 +68,9 @@ export function createGenerals() {
 export function createAdmin() {
   let production, subtract;
   const root = fieldset("space_container", [
-    legend_text("space_caption", "Admin settings"),
-    production = button_text("box _action", "Turn to production phase"),
-    subtract = button_text("box _action", "Subtract each player's terraforming rate"),
+    legend("space_caption", "Admin settings"),
+    production = button("box _action", "Turn to production phase"),
+    subtract = button("box _action", "Subtract each player's terraforming rate"),
   ]);
   return root;
 }

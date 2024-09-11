@@ -1,5 +1,4 @@
-import { div_nodes } from "../../../core/frontend-framework/dom.ts";
-import { SelectorStore } from "../selector.ts";
+import { SelectorStore } from "../utils/selector.ts";
 
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -13,11 +12,11 @@ export function createPanel(store: SelectorStore, nodes: Node[]) {
   let parallax = 0;
   const total = store.options.length - 1;
 
-  store.on(({index}) => {
+  store.on(({ index }) => {
     parallax = index;
     $root.classList.add("_transition");
     document.documentElement.style.setProperty("--animate-parallax-current", parallax.toString());
-  })
+  });
 
   $root.addEventListener("pointerdown", (event) => {
     startX = event.clientX;
@@ -26,7 +25,7 @@ export function createPanel(store: SelectorStore, nodes: Node[]) {
   });
   $root.addEventListener("pointerup", (event) => {
     if (Math.abs(currentX) > 50) {
-      parallax += currentX > 0 ? 1 : -1
+      parallax += currentX > 0 ? 1 : -1;
       parallax = clamp(parallax, 0, total);
     }
     store.setIndex(parallax);

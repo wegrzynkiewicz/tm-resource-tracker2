@@ -1,4 +1,5 @@
 import { cryptoRandomString } from "../../app-server/deps.ts";
+import { defineDependency } from "@acme/dependency/injection.ts";
 import { ServerPlayerContextIdentifier } from "../player/server/context.ts";
 
 export interface Token {
@@ -24,3 +25,7 @@ export class TokenManager {
 export function provideTokenManager() {
   return new TokenManager();
 }
+export const tokenManagerDependency = defineDependency({
+  kind: "token-manager",
+  provider: provideTokenManager,
+});

@@ -1,12 +1,10 @@
-import { Store } from "../../core/frontend-framework/store.ts";
-import { button_text, div_nodes, div_text, img_props, span_text } from "../../core/frontend-framework/dom.ts";
 import { Resource, resourcesByType } from "../../core/resources.ts";
 import { ResourceTarget, ResourceType } from "../../core/resources.ts";
 import { onClick } from "../../app-client/src/common.ts";
 import { withResolvers } from "../../core/useful.ts";
 
 export function createCalculatorButton(digit: number) {
-  const root = button_text("box _button _project", digit.toString());
+  const root = button("box _button _project", digit.toString());
   root.dataset.digit = digit.toString();
   return root;
 }
@@ -61,11 +59,11 @@ export function createSupplyModal(options: Resource) {
   const { target, type, count } = options;
   const min = resourcesByType[type].targets[target].min;
 
-  const $input = div_text("box _counter _wide", "0");
-  const $cancel = button_text("box _button", "Cancel");
-  const $confirm = button_text("box _button", "Confirm");
-  const $operator = button_text("box _button _project", "-");
-  const $clear = button_text("box _button _project", "C");
+  const $input = div("box _counter _wide", "0");
+  const $cancel = button("box _button", "Cancel");
+  const $confirm = button("box _button", "Confirm");
+  const $operator = button("box _button _project", "-");
+  const $clear = button("box _button _project", "C");
 
   const $calculator = div_nodes("calculator", [
     ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(createCalculatorButton),
@@ -76,10 +74,10 @@ export function createSupplyModal(options: Resource) {
 
   const $root = div_nodes("modal", [
     div_nodes("modal_container", [
-      div_text("modal_title", `Change your ${target}:`),
+      div("modal_title", `Change your ${target}:`),
       div_nodes("modal_target", [
         div_nodes(`modal_target-supply _${target}`, [
-          div_text("box _counter", count.toString()),
+          div("box _counter", count.toString()),
         ]),
         img_props({
           className: "modal_target-icon",
@@ -90,9 +88,9 @@ export function createSupplyModal(options: Resource) {
         }),
       ]),
       div_nodes("modal_count", [
-        span_text("modal_count-label _left", "by"),
+        span("modal_count-label _left", "by"),
         $input,
-        span_text("modal_count-label _right", "units"),
+        span("modal_count-label _right", "units"),
       ]),
       $calculator,
       div_nodes("modal_buttons", [

@@ -1,9 +1,5 @@
+// TODO: Move to shared
 const createSVGElement = (tag: string) => document.createElementNS("http://www.w3.org/2000/svg", tag);
-
-export interface SVGIconProps {
-  className: string;
-  icon: string;
-}
 
 export function svg_icon(className: string, icon: string) {
   const svg = createSVGElement("svg");

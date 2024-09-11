@@ -74,10 +74,11 @@ export function listener<TEvent extends keyof GlobalEventHandlersEventMap>(
   element.addEventListener(type, callback, options);
 }
 
-export function onClick<TElement extends Element>(element: TElement, listener: (event: MouseEvent) => void) {
-  element.addEventListener("click", function onClickWrapper(this: TElement, event) {
-    event.preventDefault();
-    event.stopPropagation();
-    listener.call(this, event as MouseEvent);
-  });
+export interface Component {
+  $root: HTMLElement;
+}
+
+export interface View extends Component {
+  $root: HTMLElement;
+  render(): void;
 }

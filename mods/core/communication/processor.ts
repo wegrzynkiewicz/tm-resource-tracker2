@@ -13,7 +13,7 @@ export class GAProcessor implements Handler<AnyGAEnvelope> {
     }
     try {
       handler.handle(body);
-    } catch(error) {
+    } catch (error) {
       throw new Breaker("error-inside-game-action-processor", { kind, envelope, error });
     }
   }

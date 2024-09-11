@@ -1,14 +1,14 @@
 import { provideWaitingPlayersCollection } from "./waiting-view.ts";
-import { ServiceResolver } from "../../../core/dependency.ts";
+import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 import { GAHandler } from "../../../core/communication/define.ts";
 import { Player } from "../common.ts";
-import { Collection } from "../../../core/frontend-framework/store.ts";
+
 import { WaitingPlayersGA } from "./common.ts";
 
-export class WaitingPlayersGAHandler implements GAHandler<WaitingPlayersGA>{
+export class WaitingPlayersGAHandler implements GAHandler<WaitingPlayersGA> {
   public constructor(
     private readonly players: Collection<Player>,
-  ) { }
+  ) {}
 
   public async handle(action: WaitingPlayersGA): Promise<void> {
     this.players.items.splice(0, this.players.items.length, ...action.players);
@@ -16,8 +16,8 @@ export class WaitingPlayersGAHandler implements GAHandler<WaitingPlayersGA>{
   }
 }
 
-export function provideWaitingPlayersGAHandler(resolver: ServiceResolver) {
+export function provideWaitingPlayersGAHandler(resolver: DependencyResolver) {
   return new WaitingPlayersGAHandler(
-    resolver.resolve(provideWaitingPlayersCollection),
+    resolver.resolve(waitingPlayersCollectionDependency),
   );
 }
