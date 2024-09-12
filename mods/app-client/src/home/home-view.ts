@@ -1,12 +1,12 @@
 import { AppView, appViewDependency } from "../app/app-view.ts";
 import { defineDependency, DependencyResolver } from "@acme/dependency/injection.ts";
 import { button, div_nodes } from "@acme/dom/nodes.ts";
-import { IntroTop, introTopDependency } from "../app/intro-top.ts";
 import { PlayerModal } from "../../../common/player/update/player-modal.ts";
 import { ModalManager, modalManagerDependency } from "../modal.ts";
 import { ActionDispatcher, actionDispatcherDependency } from "../actions.ts";
 import { gameCreateActionContract } from "./game-create-action.ts";
 import { frontendScopeContract } from "../../bootstrap.ts";
+import { DocTitle, docTitleDependency } from "../app/doc-title.ts";
 
 export class HomeView {
   public readonly $root: HTMLDivElement;
@@ -14,8 +14,8 @@ export class HomeView {
   public constructor(
     private readonly actionDispatcher: ActionDispatcher,
     private readonly app: AppView,
+    private readonly docTitle: DocTitle,
     private readonly modalManager: ModalManager,
-    private readonly top: IntroTop,
   ) {
     const $create = button(`box _action`, "New Game");
     const $join = button("box _action", "Join the Game");
@@ -37,7 +37,7 @@ export class HomeView {
   }
 
   public render() {
-    this.app.topSlot.attach(this.top.$root);
+    this.docTitle.setTitle("Home");
     this.app.contentSlot.attach(this.$root);
     this.app.render();
   }
@@ -57,8 +57,8 @@ export function provideHomepageView(resolver: DependencyResolver) {
   return new HomeView(
     resolver.resolve(actionDispatcherDependency),
     resolver.resolve(appViewDependency),
+    resolver.resolve(docTitleDependency),
     resolver.resolve(modalManagerDependency),
-    resolver.resolve(introTopDependency),
   );
 }
 export const homepageViewDependency = defineDependency({

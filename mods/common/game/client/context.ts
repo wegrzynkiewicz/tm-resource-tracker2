@@ -4,7 +4,7 @@ import { webSocketChannelDependency, webSocketDependency } from "../../../core/c
 import { Context } from "../../../core/context.ts";
 import { defineDependency, DependencyResolver, Scope, scopeDependency } from "@acme/dependency/injection.ts";
 import { LoggerFactory, loggerFactoryDependency } from "@acme/logger/factory.ts";
-import { Game } from "../create/common.ts";
+import { Game } from "../game-create.ts";
 import { feedClientGAProcessor } from "./procesor.ts";
 import { frontendScopeContract } from "../../../app-client/bootstrap.ts";
 

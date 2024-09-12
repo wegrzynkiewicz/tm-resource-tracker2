@@ -49,5 +49,6 @@ const ctx = await esbuild.context({
 
 const { port } = await ctx.serve({
   servedir: "mods/app-client/public/",
+  fallback: "mods/app-client/public/index.html",
 });
 console.log(`Serving on http://localhost:${port}`);

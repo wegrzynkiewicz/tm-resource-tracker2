@@ -1,25 +1,11 @@
 import { definePath } from "@acme/endpoint/path.ts";
 import { defineRequest } from "@acme/endpoint/request.ts";
 import { defineJSONPayload } from "@acme/endpoint/payload-json.ts";
-import { myPlayerUpdateLayout, playerLayout } from "../../player/common.ts";
-import { ObjectLayout } from "@acme/layout/types/object-layout.ts";
-import { StringLayout } from "@acme/layout/types/string-layout.ts";
-import { InferLayout } from "@acme/layout/common.ts";
+import { myPlayerUpdateLayout } from "../player/common.ts";
 import { defineResponse } from "@acme/endpoint/response.ts";
 import { defineEndpoint } from "@acme/endpoint/endpoint.ts";
 import { internalErrorResponseContract } from "@acme/endpoint/build-in/errors.ts";
-
-export const gameLayout = new ObjectLayout(
-  { summary: "Game object" },
-  {
-    gameId: new StringLayout({ summary: "Game identifier" }),
-    player: playerLayout,
-    token: new StringLayout({ summary: "Token" }),
-  },
-  [],
-);
-
-export type Game = InferLayout<typeof gameLayout>;
+import { gameLayout } from "./defs.ts";
 
 export const gameCreatePathContract = definePath({
   params: [],

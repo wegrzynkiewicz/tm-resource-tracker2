@@ -17,6 +17,7 @@ function provideHomeControllerHandler(resolver: DependencyResolver) {
     resolver.resolve(homepageViewDependency),
   );
 }
+
 export const homeControllerHandlerDependency = defineDependency({
   kind: "home-controller-handler",
   provider: provideHomeControllerHandler,

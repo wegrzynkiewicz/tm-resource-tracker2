@@ -2,7 +2,7 @@ import { ClientConfig, clientConfigDependency } from "../../../app-client/src/co
 import { Channel } from "../../../core/channel.ts";
 import { defineDependency, DependencyResolver, Scope, scopeDependency } from "@acme/dependency/injection.ts";
 import { MyPlayerDTO } from "../../player/common.ts";
-import { Game } from "../create/common.ts";
+import { Game } from "../game-create.ts";
 import { JoinGame } from "../join/common.ts";
 import { quitGameChannelDependency } from "../quit/modal.ts";
 import { ClientGameContextManager, clientGameContextManagerDependency } from "./context.ts";

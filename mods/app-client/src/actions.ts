@@ -13,7 +13,7 @@ export function defineAction<T>(type: string): ActionContract<T> {
 
 export interface ActionHandlerInput<T> {
   contract: ActionContract;
-  payload: T;
+  data: T;
 }
 
 export interface ActionHandler<T = unknown> {
@@ -47,7 +47,7 @@ export class ActionDispatcher {
     private readonly binder: ActionBinder,
   ) {}
 
-  public dispatch<T>(contract: ActionContract<T>, payload: T) {
+  public dispatch<T>(contract: ActionContract<T>, data: T) {
     const binding = this.binder.bindings.get(contract);
     if (binding === undefined) {
       throw new Panic("no-found-action-handler", { contract: contract.type });
@@ -55,7 +55,7 @@ export class ActionDispatcher {
 
     const { resolver } = this.scope;
     const handler = resolver.resolve(binding.dependency);
-    handler.handle({ contract, payload });
+    handler.handle({ contract, data });
   }
 }
 

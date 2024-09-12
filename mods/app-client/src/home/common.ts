@@ -7,6 +7,7 @@ export const homePathContract = definePath({
 });
 
 export const homeControllerContract = defineController({
+  name: "home",
   path: homePathContract,
   importer: async () => {
     const { initHomeController } = await import("./home.entry.ts");

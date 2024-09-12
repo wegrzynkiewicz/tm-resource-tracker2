@@ -1,11 +1,13 @@
 import { Scope, defineScope, globalScopeContract, scopeDependency } from "@acme/dependency/scopes.ts";
 import { cryptoRandomString } from "../deps.ts";
 import { DependencyResolver, defineDependency } from "@acme/dependency/injection.ts";
+import { Game } from "./game.ts";
+import { DEBUG, loggerDependency } from "@acme/logger/defs.ts";
 
 export const gameScopeContract = defineScope("GAME", globalScopeContract);
 
-export class ServerGameScopeManager {
-  public readonly games = new Map<string, Scope>();
+export class ServerGameManager {
+  public readonly games = new Map<string, Game>();
 
   public constructor(
     private parentScope: Scope,
@@ -21,9 +23,14 @@ export class ServerGameScopeManager {
     }
   }
 
-  public createServerGameScope(): Scope {
+  public createServerGame(): Game {
     const gameId = this.generateGameId();
-    const gameScope = new Scope(gameScopeContract, { gameId }, this.parentScope);
+    const scope = new Scope(gameScopeContract, { gameId }, this.parentScope);
+
+    const logger = scope.resolver.resolve(loggerDependency);
+
+    const game: Game = { gameId, scope };
+    logger.log(DEBUG, "created-game", { gameId })
 
     // const gameStageManager = resolver.resolve(gameStageManagerDependency);
     // {
@@ -32,18 +39,18 @@ export class ServerGameScopeManager {
     //   serverPlayerContextManager.deletes.on((ctx) => gameStageManager.handlePlayerContextDeletion(ctx));
     // }
 
-    this.games.set(gameId, gameScope);
-    return gameScope;
+    this.games.set(gameId, game);
+    return game;
   }
 }
 
-export function provideServerGameScopeManager(resolver: DependencyResolver) {
-  return new ServerGameScopeManager(
+function provideServerGameManager(resolver: DependencyResolver) {
+  return new ServerGameManager(
     resolver.resolve(scopeDependency),
   );
 }
-export const serverGameScopeManagerDependency = defineDependency({
-  kind: "server-game-scope-manager",
-  provider: provideServerGameScopeManager,
+export const serverGameManagerDependency = defineDependency({
+  kind: "server-game-manager",
+  provider: provideServerGameManager,
   scope: globalScopeContract,
 });

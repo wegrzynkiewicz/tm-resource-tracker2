@@ -2,30 +2,32 @@ import { MyPlayerDTO } from "../../../common/player/common.ts";
 import { DependencyResolver, defineDependency } from "@acme/dependency/injection.ts";
 import { ActionHandlerInput } from "../actions.ts";
 import { ActionHandler, defineAction } from "../actions.ts";
-import { apiRequestMakerDependency } from "../api-request-maker.ts";
-import { RequestMaker } from "../request-maker.ts";
-import { gameCreateEndpointContract } from "../../../common/game/create/common.ts";
 import { controllerScopeContract } from "../../bootstrap.ts";
+import { ControllerRunner, controllerRunnerDependency } from "../controller.ts";
+import { waitingControllerContract } from "../waiting/common.ts";
+import { ClientGameManager, clientGameManagerDependency } from "../game/game-manager.ts";
 
 export const gameCreateActionContract = defineAction<MyPlayerDTO>("game-create");
 
 export class GameCreateActionHandler implements ActionHandler<MyPlayerDTO> {
   public constructor(
-    private readonly apiRequestMaker: RequestMaker,
+    private readonly gameManager: ClientGameManager,
+    private readonly controllerRunner: ControllerRunner,
   ) {}
 
-  public async handle({ payload }: ActionHandlerInput<MyPlayerDTO>): Promise<void> {
-    const { response, data } = await this.apiRequestMaker.makeRequest(gameCreateEndpointContract, payload, {});
-    localStorage.setItem("token", response.token);
-    this.clientGameContextManager.createClientGameContext(response);
+  public async handle({ data }: ActionHandlerInput<MyPlayerDTO>): Promise<void> {
+    await this.gameManager.createClientGame(data);
+    await this.controllerRunner.run(waitingControllerContract, {});
   }
 }
 
 export function provideGameCreateActionHandler(resolver: DependencyResolver): ActionHandler<MyPlayerDTO> {
   return new GameCreateActionHandler(
-    resolver.resolve(apiRequestMakerDependency),
+    resolver.resolve(clientGameManagerDependency),
+    resolver.resolve(controllerRunnerDependency),
   );
 }
+
 export const gameCreateActionHandlerDependency = defineDependency({
   kind: "game-create-action-handler",
   provider: provideGameCreateActionHandler,

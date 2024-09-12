@@ -1,31 +1,58 @@
-import { EndpointContract, EndpointProps } from "@acme/endpoint/endpoint.ts";
-import { InferPathParams, createURLFromPathContract } from "@acme/endpoint/path.ts";
-import { InferPayload } from "@acme/endpoint/payload-json.ts";
+import { InferPathParams } from "@acme/endpoint/path.ts";
+import { InferJSONPayload, InferPayload } from "@acme/endpoint/payload-json.ts";
+import { RequestContract, RequestProps } from "@acme/endpoint/request.ts";
+import { ResponseContract, ResponseProps } from "@acme/endpoint/response.ts";
+import { Panic } from "@acme/useful/errors.ts";
 
 export class RequestMaker {
   public constructor(
     public readonly urlBase: string,
   ) {}
 
-  public async makeRequest<TProps extends EndpointProps>(
-    contract: EndpointContract<TProps>,
-    payload: InferPayload<TProps["request"]["payload"]>,
-    pathParams: InferPathParams<TProps["request"]["path"]>,
+  public makeRequest<TProps extends RequestProps>(
+    contract: RequestContract<TProps>,
+    pathParams?: InferPathParams<TProps["path"]>,
+    payload?: InferPayload<TProps["payload"]>,
   ) {
-    const url = createURLFromPathContract(contract.request.path, pathParams, this.urlBase);
+    const url = new URL(contract.path.create(pathParams ?? {}), this.urlBase);
     const request = new Request(url, {
-      method: contract.request.method,
+      method: contract.method,
       headers: {
         // TODO: hardcode
-        "Content-Type": "application/json",
+        "content-type": "application/json",
       },
-      body: JSON.stringify(payload),
+      body: payload ? JSON.stringify(payload) : undefined,
     });
+    return request;
+  }
 
-    const response = await fetch(request);
+  public processEmptyResponse<TProps extends ResponseProps>(
+    contract: ResponseContract<TProps>,
+    response: Response,
+  ) {
+    if (response.status !== contract.status) {
+      throw new Panic('unexpected-response-status', { contract, actual: response.status });
+    }
+  }
+
+  public async processJSONResponse<TProps extends ResponseProps>(
+    contract: ResponseContract<TProps>,
+    response: Response,
+  ): Promise<InferJSONPayload<TProps["payload"]>> {
+    if (response.status !== contract.status) {
+      throw new Panic('unexpected-response-status', { contract, actual: response.status });
+    }
+    if (contract.payload === null) {
+      throw new Panic('contract-not-contain-payload', { contract });
+    }
+    const contentType = response.headers.get("content-type");
+    if (contentType !== contract.payload?.contentType) {
+      throw new Panic('unexpected-response-content-type', { contract, actual: contentType });
+    }
+
     const json = await response.text();
     const data = JSON.parse(json);
 
-    return { response, data };
+    return data as InferJSONPayload<TProps["payload"]>;
   }
 }

@@ -5,6 +5,7 @@ import { defineDependency, DependencyResolver } from "@acme/dependency/injection
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { frontendScopeContract } from "../../bootstrap.ts";
 import { View } from "../common.ts";
+import { IntroTop, introTopDependency } from "./intro-top.ts";
 
 export class AppView implements View {
   public readonly $root: HTMLDivElement;
@@ -14,6 +15,7 @@ export class AppView implements View {
 
   public constructor(
     private readonly appSlot: Slot,
+    private readonly introTop: IntroTop,
     private readonly modalManager: ModalManager,
   ) {
     const $main = div("app_main");
@@ -26,6 +28,7 @@ export class AppView implements View {
       this.modalManager.$root,
       this.toolbarSlot.$root,
     ]);
+    this.topSlot.attach(this.introTop.$root);
   }
 
   public render() {
@@ -36,6 +39,7 @@ export class AppView implements View {
 export function provideAppView(resolver: DependencyResolver) {
   return new AppView(
     resolver.resolve(appSlotDependency),
+    resolver.resolve(introTopDependency),
     resolver.resolve(modalManagerDependency),
   );
 }
