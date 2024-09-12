@@ -1,7 +1,8 @@
 import { Channel } from "@acme/dependency/channel.ts";
-import { DependencyResolver, defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { frontendScopeContract } from "../../bootstrap.ts";
 import { appNameDependency } from "./app-name-config.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
 export class TopTitleStore extends Channel<[]> {
   public title: string;
@@ -20,7 +21,7 @@ export function provideTopTitle(resolver: DependencyResolver) {
 }
 
 export const topTitleStoreDependency = defineDependency({
-  kind: "top-title-store",
+  name: "top-title-store",
   provider: provideTopTitle,
   scope: frontendScopeContract,
 });

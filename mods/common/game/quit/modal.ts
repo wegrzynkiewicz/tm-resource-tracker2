@@ -1,12 +1,12 @@
 import { Channel } from "../../../core/channel.ts";
 import { createQuestionModal } from "../../../app-client/src/question-modal.ts";
-import { defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 
 export function provideQuitGameChannel() {
   return new Channel<null>();
 }
 export const quitGameChannelDependency = defineDependency({
-  kind: "quit-game-channel",
+  name: "quit-game-channel",
   provider: provideQuitGameChannel,
 });
 

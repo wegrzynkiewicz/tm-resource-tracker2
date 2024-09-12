@@ -6,7 +6,7 @@ import { provideTokenManager, TokenManager } from "../../token/manager.ts";
 import { provideServerPlayerManager } from "../../player/server/manager.ts";
 import { parseAuthorizationToken } from "../../token/common.ts";
 import { EPContext, EPHandler, EPRoute } from "../../../core/web/endpoint.ts";
-import { defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 
 export const readGameEPRoute = new EPRoute("GET", "/games/read");
 
@@ -44,6 +44,6 @@ export function provideReadGameEPHandler(resolver: DependencyResolver) {
   );
 }
 export const readGameEPHandlerDependency = defineDependency({
-  kind: "read-game-ep-handler",
+  name: "read-game-ep-handler",
   provider: provideReadGameEPHandler,
 });

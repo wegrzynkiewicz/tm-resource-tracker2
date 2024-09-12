@@ -1,4 +1,4 @@
-import { DependencyResolver, defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { ControllerHandler, ControllerRunner, controllerRunnerDependency } from "../controller.ts";
 import { WaitingView, waitingViewDependency } from "./waiting-view.ts";
 import { ClientGameManager, clientGameManagerDependency } from "../game/game-manager.ts";
@@ -35,6 +35,6 @@ function provideWaitingControllerHandler(resolver: DependencyResolver) {
 }
 
 export const waitingControllerHandlerDependency = defineDependency({
-  kind: "waiting-controller-handler",
+  name: "waiting-controller-handler",
   provider: provideWaitingControllerHandler,
 });

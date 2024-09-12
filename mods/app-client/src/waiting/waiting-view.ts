@@ -1,15 +1,14 @@
 import { Player } from "../../../common/player/common.ts";
-import { ComponentFactory } from "../../../core/frontend-framework/loop.ts";
-import { Collection } from "../../../core/frontend-framework/store.ts";
-import { DependencyResolver, defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { createEditBox } from "../edit-box.ts";
 import { button, div, div_nodes } from "@acme/dom/nodes.ts";
 import { AppView, appViewDependency } from "../app/app-view.ts";
 import { frontendScopeContract } from "../../bootstrap.ts";
 import { DocTitle, docTitleDependency } from "../app/doc-title.ts";
 import { ClientGame, clientGameDependency } from "../game/game-manager.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
-export class WaitingPlayerFactory implements ComponentFactory<Player> {
+export class WaitingPlayerFactory {
   public create(player: Player): HTMLElement {
     const { name, color } = player;
     const $root = div_nodes("history _background", [
@@ -22,9 +21,9 @@ export class WaitingPlayerFactory implements ComponentFactory<Player> {
   }
 }
 
-export function provideWaitingPlayersCollection() {
-  return new Collection<Player>([]);
-}
+// export function provideWaitingPlayersCollection() {
+//   return new Collection<Player>([]);
+// }
 
 export class WaitingView {
   public readonly $root: HTMLDivElement;
@@ -128,7 +127,7 @@ export function provideWaitingView(resolver: DependencyResolver) {
 }
 
 export const waitingViewDependency = defineDependency({
-  kind: "waiting-view",
+  name: "waiting-view",
   provider: provideWaitingView,
   scope: frontendScopeContract,
 });

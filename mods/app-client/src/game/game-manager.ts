@@ -1,36 +1,37 @@
-import { Scope, scopeDependency } from "@acme/dependency/scopes.ts";
 import { gameScopeContract } from "../../../app-server/game/game-scope.ts";
-import { DependencyResolver, defineDependency } from "@acme/dependency/injection.ts";
-import { myPlayerDependency } from "../player/my-player.ts";
-import { frontendScopeContract } from "../../bootstrap.ts";
-import { Panic } from "@acme/useful/errors.ts";
-import { apiRequestMakerDependency } from "../api-request-maker.ts";
-import { MyPlayerDTO } from "../../../common/player/common.ts";
-import { RequestMaker } from "../request-maker.ts";
+import { GameDTO } from "../../../common/game/defs.ts";
 import { gameCreateRequestContract, gameCreateResponseContract } from "../../../common/game/game-create.ts";
 import { gameReadRequestContract, gameReadResponseContract } from "../../../common/game/game-read.ts";
-import { GameDTO } from "../../../common/game/defs.ts";
+import { MyPlayerDTO } from "../../../common/player/common.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { frontendScopeContract } from "../../bootstrap.ts";
+import { apiRequestMakerDependency } from "../api-request-maker.ts";
+import { myPlayerDependency } from "../player/my-player.ts";
+import { RequestMaker } from "../request-maker.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
+import { Scope } from "@acme/dependency/scopes.ts";
+import { Panic } from "@acme/useful/errors.ts";
 
 export interface ClientGame {
   gameId: string;
   scope: Scope;
 }
 
-export const clientGameDependency = defineDependency<ClientGame>({ kind: "client-game" });
-export const clientGameTokenDependency = defineDependency<string>({ kind: "client-game-token" });
+export const clientGameDependency = defineDependency<ClientGame>({ name: "client-game" });
+export const clientGameTokenDependency = defineDependency<string>({ name: "client-game-token" });
 
 export class ClientGameManager {
   public game: ClientGame | null = null;
 
   public constructor(
-    private apiRequestMaker: RequestMaker,
-    private parentScope: Scope,
+    private readonly apiRequestMaker: RequestMaker,
+    private readonly resolver: DependencyResolver,
   ) {}
 
   private async createScope(payload: GameDTO) {
     const { gameId, token, player } = payload;
-    const scope = new Scope(gameScopeContract, { gameId }, this.parentScope);
-    const { resolver } = scope;
+    const scope = new Scope(gameScopeContract);
+    const resolver = new DependencyResolver([...this.resolver.scopes, scope]);
 
     localStorage.setItem("token", token);
 
@@ -75,12 +76,12 @@ export class ClientGameManager {
 export function provideClientGameManager(resolver: DependencyResolver) {
   return new ClientGameManager(
     resolver.resolve(apiRequestMakerDependency),
-    resolver.resolve(scopeDependency),
+    resolver,
   );
 }
 
 export const clientGameManagerDependency = defineDependency({
-  kind: "client-game-manager",
+  name: "client-game-manager",
   provider: provideClientGameManager,
   scope: frontendScopeContract,
 });
@@ -187,6 +188,6 @@ export const clientGameManagerDependency = defineDependency({
 //   );
 // }
 // export const clientGameManagerDependency = defineDependency({
-//   kind: "client-game-manager",
+//   name: "client-game-manager",
 //   provider: provideClientGameManager,
 // });

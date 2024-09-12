@@ -1,5 +1,3 @@
-import { onClick } from "../../app-client/src/common.ts";
-
 import { ResourceGroup, ResourceTarget } from "../../core/resources.ts";
 import { createResourceGroup, resources, ResourceType } from "../../core/resources.ts";
 import { createSupplyModal } from "./supply-modal.ts";

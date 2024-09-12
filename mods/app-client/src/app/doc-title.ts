@@ -1,6 +1,7 @@
-import { DependencyResolver, defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { frontendScopeContract } from "../../bootstrap.ts";
 import { appNameDependency } from "./app-name-config.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
 export class DocTitle {
   public constructor(
@@ -19,7 +20,7 @@ export function provideDocTitle(resolver: DependencyResolver) {
 }
 
 export const docTitleDependency = defineDependency({
-  kind: "doc-title",
+  name: "doc-title",
   provider: provideDocTitle,
   scope: frontendScopeContract,
 });

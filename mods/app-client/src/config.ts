@@ -1,4 +1,4 @@
-import { defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 
 export interface ClientConfig {
   readonly apiUrl: string;
@@ -12,6 +12,6 @@ export function provideClientConfig() {
   };
 }
 export const clientConfigDependency = defineDependency({
-  kind: "client-config",
+  name: "client-config",
   provider: provideClientConfig,
 });

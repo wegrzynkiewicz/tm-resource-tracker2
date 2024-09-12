@@ -1,13 +1,4 @@
 import { colors } from "../../common/color/color.ts";
-import {
-  button,
-  div_nodes,
-  fieldset,
-  form,
-  input_props,
-  label_props,
-  legend,
-} from "../../core/frontend-framework/dom.ts";
 import { createSelector } from "./utils/selector.ts";
 
 export function createPersonalInfo() {

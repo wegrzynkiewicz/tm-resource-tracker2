@@ -1,4 +1,4 @@
-import { defineScope, globalScopeContract } from "@acme/dependency/scopes.ts";
+import { defineScope } from "@acme/dependency/scopes.ts";
 
-export const frontendScopeContract = defineScope("FE", globalScopeContract);
-export const controllerScopeContract = defineScope("CTRL", globalScopeContract);
+export const frontendScopeContract = defineScope("FRONTEND");
+export const controllerScopeContract = defineScope("CTRL");

@@ -1,4 +1,4 @@
-import { Channel, Subscriber } from "@acme/dependency/channel.ts";
+import { Subscriber } from "@acme/dependency/channel.ts";
 
 export class Store {
   public readonly subscribers = new Set<Subscriber<[this]>>();
@@ -15,36 +15,36 @@ export class Store {
   }
 }
 
-export class Collection<TItem> {
-  public readonly updates = new Channel<TItem[]>();
-  public constructor(
-    public readonly items: TItem[],
-  ) {}
-  public update() {
-    this.updates.emit(this.items);
-  }
-}
+// export class Collection<TItem> {
+//   public readonly updates = new Channel<TItem[]>();
+//   public constructor(
+//     public readonly items: TItem[],
+//   ) {}
+//   public update() {
+//     this.updates.emit(this.items);
+//   }
+// }
 
-export class Signal<TValue> {
-  public readonly handlers = new Set<ShortHandler<TValue>>();
+// export class Signal<TValue> {
+//   public readonly handlers = new Set<ShortHandler<TValue>>();
 
-  public constructor(
-    public value: TValue,
-  ) {}
+//   public constructor(
+//     public value: TValue,
+//   ) {}
 
-  public on(handler: ShortHandler<TValue>) {
-    this.handlers.add(handler);
-    handler(this.value);
-  }
+//   public on(handler: ShortHandler<TValue>) {
+//     this.handlers.add(handler);
+//     handler(this.value);
+//   }
 
-  public update(value: TValue) {
-    this.value = value;
-    this.emit();
-  }
+//   public update(value: TValue) {
+//     this.value = value;
+//     this.emit();
+//   }
 
-  public emit() {
-    for (const handler of this.handlers) {
-      handler(this.value);
-    }
-  }
-}
+//   public emit() {
+//     for (const handler of this.handlers) {
+//       handler(this.value);
+//     }
+//   }
+// }

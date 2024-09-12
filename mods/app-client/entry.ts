@@ -2,7 +2,6 @@ import { builtInConfigValueExtractorDependency } from "@acme/config/built-in-ext
 import { configBinderDependency } from "@acme/config/common.ts";
 import { configValueResultMapDependency } from "@acme/config/value-getter.ts";
 import { configValueExtractorsDependency, configValueResolverDependency } from "@acme/config/value-resolver.ts";
-import { DependencyResolver } from "@acme/dependency/injection.ts";
 import { initGlobalLogChannel } from "@acme/logger/log-channel.ts";
 import { loggingStrategyConfigContract } from "@acme/logger/logging-strategy-config.ts";
 import { Scope, globalScopeContract } from "@acme/dependency/scopes.ts";
@@ -13,6 +12,7 @@ import { frontendScopeContract } from "./bootstrap.ts";
 import { apiURLConfigContract } from "./src/api-url-config.ts";
 import { waitingControllerContract } from "./src/waiting/common.ts";
 import { appNameConfigContract } from "./src/app/app-name-config.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
 async function initClientConfig(resolver: DependencyResolver): Promise<void> {
   const extractors = [
@@ -30,8 +30,9 @@ async function initClientConfig(resolver: DependencyResolver): Promise<void> {
   resolver.inject(configValueResultMapDependency, valueResultMap);
 }
 
-async function initFrontend(frontendScope: Scope): Promise<void> {
-  const { resolver } = frontendScope;
+async function initFrontend(parentResolver: DependencyResolver): Promise<void> {
+  const frontendScope = new Scope(frontendScopeContract);
+  const resolver = new DependencyResolver([...parentResolver.scopes, frontendScope]);
 
   const appSlot = resolver.resolve(appSlotDependency);
   document.body.appendChild(appSlot.$root);
@@ -49,13 +50,11 @@ async function initFrontend(frontendScope: Scope): Promise<void> {
 }
 
 async function start() {
-  const globalScope = new Scope(globalScopeContract, {}, null);
-  const { resolver } = globalScope;
+  const globalScope = new Scope(globalScopeContract);
+  const resolver = new DependencyResolver([globalScope]);
 
   await initClientConfig(resolver);
   await initGlobalLogChannel(resolver);
-
-  const frontendScope = new Scope(frontendScopeContract, {}, globalScope);
-  await initFrontend(frontendScope);
+  await initFrontend(resolver);
 }
 start();

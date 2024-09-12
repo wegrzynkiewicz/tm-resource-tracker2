@@ -1,4 +1,4 @@
 import { Player } from "../../../common/player/common.ts";
-import { defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 
-export const myPlayerDependency = defineDependency<Player>({ kind: "my-player" });
+export const myPlayerDependency = defineDependency<Player>({ name: "my-player" });

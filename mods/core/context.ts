@@ -1,4 +1,4 @@
-import { DependencyResolver } from "@acme/dependency/injection.ts";
+import { DependencyResolver } from "@acme/dependency/declaration.ts";
 
 export interface Context<TIdentifier> {
   descriptor: string;

@@ -5,7 +5,7 @@ import { Player, PlayerUpdateDTO, providePlayer } from "../common.ts";
 export type ServerUpdatedMyPlayerGA = PlayerUpdateDTO;
 
 export const serverUpdatedMyPlayerGADef: GADefinition<ServerUpdatedMyPlayerGA> = {
-  kind: "server-updated-my-player",
+  name: "server-updated-my-player",
 };
 
 export class ServerUpdatedMyPlayerGAHandler implements GAHandler<ServerUpdatedMyPlayerGA> {

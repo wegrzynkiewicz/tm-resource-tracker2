@@ -1,9 +1,9 @@
-import { defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Scope } from "@acme/dependency/scopes.ts";
 
-export interface Game {
+export interface ServerGame {
   gameId: string;
   scope: Scope;
 }
 
-export const gameDependency = defineDependency({ kind: "game" });
+export const gameDependency = defineDependency({ name: "game" });

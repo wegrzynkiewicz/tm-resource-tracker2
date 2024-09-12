@@ -1,7 +1,7 @@
 import { cryptoRandomString } from "../../../app-server/deps.ts";
 import { Breaker } from "../../../core/asserts.ts";
 import { Context } from "../../../core/context.ts";
-import { defineDependency, DependencyResolver, Scope, scopeDependency } from "@acme/dependency/injection.ts";
+import { defineDependency, DependencyResolver, Scope, scopeDependency } from "@acme/dependency/declaration.ts";
 import { loggerDependency } from "@acme/logger/defs.ts";
 import { LoggerFactory, loggerFactoryDependency } from "@acme/logger/factory.ts";
 import { globalScopeContract } from "@acme/dependency/scopes.ts";
@@ -16,7 +16,7 @@ export function provideServerGameContext(): ServerGameContext {
   throw new Breaker("server-game-context-must-be-injected");
 }
 export const serverGameContextDependency = defineDependency({
-  kind: "server-game-context",
+  name: "server-game-context",
   provider: provideServerGameContext,
 });
 
@@ -71,7 +71,7 @@ export function provideServerGameContextManager(resolver: DependencyResolver) {
   );
 }
 export const serverGameContextManagerDependency = defineDependency({
-  kind: "server-game-context-manager",
+  name: "server-game-context-manager",
   provider: provideServerGameContextManager,
   scope: globalScopeContract,
 });

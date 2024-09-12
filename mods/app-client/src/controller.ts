@@ -1,14 +1,15 @@
 import { InferPathParams, PathContract } from "@acme/endpoint/path.ts";
-import { DependencyResolver, defineDependency } from "@acme/dependency/injection.ts";
-import { Scope, scopeDependency } from "@acme/dependency/scopes.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { controllerScopeContract, frontendScopeContract } from "../bootstrap.ts";
 import { Panic } from "@acme/useful/errors.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Scope } from "@acme/dependency/scopes.ts";
 
 export interface ControllerHandler {
   handle(contract: ControllerContract): Promise<void>;
 }
 
-export type ControllerInitializer = (scope: Scope, contract: ControllerContract) => Promise<void>;
+export type ControllerInitializer = (resolver: DependencyResolver) => Promise<void>;
 export type ControllerImporter = () => Promise<ControllerInitializer>;
 
 export interface ControllerProps {
@@ -36,18 +37,18 @@ function provideControllerBinder() {
   return new ControllerBinder();
 }
 export const controllerBinderDependency = defineDependency({
-  kind: "controller-binder",
+  name: "controller-binder",
   provider: provideControllerBinder,
 });
 
 export class ControllerRunner {
   public constructor(
-    private readonly scope: Scope,
     private readonly binder: ControllerBinder,
+    private readonly resolver: DependencyResolver,
   ) {}
 
   public async run<TProps extends ControllerProps>(
-    contract: ControllerContract<TProps>, 
+    contract: ControllerContract<TProps>,
     pathParams: InferPathParams<TProps["path"]>,
   ) {
     history.pushState(pathParams, "", contract.path.create(pathParams));
@@ -55,12 +56,13 @@ export class ControllerRunner {
   }
 
   public async init<TProps extends ControllerProps>(
-    contract: ControllerContract<TProps>, 
+    contract: ControllerContract<TProps>,
   ) {
-    const controllerScope = new Scope(controllerScopeContract, { controller: contract.name }, this.scope);
+    const controllerScope = new Scope(controllerScopeContract);
+    const resolver = new DependencyResolver([...this.resolver.scopes, controllerScope]);
     try {
       const initializer = await contract.importer();
-      await initializer(controllerScope, contract);
+      await initializer(resolver);
     } catch (error) {
       throw new Panic("controller-initialization-failed", { controller: contract.name, error });
     }
@@ -79,12 +81,12 @@ export class ControllerRunner {
 
 export function provideControllerRunner(resolver: DependencyResolver) {
   return new ControllerRunner(
-    resolver.resolve(scopeDependency),
     resolver.resolve(controllerBinderDependency),
+    resolver,
   );
 }
 export const controllerRunnerDependency = defineDependency({
-  kind: "controller-runner",
+  name: "controller-runner",
   provider: provideControllerRunner,
   scope: frontendScopeContract,
 });

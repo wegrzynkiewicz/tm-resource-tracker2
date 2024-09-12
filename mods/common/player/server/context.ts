@@ -2,7 +2,7 @@ import { assertObject } from "../../../core/asserts.ts";
 import { Channel } from "../../../core/channel.ts";
 import { webSocketChannelDependency, webSocketDependency } from "../../../core/communication/socket.ts";
 import { Context } from "../../../core/context.ts";
-import { DependencyResolver } from "@acme/dependency/injection.ts";
+import { DependencyResolver } from "@acme/dependency/declaration.ts";
 import { ServerGameContext, serverGameContextDependency } from "../../game/server/context.ts";
 import { ServerPlayerManager, serverPlayerManagerDependency } from "./manager.ts";
 import { feedServerGAProcessor } from "./processor.ts";

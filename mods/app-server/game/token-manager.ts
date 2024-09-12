@@ -1,5 +1,5 @@
 import { cryptoRandomString } from "../../app-server/deps.ts";
-import { defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { ServerPlayerScopeIdentifier } from "../defs.ts";
 import { globalScopeContract } from "@acme/dependency/scopes.ts";
 
@@ -27,7 +27,7 @@ export function provideTokenManager() {
   return new TokenManager();
 }
 export const tokenManagerDependency = defineDependency({
-  kind: "token-manager",
+  name: "token-manager",
   provider: provideTokenManager,
   scope: globalScopeContract,
 });

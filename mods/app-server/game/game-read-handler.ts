@@ -1,4 +1,3 @@
-import { defineDependency, DependencyResolver } from "@acme/dependency/injection.ts";
 import { WebHandler } from "@acme/web/common.ts";
 import { ServerGameManager, serverGameManagerDependency } from "./game-scope.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
@@ -9,6 +8,8 @@ import { notFoundErrorResponseContract } from "@acme/endpoint/build-in/errors.ts
 import { serverPlayerManagerDependency } from "../player/server-player-manager.ts";
 import { GameDTO } from "../../common/game/defs.ts";
 import { gameReadResponseContract } from "../../common/game/game-read.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
 export class GameReadWebHandler implements WebHandler {
   public constructor(
@@ -32,7 +33,7 @@ export class GameReadWebHandler implements WebHandler {
     if (game === undefined) {
       return jsonResponse(notFoundErrorResponseContract, { error: "game-not-found" });
     }
-    const { resolver } = game.scope;
+    const resolver = new DependencyResolver([game.scope]);
 
     const playerManager = resolver.resolve(serverPlayerManagerDependency);
     const player = playerManager.players.get(playerId);
@@ -55,6 +56,6 @@ export function provideGameReadWebHandler(resolver: DependencyResolver): WebHand
 }
 
 export const gameReadWebHandlerDependency = defineDependency({
-  kind: "game-read-web-handler",
+  name: "game-read-web-handler",
   provider: provideGameReadWebHandler,
 });

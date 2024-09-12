@@ -1,6 +1,6 @@
 import { ClientConfig, clientConfigDependency } from "../../../app-client/src/config.ts";
 import { Channel } from "../../../core/channel.ts";
-import { defineDependency, DependencyResolver, Scope, scopeDependency } from "@acme/dependency/injection.ts";
+import { defineDependency, DependencyResolver, Scope, scopeDependency } from "@acme/dependency/declaration.ts";
 import { MyPlayerDTO } from "../../player/common.ts";
 import { Game } from "../game-create.ts";
 import { JoinGame } from "../join/common.ts";
@@ -111,6 +111,6 @@ export function provideClientGameManager(resolver: DependencyResolver) {
   );
 }
 export const clientGameManagerDependency = defineDependency({
-  kind: "client-game-manager",
+  name: "client-game-manager",
   provider: provideClientGameManager,
 });

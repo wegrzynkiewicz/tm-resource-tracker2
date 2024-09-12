@@ -1,11 +1,12 @@
 import { MyPlayerDTO } from "../../../common/player/common.ts";
-import { DependencyResolver, defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { ActionHandlerInput } from "../actions.ts";
 import { ActionHandler, defineAction } from "../actions.ts";
 import { controllerScopeContract } from "../../bootstrap.ts";
 import { ControllerRunner, controllerRunnerDependency } from "../controller.ts";
 import { waitingControllerContract } from "../waiting/common.ts";
 import { ClientGameManager, clientGameManagerDependency } from "../game/game-manager.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
 export const gameCreateActionContract = defineAction<MyPlayerDTO>("game-create");
 
@@ -29,7 +30,7 @@ export function provideGameCreateActionHandler(resolver: DependencyResolver): Ac
 }
 
 export const gameCreateActionHandlerDependency = defineDependency({
-  kind: "game-create-action-handler",
+  name: "game-create-action-handler",
   provider: provideGameCreateActionHandler,
   scope: controllerScopeContract,
 });

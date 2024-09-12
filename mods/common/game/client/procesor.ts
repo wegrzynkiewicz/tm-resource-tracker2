@@ -1,5 +1,5 @@
 import { GAProcessor } from "../../../core/communication/processor.ts";
-import { DependencyResolver } from "@acme/dependency/injection.ts";
+import { DependencyResolver } from "@acme/dependency/declaration.ts";
 
 export function feedClientGAProcessor(resolver: DependencyResolver, gaProcessor: GAProcessor) {
   const handlers = gaProcessor.handlers;

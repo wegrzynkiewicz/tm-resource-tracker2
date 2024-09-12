@@ -14,5 +14,5 @@ export function providePlayingGame(): PlayingGame {
 export type PlayingGameGA = PlayingGame;
 
 export const playingGameGADef: GADefinition<PlayingGameGA> = {
-  kind: "playing-game",
+  name: "playing-game",
 };

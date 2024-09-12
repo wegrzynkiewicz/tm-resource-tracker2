@@ -1,4 +1,4 @@
-import { defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Player, PlayerInput } from "../../common/player/common.ts";
 
 export let playerIdCounter = 0;
@@ -35,6 +35,6 @@ export function provideServerPlayerManager() {
 }
 
 export const serverPlayerManagerDependency = defineDependency({
-  kind: "server-player-manager",
+  name: "server-player-manager",
   provider: provideServerPlayerManager,
 });

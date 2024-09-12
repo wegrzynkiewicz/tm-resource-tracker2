@@ -6,7 +6,7 @@ import { provideTokenManager, TokenManager } from "../../token/manager.ts";
 import { provideServerPlayerManager } from "../../player/server/manager.ts";
 import { EPContext, EPHandler, EPRoute } from "../../../core/web/endpoint.ts";
 import { GameResponse } from "../game.ts";
-import { defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 
 export interface JoinGameEPRequest {
   color: ColorKey;
@@ -60,6 +60,6 @@ export function provideJoinGameEPHandler(resolver: DependencyResolver) {
   );
 }
 export const joinGameEPHandlerDependency = defineDependency({
-  kind: "join-game-ep-handler",
+  name: "join-game-ep-handler",
   provider: provideJoinGameEPHandler,
 });

@@ -1,6 +1,5 @@
 import { Resource, resourcesByType } from "../../core/resources.ts";
 import { ResourceTarget, ResourceType } from "../../core/resources.ts";
-import { onClick } from "../../app-client/src/common.ts";
 import { withResolvers } from "../../core/useful.ts";
 
 export function createCalculatorButton(digit: number) {

@@ -1,16 +1,16 @@
 import { InferPayload, isJSONPayloadContract } from "@acme/endpoint/payload-json.ts";
-import { ErrorFormatter, LayoutError, parseUsingLayout } from "@acme/layout/common.ts";
+import { ErrorFormatter, parseUsingLayout } from "@acme/layout/common.ts";
 import { Panic } from "@acme/useful/errors.ts";
 import { RequestContract, RequestProps } from "@acme/endpoint/request.ts";
 import { Result, Success } from "@acme/useful/result.ts";
-import { InferJSONPayload } from "@acme/endpoint/payload-json.ts";
 import { InferPathParams } from "@acme/endpoint/path.ts";
 import { jsonResponse } from "@acme/endpoint/payload-json.ts";
 import { badRequestErrorResponseContract, methodNotAllowedErrorResponseContract, unsupportedMediaTypeErrorResponseContract } from "@acme/endpoint/build-in/errors.ts";
 import { Failure } from "@acme/useful/result.ts";
 import { DEBUG, Logger, WARN, loggerDependency } from "@acme/logger/defs.ts";
-import { DependencyResolver, defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { endpointScopeContract } from "@acme/dependency/scopes.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
 export interface ParserResult<TPayload, TParams> {
   payload: TPayload,
@@ -90,7 +90,7 @@ export function provideJSONRequestParser(resolver: DependencyResolver) {
   );
 }
 export const jsonRequestParserDependency = defineDependency({
-  kind: "json-request-parser",
+  name: "json-request-parser",
   provider: provideJSONRequestParser,
   scope: endpointScopeContract,
 });

@@ -2,7 +2,7 @@ import { ClientConfig, clientConfigDependency } from "../../../app-client/src/co
 import { Breaker } from "../../../core/asserts.ts";
 import { webSocketChannelDependency, webSocketDependency } from "../../../core/communication/socket.ts";
 import { Context } from "../../../core/context.ts";
-import { defineDependency, DependencyResolver, Scope, scopeDependency } from "@acme/dependency/injection.ts";
+import { defineDependency, DependencyResolver, Scope, scopeDependency } from "@acme/dependency/declaration.ts";
 import { LoggerFactory, loggerFactoryDependency } from "@acme/logger/factory.ts";
 import { Game } from "../game-create.ts";
 import { feedClientGAProcessor } from "./procesor.ts";
@@ -19,7 +19,7 @@ export function provideClientGameContext(): ClientGameContext {
   throw new Breaker("client-game-context-must-be-injected");
 }
 export const clientGameContextDependency = defineDependency({
-  kind: "client-game-context",
+  name: "client-game-context",
   provider: provideClientGameContext,
   scope: frontendScopeContract,
 });
@@ -92,7 +92,7 @@ export function provideClientGameContextManager(resolver: DependencyResolver) {
   );
 }
 export const clientGameContextManagerDependency = defineDependency({
-  kind: "client-game-context-manager",
+  name: "client-game-context-manager",
   provider: provideClientGameContextManager,
   scope: frontendScopeContract,
 });

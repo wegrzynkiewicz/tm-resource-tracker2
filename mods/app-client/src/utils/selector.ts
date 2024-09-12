@@ -1,6 +1,6 @@
+import { Store } from "../../../core/frontend-framework/store.ts";
 import { svg_icon } from "./svg.ts";
 import { div_nodes, input, span } from "@acme/dom/nodes.ts";
-import { Store } from "../../../core/frontend-framework/store.ts";
 
 export interface SelectorOption {
   readonly key: string;

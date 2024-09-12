@@ -1,4 +1,4 @@
-import { defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { JoinGame } from "../join/common.ts";
 import { Channel } from "@acme/dependency/channel.ts";
 import { MyPlayerDTO } from "../../player/common.ts";
@@ -7,7 +7,7 @@ export function provideCreateGameChannel() {
   return new Channel<[MyPlayerDTO]>();
 }
 export const createGameChannelDependency = defineDependency({
-  kind: "create-game-channel",
+  name: "create-game-channel",
   provider: provideCreateGameChannel,
 });
 
@@ -15,6 +15,6 @@ export function provideJoinGameChannel() {
   return new Channel<[JoinGame]>();
 }
 export const joinGameChannelDependency = defineDependency({
-  kind: "join-game-channel",
+  name: "join-game-channel",
   provider: provideJoinGameChannel,
 });

@@ -1,7 +1,8 @@
-import { Dependency, DependencyResolver, defineDependency } from "@acme/dependency/injection.ts";
+import { Dependency, defineDependency } from "@acme/dependency/declaration.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Scope } from "@acme/dependency/scopes.ts";
 import { Panic } from "@acme/useful/errors.ts";
 import { controllerScopeContract } from "../bootstrap.ts";
-import { Scope, scopeDependency } from "@acme/dependency/scopes.ts";
 
 export interface ActionContract<T = unknown> {
   type: string;
@@ -37,14 +38,14 @@ function provideActionBinder() {
   return new ActionBinder();
 }
 export const actionBinderDependency = defineDependency({
-  kind: "action-binder",
+  name: "action-binder",
   provider: provideActionBinder,
 });
 
 export class ActionDispatcher {
   public constructor(
-    private readonly scope: Scope,
     private readonly binder: ActionBinder,
+    private readonly resolver: DependencyResolver,
   ) {}
 
   public dispatch<T>(contract: ActionContract<T>, data: T) {
@@ -52,21 +53,19 @@ export class ActionDispatcher {
     if (binding === undefined) {
       throw new Panic("no-found-action-handler", { contract: contract.type });
     }
-
-    const { resolver } = this.scope;
-    const handler = resolver.resolve(binding.dependency);
+    const handler = this.resolver.resolve(binding.dependency);
     handler.handle({ contract, data });
   }
 }
 
 export function provideActionDispatcher(resolver: DependencyResolver) {
   return new ActionDispatcher(
-    resolver.resolve(scopeDependency),
     resolver.resolve(actionBinderDependency),
+    resolver,
   );
 }
 export const actionDispatcherDependency = defineDependency({
-  kind: "action-dispatcher",
+  name: "action-dispatcher",
   provider: provideActionDispatcher,
   scope: controllerScopeContract,
 });

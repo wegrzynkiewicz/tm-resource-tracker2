@@ -1,5 +1,4 @@
 import { withResolvers } from "../../core/useful.ts";
-import { onClick } from "./common.ts";
 import { ModalResponse } from "./modal.ts";
 
 export interface QuestionModalInput {

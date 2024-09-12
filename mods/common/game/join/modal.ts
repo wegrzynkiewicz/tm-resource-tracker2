@@ -1,10 +1,7 @@
-import { onClick } from "../../../app-client/src/common.ts";
-
 import { withResolvers } from "../../../core/useful.ts";
 import { createEditBox } from "../../../app-client/src/edit-box.ts";
 import { ModalResponse } from "../../../app-client/src/modal.ts";
 import { createColorSelectorBox } from "../../color/color-selector.ts";
-import { assertRequiredString } from "../../../core/asserts.ts";
 import { JoinGame } from "./common.ts";
 
 export function createJoinModal() {

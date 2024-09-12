@@ -3,7 +3,6 @@ import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 import { Player, providePlayer } from "../common.ts";
 import { ClientGameContext, provideClientGameContext } from "../../game/client/context.ts";
 
-import { onClick } from "../../../app-client/src/common.ts";
 import { createQuitGameModal, provideQuitGameChannel } from "../../game/quit/modal.ts";
 import { ModalManager, provideModalManager } from "../../../app-client/src/modal.ts";
 import { Channel } from "../../../core/channel.ts";

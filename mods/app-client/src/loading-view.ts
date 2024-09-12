@@ -1,4 +1,4 @@
-import { defineDependency, DependencyResolver } from "@acme/dependency/injection.ts";
+import { defineDependency, DependencyResolver } from "@acme/dependency/declaration.ts";
 import { div } from "@acme/dom/nodes.ts";
 import { AppView, appViewDependency } from "./app/app-view.ts";
 import { frontendScopeContract } from "../bootstrap.ts";
@@ -22,7 +22,7 @@ export function provideLoadingView(resolver: DependencyResolver) {
   );
 }
 export const loadingViewDependency = defineDependency({
-  kind: "loading-view",
+  name: "loading-view",
   provider: provideLoadingView,
   scope: frontendScopeContract,
 });

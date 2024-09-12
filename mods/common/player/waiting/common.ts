@@ -4,7 +4,7 @@ import { Player } from "../common.ts";
 export type WaitingGameStageGA = null;
 
 export const waitingGameStageGADef: GADefinition<WaitingGameStageGA> = {
-  kind: "waiting-game-stage",
+  name: "waiting-game-stage",
 };
 
 export interface WaitingPlayersGA {
@@ -12,5 +12,5 @@ export interface WaitingPlayersGA {
 }
 
 export const waitingPlayersGADef: GADefinition<WaitingPlayersGA> = {
-  kind: "waiting-players",
+  name: "waiting-players",
 };

@@ -1,5 +1,5 @@
 import { sleep } from "../../core/useful.ts";
-import { defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { comment, div } from "@acme/dom/nodes.ts";
 
 export interface ModalConfirmResponse<TValue> {
@@ -41,6 +41,6 @@ export function provideModalManager() {
   return new ModalManager();
 }
 export const modalManagerDependency = defineDependency({
-  kind: "modal-manager",
+  name: "modal-manager",
   provider: provideModalManager,
 });

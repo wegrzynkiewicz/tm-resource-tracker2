@@ -6,7 +6,7 @@ import { provideServerPlayerContextManager } from "../../player/server/context.t
 import { provideServerPlayerManager } from "../../player/server/manager.ts";
 import { parseAuthorizationToken } from "../../token/common.ts";
 import { EPContext, EPHandler, EPRoute } from "../../../core/web/endpoint.ts";
-import { defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 
 export const quitGameEPRoute = new EPRoute("POST", "/games/quit");
 
@@ -44,6 +44,6 @@ export function provideQuitGameEPHandler(resolver: DependencyResolver) {
   );
 }
 export const quitGameEPHandlerDependency = defineDependency({
-  kind: "quit-game-ep-handler",
+  name: "quit-game-ep-handler",
   provider: provideQuitGameEPHandler,
 });

@@ -1,6 +1,5 @@
 import { gameCreateEndpointContract } from "../common/game/game-create.ts";
 import { gameCreateWebHandlerDependency } from "./game/game-create-handler.ts";
-import { DependencyResolver } from "@acme/dependency/injection.ts";
 import { openAPIEndpointContract, openAPIWebHandlerDependency } from "@acme/endpoint/build-in/open-api.ts";
 import { terminatorDependency } from "@acme/system/terminator.ts";
 import { naiveServerWebRouterDependency, serverWebRouteBinderDependency, serverWebRouterDependency } from "@acme/web/routing.ts";
@@ -10,6 +9,7 @@ import { mainWebServer } from "./config.ts";
 import { preflightEndpointContract, preflightWebHandlerDependency } from "@acme/endpoint/build-in/preflight.ts";
 import { gameReadWebHandlerDependency } from "./game/game-read-handler.ts";
 import { gameReadEndpointContract } from "../common/game/game-read.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
 export function initMainWebServer(resolver: DependencyResolver) {
   const config = resolver.resolve(mainWebServer.webConfigService);

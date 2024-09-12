@@ -4,5 +4,5 @@ import { MyPlayerDTO } from "../common.ts";
 export type ClientUpdatingMyPlayerGA = MyPlayerDTO;
 
 export const clientUpdatingMyPlayerGADef: GADefinition<ClientUpdatingMyPlayerGA> = {
-  kind: "client-updating-my-player",
+  name: "client-updating-my-player",
 };

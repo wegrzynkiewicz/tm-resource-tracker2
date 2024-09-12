@@ -1,6 +1,7 @@
-import { DependencyResolver, defineDependency } from "@acme/dependency/injection.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { ControllerHandler } from "../controller.ts";
 import { HomeView, homepageViewDependency } from "./home-view.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
 export class HomeControllerHandler implements ControllerHandler {
   public constructor(
@@ -19,6 +20,6 @@ function provideHomeControllerHandler(resolver: DependencyResolver) {
 }
 
 export const homeControllerHandlerDependency = defineDependency({
-  kind: "home-controller-handler",
+  name: "home-controller-handler",
   provider: provideHomeControllerHandler,
 });

@@ -1,5 +1,5 @@
 import { InferPathParams } from "@acme/endpoint/path.ts";
-import { InferJSONPayload, InferPayload } from "@acme/endpoint/payload-json.ts";
+import { InferPayload } from "@acme/endpoint/payload-json.ts";
 import { RequestContract, RequestProps } from "@acme/endpoint/request.ts";
 import { ResponseContract, ResponseProps } from "@acme/endpoint/response.ts";
 import { Panic } from "@acme/useful/errors.ts";
@@ -38,7 +38,7 @@ export class RequestMaker {
   public async processJSONResponse<TProps extends ResponseProps>(
     contract: ResponseContract<TProps>,
     response: Response,
-  ): Promise<InferJSONPayload<TProps["payload"]>> {
+  ): Promise<InferPayload<TProps["payload"]>> {
     if (response.status !== contract.status) {
       throw new Panic('unexpected-response-status', { contract, actual: response.status });
     }
@@ -53,6 +53,6 @@ export class RequestMaker {
     const json = await response.text();
     const data = JSON.parse(json);
 
-    return data as InferJSONPayload<TProps["payload"]>;
+    return data as InferPayload<TProps["payload"]>;
   }
 }

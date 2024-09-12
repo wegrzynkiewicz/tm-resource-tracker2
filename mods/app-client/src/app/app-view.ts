@@ -1,11 +1,12 @@
 import { createScroll } from "./scroll.ts";
 import { ModalManager, modalManagerDependency } from "../modal.ts";
 import { Slot } from "../place.ts";
-import { defineDependency, DependencyResolver } from "@acme/dependency/injection.ts";
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { frontendScopeContract } from "../../bootstrap.ts";
 import { View } from "../common.ts";
 import { IntroTop, introTopDependency } from "./intro-top.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
 export class AppView implements View {
   public readonly $root: HTMLDivElement;
@@ -44,7 +45,7 @@ export function provideAppView(resolver: DependencyResolver) {
   );
 }
 export const appViewDependency = defineDependency({
-  kind: "intro-app-view",
+  name: "intro-app-view",
   provider: provideAppView,
   scope: frontendScopeContract,
 });
@@ -53,7 +54,7 @@ export function provideAppSlot() {
   return new Slot("app");
 }
 export const appSlotDependency = defineDependency({
-  kind: "app-slot",
+  name: "app-slot",
   provider: provideAppSlot,
   scope: frontendScopeContract,
 });

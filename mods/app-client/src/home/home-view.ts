@@ -1,5 +1,4 @@
 import { AppView, appViewDependency } from "../app/app-view.ts";
-import { defineDependency, DependencyResolver } from "@acme/dependency/injection.ts";
 import { button, div_nodes } from "@acme/dom/nodes.ts";
 import { PlayerModal } from "../../../common/player/update/player-modal.ts";
 import { ModalManager, modalManagerDependency } from "../modal.ts";
@@ -7,6 +6,8 @@ import { ActionDispatcher, actionDispatcherDependency } from "../actions.ts";
 import { gameCreateActionContract } from "./game-create-action.ts";
 import { frontendScopeContract } from "../../bootstrap.ts";
 import { DocTitle, docTitleDependency } from "../app/doc-title.ts";
+import { defineDependency } from "@acme/dependency/declaration.ts";
+import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
 export class HomeView {
   public readonly $root: HTMLDivElement;
@@ -62,7 +63,7 @@ export function provideHomepageView(resolver: DependencyResolver) {
   );
 }
 export const homepageViewDependency = defineDependency({
-  kind: "home-view",
+  name: "home-view",
   provider: provideHomepageView,
   scope: frontendScopeContract,
 });
