@@ -6,7 +6,7 @@ import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { loggerFactoryDependency } from "@acme/logger/factory.ts";
 
-export const gameScopeContract = defineScope("GAME");
+export const serverGameScopeContract = defineScope("SRV-GAME");
 
 export class ServerGameManager {
   public readonly games = new Map<string, ServerGame>();
@@ -28,7 +28,7 @@ export class ServerGameManager {
   public createServerGame(): ServerGame {
     const gameId = this.generateGameId();
 
-    const scope = new Scope(gameScopeContract);
+    const scope = new Scope(serverGameScopeContract);
     const resolver = new DependencyResolver([...this.resolver.scopes, scope]);
 
     const loggerFactory = resolver.resolve(loggerFactoryDependency);

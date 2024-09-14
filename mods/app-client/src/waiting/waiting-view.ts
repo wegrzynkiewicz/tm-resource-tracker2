@@ -7,6 +7,7 @@ import { frontendScopeContract } from "../../bootstrap.ts";
 import { DocTitle, docTitleDependency } from "../app/doc-title.ts";
 import { ClientGame, clientGameDependency } from "../game/game-manager.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { myPlayerDependency } from "../player/my-player.ts";
 
 export class WaitingPlayerFactory {
   public create(player: Player): HTMLElement {
@@ -32,7 +33,7 @@ export class WaitingView {
     private readonly app: AppView,
     private readonly docTitle: DocTitle,
     private readonly game: ClientGame,
-    // private readonly player: Player,
+    private readonly myPlayer: Player,
     // players: Collection<Player>,
     // private readonly modalManager: ModalManager,
     // private readonly quitGameChannel: Channel<null>,
@@ -64,7 +65,7 @@ export class WaitingView {
           div("space_caption", "You can also..."),
           $change,
           $quitGame,
-          // ...(player.isAdmin ? [$start] : []),
+          ...(myPlayer.isAdmin ? [$start] : []),
         ]),
         div_nodes("space_container", [
           div("space_caption", "Joining players:"),
@@ -116,6 +117,7 @@ export function provideWaitingView(resolver: DependencyResolver) {
     resolver.resolve(appViewDependency),
     resolver.resolve(docTitleDependency),
     resolver.resolve(clientGameDependency),
+    resolver.resolve(myPlayerDependency),
     // resolver.resolve(clientGameContextDependency),
     // resolver.resolve(playerDependency),
     // resolver.resolve(waitingPlayersCollectionDependency),

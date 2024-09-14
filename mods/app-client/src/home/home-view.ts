@@ -8,9 +8,11 @@ import { frontendScopeContract } from "../../bootstrap.ts";
 import { DocTitle, docTitleDependency } from "../app/doc-title.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Slot } from "../place.ts";
 
 export class HomeView {
   public readonly $root: HTMLDivElement;
+  private readonly resumeSlot = new Slot("resume");
 
   public constructor(
     private readonly actionDispatcher: ActionDispatcher,
@@ -21,7 +23,9 @@ export class HomeView {
     const $create = button(`box _action`, "New Game");
     const $join = button("box _action", "Join the Game");
     const $about = button("box _action", "About");
+
     this.$root = div_nodes("homepage", [
+      this.resumeSlot.$root,
       $create,
       $join,
       $about,
@@ -35,6 +39,11 @@ export class HomeView {
         this.actionDispatcher.dispatch(gameCreateActionContract, result.value);
       }
     });
+  }
+
+  public attachResumeGame() {
+    const $resume = button(`box _action`, "Resume the Game");
+    this.resumeSlot.attach($resume);
   }
 
   public render() {

@@ -1,10 +1,9 @@
-import { gameScopeContract } from "../../../app-server/game/game-scope.ts";
 import { GameDTO } from "../../../common/game/defs.ts";
 import { gameCreateRequestContract, gameCreateResponseContract } from "../../../common/game/game-create.ts";
 import { gameReadRequestContract, gameReadResponseContract } from "../../../common/game/game-read.ts";
 import { MyPlayerDTO } from "../../../common/player/common.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
-import { frontendScopeContract } from "../../bootstrap.ts";
+import { clientGameScopeContract, frontendScopeContract } from "../../bootstrap.ts";
 import { apiRequestMakerDependency } from "../api-request-maker.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
 import { RequestMaker } from "../request-maker.ts";
@@ -17,8 +16,15 @@ export interface ClientGame {
   scope: Scope;
 }
 
-export const clientGameDependency = defineDependency<ClientGame>({ name: "client-game" });
-export const clientGameTokenDependency = defineDependency<string>({ name: "client-game-token" });
+export const clientGameDependency = defineDependency<ClientGame>({
+  name: "client-game",
+  scope: clientGameScopeContract,
+});
+
+export const clientGameTokenDependency = defineDependency<string>({
+  name: "client-game-token",
+  scope: clientGameScopeContract,
+});
 
 export class ClientGameManager {
   public game: ClientGame | null = null;
@@ -30,7 +36,7 @@ export class ClientGameManager {
 
   private async createScope(payload: GameDTO) {
     const { gameId, token, player } = payload;
-    const scope = new Scope(gameScopeContract);
+    const scope = new Scope(clientGameScopeContract);
     const resolver = new DependencyResolver([...this.resolver.scopes, scope]);
 
     localStorage.setItem("token", token);
@@ -52,13 +58,13 @@ export class ClientGameManager {
     return this.createScope(payload);
   }
 
-  public async restoreClientGame(): Promise<ClientGame> {
+  public async restoreClientGame(): Promise<ClientGame | undefined> {
     if (this.game) {
       return this.game;
     }
     const token = localStorage.getItem("token");
     if (token === null) {
-      throw new Panic("no-game-token-found");
+      return undefined;
     }
     const request = this.apiRequestMaker.makeRequest(gameReadRequestContract);
     request.headers.set("Authorization", `Bearer ${token}`);
