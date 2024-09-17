@@ -1,5 +1,6 @@
 import { definePath } from "@acme/endpoint/path.ts";
 import { defineController } from "../controller.ts";
+import { initWaitingController } from "./waiting.entry.ts";
 
 export const waitingPathContract = definePath({
   params: [],
@@ -10,7 +11,6 @@ export const waitingControllerContract = defineController({
   name: "waiting",
   path: waitingPathContract,
   importer: async () => {
-    const { initWaitingController } = await import("./waiting.entry.ts");
     return initWaitingController;
   }
 });
