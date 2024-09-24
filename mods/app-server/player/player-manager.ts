@@ -1,17 +1,18 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Player, PlayerInput } from "../../common/player/player.layout.ts";
-import { serverGameScopeContract } from "../game/game-scope.ts";
+import { serverGameScopeContract } from "../game/game-context.ts";
+import { PlayerDTO } from "../../common/player/player.layout.compiled.ts";
+import { PlayerInput } from "../../common/player/player.layout.ts";
 
 export let playerIdCounter = 0;
 
 export class ServerPlayerManager {
-  public readonly players = new Map<number, Player>();
+  public readonly players = new Map<string, PlayerDTO>();
 
-  public createPlayer(input: PlayerInput): Player {
+  public createPlayer(input: PlayerInput): PlayerDTO {
     const { color, isAdmin, name } = input;
-    const playerId = ++playerIdCounter;
+    const playerId = (++playerIdCounter).toString();
 
-    const player: Player = {
+    const player: PlayerDTO = {
       color,
       isAdmin,
       name,
@@ -22,7 +23,7 @@ export class ServerPlayerManager {
     return player;
   }
 
-  public deletePlayer(playerId: number) {
+  public deletePlayer(playerId: string) {
     const playerData = this.players.get(playerId);
     if (playerData === undefined) {
       return;

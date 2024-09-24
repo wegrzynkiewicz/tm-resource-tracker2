@@ -1,5 +1,3 @@
-import { IntegerLayout } from "@acme/layout/types/integer-layout.ts";
-import { NumberGreaterThanValidator } from "@acme/layout/types/number-greater.ts";
 import { BooleanLayout } from "@acme/layout/types/boolean-layout.ts";
 import { ObjectLayout } from "@acme/layout/types/object-layout.ts";
 import { StringLayout } from "@acme/layout/types/string-layout.ts";
@@ -10,10 +8,10 @@ import { ColorKey } from "../color/color.layout.compiled.ts";
 import { StandaloneLayout } from "@acme/layout/types/standalone-layout.ts";
 import { compileLayouts } from "@acme/layout/defs.ts";
 
-export const playerIdLayout = new IntegerLayout({
+export const playerIdLayout = new StringLayout({
   description: "The player ID",
   validators: [
-    new NumberGreaterThanValidator(0),
+    new StringMinLengthValidator(1),
   ],
 });
 
@@ -31,9 +29,9 @@ export const isAdminLayout = new BooleanLayout({
 
 export const playerLayout = new StandaloneLayout({
   meta: import.meta,
-  parserName: "parsePlayer",
+  parserName: "parsePlayerDTO",
   layout: new ObjectLayout({
-    type: "Player",
+    type: "PlayerDTO",
     description: "A player in the game",
     properties: {
       color: colorLayout,

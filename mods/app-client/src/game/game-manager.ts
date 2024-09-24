@@ -3,19 +3,21 @@ import { jsonRequest } from "@acme/useful/json-request.ts";
 import { clientGameScopeContract, frontendScopeContract } from "../../bootstrap.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
+import { readySocket } from "@acme/web/socket.ts";
 import { Scope } from "@acme/dependency/scopes.ts";
-import { Panic } from "@acme/useful/errors.ts";
 import { apiURLDependency } from "../api-url-config.ts";
-import { gameCreatePathname, gameReadPathname } from "../../../common/game/defs.ts";
+import { createGameSocketPathname, gameCreatePathname, gameQuitPathname, gameReadPathname } from "../../../common/game/defs.ts";
 import { GameDTO } from "../../../common/game/game-dto.layout.compiled.ts";
 import { MyPlayerUpdate } from "../../../common/player/player.layout.compiled.ts";
 
-export interface ClientGame {
+export interface ClientGameContext {
   gameId: string;
   scope: Scope;
+  resolver: DependencyResolver;
+  socket: WebSocket;
 }
 
-export const clientGameDependency = defineDependency<ClientGame>({
+export const clientGameContextDependency = defineDependency<ClientGameContext>({
   name: "client-game",
   scope: clientGameScopeContract,
 });
@@ -25,8 +27,13 @@ export const clientGameTokenDependency = defineDependency<string>({
   scope: clientGameScopeContract,
 });
 
+export const clientGameWebSocketDependency = defineDependency<WebSocket>({
+  name: "client-game-web-socket",
+  scope: clientGameScopeContract,
+});
+
 export class ClientGameManager {
-  public game: ClientGame | null = null;
+  public gameContext: ClientGameContext | null = null;
 
   public constructor(
     private readonly apiURL: URL,
@@ -43,14 +50,20 @@ export class ClientGameManager {
     resolver.inject(clientGameTokenDependency, token);
     resolver.inject(myPlayerDependency, player);
 
-    const clientGame: ClientGame = { gameId, scope };
-    resolver.inject(clientGameDependency, clientGame);
+    const url = new URL(createGameSocketPathname(token), this.apiURL);
+    const socket = new WebSocket(url.toString());
+    await readySocket(socket);
 
-    this.game = clientGame;
-    return clientGame;
+
+    const ctx: ClientGameContext = { gameId, scope, resolver, socket };
+    resolver.inject(clientGameContextDependency, ctx);
+    resolver.inject(clientGameWebSocketDependency, socket);
+
+    this.gameContext = ctx;
+    return ctx;
   }
 
-  public async createClientGame(data: MyPlayerUpdate): Promise<ClientGame> {
+  public async createClientGame(data: MyPlayerUpdate): Promise<ClientGameContext> {
     const url = new URL(gameCreatePathname, this.apiURL);
     const request = jsonRequest(url, data, { method: "POST" });
     const response = await fetch(request);
@@ -58,9 +71,9 @@ export class ClientGameManager {
     return this.createScope(payload);
   }
 
-  public async restoreClientGame(): Promise<ClientGame | undefined> {
-    if (this.game) {
-      return this.game;
+  public async restoreClientGame(): Promise<ClientGameContext | undefined> {
+    if (this.gameContext) {
+      return this.gameContext;
     }
     const token = localStorage.getItem("token");
     if (token === null) {
@@ -69,14 +82,41 @@ export class ClientGameManager {
     const url = new URL(gameReadPathname, this.apiURL);
     const request = jsonRequest(url);
     request.headers.set("Authorization", `Bearer ${token}`);
-    const response = await fetch(request);
     try {
-      const payload = await this.apiRequestMaker.processJSONResponse(gameReadResponseContract, response);
-      return this.createScope(payload);
-    } catch (error) {
-      localStorage.removeItem("token");
-      throw new Panic("failed-to-restore-game", { error });
+      const response = await fetch(request);
+      if (response.status === 200) {
+        const payload = await response.json() as GameDTO;
+        return this.createScope(payload);
+      }
+    } catch {
+      // nothing
     }
+    localStorage.removeItem("token");
+    return undefined;
+  }
+
+  public async quitClientGame(): Promise<void> {
+    if (this.gameContext === null) {
+      return;
+    }
+    const { socket } = this.gameContext;
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.close();
+    }
+    this.gameContext = null;
+    const token = localStorage.getItem("token");
+    if (token === null) {
+      return;
+    }
+    const url = new URL(gameQuitPathname, this.apiURL);
+    const request = jsonRequest(url, null, { method: "POST" });
+    request.headers.set("Authorization", `Bearer ${token}`);
+    try {
+      await fetch(request);
+    } catch {
+      // nothing
+    }
+    localStorage.removeItem("token");
   }
 }
 

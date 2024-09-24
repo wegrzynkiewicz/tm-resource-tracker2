@@ -37,7 +37,7 @@ export class NaiveControllerRouter implements ControllerRouter {
 
   public match(pathname: string): ControllerRouteMatch | undefined {
     for (const { importer, urlPattern } of this.routes) {
-      const result = urlPattern.exec(pathname);
+      const result = urlPattern.exec(pathname, window.location.origin);
       if (result === null) {
         continue;
       }

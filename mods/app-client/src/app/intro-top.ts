@@ -20,6 +20,7 @@ export function provideIntroTop(resolver: DependencyResolver): IntroTop {
     resolver.resolve(topTitleStoreDependency),
   );
 }
+
 export const introTopDependency = defineDependency({
   name: "intro-top",
   provider: provideIntroTop,

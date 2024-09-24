@@ -44,6 +44,7 @@ export function provideAppView(resolver: DependencyResolver) {
     resolver.resolve(modalManagerDependency),
   );
 }
+
 export const appViewDependency = defineDependency({
   name: "intro-app-view",
   provider: provideAppView,
@@ -53,6 +54,7 @@ export const appViewDependency = defineDependency({
 export function provideAppSlot() {
   return new Slot("app");
 }
+
 export const appSlotDependency = defineDependency({
   name: "app-slot",
   provider: provideAppSlot,

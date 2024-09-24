@@ -1,8 +1,8 @@
-import { LayoutResult, exceedsMaxStringLengthErrorContract, exceedsMinExclusiveNumberLengthErrorContract, exceedsMinStringLengthErrorContract, expectedIntegerErrorContract, expectedNotNullObjectErrorContract, missingObjectPropertyErrorContract, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
+import { LayoutResult, exceedsMaxStringLengthErrorContract, exceedsMinStringLengthErrorContract, expectedNotNullObjectErrorContract, missingObjectPropertyErrorContract, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
 import { ColorKey, parseColor } from "../color/color.layout.compiled.ts";
 
 /** A player in the game */
-export interface Player {
+export interface PlayerDTO {
   /** One of the five colors */
   color: ColorKey;
   /** The player name */
@@ -10,10 +10,10 @@ export interface Player {
   /** Determines if the player is an admin */
   isAdmin: boolean;
   /** The player ID */
-  playerId: number;
+  playerId: string;
 }
 
-export const schemaPlayer = {
+export const schemaPlayerDTO = {
   "description": "A player in the game",
   "type": "object",
   "properties": {
@@ -39,9 +39,9 @@ export const schemaPlayer = {
       "type": "boolean"
     },
     "playerId": {
-      "type": "integer",
+      "type": "string",
       "description": "The player ID",
-      "exclusiveMinimum": 0
+      "minLength": 1
     }
   },
   "required": [
@@ -52,7 +52,7 @@ export const schemaPlayer = {
   ],
   "additionalProperties": false
 };
-export const parsePlayer = (data: unknown, path: string = ""): LayoutResult<Player> => {
+export const parsePlayerDTO = (data: unknown, path: string = ""): LayoutResult<PlayerDTO> => {
   let output;
   while (true) {
     if (typeof data === "object") {
@@ -116,12 +116,9 @@ export const parsePlayer = (data: unknown, path: string = ""): LayoutResult<Play
         return [false, missingObjectPropertyErrorContract, path, "playerId"];
       }
       while (true) {
-        if (typeof input_playerId === "number") {
-          if (Number.isInteger(input_playerId) === false) {
-            return [false, expectedIntegerErrorContract, path, "playerId"];
-          }
-          if (input_playerId <= 0) {
-            return [false, exceedsMinExclusiveNumberLengthErrorContract, path, "playerId", { exclusiveMinimum: 0 }];
+        if (typeof input_playerId === "string") {
+          if (input_playerId.length < 1) {
+            return [false, exceedsMinStringLengthErrorContract, path, "playerId", { min: 1 }];
           }
           output_playerId = input_playerId;
           break;

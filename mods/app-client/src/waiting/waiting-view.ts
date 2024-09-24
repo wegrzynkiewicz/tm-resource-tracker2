@@ -1,16 +1,20 @@
-import { Player } from "../../../common/player/player.layout.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { createEditBox } from "../edit-box.ts";
 import { button, div, div_nodes } from "@acme/dom/nodes.ts";
 import { AppView, appViewDependency } from "../app/app-view.ts";
 import { frontendScopeContract } from "../../bootstrap.ts";
 import { DocTitle, docTitleDependency } from "../app/doc-title.ts";
-import { ClientGame, clientGameDependency } from "../game/game-manager.ts";
+import { ClientGameContext, clientGameContextDependency, ClientGameManager, clientGameManagerDependency } from "../game/game-manager.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
+import { PlayerDTO } from "../../../common/player/player.layout.compiled.ts";
+import { ControllerRunner, controllerRunnerDependency } from "../controller.ts";
+import { homePath } from "../home/home-defs.ts";
+import { createQuestionModal, modalManagerDependency } from "../modal.ts";
+import { PlayerModal } from "../../../common/player/update/player-modal.ts";
 
 export class WaitingPlayerFactory {
-  public create(player: Player): HTMLElement {
+  public create(player: PlayerDTO): HTMLElement {
     const { name, color } = player;
     const $root = div_nodes("history _background", [
       div_nodes("history_header", [
@@ -32,8 +36,10 @@ export class WaitingView {
   public constructor(
     private readonly app: AppView,
     private readonly docTitle: DocTitle,
-    private readonly game: ClientGame,
-    private readonly myPlayer: Player,
+    private readonly game: ClientGameContext,
+    private readonly myPlayer: PlayerDTO,
+    private readonly manager: ClientGameManager,
+    private readonly controllerRunner: ControllerRunner,
     // players: Collection<Player>,
     // private readonly modalManager: ModalManager,
     // private readonly quitGameChannel: Channel<null>,
@@ -74,6 +80,11 @@ export class WaitingView {
       ]),
     ]);
 
+    $quitGame.addEventListener("click", async () => {
+      await this.manager.quitClientGame();
+      await this.controllerRunner.run(homePath);
+    });
+
     // onClick($quitGame, () => {
     //   this.whenQuidGameClicked();
     // });
@@ -113,19 +124,77 @@ export class WaitingView {
 }
 
 export function provideWaitingView(resolver: DependencyResolver) {
-  return new WaitingView(
-    resolver.resolve(appViewDependency),
-    resolver.resolve(docTitleDependency),
-    resolver.resolve(clientGameDependency),
-    resolver.resolve(myPlayerDependency),
-    // resolver.resolve(clientGameContextDependency),
-    // resolver.resolve(playerDependency),
-    // resolver.resolve(waitingPlayersCollectionDependency),
-    // resolver.resolve(modalManagerDependency),
-    // resolver.resolve(quitGameChannelDependency),
-    // resolver.resolve(playerUpdaterDependency),
-    // resolver.resolve(gameStarterDependency),
-  );
+  const app = resolver.resolve(appViewDependency);
+  const docTitle = resolver.resolve(docTitleDependency);
+  const game = resolver.resolve(clientGameContextDependency);
+  const myPlayer = resolver.resolve(myPlayerDependency);
+  const modalManager = resolver.resolve(modalManagerDependency);
+  const clientGameManager = resolver.resolve(clientGameManagerDependency);
+  const controllerRunner = resolver.resolve(controllerRunnerDependency);
+
+  const gameIdBox = createEditBox({
+    caption: "GameID",
+    name: "gameId",
+    placeholder: "GameID",
+  });
+  gameIdBox.$input.readOnly = true;
+  gameIdBox.$input.value = game.gameId;
+
+  const $change = button("box _action", "Change name or color...");
+  const $quitGame = button("box _action", "Quit game");
+  const $start = button("box _action", "Start game");
+
+  const $loop = div("waiting_players");
+  // new Loop<Player>($loop, players, new WaitingPlayerFactory());
+
+  const $root = div_nodes("waiting", [
+    div_nodes("space", [
+      div_nodes("space_container", [
+        div("space_caption", "Waiting for players..."),
+        gameIdBox.$root,
+      ]),
+      div_nodes("space_container", [
+        div("space_caption", "You can also..."),
+        $change,
+        $quitGame,
+        ...(myPlayer.isAdmin ? [$start] : []),
+      ]),
+      div_nodes("space_container", [
+        div("space_caption", "Joining players:"),
+        $loop,
+      ]),
+    ]),
+  ]);
+
+  $change.addEventListener("click", async () => {
+    const modal = new PlayerModal();
+    await modalManager.mount(modal);
+    const [status, data] = await modal.ready;
+    if (status === true) {
+      // await clientGameManager.updateClientPlayer(data);
+    }
+  });
+
+  $quitGame.addEventListener("click", async () => {
+    const modal = createQuestionModal({
+      titleText: "Do you want to quit the game?",
+      confirmText: "Quit",
+    });
+    await modalManager.mount(modal);
+    const status = await modal.ready;
+    if (status === true) {
+      await clientGameManager.quitClientGame();
+      await controllerRunner.run(homePath);
+    }
+  });
+
+  const render = () => {
+    docTitle.setTitle("Waiting");
+    app.contentSlot.attach($root);
+    app.render();
+  }
+
+  return { $root, render };
 }
 
 export const waitingViewDependency = defineDependency({

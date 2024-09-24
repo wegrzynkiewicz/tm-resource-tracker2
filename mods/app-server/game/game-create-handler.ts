@@ -1,33 +1,30 @@
-import { ServerGameManager, serverGameManagerDependency } from "./game-scope.ts";
+import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
-import { gameCreateRequestContract } from "../../common/game/game-create.ts";
-import { GameDTO } from "../../common/game/defs.ts";
 import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-parser.ts";
-import { serverPlayerManagerDependency } from "../player/server-player-manager.ts";
+import { serverPlayerManagerDependency } from "../player/player-manager.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
+import { parseMyPlayerUpdate } from "../../common/player/player.layout.compiled.ts";
+import { GameDTO } from "../../common/game/game-dto.layout.compiled.ts";
 
 export class GameCreateWebHandler implements EndpointHandler {
   public constructor(
     public readonly parser: JSONRequestParser,
-    public readonly gameManager: ServerGameManager,
+    public readonly gameManager: ServerGameContextManager,
     public readonly tokenManager: TokenManager,
   ) {}
 
   public async handle(request: Request): Promise<Response> {
-    const result = await this.parser.parse(gameCreateRequestContract, request);
-    const [valid, data] = result.toTuple();
-    if (valid === false) {
+    const [status, data] = await this.parser.parse(parseMyPlayerUpdate, request);
+    if (status === false) {
       return data;
     }
 
-    const { color, name } = data.payload;
+    const { color, name } = data;
     const isAdmin = true;
 
-    const game = this.gameManager.createServerGame();
-    const { gameId, scope } = game;
-    const resolver = new DependencyResolver([scope]);
+    const { gameId, resolver } = this.gameManager.createServerGame();
 
     const playerDataManager = resolver.resolve(serverPlayerManagerDependency);
     const player = playerDataManager.createPlayer({ color, name, isAdmin });
@@ -48,6 +45,7 @@ export function provideGameCreateWebHandler(resolver: DependencyResolver): Endpo
     resolver.resolve(tokenManagerDependency),
   );
 }
+
 export const gameCreateWebHandlerDependency = defineDependency({
   name: "game-create-web-handler",
   provider: provideGameCreateWebHandler,

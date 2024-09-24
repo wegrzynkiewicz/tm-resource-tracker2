@@ -2,6 +2,21 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "request": "launch",
+      "name": "Start server",
+      "type": "node",
+      "program": "${workspaceFolder}/mods/app-server/server-entry.ts",
+      "cwd": "${workspaceFolder}",
+      "env": {},
+      "runtimeExecutable": "deno",
+      "runtimeArgs": [
+        "run",
+        "--inspect-wait",
+        "--allow-all"
+      ],
+      "attachSimplePort": 9229
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Run current open file",

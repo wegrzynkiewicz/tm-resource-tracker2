@@ -1,12 +1,12 @@
 import { LayoutResult, expectedNotNullObjectErrorContract, missingObjectPropertyErrorContract, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
-import { Player, parsePlayer } from "../player/player.layout.compiled.ts";
+import { PlayerDTO, parsePlayerDTO } from "../player/player.layout.compiled.ts";
 
 /** Game */
 export interface GameDTO {
   /** Game identifier */
   gameId: string;
   /** A player in the game */
-  player: Player;
+  player: PlayerDTO;
   /** Token */
   token: string;
 }
@@ -45,9 +45,9 @@ export const schemaGameDTO = {
           "type": "boolean"
         },
         "playerId": {
-          "type": "integer",
+          "type": "string",
           "description": "The player ID",
-          "exclusiveMinimum": 0
+          "minLength": 1
         }
       },
       "required": [
@@ -99,7 +99,7 @@ export const parseGameDTO = (data: unknown, path: string = ""): LayoutResult<Gam
         return [false, missingObjectPropertyErrorContract, path, "player"];
       }
       while (true) {
-        const result_player = parsePlayer(input_player);
+        const result_player = parsePlayerDTO(input_player);
         if (result_player[0] === true) {
           output_player = result_player[1];
           break;

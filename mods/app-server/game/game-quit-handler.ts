@@ -1,16 +1,13 @@
-import { GameDTO } from "../../common/game/game-dto.layout.compiled.ts";
+import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
+import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
+import { serverPlayerManagerDependency } from "../player/player-manager.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { parseAuthorizationToken } from "@acme/web/build-in/token.ts";
-import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-parser.ts";
-import { serverPlayerManagerDependency } from "../player/player-manager.ts";
-import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
-import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
 
-export class GameReadEndpointHandler implements EndpointHandler {
+export class GameQuitEndpointHandler implements EndpointHandler {
   public constructor(
-    public readonly parser: JSONRequestParser,
     public readonly gameManager: ServerGameContextManager,
     public readonly tokenManager: TokenManager,
   ) {}
@@ -32,26 +29,20 @@ export class GameReadEndpointHandler implements EndpointHandler {
     }
 
     const playerManager = gameContext.resolver.resolve(serverPlayerManagerDependency);
-    const player = playerManager.players.get(playerId);
-    if (player === undefined) {
-      return Response.json({ error: "player-not-found" }, { status: 404 });
-    }
+    playerManager.deletePlayer(playerId);
 
-    const payload: GameDTO = { gameId, player, token: token.key };
-    const response = Response.json(payload);
-    return response;
+    return new Response(null, { status: 204 });
   }
 }
 
-export function provideGameReadEndpointHandler(resolver: DependencyResolver): EndpointHandler {
-  return new GameReadEndpointHandler(
-    resolver.resolve(jsonRequestParserDependency),
+export function provideGameQuitEndpointHandler(resolver: DependencyResolver): EndpointHandler {
+  return new GameQuitEndpointHandler(
     resolver.resolve(serverGameManagerDependency),
     resolver.resolve(tokenManagerDependency),
   );
 }
 
-export const gameReadEndpointHandlerDependency = defineDependency({
-  name: "game-read-web-handler",
-  provider: provideGameReadEndpointHandler,
+export const gameQuitEndpointHandlerDependency = defineDependency({
+  name: "game-quit-web-handler",
+  provider: provideGameQuitEndpointHandler,
 });

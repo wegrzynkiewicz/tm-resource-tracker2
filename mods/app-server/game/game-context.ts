@@ -1,15 +1,24 @@
 import { defineScope, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { cryptoRandomString } from "../deps.ts";
-import { ServerGame } from "./game.ts";
 import { DEBUG, loggerDependency } from "@acme/logger/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { loggerFactoryDependency } from "@acme/logger/factory.ts";
 
-export const serverGameScopeContract = defineScope("SRV-GAME");
+export interface GameContext {
+  gameId: string;
+  scope: Scope;
+  resolver: DependencyResolver;
+}
 
-export class ServerGameManager {
-  public readonly games = new Map<string, ServerGame>();
+export const serverGameScopeContract = defineScope("SRV-GAME");
+export const serverGameIdDependency = defineDependency<string>({
+  name: "game-id",
+  scope: serverGameScopeContract,
+});
+
+export class ServerGameContextManager {
+  public readonly games = new Map<string, GameContext>();
 
   public constructor(
     private readonly resolver: DependencyResolver,
@@ -25,17 +34,19 @@ export class ServerGameManager {
     }
   }
 
-  public createServerGame(): ServerGame {
+  public createServerGame(): GameContext {
     const gameId = this.generateGameId();
 
     const scope = new Scope(serverGameScopeContract);
     const resolver = new DependencyResolver([...this.resolver.scopes, scope]);
+    const ctx: GameContext = { gameId, resolver, scope };
+
+    resolver.inject(serverGameIdDependency, gameId);
 
     const loggerFactory = resolver.resolve(loggerFactoryDependency);
     const logger = loggerFactory.createLogger("GAME", { gameId });
     resolver.inject(loggerDependency, logger);
 
-    const game: ServerGame = { gameId, scope };
     logger.log(DEBUG, "created-game", { gameId });
 
     // const gameStageManager = resolver.resolve(gameStageManagerDependency);
@@ -45,16 +56,17 @@ export class ServerGameManager {
     //   serverPlayerContextManager.deletes.on((ctx) => gameStageManager.handlePlayerContextDeletion(ctx));
     // }
 
-    this.games.set(gameId, game);
-    return game;
+    this.games.set(gameId, ctx);
+    return ctx;
   }
 }
 
 function provideServerGameManager(resolver: DependencyResolver) {
-  return new ServerGameManager(
+  return new ServerGameContextManager(
     resolver,
   );
 }
+
 export const serverGameManagerDependency = defineDependency({
   name: "server-game-manager",
   provider: provideServerGameManager,

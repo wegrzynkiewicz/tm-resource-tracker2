@@ -1,15 +1,14 @@
 import { createColorSelectorBox } from "../../color/color-selector.ts";
 import { createEditBox } from "../../../app-client/src/edit-box.ts";
-import { Modal, ModalResponse } from "../../../app-client/src/modal.ts";
+import { Modal } from "../../../app-client/src/modal.ts";
 import { div, div_nodes, form_nodes } from "@acme/dom/nodes.ts";
-import { parseMyPlayerUpdate } from "../player.layout.compiled.ts";
+import { MyPlayerUpdate, parseMyPlayerUpdate } from "../player.layout.compiled.ts";
 import { unwrapLayoutResult } from "@acme/layout/runtime/mod.ts";
+import { Result } from "@acme/useful/result.ts";
 
-export type PlayerModalResponse = MyPlayerDTO;
-
-export class PlayerModal implements Modal<PlayerModalResponse> {
+export class PlayerModal implements Modal<MyPlayerUpdate> {
   public readonly $root: HTMLFormElement;
-  public readonly defer = Promise.withResolvers<ModalResponse<PlayerModalResponse>>();
+  public readonly defer = Promise.withResolvers<Result<MyPlayerUpdate, null>>();
 
   public constructor() {
     const nameBox = createEditBox({
@@ -34,7 +33,7 @@ export class PlayerModal implements Modal<PlayerModalResponse> {
     ]);
 
     $cancel.addEventListener("click", () => {
-      this.defer.resolve({ type: "cancel" });
+      this.defer.resolve([false, null]);
     });
 
     $create.addEventListener("click", () => {
@@ -42,7 +41,7 @@ export class PlayerModal implements Modal<PlayerModalResponse> {
       const payload = Object.fromEntries(data);
       const result = parseMyPlayerUpdate(payload);
       const value = unwrapLayoutResult(result, "invalid-player-name");
-      this.defer.resolve({ type: "confirm", value });
+      this.defer.resolve([true, value]);
     });
   }
 
