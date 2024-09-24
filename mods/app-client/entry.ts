@@ -3,16 +3,16 @@ import { configBinderDependency } from "@acme/config/common.ts";
 import { configValueResultMapDependency } from "@acme/config/value-getter.ts";
 import { configValueExtractorsDependency, configValueResolverDependency } from "@acme/config/value-resolver.ts";
 import { initGlobalLogChannel } from "@acme/logger/log-channel.ts";
-import { loggingStrategyConfigContract } from "@acme/logger/logging-strategy-config.ts";
-import { Scope, globalScopeContract } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { appSlotDependency } from "./src/app/app-view.ts";
 import { controllerBinderDependency, controllerRunnerDependency } from "./src/controller.ts";
-import { homeControllerContract } from "./src/home/common.ts";
+import { homeControllerContract } from "./src/home/home-defs.ts";
 import { frontendScopeContract } from "./bootstrap.ts";
 import { apiURLConfigContract } from "./src/api-url-config.ts";
-import { waitingControllerContract } from "./src/waiting/common.ts";
+import { waitingControllerContract } from "./src/waiting/waiting-defs.ts";
 import { appNameConfigContract } from "./src/app/app-name-config.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { loggingStrategyConfigContract } from "@acme/logger/defs.ts";
 
 async function initClientConfig(resolver: DependencyResolver): Promise<void> {
   const extractors = [

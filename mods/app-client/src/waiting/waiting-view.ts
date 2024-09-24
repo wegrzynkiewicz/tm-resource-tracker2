@@ -1,4 +1,4 @@
-import { Player } from "../../../common/player/common.ts";
+import { Player } from "../../../common/player/player.layout.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { createEditBox } from "../edit-box.ts";
 import { button, div, div_nodes } from "@acme/dom/nodes.ts";

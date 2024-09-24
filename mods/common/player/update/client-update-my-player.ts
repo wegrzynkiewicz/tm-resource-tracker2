@@ -1,6 +1,6 @@
 import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 import { GAHandler } from "../../../core/communication/define.ts";
-import { Player, providePlayer } from "../common.ts";
+import { Player, providePlayer } from "../player.layout.ts";
 import { PlayerBroadcast, providePlayerBroadcast } from "../player-broadcast.ts";
 import { waitingPlayersGADef } from "../waiting/common.ts";
 import { ClientUpdatingMyPlayerGA } from "./common.ts";

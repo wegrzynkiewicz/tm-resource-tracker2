@@ -1,6 +1,6 @@
 import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 import { GADefinition, GAHandler } from "../../../core/communication/define.ts";
-import { Player, PlayerUpdateDTO, providePlayer } from "../common.ts";
+import { Player, PlayerUpdateDTO, providePlayer } from "../player.layout.ts";
 
 export type ServerUpdatedMyPlayerGA = PlayerUpdateDTO;
 

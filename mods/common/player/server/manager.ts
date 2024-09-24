@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Player, PlayerInput } from "../common.ts";
+import { Player, PlayerInput } from "../player.layout.ts";
 
 export let playerIdCounter = 0;
 

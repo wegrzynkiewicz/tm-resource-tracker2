@@ -1,9 +1,9 @@
 import { createColorSelectorBox } from "../../color/color-selector.ts";
 import { createEditBox } from "../../../app-client/src/edit-box.ts";
 import { Modal, ModalResponse } from "../../../app-client/src/modal.ts";
-import { MyPlayerDTO, myPlayerUpdateLayout } from "../common.ts";
 import { div, div_nodes, form_nodes } from "@acme/dom/nodes.ts";
-import { parseUsingLayout } from "@acme/layout/common.ts";
+import { parseMyPlayerUpdate } from "../player.layout.compiled.ts";
+import { unwrapLayoutResult } from "@acme/layout/runtime/mod.ts";
 
 export type PlayerModalResponse = MyPlayerDTO;
 
@@ -40,7 +40,8 @@ export class PlayerModal implements Modal<PlayerModalResponse> {
     $create.addEventListener("click", () => {
       const data = new FormData(this.$root);
       const payload = Object.fromEntries(data);
-      const value = parseUsingLayout(myPlayerUpdateLayout, payload).unwrap("invalid-player-data");
+      const result = parseMyPlayerUpdate(payload);
+      const value = unwrapLayoutResult(result, "invalid-player-name");
       this.defer.resolve({ type: "confirm", value });
     });
   }

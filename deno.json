@@ -21,9 +21,7 @@
     }
   },
   "fmt": {
-    "options": {
-      "lineWidth": 120
-    }
+    "lineWidth": 120
   },
   "tasks": {
     "server": "deno run --allow-all --check --watch mods/app-server/server-entry.ts",

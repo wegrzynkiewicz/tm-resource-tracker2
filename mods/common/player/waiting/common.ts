@@ -1,5 +1,5 @@
 import { GADefinition } from "../../../core/communication/define.ts";
-import { Player } from "../common.ts";
+import { Player } from "../player.layout.ts";
 
 export type WaitingGameStageGA = null;
 

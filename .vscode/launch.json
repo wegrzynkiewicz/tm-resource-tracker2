@@ -2,6 +2,17 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "node",
+      "request": "launch",
+      "name": "Run current open file",
+      "runtimeExecutable": "deno",
+      "runtimeArgs": ["run", "--allow-all", "${file}"],
+      "cwd": "${workspaceFolder}",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "args": [],
+    },
+    {
       "name": "Attach",
       "type": "node",
       "request": "attach",

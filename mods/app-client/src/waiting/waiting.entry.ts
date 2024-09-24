@@ -2,7 +2,7 @@ import { actionBinderDependency } from "../actions.ts";
 import { gameCreateActionContract, gameCreateActionHandlerDependency } from "../home/game-create-action.ts";
 import { clientGameManagerDependency } from "../game/game-manager.ts";
 import { controllerRunnerDependency } from "../controller.ts";
-import { homeControllerContract } from "../home/common.ts";
+import { homeControllerContract } from "../home/home-defs.ts";
 import { waitingViewDependency } from "./waiting-view.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 

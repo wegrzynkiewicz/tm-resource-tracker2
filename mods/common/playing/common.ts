@@ -1,6 +1,6 @@
 import { Breaker } from "../../core/asserts.ts";
 import { GADefinition } from "../../core/communication/define.ts";
-import { Player } from "../player/common.ts";
+import { Player } from "../player/player.layout.ts";
 
 export interface PlayingGame {
   players: Player[];

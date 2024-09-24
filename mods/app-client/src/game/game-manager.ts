@@ -1,15 +1,14 @@
-import { GameDTO } from "../../../common/game/defs.ts";
-import { gameCreateRequestContract, gameCreateResponseContract } from "../../../common/game/game-create.ts";
-import { gameReadRequestContract, gameReadResponseContract } from "../../../common/game/game-read.ts";
-import { MyPlayerDTO } from "../../../common/player/common.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { jsonRequest } from "@acme/useful/json-request.ts";
 import { clientGameScopeContract, frontendScopeContract } from "../../bootstrap.ts";
-import { apiRequestMakerDependency } from "../api-request-maker.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
-import { RequestMaker } from "../request-maker.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Scope } from "@acme/dependency/scopes.ts";
 import { Panic } from "@acme/useful/errors.ts";
+import { apiURLDependency } from "../api-url-config.ts";
+import { gameCreatePathname, gameReadPathname } from "../../../common/game/defs.ts";
+import { GameDTO } from "../../../common/game/game-dto.layout.compiled.ts";
+import { MyPlayerUpdate } from "../../../common/player/player.layout.compiled.ts";
 
 export interface ClientGame {
   gameId: string;
@@ -30,7 +29,7 @@ export class ClientGameManager {
   public game: ClientGame | null = null;
 
   public constructor(
-    private readonly apiRequestMaker: RequestMaker,
+    private readonly apiURL: URL,
     private readonly resolver: DependencyResolver,
   ) {}
 
@@ -51,10 +50,11 @@ export class ClientGameManager {
     return clientGame;
   }
 
-  public async createClientGame(data: MyPlayerDTO): Promise<ClientGame> {
-    const request = this.apiRequestMaker.makeRequest(gameCreateRequestContract, {}, data);
+  public async createClientGame(data: MyPlayerUpdate): Promise<ClientGame> {
+    const url = new URL(gameCreatePathname, this.apiURL);
+    const request = jsonRequest(url, data, { method: "POST" });
     const response = await fetch(request);
-    const payload = await this.apiRequestMaker.processJSONResponse(gameCreateResponseContract, response);
+    const payload = await response.json() as GameDTO;
     return this.createScope(payload);
   }
 
@@ -66,7 +66,8 @@ export class ClientGameManager {
     if (token === null) {
       return undefined;
     }
-    const request = this.apiRequestMaker.makeRequest(gameReadRequestContract);
+    const url = new URL(gameReadPathname, this.apiURL);
+    const request = jsonRequest(url);
     request.headers.set("Authorization", `Bearer ${token}`);
     const response = await fetch(request);
     try {
@@ -81,7 +82,7 @@ export class ClientGameManager {
 
 export function provideClientGameManager(resolver: DependencyResolver) {
   return new ClientGameManager(
-    resolver.resolve(apiRequestMakerDependency),
+    resolver.resolve(apiURLDependency),
     resolver,
   );
 }

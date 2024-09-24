@@ -1,6 +1,6 @@
 import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 
-import { Player, providePlayer } from "../common.ts";
+import { Player, providePlayer } from "../player.layout.ts";
 import { ClientGameContext, provideClientGameContext } from "../../game/client/context.ts";
 
 import { createQuitGameModal, provideQuitGameChannel } from "../../game/quit/modal.ts";

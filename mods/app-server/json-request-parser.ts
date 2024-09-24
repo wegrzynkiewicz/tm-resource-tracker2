@@ -5,15 +5,19 @@ import { RequestContract, RequestProps } from "@acme/endpoint/request.ts";
 import { Result, Success } from "@acme/useful/result.ts";
 import { InferPathParams } from "@acme/endpoint/path.ts";
 import { jsonResponse } from "@acme/endpoint/payload-json.ts";
-import { badRequestErrorResponseContract, methodNotAllowedErrorResponseContract, unsupportedMediaTypeErrorResponseContract } from "@acme/endpoint/build-in/errors.ts";
+import {
+  badRequestErrorResponseContract,
+  methodNotAllowedErrorResponseContract,
+  unsupportedMediaTypeErrorResponseContract,
+} from "@acme/endpoint/build-in/errors.ts";
 import { Failure } from "@acme/useful/result.ts";
-import { DEBUG, Logger, WARN, loggerDependency } from "@acme/logger/defs.ts";
+import { DEBUG, Logger, loggerDependency, WARN } from "@acme/logger/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { endpointScopeContract } from "@acme/dependency/scopes.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
 export interface ParserResult<TPayload, TParams> {
-  payload: TPayload,
+  payload: TPayload;
 }
 
 export class JSONRequestParser {
@@ -30,8 +34,8 @@ export class JSONRequestParser {
   ): Promise<
     Result<
       ParserResult<
-        InferPayload<TProps['payload']>,
-        InferPathParams<TProps['path']>
+        InferPayload<TProps["payload"]>,
+        InferPathParams<TProps["path"]>
       >,
       Response
     >
@@ -61,7 +65,7 @@ export class JSONRequestParser {
     } catch (error: unknown) {
       const message = "invalid-json";
       const data = { error: "invalid-body", data: { message } };
-      this.logger.log(WARN, 'invalid-body', { error, body });
+      this.logger.log(WARN, "invalid-body", { error, body });
       return new Failure(
         jsonResponse(badRequestErrorResponseContract, data),
       );
@@ -71,13 +75,13 @@ export class JSONRequestParser {
     if (layoutResult.valid === false) {
       const message = this.errorFormatter.format(layoutResult.error);
       const data = { error: "invalid-payload", data: { message } };
-      this.logger.log(DEBUG, 'invalid-payload', { message, layoutResult });
+      this.logger.log(DEBUG, "invalid-payload", { message, layoutResult });
       return new Failure(
         jsonResponse(badRequestErrorResponseContract, data),
       );
     }
     const result = {
-      payload: layoutResult.value as InferPayload<TProps['payload']>,
+      payload: layoutResult.value as InferPayload<TProps["payload"]>,
       //TODO: path params
     };
     return new Success(result);

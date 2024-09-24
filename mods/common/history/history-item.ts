@@ -2,7 +2,7 @@ import { createResource } from "../../app-client/src/resource.ts";
 import { Channel } from "../../core/channel.ts";
 
 import { HistoryEntry, HistoryGenerationEntry, HistorySingleEntry, HistorySummaryEntry } from "./common.ts";
-import { Player } from "../player/common.ts";
+import { Player } from "../player/player.layout.ts";
 import { formatTime } from "../../core/formatTime.ts";
 
 export const historyEntryCreatedChannel = new Channel<HistoryEntry>();

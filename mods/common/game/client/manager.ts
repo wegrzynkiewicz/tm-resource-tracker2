@@ -1,13 +1,13 @@
 import { ClientConfig, clientConfigDependency } from "../../../app-client/src/config.ts";
 import { Channel } from "../../../core/channel.ts";
 import { defineDependency, DependencyResolver, Scope, scopeDependency } from "@acme/dependency/declaration.ts";
-import { MyPlayerDTO } from "../../player/common.ts";
+import { MyPlayerDTO } from "../../player/player.layout.ts";
 import { Game } from "../game-create.ts";
 import { JoinGame } from "../join/common.ts";
 import { quitGameChannelDependency } from "../quit/modal.ts";
 import { ClientGameContextManager, clientGameContextManagerDependency } from "./context.ts";
 import { createGameChannelDependency, joinGameChannelDependency } from "./source.ts";
-import { HomeView, homepageViewDependency } from "../../../app-client/src/home/home-view.ts";
+import { homepageViewDependency, HomeView } from "../../../app-client/src/home/home-view.ts";
 
 export class ClientGameManager {
   public constructor(

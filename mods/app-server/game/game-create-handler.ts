@@ -1,4 +1,3 @@
-import { WebHandler } from "@acme/web/common.ts";
 import { ServerGameManager, serverGameManagerDependency } from "./game-scope.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
 import { gameCreateRequestContract } from "../../common/game/game-create.ts";
@@ -7,8 +6,9 @@ import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-
 import { serverPlayerManagerDependency } from "../player/server-player-manager.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { EndpointHandler } from "@acme/web/defs.ts";
 
-export class GameCreateWebHandler implements WebHandler {
+export class GameCreateWebHandler implements EndpointHandler {
   public constructor(
     public readonly parser: JSONRequestParser,
     public readonly gameManager: ServerGameManager,
@@ -41,7 +41,7 @@ export class GameCreateWebHandler implements WebHandler {
   }
 }
 
-export function provideGameCreateWebHandler(resolver: DependencyResolver): WebHandler {
+export function provideGameCreateWebHandler(resolver: DependencyResolver): EndpointHandler {
   return new GameCreateWebHandler(
     resolver.resolve(jsonRequestParserDependency),
     resolver.resolve(serverGameManagerDependency),

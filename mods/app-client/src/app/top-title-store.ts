@@ -25,4 +25,3 @@ export const topTitleStoreDependency = defineDependency({
   provider: provideTopTitle,
   scope: frontendScopeContract,
 });
-

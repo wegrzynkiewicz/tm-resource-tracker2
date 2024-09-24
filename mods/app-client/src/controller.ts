@@ -1,90 +1,83 @@
-import { InferPathParams, PathContract } from "@acme/endpoint/path.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { controllerScopeContract, frontendScopeContract } from "../bootstrap.ts";
 import { Panic } from "@acme/useful/errors.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { Scope } from "@acme/dependency/scopes.ts";
+import { Data } from "@acme/useful/types.ts";
 
-export interface ControllerHandler {
-  handle(contract: ControllerContract): Promise<void>;
-}
-
-export type ControllerInitializer = (resolver: DependencyResolver) => Promise<void>;
+export type ControllerInitializer = (resolver: DependencyResolver, params: Data) => Promise<void>;
 export type ControllerImporter = () => Promise<ControllerInitializer>;
 
-export interface ControllerProps {
-  path: PathContract,
+export interface ControllerRouteMatch {
+  importer: ControllerImporter;
+  params: Data,
 }
 
-export interface ControllerContract<TProps extends ControllerProps = ControllerProps> {
-  name: string,
-  path: TProps["path"],
-  importer: ControllerImporter,
+export interface ControllerRouter {
+  match(pathname: string): ControllerRouteMatch | undefined;
 }
 
-export function defineController(contract: ControllerContract): ControllerContract {
-  return contract;
+export const controllerRouterDependency = defineDependency<ControllerRouter>({
+  name: "controller-router",
+  scope: frontendScopeContract,
+});
+
+export interface NaiveControllerRoute {
+  importer: ControllerImporter;
+  urlPattern: URLPattern;
 }
 
-export class ControllerBinder {
-  public readonly contracts: ControllerContract[] = [];
-  public bind(contract: ControllerContract) {
-    this.contracts.push(contract);
+export class NaiveControllerRouter implements ControllerRouter {
+  public readonly routes: NaiveControllerRoute[] = [];
+
+  public addRoute(pathname: string, importer: ControllerImporter) {
+    const urlPattern = new URLPattern({ pathname });
+    this.routes.push({ importer, urlPattern });
+  }
+
+  public match(pathname: string): ControllerRouteMatch | undefined {
+    for (const { importer, urlPattern } of this.routes) {
+      const result = urlPattern.exec(pathname);
+      if (result === null) {
+        continue;
+      }
+      const params = result.pathname.groups;
+      return { importer, params };
+    }
   }
 }
-
-function provideControllerBinder() {
-  return new ControllerBinder();
-}
-export const controllerBinderDependency = defineDependency({
-  name: "controller-binder",
-  provider: provideControllerBinder,
-});
 
 export class ControllerRunner {
   public constructor(
-    private readonly binder: ControllerBinder,
+    private readonly router: ControllerRouter,
     private readonly resolver: DependencyResolver,
   ) {}
 
-  public async run<TProps extends ControllerProps>(
-    contract: ControllerContract<TProps>,
-    pathParams: InferPathParams<TProps["path"]>,
-  ) {
-    history.pushState(pathParams, "", contract.path.create(pathParams));
-    await this.init(contract);
-  }
-
-  public async init<TProps extends ControllerProps>(
-    contract: ControllerContract<TProps>,
-  ) {
+  public async run(path: string) {
+    history.pushState(null, "", path);
+    const route = this.router.match(path);
+    if (route === undefined) {
+      throw new Panic("no-matching-controller-found", { path });
+    }
+    const { importer, params } = route;
     const controllerScope = new Scope(controllerScopeContract);
     const resolver = new DependencyResolver([...this.resolver.scopes, controllerScope]);
     try {
-      const initializer = await contract.importer();
-      await initializer(resolver);
+      const initializer = await importer();
+      await initializer(resolver, params);
     } catch (error) {
-      throw new Panic("controller-initialization-failed", { controller: contract.name, error });
+      throw new Panic("controller-initialization-failed", { controller: importer.name, error });
     }
-  }
-
-  public async bootstrap(path: string) {
-    for (const contract of this.binder.contracts) {
-      if (contract.path.urlPattern.test(path)) {
-        await this.init(contract);
-        return;
-      }
-    }
-    throw new Panic("no-matching-controller-found", { path });
   }
 }
 
 export function provideControllerRunner(resolver: DependencyResolver) {
   return new ControllerRunner(
-    resolver.resolve(controllerBinderDependency),
+    resolver.resolve(controllerRouterDependency),
     resolver,
   );
 }
+
 export const controllerRunnerDependency = defineDependency({
   name: "controller-runner",
   provider: provideControllerRunner,

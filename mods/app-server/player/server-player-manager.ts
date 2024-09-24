@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Player, PlayerInput } from "../../common/player/common.ts";
+import { Player, PlayerInput } from "../../common/player/player.layout.ts";
 import { serverGameScopeContract } from "../game/game-scope.ts";
 
 export let playerIdCounter = 0;
@@ -38,5 +38,5 @@ export function provideServerPlayerManager() {
 export const serverPlayerManagerDependency = defineDependency({
   name: "server-player-manager",
   provider: provideServerPlayerManager,
-  scope: serverGameScopeContract
+  scope: serverGameScopeContract,
 });

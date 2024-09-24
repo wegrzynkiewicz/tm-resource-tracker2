@@ -1,0 +1,231 @@
+import { LayoutResult, exceedsMaxStringLengthErrorContract, exceedsMinExclusiveNumberLengthErrorContract, exceedsMinStringLengthErrorContract, expectedIntegerErrorContract, expectedNotNullObjectErrorContract, missingObjectPropertyErrorContract, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
+import { ColorKey, parseColor } from "../color/color.layout.compiled.ts";
+
+/** A player in the game */
+export interface Player {
+  /** One of the five colors */
+  color: ColorKey;
+  /** The player name */
+  name: string;
+  /** Determines if the player is an admin */
+  isAdmin: boolean;
+  /** The player ID */
+  playerId: number;
+}
+
+export const schemaPlayer = {
+  "description": "A player in the game",
+  "type": "object",
+  "properties": {
+    "color": {
+      "$id": "color",
+      "description": "One of the five colors",
+      "enum": [
+        "black",
+        "blue",
+        "green",
+        "red",
+        "yellow"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "The player name",
+      "minLength": 1,
+      "maxLength": 32
+    },
+    "isAdmin": {
+      "description": "Determines if the player is an admin",
+      "type": "boolean"
+    },
+    "playerId": {
+      "type": "integer",
+      "description": "The player ID",
+      "exclusiveMinimum": 0
+    }
+  },
+  "required": [
+    "color",
+    "name",
+    "isAdmin",
+    "playerId"
+  ],
+  "additionalProperties": false
+};
+export const parsePlayer = (data: unknown, path: string = ""): LayoutResult<Player> => {
+  let output;
+  while (true) {
+    if (typeof data === "object") {
+      if (data === null) {
+        return [false, expectedNotNullObjectErrorContract, path, ""];
+      }
+
+      // Parsing property "color"
+      const input_color = "color" in data === true ? data.color : undefined;
+      let output_color;
+      if (input_color === undefined) {
+        return [false, missingObjectPropertyErrorContract, path, "color"];
+      }
+      while (true) {
+        const result_color = parseColor(input_color);
+        if (result_color[0] === true) {
+          output_color = result_color[1];
+          break;
+        }
+        return [false, notMatchedErrorContract, path, "color"];
+      }
+
+      // Parsing property "name"
+      const input_name = "name" in data === true ? data.name : undefined;
+      let output_name;
+      if (input_name === undefined) {
+        return [false, missingObjectPropertyErrorContract, path, "name"];
+      }
+      while (true) {
+        if (typeof input_name === "string") {
+          if (input_name.length < 1) {
+            return [false, exceedsMinStringLengthErrorContract, path, "name", { min: 1 }];
+          }
+          if (input_name.length > 32) {
+            return [false, exceedsMaxStringLengthErrorContract, path, "name", { max: 32 }];
+          }
+          output_name = input_name;
+          break;
+        }
+        return [false, notMatchedErrorContract, path, "name"];
+      }
+
+      // Parsing property "isAdmin"
+      const input_isAdmin = "isAdmin" in data === true ? data.isAdmin : undefined;
+      let output_isAdmin;
+      if (input_isAdmin === undefined) {
+        return [false, missingObjectPropertyErrorContract, path, "isAdmin"];
+      }
+      while (true) {
+        if (typeof input_isAdmin === "boolean") {
+          output_isAdmin = input_isAdmin;
+          break;
+        }
+        return [false, notMatchedErrorContract, path, "isAdmin"];
+      }
+
+      // Parsing property "playerId"
+      const input_playerId = "playerId" in data === true ? data.playerId : undefined;
+      let output_playerId;
+      if (input_playerId === undefined) {
+        return [false, missingObjectPropertyErrorContract, path, "playerId"];
+      }
+      while (true) {
+        if (typeof input_playerId === "number") {
+          if (Number.isInteger(input_playerId) === false) {
+            return [false, expectedIntegerErrorContract, path, "playerId"];
+          }
+          if (input_playerId <= 0) {
+            return [false, exceedsMinExclusiveNumberLengthErrorContract, path, "playerId", { exclusiveMinimum: 0 }];
+          }
+          output_playerId = input_playerId;
+          break;
+        }
+        return [false, notMatchedErrorContract, path, "playerId"];
+      }
+      output = {
+        color: output_color,
+        name: output_name,
+        isAdmin: output_isAdmin,
+        playerId: output_playerId,
+      };
+      break;
+    }
+    return [false, notMatchedErrorContract, path, ""];
+  }
+  return [true, output];
+};
+
+/** My player update object */
+export interface MyPlayerUpdate {
+  /** One of the five colors */
+  color: ColorKey;
+  /** The player name */
+  name: string;
+}
+
+export const schemaMyPlayerUpdate = {
+  "description": "My player update object",
+  "type": "object",
+  "properties": {
+    "color": {
+      "$id": "color",
+      "description": "One of the five colors",
+      "enum": [
+        "black",
+        "blue",
+        "green",
+        "red",
+        "yellow"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "The player name",
+      "minLength": 1,
+      "maxLength": 32
+    }
+  },
+  "required": [
+    "color",
+    "name"
+  ],
+  "additionalProperties": false
+};
+export const parseMyPlayerUpdate = (data: unknown, path: string = ""): LayoutResult<MyPlayerUpdate> => {
+  let output;
+  while (true) {
+    if (typeof data === "object") {
+      if (data === null) {
+        return [false, expectedNotNullObjectErrorContract, path, ""];
+      }
+
+      // Parsing property "color"
+      const input_color = "color" in data === true ? data.color : undefined;
+      let output_color;
+      if (input_color === undefined) {
+        return [false, missingObjectPropertyErrorContract, path, "color"];
+      }
+      while (true) {
+        const result_color = parseColor(input_color);
+        if (result_color[0] === true) {
+          output_color = result_color[1];
+          break;
+        }
+        return [false, notMatchedErrorContract, path, "color"];
+      }
+
+      // Parsing property "name"
+      const input_name = "name" in data === true ? data.name : undefined;
+      let output_name;
+      if (input_name === undefined) {
+        return [false, missingObjectPropertyErrorContract, path, "name"];
+      }
+      while (true) {
+        if (typeof input_name === "string") {
+          if (input_name.length < 1) {
+            return [false, exceedsMinStringLengthErrorContract, path, "name", { min: 1 }];
+          }
+          if (input_name.length > 32) {
+            return [false, exceedsMaxStringLengthErrorContract, path, "name", { max: 32 }];
+          }
+          output_name = input_name;
+          break;
+        }
+        return [false, notMatchedErrorContract, path, "name"];
+      }
+      output = {
+        color: output_color,
+        name: output_name,
+      };
+      break;
+    }
+    return [false, notMatchedErrorContract, path, ""];
+  }
+  return [true, output];
+};

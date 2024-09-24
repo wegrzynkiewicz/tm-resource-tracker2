@@ -1,7 +1,7 @@
 import { provideWaitingPlayersCollection } from "./waiting-view.ts";
 import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 import { GAHandler } from "../../../core/communication/define.ts";
-import { Player } from "../common.ts";
+import { Player } from "../player.layout.ts";
 
 import { WaitingPlayersGA } from "./common.ts";
 

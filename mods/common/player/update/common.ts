@@ -1,5 +1,5 @@
 import { GADefinition } from "../../../core/communication/define.ts";
-import { MyPlayerDTO } from "../common.ts";
+import { MyPlayerDTO } from "../player.layout.ts";
 
 export type ClientUpdatingMyPlayerGA = MyPlayerDTO;
 

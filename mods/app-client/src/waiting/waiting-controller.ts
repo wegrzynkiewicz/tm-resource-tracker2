@@ -2,8 +2,8 @@ import { defineDependency } from "@acme/dependency/declaration.ts";
 import { ControllerHandler, ControllerRunner, controllerRunnerDependency } from "../controller.ts";
 import { WaitingView, waitingViewDependency } from "./waiting-view.ts";
 import { ClientGameManager, clientGameManagerDependency } from "../game/game-manager.ts";
-import { Logger, WARN, loggerDependency } from "@acme/logger/defs.ts";
-import { homeControllerContract } from "../home/common.ts";
+import { Logger, loggerDependency, WARN } from "@acme/logger/defs.ts";
+import { homeControllerContract } from "../home/home-defs.ts";
 
 export class WaitingControllerHandler implements ControllerHandler {
   public constructor(

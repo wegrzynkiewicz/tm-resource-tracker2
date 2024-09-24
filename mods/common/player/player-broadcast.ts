@@ -2,7 +2,7 @@ import { GADefinition } from "../../core/communication/define.ts";
 import { provideGADispatcher } from "../../core/communication/dispatcher.ts";
 import { ServerPlayerContextManager } from "./server/context.ts";
 import { provideServerPlayerContextManager } from "./server/context.ts";
-import { Player, providePlayer } from "./common.ts";
+import { Player, providePlayer } from "./player.layout.ts";
 import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 
 export class PlayerBroadcast {

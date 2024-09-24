@@ -1,4 +1,4 @@
-import { Dependency, defineDependency } from "@acme/dependency/declaration.ts";
+import { defineDependency, Dependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { Scope } from "@acme/dependency/scopes.ts";
 import { Panic } from "@acme/useful/errors.ts";
@@ -23,7 +23,7 @@ export interface ActionHandler<T = unknown> {
 
 export interface ActionBinding {
   contract: ActionContract;
-  dependency: Dependency<ActionHandler>
+  dependency: Dependency<ActionHandler>;
 }
 
 export class ActionBinder {

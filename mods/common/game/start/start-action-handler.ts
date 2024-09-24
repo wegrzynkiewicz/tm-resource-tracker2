@@ -1,7 +1,7 @@
 import { assertTrue } from "../../../core/asserts.ts";
 import { GAHandler } from "../../../core/communication/define.ts";
 import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
-import { Player, providePlayer } from "../../player/common.ts";
+import { Player, providePlayer } from "../../player/player.layout.ts";
 import { providePlayingGameStage } from "../../playing/playing-game-stage.ts";
 import { provideServerGameContext, ServerGameContext } from "../server/context.ts";
 import { GameStageManager } from "../stage/game-stage-manager.ts";

@@ -1,4 +1,4 @@
-import { Scope, defineScope, globalScopeContract } from "@acme/dependency/scopes.ts";
+import { defineScope, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { cryptoRandomString } from "../deps.ts";
 import { ServerGame } from "./game.ts";
 import { DEBUG, loggerDependency } from "@acme/logger/defs.ts";
@@ -36,7 +36,7 @@ export class ServerGameManager {
     resolver.inject(loggerDependency, logger);
 
     const game: ServerGame = { gameId, scope };
-    logger.log(DEBUG, "created-game", { gameId })
+    logger.log(DEBUG, "created-game", { gameId });
 
     // const gameStageManager = resolver.resolve(gameStageManagerDependency);
     // {

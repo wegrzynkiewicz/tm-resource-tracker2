@@ -5,7 +5,7 @@ import { importMapPlugin } from "jsr:@miyauci/esbuild-import-map@^1.2.0";
 
 const regex = /\.dynamic\.ts$/;
 const dynamicOverridePlugin: esbuild.Plugin = {
-  name: 'dynamic-override',
+  name: "dynamic-override",
   setup(build) {
     build.onResolve({ filter: regex }, async (args) => {
       const { kind, path, resolveDir } = args;
@@ -17,7 +17,18 @@ const dynamicOverridePlugin: esbuild.Plugin = {
       };
     });
   },
-}
+};
+
+const addPureAnnotation: esbuild.Plugin = {
+  name: "add-pure-annotation",
+  setup(build) {
+    build.onLoad({ filter: /.ts/ }, async (args) => {
+      const file = await Deno.readTextFile(args.path);
+      const contents = file.replaceAll(/= define/g, "= /** @__PURE__ */ define");
+      return { contents, loader: "default" };
+    });
+  },
+};
 
 const ctx = await esbuild.context({
   bundle: true,
@@ -36,6 +47,7 @@ const ctx = await esbuild.context({
   minify: false,
   outdir: "mods/app-client/public/dist",
   plugins: [
+    addPureAnnotation,
     dynamicOverridePlugin,
     httpFetch,
     importMapPlugin({

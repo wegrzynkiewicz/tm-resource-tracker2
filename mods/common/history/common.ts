@@ -1,5 +1,5 @@
 import { Resource } from "../../core/resources.ts";
-import { Player } from "../player/common.ts";
+import { Player } from "../player/player.layout.ts";
 
 export interface HistoryCommon {
   historyEntryId: string;

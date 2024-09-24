@@ -3,7 +3,6 @@ import {
   dotEnvMapDependency,
   readDotEnvMap,
 } from "@acme/config/dot-env-extractor.ts";
-import { loggingStrategyConfigContract } from "@acme/logger/logging-strategy-config.ts";
 import { createWebServerConfigProvider } from "@acme/web/server-config.ts";
 import { builtInConfigValueExtractorDependency } from "@acme/config/built-in-extractor.ts";
 import { configBinderDependency } from "@acme/config/common.ts";
@@ -13,6 +12,7 @@ import { configValueGetterDependency, configValueResultMapDependency } from "@ac
 import { configValueExtractorsDependency, configValueResolverDependency } from "@acme/config/value-resolver.ts";
 import { configVariableNamePrefixDependency } from "@acme/config/variable-name.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { loggingStrategyConfigContract } from "@acme/logger/defs.ts";
 
 export const mainWebServer = createWebServerConfigProvider("name");
 
