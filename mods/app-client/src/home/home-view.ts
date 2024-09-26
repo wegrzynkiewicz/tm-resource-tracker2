@@ -2,12 +2,12 @@ import { appViewDependency } from "../app/app-view.ts";
 import { button, div_nodes } from "@acme/dom/nodes.ts";
 import { PlayerModal } from "../../../common/player/update/player-modal.ts";
 import { modalManagerDependency } from "../modal.ts";
-import { frontendScopeContract } from "../../bootstrap.ts";
+import { frontendScopeContract } from "../../defs.ts";
 import { docTitleDependency } from "../app/doc-title.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { Slot } from "../place.ts";
-import { clientGameManagerDependency } from "../game/game-context.ts";
+import { clientGameContextManagerDependency } from "../game/client-game-context.ts";
 import { controllerRunnerDependency } from "../controller.ts";
 import { waitingPath } from "../waiting/waiting-defs.ts";
 
@@ -15,7 +15,7 @@ export function provideHomepageView(resolver: DependencyResolver) {
   const app = resolver.resolve(appViewDependency);
   const docTitle = resolver.resolve(docTitleDependency);
   const modalManager = resolver.resolve(modalManagerDependency);
-  const clientGameManager = resolver.resolve(clientGameManagerDependency);
+  const clientGameManager = resolver.resolve(clientGameContextManagerDependency);
   const controllerRunner = resolver.resolve(controllerRunnerDependency);
 
   const resumeSlot = new Slot("resume");

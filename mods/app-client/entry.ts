@@ -3,9 +3,9 @@ import { configBinderDependency } from "@acme/config/common.ts";
 import { configValueResultMapDependency } from "@acme/config/value-getter.ts";
 import { configValueExtractorsDependency, configValueResolverDependency } from "@acme/config/value-resolver.ts";
 import { initGlobalLogChannel } from "@acme/logger/log-channel.ts";
-import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { appSlotDependency } from "./src/app/app-view.ts";
-import { frontendScopeContract } from "./bootstrap.ts";
+import { frontendScopeContract } from "./defs.ts";
 import { apiURLConfigContract } from "./src/api-url-config.ts";
 import { appNameConfigContract } from "./src/app/app-name-config.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
@@ -13,6 +13,7 @@ import { loggingStrategyConfigContract } from "@acme/logger/defs.ts";
 import { controllerRouterDependency, controllerRunnerDependency, NaiveControllerRouter } from "./src/controller.ts";
 import { homeControllerImporter, homePath } from "./src/home/home-defs.ts";
 import { waitingControllerImporter, waitingPath } from "./src/waiting/waiting-defs.ts";
+import { Context, createContext } from "@acme/dependency/context.ts";
 
 async function initClientConfig(resolver: DependencyResolver): Promise<void> {
   const extractors = [
@@ -30,9 +31,17 @@ async function initClientConfig(resolver: DependencyResolver): Promise<void> {
   resolver.inject(configValueResultMapDependency, valueResultMap);
 }
 
-async function initFrontend(parentResolver: DependencyResolver): Promise<void> {
-  const frontendScope = new Scope(frontendScopeContract);
-  const resolver = new DependencyResolver([...parentResolver.scopes, frontendScope]);
+async function initFrontend(globalContext: Context): Promise<void> {
+  const frontendScope = createContext({
+    identifier: {},
+    name: "FRONTEND",
+    scopes: {
+      [globalScopeContract.token]: globalContext.scopes[globalScopeContract.token],
+      [frontendScopeContract.token]: new Scope(frontendScopeContract),
+      [localScopeContract.token]: new Scope(localScopeContract),
+    },
+  });
+  const { resolver } = frontendScope;
 
   const appSlot = resolver.resolve(appSlotDependency);
   document.body.appendChild(appSlot.$root);
@@ -51,11 +60,18 @@ async function initFrontend(parentResolver: DependencyResolver): Promise<void> {
 }
 
 async function start() {
-  const globalScope = new Scope(globalScopeContract);
-  const resolver = new DependencyResolver([globalScope]);
+  const globalContext = createContext({
+    identifier: {},
+    name: "GLOBAL",
+    scopes: {
+      [globalScopeContract.token]: new Scope(globalScopeContract),
+      [localScopeContract.token]: new Scope(localScopeContract),
+    },
+  });
+  const { resolver } = globalContext;
 
   await initClientConfig(resolver);
   await initGlobalLogChannel(resolver);
-  await initFrontend(resolver);
+  await initFrontend(globalContext);
 }
 start();

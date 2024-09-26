@@ -1,21 +1,20 @@
-import { Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { Channel } from "@acme/dependency/channel.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { loggerDependency } from "@acme/logger/defs.ts";
-import { loggerFactoryDependency } from "@acme/logger/factory.ts";
 import { PlayerDTO } from "../../common/player/player.layout.compiled.ts";
-import { serverGameIdDependency, serverGameScopeContract } from "../game/game-context.ts";
+import { ServerGameContext, serverGameScopeContract } from "../game/game-context.ts";
 import { ColorKey } from "../../common/color/color.layout.compiled.ts";
 import { serverPlayerWSContextManagerDependency } from "./player-ws-context.ts";
 import { serverPlayerScopeContract } from "../defs.ts";
+import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
 
-export interface ServerPlayerContext {
+interface ServerPlayerContextIdentifier {
   gameId: string;
   playerId: string;
-  scope: Scope;
-  resolver: DependencyResolver;
 }
+
+export type ServerPlayerContext = Context<ServerPlayerContextIdentifier>;
 
 export interface ServerPlayerInput {
   color: ColorKey;
@@ -23,16 +22,12 @@ export interface ServerPlayerInput {
   isAdmin: boolean;
 }
 
-export interface Context {
-  
-  resolver: DependencyResolver;
-}
-
-export const serverPlayerIdDependency = defineDependency<string>({ 
+export const serverPlayerIdDependency = defineDependency<string>({
   name: "player-id",
   scope: serverPlayerScopeContract,
 });
-export const serverPlayerDTODependency = defineDependency<PlayerDTO>({ 
+
+export const serverPlayerDTODependency = defineDependency<PlayerDTO>({
   name: "player-dto",
   scope: serverPlayerScopeContract,
 });
@@ -45,23 +40,26 @@ export class ServerPlayerContextManager {
   public readonly deletes = new Channel<[ServerPlayerContext]>();
 
   public constructor(
-    private readonly gameId: string,
-    private readonly resolver: DependencyResolver,
+    private readonly gameContext: ServerGameContext,
   ) {}
 
   public async create(
     { color, isAdmin, name }: ServerPlayerInput
   ): Promise<ServerPlayerContext> {
-    const { gameId } = this;
     const playerId = (++playerIdCounter).toString();
+    const { gameId } = this.gameContext.identifier;
 
-    const scope = new Scope(serverPlayerScopeContract);
-    const resolver = new DependencyResolver([...this.resolver.scopes, scope]);
-    const ctx: ServerPlayerContext = { gameId, playerId, resolver, scope };
-
-    const loggerFactory = resolver.resolve(loggerFactoryDependency);
-    const logger = loggerFactory.createLogger("PLAYER", { gameId });
-    resolver.inject(loggerDependency, logger);
+    const playerContext = createContext({
+      identifier: { gameId, playerId },
+      name: "PLAYER",
+      scopes: {
+        [globalScopeContract.token]: this.gameContext.scopes[globalScopeContract.token],
+        [serverGameScopeContract.token]: this.gameContext.scopes[serverGameScopeContract.token],
+        [serverPlayerScopeContract.token]: new Scope(serverPlayerScopeContract),
+        [localScopeContract.token]: new Scope(localScopeContract),
+      },
+    });
+    const { resolver } = playerContext;
 
     const player: PlayerDTO = {
       color,
@@ -73,10 +71,10 @@ export class ServerPlayerContextManager {
     resolver.inject(serverPlayerIdDependency, playerId);
     resolver.inject(serverPlayerDTODependency, player);
 
-    this.players.set(playerId, ctx);
-    this.creates.emit(ctx);
+    this.players.set(playerId, playerContext);
+    this.creates.emit(playerContext);
 
-    return ctx;
+    return playerContext;
   }
 
   public async dispose(playerId: string) {
@@ -93,8 +91,7 @@ export class ServerPlayerContextManager {
 
 export function provideServerPlayerContextManager(resolver: DependencyResolver) {
   return new ServerPlayerContextManager(
-    resolver.resolve(serverGameIdDependency),
-    resolver,
+    resolver.resolve(contextDependency) as ServerGameContext,
   );
 }
 

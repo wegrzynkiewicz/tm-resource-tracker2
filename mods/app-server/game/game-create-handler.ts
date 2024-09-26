@@ -12,7 +12,7 @@ import { webServerScopeContract } from "@acme/dependency/scopes.ts";
 export class GameCreateWebHandler implements EndpointHandler {
   public constructor(
     public readonly parser: JSONRequestParser,
-    public readonly gameContextManager: ServerGameContextManager,
+    public readonly gameManager: ServerGameContextManager,
     public readonly tokenManager: TokenManager,
   ) {}
 
@@ -25,12 +25,14 @@ export class GameCreateWebHandler implements EndpointHandler {
     const { color, name } = data;
     const isAdmin = true;
 
-    const { gameId, resolver } = this.gameContextManager.createServerGameContext();
+    const gameContext = this.gameManager.createServerGameContext();
+    const { gameId } = gameContext.identifier;
 
-    const playerContextManager = resolver.resolve(serverPlayerContextManagerDependency);
-    const ctx = await playerContextManager.create({ color, name, isAdmin });
-    const { playerId } = ctx;
-    const player = ctx.resolver.resolve(serverPlayerDTODependency);
+    const playerContextManager = gameContext.resolver.resolve(serverPlayerContextManagerDependency);
+    const playerContext = await playerContextManager.create({ color, name, isAdmin });
+    const { playerId } = playerContext.identifier;
+
+    const player = playerContext.resolver.resolve(serverPlayerDTODependency);
 
     const token = this.tokenManager.createToken({ gameId, playerId });
 

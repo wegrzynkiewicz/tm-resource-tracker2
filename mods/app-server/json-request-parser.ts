@@ -1,10 +1,10 @@
 import { Result } from "@acme/useful/result.ts";
 import { DEBUG, Logger, loggerDependency, WARN } from "@acme/logger/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { endpointScopeContract } from "@acme/dependency/scopes.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { LayoutParser } from "@acme/layout/runtime/defs.ts";
 import { ErrorDTO } from "@acme/web/docs/error-dto.layout.compiled.ts";
+import { webRequestScopeContract } from "@acme/dependency/scopes.ts";
 
 export interface ParserResult<TPayload, TParams> {
   payload: TPayload;
@@ -68,5 +68,5 @@ export function provideJSONRequestParser(resolver: DependencyResolver) {
 export const jsonRequestParserDependency = defineDependency({
   name: "json-request-parser",
   provider: provideJSONRequestParser,
-  scope: endpointScopeContract,
+  scope: webRequestScopeContract,
 });

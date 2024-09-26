@@ -2,7 +2,7 @@ import { defineDependency, Dependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { Scope } from "@acme/dependency/scopes.ts";
 import { Panic } from "@acme/useful/errors.ts";
-import { controllerScopeContract } from "../bootstrap.ts";
+import { controllerScopeContract } from "../defs.ts";
 
 export interface ActionContract<T = unknown> {
   type: string;

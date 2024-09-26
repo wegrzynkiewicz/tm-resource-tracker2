@@ -1,20 +1,33 @@
-import { clientGameManagerDependency } from "../game/game-context.ts";
+import { clientGameContextManagerDependency } from "../game/client-game-context.ts";
 import { controllerRunnerDependency } from "../controller.ts";
 import { waitingViewDependency } from "./waiting-view.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { homePath } from "../home/home-defs.ts";
+import { Context, createContext } from "@acme/dependency/context.ts";
+import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { frontendScopeContract, clientGameScopeContract, controllerScopeContract } from "../../defs.ts";
 
-export async function initWaitingController(parentResolver: DependencyResolver) {
-  const controllerRunner = parentResolver.resolve(controllerRunnerDependency);
-  const gameManager = parentResolver.resolve(clientGameManagerDependency);
+export async function initWaitingController(context: Context) {
+  const controllerRunner = context.resolver.resolve(controllerRunnerDependency);
+  const gameManager = context.resolver.resolve(clientGameContextManagerDependency);
 
-  const game = await gameManager.restoreClientGame();
-  if (!game) {
+  const gameContext = await gameManager.getClientGameContext();
+  if (!gameContext) {
     return await controllerRunner.run(homePath);
   }
 
-  const resolver = new DependencyResolver([...parentResolver.scopes, game.scope]);
-
+  const waitingContext = createContext({
+    identifier: {},
+    name: "WAITING-CTRL",
+    scopes: {
+      [globalScopeContract.token]: context.scopes[globalScopeContract.token],
+      [frontendScopeContract.token]: context.scopes[frontendScopeContract.token],
+      [clientGameScopeContract.token]: gameContext.scopes[clientGameScopeContract.token],
+      [controllerScopeContract.token]: new Scope(controllerScopeContract),
+      [localScopeContract.token]: new Scope(localScopeContract),
+    },
+  });
+  const { resolver } = waitingContext;
   const view = resolver.resolve(waitingViewDependency);
+
   view.render();
 }

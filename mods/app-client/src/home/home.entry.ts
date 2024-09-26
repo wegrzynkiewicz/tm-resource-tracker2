@@ -1,13 +1,13 @@
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
-import { clientGameManagerDependency } from "../game/game-context.ts";
+import { clientGameContextManagerDependency } from "../game/client-game-context.ts";
 import { homepageViewDependency } from "./home-view.ts";
+import { Context } from "@acme/dependency/context.ts";
 
-export async function initHomeController(resolver: DependencyResolver) {
-  const homepageView = resolver.resolve(homepageViewDependency);
+export async function initHomeController(context: Context) {
+  const homepageView = context.resolver.resolve(homepageViewDependency);
+  const gameManager = context.resolver.resolve(clientGameContextManagerDependency);
+
   homepageView.render();
-
-  const gameManager = resolver.resolve(clientGameManagerDependency);
-  const game = await gameManager.restoreClientGame();
+  const game = await gameManager.getClientGameContext();
   if (game) {
     homepageView.attachResumeGame();
   }

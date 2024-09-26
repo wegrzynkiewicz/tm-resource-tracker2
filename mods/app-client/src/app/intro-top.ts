@@ -3,6 +3,7 @@ import { Component } from "../common.ts";
 import { TopTitleStore, topTitleStoreDependency } from "./top-title-store.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { frontendScopeContract } from "../../defs.ts";
 
 export class IntroTop implements Component {
   public readonly $root: HTMLDivElement;
@@ -11,7 +12,7 @@ export class IntroTop implements Component {
   ) {
     const label = div("top_label", store.title);
     this.$root = div_nodes("top", [label]);
-    store.on(() => label.textContent = store.title);
+    store.updates.on(() => label.textContent = store.title);
   }
 }
 
@@ -24,4 +25,5 @@ export function provideIntroTop(resolver: DependencyResolver): IntroTop {
 export const introTopDependency = defineDependency({
   name: "intro-top",
   provider: provideIntroTop,
+  scope: frontendScopeContract,
 });

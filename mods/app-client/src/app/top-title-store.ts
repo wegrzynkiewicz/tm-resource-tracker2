@@ -1,16 +1,19 @@
 import { Channel } from "@acme/dependency/channel.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { frontendScopeContract } from "../../bootstrap.ts";
+import { frontendScopeContract } from "../../defs.ts";
 import { appNameDependency } from "./app-name-config.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 
-export class TopTitleStore extends Channel<[]> {
-  public title: string;
+export class TopTitleStore {
+  public readonly updates = new Channel<[]>();
+
   public constructor(
-    private readonly appName: string,
-  ) {
-    super();
-    this.title = this.appName;
+    public title: string,
+  ) {}
+
+  public setTitle(title: string) {
+    this.title = title;
+    this.updates.emit();
   }
 }
 

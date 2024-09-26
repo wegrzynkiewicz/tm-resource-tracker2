@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { frontendScopeContract } from "../../bootstrap.ts";
+import { frontendScopeContract } from "../../defs.ts";
 import { appNameDependency } from "./app-name-config.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 

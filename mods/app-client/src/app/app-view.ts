@@ -2,7 +2,7 @@ import { createScroll } from "./scroll.ts";
 import { ModalManager, modalManagerDependency } from "../modal.ts";
 import { Slot } from "../place.ts";
 import { div, div_nodes } from "@acme/dom/nodes.ts";
-import { frontendScopeContract } from "../../bootstrap.ts";
+import { frontendScopeContract } from "../../defs.ts";
 import { View } from "../common.ts";
 import { IntroTop, introTopDependency } from "./intro-top.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
@@ -46,7 +46,7 @@ export function provideAppView(resolver: DependencyResolver) {
 }
 
 export const appViewDependency = defineDependency({
-  name: "intro-app-view",
+  name: "app-view",
   provider: provideAppView,
   scope: frontendScopeContract,
 });

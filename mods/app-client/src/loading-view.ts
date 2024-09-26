@@ -1,7 +1,7 @@
 import { defineDependency, DependencyResolver } from "@acme/dependency/declaration.ts";
 import { div } from "@acme/dom/nodes.ts";
 import { AppView, appViewDependency } from "./app/app-view.ts";
-import { frontendScopeContract } from "../bootstrap.ts";
+import { frontendScopeContract } from "../defs.ts";
 
 export class LoadingView {
   public readonly $root = div("loading", "Loading...");

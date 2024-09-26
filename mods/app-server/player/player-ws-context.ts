@@ -1,32 +1,28 @@
-import { Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { loggerDependency } from "@acme/logger/defs.ts";
-import { loggerFactoryDependency } from "@acme/logger/factory.ts";
-import { serverGameIdDependency } from "../game/game-context.ts";
+import { serverGameIdDependency, serverGameScopeContract } from "../game/game-context.ts";
 import { logifyWebSocket } from "@acme/web/socket.ts";
-import { wsScopeContract } from "../../common/web-socket/ws-context.ts";
-import { serverPlayerScopeContract } from "../defs.ts";
-import { serverPlayerIdDependency } from "./player-context.ts";
+import { serverPlayerScopeContract, serverPlayerWSScopeContract } from "../defs.ts";
+import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
+import { ServerPlayerContext } from "./player-context.ts";
 
-export interface ServerPlayerWSContext {
+export interface ServerPlayerWSContextIdentifier {
   gameId: string;
   playerId: string;
-  netId: string;
-  scope: Scope;
-  resolver: DependencyResolver;
-  socket: WebSocket;
+  wsId: string;
 }
 
-export let netIdCounter = 0;
+export type ServerPlayerWSContext = Context<ServerPlayerWSContextIdentifier>;
+
+export let wsIdCounter = 0;
 
 export class ServerPlayerWSContextManager {
   public context: ServerPlayerWSContext | null = null;
 
   public constructor(
-    private readonly gameId: string,
-    private readonly playerId: string,
-    private readonly resolver: DependencyResolver,
+    private readonly serverPlayerContext: ServerPlayerContext,
   ) {}
 
   public async create(
@@ -34,23 +30,29 @@ export class ServerPlayerWSContextManager {
       socket: WebSocket,
     },
   ): Promise<ServerPlayerWSContext> {
-    const { gameId, playerId } = this;
-    const netId = (++netIdCounter).toString();
+    const { gameId, playerId } = this.serverPlayerContext.identifier;
+    const wsId = (++wsIdCounter).toString();
 
-    const scope = new Scope(wsScopeContract);
-    const resolver = new DependencyResolver([...this.resolver.scopes, scope]);
-    const ctx: ServerPlayerWSContext = { gameId, playerId, netId, resolver, scope, socket };
+    const serverPlayerWSContext = createContext({
+      identifier: { gameId, playerId, wsId },
+      name: "PLAYER",
+      scopes: {
+        [globalScopeContract.token]: this.serverPlayerContext.scopes[globalScopeContract.token],
+        [serverGameScopeContract.token]: this.serverPlayerContext.scopes[serverGameScopeContract.token],
+        [serverPlayerScopeContract.token]: this.serverPlayerContext.scopes[serverPlayerScopeContract.token],
+        [serverPlayerWSScopeContract.token]: new Scope(serverPlayerWSScopeContract),
+        [localScopeContract.token]: new Scope(localScopeContract),
+      },
+    });
+    const { resolver } = serverPlayerWSContext;
 
-    const loggerFactory = resolver.resolve(loggerFactoryDependency);
-    const logger = loggerFactory.createLogger("PLAYER-NET", { netId, gameId, playerId });
-    resolver.inject(loggerDependency, logger);
-
+    const logger = resolver.resolve(loggerDependency);
     logifyWebSocket(logger, socket);
 
     const onClose = () => this.dispose();
     socket.addEventListener("close", onClose, { once: true });
 
-    return ctx;
+    return serverPlayerWSContext;
 
     // const webSocketChannel = resolver.resolve(webSocketChannelDependency);
     // {
@@ -70,9 +72,9 @@ export class ServerPlayerWSContextManager {
     if (this.context === null) {
       return;
     }
-    if (this.context.socket.readyState === WebSocket.OPEN) {
-      this.context.socket.close();
-    }
+    // if (this.context.socket.readyState === WebSocket.OPEN) {
+    //   this.context.socket.close();
+    // }
     this.context = null;
   }
 }
@@ -84,9 +86,7 @@ export function provideServerPlayerWSContextManager(resolver: DependencyResolver
   console.log(`ServerPlayerWSContextManager: ${e - s}ms`);
 
   return new ServerPlayerWSContextManager(
-    resolver.resolve(serverGameIdDependency),
-    resolver.resolve(serverPlayerIdDependency),
-    resolver,
+    resolver.resolve(contextDependency) as ServerPlayerContext,
   );
 }
 

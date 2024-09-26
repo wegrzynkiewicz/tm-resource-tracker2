@@ -1,11 +1,12 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { controllerScopeContract, frontendScopeContract } from "../bootstrap.ts";
+import { controllerScopeContract, frontendScopeContract } from "../defs.ts";
 import { Panic } from "@acme/useful/errors.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
-import { Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { Data } from "@acme/useful/types.ts";
+import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
 
-export type ControllerInitializer = (resolver: DependencyResolver, params: Data) => Promise<void>;
+export type ControllerInitializer = (context: Context, params: Data) => Promise<void>;
 export type ControllerImporter = () => Promise<ControllerInitializer>;
 
 export interface ControllerRouteMatch {
@@ -50,7 +51,7 @@ export class NaiveControllerRouter implements ControllerRouter {
 export class ControllerRunner {
   public constructor(
     private readonly router: ControllerRouter,
-    private readonly resolver: DependencyResolver,
+    private readonly frontendContext: Context,
   ) {}
 
   public async run(path: string) {
@@ -60,11 +61,10 @@ export class ControllerRunner {
       throw new Panic("no-matching-controller-found", { path });
     }
     const { importer, params } = route;
-    const controllerScope = new Scope(controllerScopeContract);
-    const resolver = new DependencyResolver([...this.resolver.scopes, controllerScope]);
+
     try {
       const initializer = await importer();
-      await initializer(resolver, params);
+      await initializer(this.frontendContext, params);
     } catch (error) {
       throw new Panic("controller-initialization-failed", { controller: importer.name, error });
     }
@@ -74,7 +74,7 @@ export class ControllerRunner {
 export function provideControllerRunner(resolver: DependencyResolver) {
   return new ControllerRunner(
     resolver.resolve(controllerRouterDependency),
-    resolver,
+    resolver.resolve(contextDependency),
   );
 }
 

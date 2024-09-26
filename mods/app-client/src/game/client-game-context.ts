@@ -1,23 +1,24 @@
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { jsonRequest } from "@acme/useful/json-request.ts";
-import { clientGameScopeContract, frontendScopeContract } from "../../bootstrap.ts";
+import { clientGameScopeContract, frontendScopeContract } from "../../defs.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { apiURLDependency } from "../api-url-config.ts";
 import { gameCreatePathname, gameQuitPathname, gameReadPathname } from "../../../common/game/defs.ts";
 import { GameDTO } from "../../../common/game/game-dto.layout.compiled.ts";
 import { MyPlayerUpdate } from "../../../common/player/player.layout.compiled.ts";
-import { clientPlayerWSContextManagerDependency } from "./client-ws-context.ts";
+import { clientPlayerWSContextManagerDependency } from "./client-player-ws-context.ts";
+import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
 
-export interface ClientGameContext {
+export interface ClientGameContextIdentifier {
   gameId: string;
-  scope: Scope;
-  resolver: DependencyResolver;
 }
 
-export const clientGameContextDependency = defineDependency<ClientGameContext>({
-  name: "client-game",
+export type ClientGameContext = Context<ClientGameContextIdentifier>;
+
+export const clientGameIdDependency = defineDependency<string>({
+  name: "client-game-id",
   scope: clientGameScopeContract,
 });
 
@@ -31,26 +32,37 @@ export class ClientGameContextManager {
 
   public constructor(
     private readonly apiURL: URL,
-    private readonly resolver: DependencyResolver,
+    private readonly frontendContext: Context,
   ) {}
 
   private async createScope(payload: GameDTO) {
     const { gameId, token, player } = payload;
-    const scope = new Scope(clientGameScopeContract);
-    const resolver = new DependencyResolver([...this.resolver.scopes, scope]);
+
+    const gameContext = createContext({
+      identifier: {
+        gameId,
+      },
+      name: "CLIENT-GAME",
+      scopes: {
+        [globalScopeContract.token]: this.frontendContext.scopes[globalScopeContract.token],
+        [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
+        [clientGameScopeContract.token]: new Scope(clientGameScopeContract),
+        [localScopeContract.token]: new Scope(localScopeContract),
+      },
+    });
+    const { resolver } = gameContext;
 
     localStorage.setItem("token", token);
 
-    const ctx: ClientGameContext = { gameId, scope, resolver };
-    resolver.inject(clientGameContextDependency, ctx);
+    resolver.inject(clientGameIdDependency, gameId);
     resolver.inject(clientGameTokenDependency, token);
     resolver.inject(myPlayerDependency, player);
 
     const clientPlayerWSContentManager = resolver.resolve(clientPlayerWSContextManagerDependency)
     await clientPlayerWSContentManager.create();
 
-    this.gameContext = ctx;
-    return ctx;
+    this.gameContext = gameContext;
+    return gameContext;
   }
 
   public async createClientGame(data: MyPlayerUpdate): Promise<ClientGameContext> {
@@ -61,7 +73,7 @@ export class ClientGameContextManager {
     return this.createScope(payload);
   }
 
-  public async restoreClientGame(): Promise<ClientGameContext | undefined> {
+  public async getClientGameContext(): Promise<ClientGameContext | undefined> {
     if (this.gameContext) {
       return this.gameContext;
     }
@@ -91,7 +103,7 @@ export class ClientGameContextManager {
     }
     const manager = this.gameContext.resolver.resolve(clientPlayerWSContextManagerDependency);
     await manager.dispose();
-    
+
     this.gameContext = null;
     const token = localStorage.getItem("token");
     if (token === null) {
@@ -112,12 +124,12 @@ export class ClientGameContextManager {
 export function provideClientGameManager(resolver: DependencyResolver) {
   return new ClientGameContextManager(
     resolver.resolve(apiURLDependency),
-    resolver,
+    resolver.resolve(contextDependency),
   );
 }
 
-export const clientGameManagerDependency = defineDependency({
-  name: "client-game-manager",
+export const clientGameContextManagerDependency = defineDependency({
+  name: "client-game-context-manager",
   provider: provideClientGameManager,
   scope: frontendScopeContract,
 });

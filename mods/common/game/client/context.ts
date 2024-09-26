@@ -6,7 +6,7 @@ import { defineDependency, DependencyResolver, Scope, scopeDependency } from "@a
 import { LoggerFactory, loggerFactoryDependency } from "@acme/logger/factory.ts";
 import { Game } from "../game-create.ts";
 import { feedClientGAProcessor } from "./procesor.ts";
-import { frontendScopeContract } from "../../../app-client/bootstrap.ts";
+import { frontendScopeContract } from "../../../app-client/defs.ts";
 
 export interface ClientGameContextIdentifier {
   gameId: string;
