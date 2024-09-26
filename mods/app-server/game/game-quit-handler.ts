@@ -1,10 +1,11 @@
 import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
-import { serverPlayerManagerDependency } from "../player/player-manager.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { parseAuthorizationToken } from "@acme/web/build-in/token.ts";
+import { serverPlayerContextManagerDependency } from "../player/player-context.ts";
+import { webServerScopeContract } from "@acme/dependency/scopes.ts";
 
 export class GameQuitEndpointHandler implements EndpointHandler {
   public constructor(
@@ -28,8 +29,8 @@ export class GameQuitEndpointHandler implements EndpointHandler {
       return Response.json({ error: "game-not-found" }, { status: 404 });
     }
 
-    const playerManager = gameContext.resolver.resolve(serverPlayerManagerDependency);
-    playerManager.deletePlayer(playerId);
+    const playerContextManager = gameContext.resolver.resolve(serverPlayerContextManagerDependency);
+    await playerContextManager.dispose(playerId);
 
     return new Response(null, { status: 204 });
   }
@@ -45,4 +46,5 @@ export function provideGameQuitEndpointHandler(resolver: DependencyResolver): En
 export const gameQuitEndpointHandlerDependency = defineDependency({
   name: "game-quit-web-handler",
   provider: provideGameQuitEndpointHandler,
+  scope: webServerScopeContract,
 });

@@ -7,7 +7,7 @@ import { docTitleDependency } from "../app/doc-title.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { Slot } from "../place.ts";
-import { clientGameManagerDependency } from "../game/game-manager.ts";
+import { clientGameManagerDependency } from "../game/game-context.ts";
 import { controllerRunnerDependency } from "../controller.ts";
 import { waitingPath } from "../waiting/waiting-defs.ts";
 

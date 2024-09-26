@@ -1,26 +1,43 @@
-import { defineScope, Scope } from "@acme/dependency/scopes.ts";
+import { Scope } from "@acme/dependency/scopes.ts";
 import { Channel } from "@acme/dependency/channel.ts";
-import { ServerPlayerManager, serverPlayerManagerDependency } from "./player-manager.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Panic } from "@acme/useful/errors.ts";
 import { loggerDependency } from "@acme/logger/defs.ts";
 import { loggerFactoryDependency } from "@acme/logger/factory.ts";
 import { PlayerDTO } from "../../common/player/player.layout.compiled.ts";
 import { serverGameIdDependency, serverGameScopeContract } from "../game/game-context.ts";
-import { logifyWebSocket } from "@acme/web/socket.ts";
+import { ColorKey } from "../../common/color/color.layout.compiled.ts";
+import { serverPlayerWSContextManagerDependency } from "./player-ws-context.ts";
+import { serverPlayerScopeContract } from "../defs.ts";
 
 export interface ServerPlayerContext {
+  gameId: string;
   playerId: string;
   scope: Scope;
   resolver: DependencyResolver;
-  socket: WebSocket;
 }
 
-export const serverPlayerScopeContract = defineScope("SRV-PLAYER");
-export const serverPlayerIdDependency = defineDependency<number>({ name: "player-id" });
-export const serverPlayerDependency = defineDependency<PlayerDTO>({ name: "player" });
-export const serverPlayerWebSocketDependency = defineDependency<WebSocket>({ name: "player-web-socket" });
+export interface ServerPlayerInput {
+  color: ColorKey;
+  name: string;
+  isAdmin: boolean;
+}
+
+export interface Context {
+  
+  resolver: DependencyResolver;
+}
+
+export const serverPlayerIdDependency = defineDependency<string>({ 
+  name: "player-id",
+  scope: serverPlayerScopeContract,
+});
+export const serverPlayerDTODependency = defineDependency<PlayerDTO>({ 
+  name: "player-dto",
+  scope: serverPlayerScopeContract,
+});
+
+export let playerIdCounter = 0;
 
 export class ServerPlayerContextManager {
   public readonly players = new Map<string, ServerPlayerContext>();
@@ -29,65 +46,46 @@ export class ServerPlayerContextManager {
 
   public constructor(
     private readonly gameId: string,
-    private readonly playerManager: ServerPlayerManager,
     private readonly resolver: DependencyResolver,
   ) {}
 
-  public async createServerPlayerContext(
-    { playerId, socket }: {
-      playerId: string;
-      socket: WebSocket;
-    },
+  public async create(
+    { color, isAdmin, name }: ServerPlayerInput
   ): Promise<ServerPlayerContext> {
-    const { gameId, playerManager } = this;
-    const player = playerManager.players.get(playerId);
-    if (player === undefined) {
-      throw new Panic("not-found-player-data", { status: 500 });
-    }
+    const { gameId } = this;
+    const playerId = (++playerIdCounter).toString();
 
     const scope = new Scope(serverPlayerScopeContract);
     const resolver = new DependencyResolver([...this.resolver.scopes, scope]);
-    const ctx: ServerPlayerContext = { playerId, resolver, scope, socket };
+    const ctx: ServerPlayerContext = { gameId, playerId, resolver, scope };
 
     const loggerFactory = resolver.resolve(loggerFactoryDependency);
     const logger = loggerFactory.createLogger("PLAYER", { gameId });
     resolver.inject(loggerDependency, logger);
-    resolver.inject(serverPlayerWebSocketDependency, socket);
-    resolver.inject(serverPlayerDependency, player);
 
-    logifyWebSocket(logger, socket);
+    const player: PlayerDTO = {
+      color,
+      isAdmin,
+      name,
+      playerId,
+    };
 
-    socket.addEventListener("close", () => {
-      this.deletePlayerContext(playerId);
-    });
+    resolver.inject(serverPlayerIdDependency, playerId);
+    resolver.inject(serverPlayerDTODependency, player);
 
     this.players.set(playerId, ctx);
     this.creates.emit(ctx);
 
     return ctx;
-
-    // const webSocketChannel = resolver.resolve(webSocketChannelDependency);
-    // {
-    //   const gaDecoder = resolver.resolve(gADecoderDependency);
-    //   webSocketChannel.messages.handlers.add(gaDecoder);
-    // }
-
-    // const receivingGABus = resolver.resolve(receivingGABusDependency);
-    // {
-    //   const gaProcesor = resolver.resolve(gAProcessorDependency);
-    //   feedServerGAProcessor(resolver, gaProcesor);
-    //   receivingGABus.handlers.add(gaProcesor);
-    // }
   }
 
-  public async deletePlayerContext(playerId: string) {
+  public async dispose(playerId: string) {
     const ctx = this.players.get(playerId);
     if (ctx === undefined) {
       return;
     }
-    if (ctx.socket.readyState === WebSocket.OPEN) {
-      ctx.socket.close();
-    }
+    const netManager = ctx.resolver.resolve(serverPlayerWSContextManagerDependency);
+    await netManager.dispose();
     this.players.delete(playerId);
     this.deletes.emit(ctx);
   }
@@ -96,7 +94,6 @@ export class ServerPlayerContextManager {
 export function provideServerPlayerContextManager(resolver: DependencyResolver) {
   return new ServerPlayerContextManager(
     resolver.resolve(serverGameIdDependency),
-    resolver.resolve(serverPlayerManagerDependency),
     resolver,
   );
 }

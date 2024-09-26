@@ -4,7 +4,7 @@ import { button, div, div_nodes } from "@acme/dom/nodes.ts";
 import { AppView, appViewDependency } from "../app/app-view.ts";
 import { frontendScopeContract } from "../../bootstrap.ts";
 import { DocTitle, docTitleDependency } from "../app/doc-title.ts";
-import { ClientGameContext, clientGameContextDependency, ClientGameManager, clientGameManagerDependency } from "../game/game-manager.ts";
+import { ClientGameContext, clientGameContextDependency, ClientGameContextManager, clientGameManagerDependency } from "../game/game-context.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
 import { PlayerDTO } from "../../../common/player/player.layout.compiled.ts";
@@ -38,7 +38,7 @@ export class WaitingView {
     private readonly docTitle: DocTitle,
     private readonly game: ClientGameContext,
     private readonly myPlayer: PlayerDTO,
-    private readonly manager: ClientGameManager,
+    private readonly manager: ClientGameContextManager,
     private readonly controllerRunner: ControllerRunner,
     // players: Collection<Player>,
     // private readonly modalManager: ModalManager,

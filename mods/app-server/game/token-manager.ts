@@ -1,18 +1,22 @@
 import { cryptoRandomString } from "../../app-server/deps.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { ServerPlayerScopeIdentifier } from "../defs.ts";
 import { globalScopeContract } from "@acme/dependency/scopes.ts";
+
+export interface TokenTarget {
+  readonly gameId: string;
+  readonly playerId: string;
+}
 
 export interface Token {
   readonly key: string;
-  readonly identifier: ServerPlayerScopeIdentifier;
+  readonly identifier: TokenTarget;
 }
 
 export class TokenManager {
   public readonly tokens = new Map<string, Token>();
 
-  public createToken(identifier: ServerPlayerScopeIdentifier): string {
-    const key = cryptoRandomString({ length: 64, type: "url-safe" });
+  public createToken(identifier: TokenTarget): string {
+    const key = cryptoRandomString({ length: 64, type: "alphanumeric" });
     const token = { key, identifier };
     this.tokens.set(key, token);
     return key;
@@ -26,6 +30,7 @@ export class TokenManager {
 export function provideTokenManager() {
   return new TokenManager();
 }
+
 export const tokenManagerDependency = defineDependency({
   name: "token-manager",
   provider: provideTokenManager,

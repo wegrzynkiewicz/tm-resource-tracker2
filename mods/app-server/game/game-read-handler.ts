@@ -4,9 +4,10 @@ import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { parseAuthorizationToken } from "@acme/web/build-in/token.ts";
 import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-parser.ts";
-import { serverPlayerManagerDependency } from "../player/player-manager.ts";
 import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
+import { serverPlayerContextManagerDependency, serverPlayerDTODependency } from "../player/player-context.ts";
+import { webServerScopeContract } from "@acme/dependency/scopes.ts";
 
 export class GameReadEndpointHandler implements EndpointHandler {
   public constructor(
@@ -31,11 +32,12 @@ export class GameReadEndpointHandler implements EndpointHandler {
       return Response.json({ error: "game-not-found" }, { status: 404 });
     }
 
-    const playerManager = gameContext.resolver.resolve(serverPlayerManagerDependency);
-    const player = playerManager.players.get(playerId);
-    if (player === undefined) {
+    const manager = gameContext.resolver.resolve(serverPlayerContextManagerDependency);
+    const ctx = manager.players.get(playerId);
+    if (ctx === undefined) {
       return Response.json({ error: "player-not-found" }, { status: 404 });
     }
+    const player = ctx.resolver.resolve(serverPlayerDTODependency);
 
     const payload: GameDTO = { gameId, player, token: token.key };
     const response = Response.json(payload);
@@ -54,4 +56,5 @@ export function provideGameReadEndpointHandler(resolver: DependencyResolver): En
 export const gameReadEndpointHandlerDependency = defineDependency({
   name: "game-read-web-handler",
   provider: provideGameReadEndpointHandler,
+  scope: webServerScopeContract,
 });

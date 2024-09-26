@@ -3,18 +3,17 @@ import { jsonRequest } from "@acme/useful/json-request.ts";
 import { clientGameScopeContract, frontendScopeContract } from "../../bootstrap.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { readySocket } from "@acme/web/socket.ts";
 import { Scope } from "@acme/dependency/scopes.ts";
 import { apiURLDependency } from "../api-url-config.ts";
-import { createGameSocketPathname, gameCreatePathname, gameQuitPathname, gameReadPathname } from "../../../common/game/defs.ts";
+import { gameCreatePathname, gameQuitPathname, gameReadPathname } from "../../../common/game/defs.ts";
 import { GameDTO } from "../../../common/game/game-dto.layout.compiled.ts";
 import { MyPlayerUpdate } from "../../../common/player/player.layout.compiled.ts";
+import { clientPlayerWSContextManagerDependency } from "./client-ws-context.ts";
 
 export interface ClientGameContext {
   gameId: string;
   scope: Scope;
   resolver: DependencyResolver;
-  socket: WebSocket;
 }
 
 export const clientGameContextDependency = defineDependency<ClientGameContext>({
@@ -27,12 +26,7 @@ export const clientGameTokenDependency = defineDependency<string>({
   scope: clientGameScopeContract,
 });
 
-export const clientGameWebSocketDependency = defineDependency<WebSocket>({
-  name: "client-game-web-socket",
-  scope: clientGameScopeContract,
-});
-
-export class ClientGameManager {
+export class ClientGameContextManager {
   public gameContext: ClientGameContext | null = null;
 
   public constructor(
@@ -47,17 +41,13 @@ export class ClientGameManager {
 
     localStorage.setItem("token", token);
 
+    const ctx: ClientGameContext = { gameId, scope, resolver };
+    resolver.inject(clientGameContextDependency, ctx);
     resolver.inject(clientGameTokenDependency, token);
     resolver.inject(myPlayerDependency, player);
 
-    const url = new URL(createGameSocketPathname(token), this.apiURL);
-    const socket = new WebSocket(url.toString());
-    await readySocket(socket);
-
-
-    const ctx: ClientGameContext = { gameId, scope, resolver, socket };
-    resolver.inject(clientGameContextDependency, ctx);
-    resolver.inject(clientGameWebSocketDependency, socket);
+    const clientPlayerWSContentManager = resolver.resolve(clientPlayerWSContextManagerDependency)
+    await clientPlayerWSContentManager.create();
 
     this.gameContext = ctx;
     return ctx;
@@ -99,10 +89,9 @@ export class ClientGameManager {
     if (this.gameContext === null) {
       return;
     }
-    const { socket } = this.gameContext;
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.close();
-    }
+    const manager = this.gameContext.resolver.resolve(clientPlayerWSContextManagerDependency);
+    await manager.dispose();
+    
     this.gameContext = null;
     const token = localStorage.getItem("token");
     if (token === null) {
@@ -121,7 +110,7 @@ export class ClientGameManager {
 }
 
 export function provideClientGameManager(resolver: DependencyResolver) {
-  return new ClientGameManager(
+  return new ClientGameContextManager(
     resolver.resolve(apiURLDependency),
     resolver,
   );

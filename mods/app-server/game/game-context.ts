@@ -34,7 +34,7 @@ export class ServerGameContextManager {
     }
   }
 
-  public createServerGame(): GameContext {
+  public createServerGameContext(): GameContext {
     const gameId = this.generateGameId();
 
     const scope = new Scope(serverGameScopeContract);

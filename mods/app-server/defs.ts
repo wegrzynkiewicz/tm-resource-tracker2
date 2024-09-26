@@ -1,4 +1,3 @@
-export interface ServerPlayerScopeIdentifier {
-  gameId: string;
-  playerId: string;
-}
+import { defineScope } from "@acme/dependency/scopes.ts";
+
+export const serverPlayerScopeContract = defineScope("SRV-PLAYER");

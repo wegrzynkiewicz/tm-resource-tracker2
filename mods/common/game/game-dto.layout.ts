@@ -1,5 +1,5 @@
 import { StandaloneLayout } from "@acme/layout/types/standalone-layout.ts";
-import { playerLayout } from "../player/player.layout.ts";
+import { playerDTOLayout } from "../player/player.layout.ts";
 import { ObjectLayout } from "@acme/layout/types/object-layout.ts";
 import { StringLayout } from "@acme/layout/types/string-layout.ts";
 import { compileLayouts } from "@acme/layout/defs.ts";
@@ -14,7 +14,7 @@ export const gameDTOLayout = new StandaloneLayout({
       gameId: new StringLayout({
         description: "Game identifier"
       }),
-      player: playerLayout,
+      player: playerDTOLayout,
       token: new StringLayout({
         description: "Token"
       }),

@@ -47,7 +47,7 @@ async function initFrontend(parentResolver: DependencyResolver): Promise<void> {
 
   globalThis.addEventListener("popstate", async () => {
     await controllerRunner.run(window.location.pathname);
-  }); 
+  });
 }
 
 async function start() {

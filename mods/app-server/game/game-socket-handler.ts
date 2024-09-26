@@ -4,16 +4,16 @@ import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
 import { Data } from "@acme/useful/types.ts";
 import { parseNotEmptyString } from "@acme/layout/runtime/parsers.ts";
 import { ErrorDTO } from "@acme/web/docs/error-dto.layout.compiled.ts";
-import { serverPlayerManagerDependency } from "../player/player-manager.ts";
 import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
 import { serverPlayerContextManagerDependency } from "../player/player-context.ts";
 import { webServerScopeContract } from "@acme/dependency/scopes.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
+import { serverPlayerWSContextManagerDependency } from "../player/player-ws-context.ts";
 
 export class GameSocketEndpointHandler implements EndpointHandler {
 
   public constructor(
-    public readonly gameManager: ServerGameContextManager,
+    public readonly gameContextManager: ServerGameContextManager,
     public readonly tokenManager: TokenManager,
   ) {}
 
@@ -30,20 +30,20 @@ export class GameSocketEndpointHandler implements EndpointHandler {
     }
     const { gameId, playerId } = token.identifier;
 
-    const gameContext = this.gameManager.games.get(gameId);
+    const gameContext = this.gameContextManager.games.get(gameId);
     if (gameContext === undefined) {
       return Response.json({ error: "game-not-found" }, { status: 404 });
     }
-    const playerManager = gameContext.resolver.resolve(serverPlayerManagerDependency);
-    const player = playerManager.players.get(playerId);
-    if (player === undefined) {
+    const playerContextManager = gameContext.resolver.resolve(serverPlayerContextManagerDependency);
+    const playerContext = playerContextManager.players.get(playerId);
+    if (playerContext === undefined) {
       return Response.json({ error: "player-not-found" }, { status: 404 });
     }
 
     const { response, socket } = Deno.upgradeWebSocket(request);
 
-    const playerContextManager = gameContext.resolver.resolve(serverPlayerContextManagerDependency);
-    await playerContextManager.createServerPlayerContext({ playerId, socket });
+    const playerWSContextManager = playerContext.resolver.resolve(serverPlayerWSContextManagerDependency);
+    await playerWSContextManager.create({ socket });
 
     return response;
   }
