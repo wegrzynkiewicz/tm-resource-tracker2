@@ -4,7 +4,7 @@ import { waitingViewDependency } from "./waiting-view.ts";
 import { homePath } from "../home/home-defs.ts";
 import { Context, createContext } from "@acme/dependency/context.ts";
 import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
-import { frontendScopeContract, clientGameScopeContract, controllerScopeContract } from "../../defs.ts";
+import { clientGameScopeContract, controllerScopeContract, frontendScopeContract } from "../../defs.ts";
 
 export async function initWaitingController(context: Context) {
   const controllerRunner = context.resolver.resolve(controllerRunnerDependency);

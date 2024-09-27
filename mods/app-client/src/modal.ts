@@ -12,7 +12,7 @@ export function createQuestionModal(
   { confirmText = "Confirm", titleText }: {
     confirmText?: string;
     titleText: string;
-  }
+  },
 ) {
   const $cancel = button("box _button", "Cancel");
   const $confirm = button("box _button", confirmText);
@@ -32,8 +32,8 @@ export function createQuestionModal(
     return (event: Event) => {
       event.preventDefault();
       resolve(result);
-    }
-  }
+    };
+  };
   $confirm.addEventListener("click", createClickListener(true));
   $cancel.addEventListener("click", createClickListener(false));
 

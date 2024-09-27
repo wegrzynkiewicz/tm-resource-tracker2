@@ -8,7 +8,12 @@ import { NaiveServerWebRouter } from "@acme/web/router-naive.ts";
 import { serverWebRouterDependency } from "@acme/web/defs.ts";
 import { webServerContextManagerDependency } from "@acme/web/server-context.ts";
 import { preflightEndpointHandlerDependency } from "@acme/web/build-in/preflight.ts";
-import { gameCreatePathname, gameQuitPathname, gameReadPathname, gameSocketPatternPathname } from "../common/game/defs.ts";
+import {
+  gameCreatePathname,
+  gameQuitPathname,
+  gameReadPathname,
+  gameSocketPatternPathname,
+} from "../common/game/defs.ts";
 import { gameQuitEndpointHandlerDependency } from "./game/game-quit-handler.ts";
 import { gameSocketEndpointHandlerDependency } from "./game/game-socket-handler.ts";
 

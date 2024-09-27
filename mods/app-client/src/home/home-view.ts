@@ -44,13 +44,13 @@ export function provideHomepageView(resolver: DependencyResolver) {
   const attachResumeGame = () => {
     const $resume = button(`box _action`, "Resume the Game");
     resumeSlot.attach($resume);
-  }
+  };
 
   const render = () => {
     docTitle.setTitle("Home");
     app.contentSlot.attach($root);
     app.render();
-  }
+  };
 
   return { $root, attachResumeGame, render };
 }

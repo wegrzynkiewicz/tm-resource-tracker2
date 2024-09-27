@@ -1,58 +1,79 @@
-import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { normalCASenderDependency } from "@acme/control-action/normal/defs.ts";
+import { webSocketNormalCASenderDependency } from "@acme/control-action/transport/ws-normal-ca-sender.ts";
+import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { loggerDependency } from "@acme/logger/defs.ts";
-import { serverGameIdDependency, serverGameScopeContract } from "../game/game-context.ts";
+import { serverGameIdDependency } from "../game/game-context.ts";
 import { logifyWebSocket } from "@acme/web/socket.ts";
-import { serverPlayerScopeContract, serverPlayerWSScopeContract } from "../defs.ts";
+import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
 import { ServerPlayerContext } from "./player-context.ts";
+import { webSocketCAReceiverDependency } from "@acme/control-action/transport/ws-ca-receiver.ts";
+import { ServerNormalCAContextFactory } from "./normal-ca-context-factory.ts";
+import { normalCAContextFactoryDependency, normalCARouterDependency } from "@acme/control-action/normal/defs.ts";
+import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
+import { initServerNormalCARouter } from "./normal-ca-router.ts";
 
-export interface ServerPlayerWSContextIdentifier {
+export interface ServerPlayerDuplexContextIdentifier {
   gameId: string;
   playerId: string;
   wsId: string;
 }
 
-export type ServerPlayerWSContext = Context<ServerPlayerWSContextIdentifier>;
+export type ServerPlayerDuplexContext = Context<ServerPlayerDuplexContextIdentifier>;
 
 export let wsIdCounter = 0;
 
-export class ServerPlayerWSContextManager {
-  public context: ServerPlayerWSContext | null = null;
+export class ServerPlayerDuplexContextManager {
+  public context: ServerPlayerDuplexContext | null = null;
 
   public constructor(
     private readonly serverPlayerContext: ServerPlayerContext,
   ) {}
 
-  public async create(
+  public async createServerPlayerDuplexContext(
     { socket }: {
-      socket: WebSocket,
+      socket: WebSocket;
     },
-  ): Promise<ServerPlayerWSContext> {
+  ): Promise<ServerPlayerDuplexContext> {
     const { gameId, playerId } = this.serverPlayerContext.identifier;
     const wsId = (++wsIdCounter).toString();
 
-    const serverPlayerWSContext = createContext({
+    const serverPlayerDuplexContext = createContext({
       identifier: { gameId, playerId, wsId },
-      name: "PLAYER",
+      name: "PLR-DUX",
       scopes: {
         [globalScopeContract.token]: this.serverPlayerContext.scopes[globalScopeContract.token],
         [serverGameScopeContract.token]: this.serverPlayerContext.scopes[serverGameScopeContract.token],
         [serverPlayerScopeContract.token]: this.serverPlayerContext.scopes[serverPlayerScopeContract.token],
-        [serverPlayerWSScopeContract.token]: new Scope(serverPlayerWSScopeContract),
+        [duplexScopeContract.token]: new Scope(duplexScopeContract),
         [localScopeContract.token]: new Scope(localScopeContract),
       },
     });
-    const { resolver } = serverPlayerWSContext;
+    const { resolver } = serverPlayerDuplexContext;
+
+    resolver.inject(webSocketDependency, socket);
 
     const logger = resolver.resolve(loggerDependency);
     logifyWebSocket(logger, socket);
 
+    const factory = new ServerNormalCAContextFactory(serverPlayerDuplexContext);
+    resolver.inject(normalCAContextFactoryDependency, factory);
+
+    const router = initServerNormalCARouter();
+    resolver.inject(normalCARouterDependency, router);
+
+    const sender = resolver.resolve(webSocketNormalCASenderDependency);
+    resolver.inject(normalCASenderDependency, sender);
+
     const onClose = () => this.dispose();
     socket.addEventListener("close", onClose, { once: true });
 
-    return serverPlayerWSContext;
+    const receiver = resolver.resolve(webSocketCAReceiverDependency);
+    socket.addEventListener("message", (event) => receiver.receive(event));
+
+    return serverPlayerDuplexContext;
 
     // const webSocketChannel = resolver.resolve(webSocketChannelDependency);
     // {
@@ -80,12 +101,7 @@ export class ServerPlayerWSContextManager {
 }
 
 export function provideServerPlayerWSContextManager(resolver: DependencyResolver) {
-  const s = performance.now();
-  resolver.resolve(serverGameIdDependency)
-  const e = performance.now();
-  console.log(`ServerPlayerWSContextManager: ${e - s}ms`);
-
-  return new ServerPlayerWSContextManager(
+  return new ServerPlayerDuplexContextManager(
     resolver.resolve(contextDependency) as ServerPlayerContext,
   );
 }

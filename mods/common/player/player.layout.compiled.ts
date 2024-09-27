@@ -1,4 +1,11 @@
-import { LayoutResult, exceedsMaxStringLengthErrorContract, exceedsMinStringLengthErrorContract, expectedNotNullObjectErrorContract, missingObjectPropertyErrorContract, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
+import {
+  exceedsMaxStringLengthErrorContract,
+  exceedsMinStringLengthErrorContract,
+  expectedNotNullObjectErrorContract,
+  LayoutResult,
+  missingObjectPropertyErrorContract,
+  notMatchedErrorContract,
+} from "@acme/layout/runtime/mod.ts";
 import { ColorKey, parseColor } from "../color/color.layout.compiled.ts";
 
 /** A player in the game */
@@ -25,32 +32,32 @@ export const schemaPlayerDTO = {
         "blue",
         "green",
         "red",
-        "yellow"
-      ]
+        "yellow",
+      ],
     },
     "name": {
       "type": "string",
       "description": "The player name",
       "minLength": 1,
-      "maxLength": 32
+      "maxLength": 32,
     },
     "isAdmin": {
       "description": "Determines if the player is an admin",
-      "type": "boolean"
+      "type": "boolean",
     },
     "playerId": {
       "type": "string",
       "description": "The player ID",
-      "minLength": 1
-    }
+      "minLength": 1,
+    },
   },
   "required": [
     "color",
     "name",
     "isAdmin",
-    "playerId"
+    "playerId",
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
 };
 export const parsePlayerDTO = (data: unknown, path: string = ""): LayoutResult<PlayerDTO> => {
   let output;
@@ -158,21 +165,21 @@ export const schemaMyPlayerUpdate = {
         "blue",
         "green",
         "red",
-        "yellow"
-      ]
+        "yellow",
+      ],
     },
     "name": {
       "type": "string",
       "description": "The player name",
       "minLength": 1,
-      "maxLength": 32
-    }
+      "maxLength": 32,
+    },
   },
   "required": [
     "color",
-    "name"
+    "name",
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
 };
 export const parseMyPlayerUpdate = (data: unknown, path: string = ""): LayoutResult<MyPlayerUpdate> => {
   let output;

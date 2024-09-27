@@ -12,11 +12,11 @@ export const gameDTOLayout = new StandaloneLayout({
     description: "Game",
     properties: {
       gameId: new StringLayout({
-        description: "Game identifier"
+        description: "Game identifier",
       }),
       player: playerDTOLayout,
       token: new StringLayout({
-        description: "Token"
+        description: "Token",
       }),
     },
   }),

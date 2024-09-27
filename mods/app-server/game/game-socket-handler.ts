@@ -8,10 +8,9 @@ import { ServerGameContextManager, serverGameManagerDependency } from "./game-co
 import { serverPlayerContextManagerDependency } from "../player/player-context.ts";
 import { webServerScopeContract } from "@acme/dependency/scopes.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { serverPlayerWSContextManagerDependency } from "../player/player-ws-context.ts";
+import { serverPlayerWSContextManagerDependency } from "../player/player-duplex-context.ts";
 
 export class GameSocketEndpointHandler implements EndpointHandler {
-
   public constructor(
     public readonly gameContextManager: ServerGameContextManager,
     public readonly tokenManager: TokenManager,
@@ -43,7 +42,11 @@ export class GameSocketEndpointHandler implements EndpointHandler {
     const { response, socket } = Deno.upgradeWebSocket(request);
 
     const playerWSContextManager = playerContext.resolver.resolve(serverPlayerWSContextManagerDependency);
-    await playerWSContextManager.create({ socket });
+
+    const onOpen = async () => {
+      await playerWSContextManager.createServerPlayerDuplexContext({ socket });
+    };
+    socket.addEventListener("open", onOpen, { once: true });
 
     return response;
   }
@@ -59,5 +62,5 @@ export function provideGameSocketEndpointHandler(resolver: DependencyResolver): 
 export const gameSocketEndpointHandlerDependency = defineDependency({
   name: "game-socket-web-handler",
   provider: provideGameSocketEndpointHandler,
-  scope: webServerScopeContract
+  scope: webServerScopeContract,
 });

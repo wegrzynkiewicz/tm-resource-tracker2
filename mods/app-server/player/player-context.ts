@@ -3,11 +3,12 @@ import { Channel } from "@acme/dependency/channel.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { PlayerDTO } from "../../common/player/player.layout.compiled.ts";
-import { ServerGameContext, serverGameScopeContract } from "../game/game-context.ts";
+import { ServerGameContext } from "../game/game-context.ts";
 import { ColorKey } from "../../common/color/color.layout.compiled.ts";
-import { serverPlayerWSContextManagerDependency } from "./player-ws-context.ts";
-import { serverPlayerScopeContract } from "../defs.ts";
+import { serverPlayerWSContextManagerDependency } from "./player-duplex-context.ts";
+import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
+import { DEBUG, loggerDependency } from "@acme/logger/defs.ts";
 
 interface ServerPlayerContextIdentifier {
   gameId: string;
@@ -44,14 +45,14 @@ export class ServerPlayerContextManager {
   ) {}
 
   public async create(
-    { color, isAdmin, name }: ServerPlayerInput
+    { color, isAdmin, name }: ServerPlayerInput,
   ): Promise<ServerPlayerContext> {
     const playerId = (++playerIdCounter).toString();
     const { gameId } = this.gameContext.identifier;
 
     const playerContext = createContext({
       identifier: { gameId, playerId },
-      name: "PLAYER",
+      name: "PLR",
       scopes: {
         [globalScopeContract.token]: this.gameContext.scopes[globalScopeContract.token],
         [serverGameScopeContract.token]: this.gameContext.scopes[serverGameScopeContract.token],
@@ -70,6 +71,9 @@ export class ServerPlayerContextManager {
 
     resolver.inject(serverPlayerIdDependency, playerId);
     resolver.inject(serverPlayerDTODependency, player);
+
+    const logger = resolver.resolve(loggerDependency);
+    logger.log(DEBUG, "player-created");
 
     this.players.set(playerId, playerContext);
     this.creates.emit(playerContext);

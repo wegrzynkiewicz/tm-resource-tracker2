@@ -1,13 +1,22 @@
+import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { clientGameScopeContract, frontendScopeContract } from "../../defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { readySocket } from "@acme/web/socket.ts";
-import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { apiURLDependency } from "../api-url-config.ts";
 import { createGameSocketPathname } from "../../../common/game/defs.ts";
-import { wsDependency, wsScopeContract } from "../../../common/web-socket/ws-context.ts";
 import { ClientGameContext, clientGameTokenDependency } from "./client-game-context.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
+import {
+  normalCAContextFactoryDependency,
+  normalCARouterDependency,
+  normalCASenderDependency,
+} from "@acme/control-action/normal/defs.ts";
+import { webSocketCAReceiverDependency } from "@acme/control-action/transport/ws-ca-receiver.ts";
+import { webSocketNormalCASenderDependency } from "@acme/control-action/transport/ws-normal-ca-sender.ts";
+import { initClientNormalCARouter } from "./normal-ca-router.ts";
+import { ClientNormalCAContextFactory } from "./client-normal-ca-context-factory.ts";
 
 export interface ClientPlayerWSContextIdentifier {
   gameId: string;
@@ -29,7 +38,7 @@ export class ClientPlayerWSContextManager {
     const socket = new WebSocket(url.toString());
 
     const { gameId } = this.clientGameContext.identifier;
-    const gameContext = createContext({
+    const clientPlayerWSContext = createContext({
       identifier: {
         gameId,
       },
@@ -38,26 +47,39 @@ export class ClientPlayerWSContextManager {
         [globalScopeContract.token]: this.clientGameContext.scopes[globalScopeContract.token],
         [frontendScopeContract.token]: this.clientGameContext.scopes[frontendScopeContract.token],
         [clientGameScopeContract.token]: this.clientGameContext.scopes[clientGameScopeContract.token],
-        [wsScopeContract.token]: new Scope(wsScopeContract),
+        [duplexScopeContract.token]: new Scope(duplexScopeContract),
         [localScopeContract.token]: new Scope(localScopeContract),
       },
     });
+    const { resolver } = clientPlayerWSContext;
+    resolver.inject(webSocketDependency, socket);
 
-    const { resolver } = gameContext;
-    resolver.inject(wsDependency, socket);
+    const factory = new ClientNormalCAContextFactory(clientPlayerWSContext);
+    resolver.inject(normalCAContextFactoryDependency, factory);
+
+    const router = initClientNormalCARouter();
+    resolver.inject(normalCARouterDependency, router);
+
+    const sender = resolver.resolve(webSocketNormalCASenderDependency);
+    resolver.inject(normalCASenderDependency, sender);
 
     const onClose = () => this.dispose();
     socket.addEventListener("close", onClose, { once: true });
-    await readySocket(socket);
 
-    return gameContext;
-  };
+    const receiver = resolver.resolve(webSocketCAReceiverDependency);
+    socket.addEventListener("message", (event) => receiver.receive(event));
+
+    await readySocket(socket);
+    socket.send("siema");
+
+    return clientPlayerWSContext;
+  }
 
   public async dispose(): Promise<void> {
     if (this.clientPlayerWSContext === null) {
       return;
     }
-    const socket = this.clientPlayerWSContext.resolver.resolve(wsDependency);
+    const socket = this.clientPlayerWSContext.resolver.resolve(webSocketDependency);
     if (socket.readyState === WebSocket.OPEN) {
       socket.close();
     }

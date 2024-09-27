@@ -58,7 +58,7 @@ export class ClientGameContextManager {
     resolver.inject(clientGameTokenDependency, token);
     resolver.inject(myPlayerDependency, player);
 
-    const clientPlayerWSContentManager = resolver.resolve(clientPlayerWSContextManagerDependency)
+    const clientPlayerWSContentManager = resolver.resolve(clientPlayerWSContextManagerDependency);
     await clientPlayerWSContentManager.create();
 
     this.gameContext = gameContext;

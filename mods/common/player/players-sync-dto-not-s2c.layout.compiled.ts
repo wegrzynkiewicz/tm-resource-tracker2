@@ -1,5 +1,11 @@
-import { LayoutResult, expectedNotNullObjectErrorContract, missingObjectPropertyErrorContract, notMatchedArrayItemErrorContract, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
-import { PlayerDTO, parsePlayerDTO } from "../player/player.layout.compiled.ts";
+import {
+  expectedNotNullObjectErrorContract,
+  LayoutResult,
+  missingObjectPropertyErrorContract,
+  notMatchedArrayItemErrorContract,
+  notMatchedErrorContract,
+} from "@acme/layout/runtime/mod.ts";
+import { parsePlayerDTO, PlayerDTO } from "./player.layout.compiled.ts";
 
 export interface PlayerSyncDTONotS2C {
   players: PlayerDTO[];
@@ -22,39 +28,39 @@ export const schemaPlayerSyncDTONotS2C = {
               "blue",
               "green",
               "red",
-              "yellow"
-            ]
+              "yellow",
+            ],
           },
           "name": {
             "type": "string",
             "description": "The player name",
             "minLength": 1,
-            "maxLength": 32
+            "maxLength": 32,
           },
           "isAdmin": {
             "description": "Determines if the player is an admin",
-            "type": "boolean"
+            "type": "boolean",
           },
           "playerId": {
             "type": "string",
             "description": "The player ID",
-            "minLength": 1
-          }
+            "minLength": 1,
+          },
         },
         "required": [
           "color",
           "name",
           "isAdmin",
-          "playerId"
+          "playerId",
         ],
-        "additionalProperties": false
-      }
-    }
+        "additionalProperties": false,
+      },
+    },
   },
   "required": [
-    "players"
+    "players",
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
 };
 export const parsePlayerSyncDTONotS2C = (data: unknown, path: string = ""): LayoutResult<PlayerSyncDTONotS2C> => {
   let output;

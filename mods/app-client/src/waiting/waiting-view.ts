@@ -192,7 +192,7 @@ export function provideWaitingView(resolver: DependencyResolver) {
     docTitle.setTitle("Waiting");
     app.contentSlot.attach($root);
     app.render();
-  }
+  };
 
   return { $root, render };
 }

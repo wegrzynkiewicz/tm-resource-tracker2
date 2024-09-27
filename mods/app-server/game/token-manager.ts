@@ -1,4 +1,4 @@
-import { cryptoRandomString } from "../../app-server/deps.ts";
+import { createRandomStringFactory } from "@acme/useful/strings.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { globalScopeContract } from "@acme/dependency/scopes.ts";
 
@@ -12,11 +12,13 @@ export interface Token {
   readonly identifier: TokenTarget;
 }
 
+const randomKey = createRandomStringFactory(64);
+
 export class TokenManager {
   public readonly tokens = new Map<string, Token>();
 
   public createToken(identifier: TokenTarget): string {
-    const key = cryptoRandomString({ length: 64, type: "alphanumeric" });
+    const key = randomKey();
     const token = { key, identifier };
     this.tokens.set(key, token);
     return key;

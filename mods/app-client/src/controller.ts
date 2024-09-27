@@ -11,7 +11,7 @@ export type ControllerImporter = () => Promise<ControllerInitializer>;
 
 export interface ControllerRouteMatch {
   importer: ControllerImporter;
-  params: Data,
+  params: Data;
 }
 
 export interface ControllerRouter {

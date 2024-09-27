@@ -25,7 +25,7 @@
       "cwd": "${workspaceFolder}",
       "program": "${file}",
       "console": "integratedTerminal",
-      "args": [],
+      "args": []
     },
     {
       "name": "Attach",
