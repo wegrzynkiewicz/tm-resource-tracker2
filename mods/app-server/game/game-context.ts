@@ -3,9 +3,9 @@ import { DEBUG, loggerDependency } from "@acme/logger/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
-import { serverPlayerContextManagerDependency } from "../player/player-context.ts";
 import { serverGameScopeContract } from "../defs.ts";
 import { createRandomStringFactory } from "@acme/useful/strings.ts";
+import { playerBroadcastDependency } from "./player-broadcast.ts";
 
 export interface ServerGameContextIdentifier {
   gameId: string;
@@ -50,14 +50,11 @@ export class ServerGameContextManager {
     });
     const { resolver } = gameContext;
 
+    resolver.resolve(playerBroadcastDependency);
     resolver.inject(serverGameIdDependency, gameId);
 
     const logger = resolver.resolve(loggerDependency);
     logger.log(DEBUG, "game-created");
-
-    const serverPlayerContextManager = resolver.resolve(serverPlayerContextManagerDependency);
-    // serverPlayerContextManager.creates.on((ctx) => gameStageManager.handlePlayerContextCreation(ctx));
-    // serverPlayerContextManager.deletes.on((ctx) => gameStageManager.handlePlayerContextDeletion(ctx));
 
     this.games.set(gameId, gameContext);
     return gameContext;

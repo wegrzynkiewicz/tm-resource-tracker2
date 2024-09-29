@@ -69,10 +69,10 @@ export const parsePlayerDTO = (data: unknown, path: string = ""): LayoutResult<P
 
       // Parsing property "color"
       const input_color = "color" in data === true ? data.color : undefined;
-      let output_color;
       if (input_color === undefined) {
         return [false, missingObjectPropertyErrorContract, path, "color"];
       }
+      let output_color;
       while (true) {
         const result_color = parseColor(input_color);
         if (result_color[0] === true) {
@@ -84,10 +84,10 @@ export const parsePlayerDTO = (data: unknown, path: string = ""): LayoutResult<P
 
       // Parsing property "name"
       const input_name = "name" in data === true ? data.name : undefined;
-      let output_name;
       if (input_name === undefined) {
         return [false, missingObjectPropertyErrorContract, path, "name"];
       }
+      let output_name;
       while (true) {
         if (typeof input_name === "string") {
           if (input_name.length < 1) {
@@ -104,10 +104,10 @@ export const parsePlayerDTO = (data: unknown, path: string = ""): LayoutResult<P
 
       // Parsing property "isAdmin"
       const input_isAdmin = "isAdmin" in data === true ? data.isAdmin : undefined;
-      let output_isAdmin;
       if (input_isAdmin === undefined) {
         return [false, missingObjectPropertyErrorContract, path, "isAdmin"];
       }
+      let output_isAdmin;
       while (true) {
         if (typeof input_isAdmin === "boolean") {
           output_isAdmin = input_isAdmin;
@@ -118,10 +118,10 @@ export const parsePlayerDTO = (data: unknown, path: string = ""): LayoutResult<P
 
       // Parsing property "playerId"
       const input_playerId = "playerId" in data === true ? data.playerId : undefined;
-      let output_playerId;
       if (input_playerId === undefined) {
         return [false, missingObjectPropertyErrorContract, path, "playerId"];
       }
+      let output_playerId;
       while (true) {
         if (typeof input_playerId === "string") {
           if (input_playerId.length < 1) {
@@ -191,10 +191,10 @@ export const parseMyPlayerUpdate = (data: unknown, path: string = ""): LayoutRes
 
       // Parsing property "color"
       const input_color = "color" in data === true ? data.color : undefined;
-      let output_color;
       if (input_color === undefined) {
         return [false, missingObjectPropertyErrorContract, path, "color"];
       }
+      let output_color;
       while (true) {
         const result_color = parseColor(input_color);
         if (result_color[0] === true) {
@@ -206,10 +206,10 @@ export const parseMyPlayerUpdate = (data: unknown, path: string = ""): LayoutRes
 
       // Parsing property "name"
       const input_name = "name" in data === true ? data.name : undefined;
-      let output_name;
       if (input_name === undefined) {
         return [false, missingObjectPropertyErrorContract, path, "name"];
       }
+      let output_name;
       while (true) {
         if (typeof input_name === "string") {
           if (input_name.length < 1) {

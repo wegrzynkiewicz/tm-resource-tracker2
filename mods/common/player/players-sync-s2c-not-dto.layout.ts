@@ -4,11 +4,11 @@ import { ArrayLayout } from "@acme/layout/types/array-layout.ts";
 import { playerDTOLayout } from "./player.layout.ts";
 import { compileLayouts } from "@acme/layout/defs.ts";
 
-export const playerSyncDTONotS2CLayout = new StandaloneLayout({
+export const playersSyncS2CNotDTOLayout = new StandaloneLayout({
   meta: import.meta,
-  parserName: "parsePlayerSyncDTONotS2C",
+  parserName: "parsePlayersSyncS2CNotDTO",
   layout: new ObjectLayout({
-    type: "PlayerSyncDTONotS2C",
+    type: "PlayersSyncS2CNotDTO",
     properties: {
       players: new ArrayLayout({
         items: playerDTOLayout,
@@ -17,4 +17,4 @@ export const playerSyncDTONotS2CLayout = new StandaloneLayout({
   }),
 });
 
-await compileLayouts(`@acme/layout/runtime/mod.ts`, [playerSyncDTONotS2CLayout]);
+await compileLayouts(`@acme/layout/runtime/mod.ts`, [playersSyncS2CNotDTOLayout]);

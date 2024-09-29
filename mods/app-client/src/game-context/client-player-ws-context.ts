@@ -15,7 +15,7 @@ import {
 } from "@acme/control-action/normal/defs.ts";
 import { webSocketCAReceiverDependency } from "@acme/control-action/transport/ws-ca-receiver.ts";
 import { webSocketNormalCASenderDependency } from "@acme/control-action/transport/ws-normal-ca-sender.ts";
-import { initClientNormalCARouter } from "./normal-ca-router.ts";
+import { initClientNormalCARouter } from "../game-actions/normal-ca-router.ts";
 import { ClientNormalCAContextFactory } from "./client-normal-ca-context-factory.ts";
 
 export interface ClientPlayerWSContextIdentifier {

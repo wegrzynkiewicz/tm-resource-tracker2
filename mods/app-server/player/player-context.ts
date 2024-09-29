@@ -5,7 +5,7 @@ import { defineDependency } from "@acme/dependency/declaration.ts";
 import { PlayerDTO } from "../../common/player/player.layout.compiled.ts";
 import { ServerGameContext } from "../game/game-context.ts";
 import { ColorKey } from "../../common/color/color.layout.compiled.ts";
-import { serverPlayerWSContextManagerDependency } from "./player-duplex-context.ts";
+import { serverPlayerDuplexContextManagerDependency } from "./player-duplex-context.ts";
 import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
 import { DEBUG, loggerDependency } from "@acme/logger/defs.ts";
@@ -86,10 +86,14 @@ export class ServerPlayerContextManager {
     if (ctx === undefined) {
       return;
     }
-    const netManager = ctx.resolver.resolve(serverPlayerWSContextManagerDependency);
-    await netManager.dispose();
+    const serverPlayerDuplexContextManager = ctx.resolver.resolve(serverPlayerDuplexContextManagerDependency);
+    await serverPlayerDuplexContextManager.dispose();
     this.players.delete(playerId);
     this.deletes.emit(ctx);
+  }
+
+  public getPlayersDTO(): PlayerDTO[] {
+    return [...this.players.values()].map((ctx) => ctx.resolver.resolve(serverPlayerDTODependency));
   }
 }
 

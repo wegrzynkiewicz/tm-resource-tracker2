@@ -1,4 +1,4 @@
-import { clientGameContextManagerDependency } from "../game/client-game-context.ts";
+import { clientGameContextManagerDependency } from "../game-context/client-game-context.ts";
 import { homepageViewDependency } from "./home-view.ts";
 import { Context } from "@acme/dependency/context.ts";
 

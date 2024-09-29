@@ -1,4 +1,4 @@
-import { clientGameContextManagerDependency } from "../game/client-game-context.ts";
+import { clientGameContextManagerDependency } from "../game-context/client-game-context.ts";
 import { controllerRunnerDependency } from "../controller.ts";
 import { waitingViewDependency } from "./waiting-view.ts";
 import { homePath } from "../home/home-defs.ts";

@@ -10,8 +10,9 @@ import { controllerRunnerDependency } from "../controller.ts";
 import { homePath } from "../home/home-defs.ts";
 import { createQuestionModal, modalManagerDependency } from "../modal.ts";
 import { PlayerModal } from "../../../common/player/update/player-modal.ts";
-import { clientGameContextManagerDependency, clientGameIdDependency } from "../game/client-game-context.ts";
+import { clientGameContextManagerDependency, clientGameIdDependency } from "../game-context/client-game-context.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { playersStoreDependency } from "../player/players-store.ts";
 
 export class WaitingPlayerFactory {
   public create(player: PlayerDTO): HTMLElement {
@@ -123,6 +124,17 @@ export class WaitingPlayerFactory {
 //   // }
 // }
 
+function createPlayer(player: PlayerDTO): HTMLElement {
+  const { name, color } = player;
+  const $root = div_nodes("history _background", [
+    div_nodes("history_header", [
+      div(`player-cube _${color}`),
+      div("history_name", name),
+    ]),
+  ]);
+  return $root;
+}
+
 export function provideWaitingView(resolver: DependencyResolver) {
   const app = resolver.resolve(appViewDependency);
   const docTitle = resolver.resolve(docTitleDependency);
@@ -131,6 +143,7 @@ export function provideWaitingView(resolver: DependencyResolver) {
   const modalManager = resolver.resolve(modalManagerDependency);
   const clientGameManager = resolver.resolve(clientGameContextManagerDependency);
   const controllerRunner = resolver.resolve(controllerRunnerDependency);
+  const playersStore = resolver.resolve(playersStoreDependency);
 
   const gameIdBox = createEditBox({
     caption: "GameID",
@@ -143,9 +156,7 @@ export function provideWaitingView(resolver: DependencyResolver) {
   const $change = button("box _action", "Change name or color...");
   const $quitGame = button("box _action", "Quit game");
   const $start = button("box _action", "Start game");
-
-  const $loop = div("waiting_players");
-  // new Loop<Player>($loop, players, new WaitingPlayerFactory());
+  const $players = div("waiting_players");
 
   const $root = div_nodes("waiting", [
     div_nodes("space", [
@@ -161,10 +172,15 @@ export function provideWaitingView(resolver: DependencyResolver) {
       ]),
       div_nodes("space_container", [
         div("space_caption", "Joining players:"),
-        $loop,
+        $players,
       ]),
     ]),
   ]);
+
+  playersStore.updates.on(() => {
+    const players = playersStore.players.map(createPlayer);
+    $players.replaceChildren(...players);
+  });
 
   $change.addEventListener("click", async () => {
     const modal = new PlayerModal();

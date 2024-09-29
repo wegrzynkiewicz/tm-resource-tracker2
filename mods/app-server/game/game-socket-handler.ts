@@ -8,7 +8,7 @@ import { ServerGameContextManager, serverGameManagerDependency } from "./game-co
 import { serverPlayerContextManagerDependency } from "../player/player-context.ts";
 import { webServerScopeContract } from "@acme/dependency/scopes.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { serverPlayerWSContextManagerDependency } from "../player/player-duplex-context.ts";
+import { serverPlayerDuplexContextManagerDependency } from "../player/player-duplex-context.ts";
 
 export class GameSocketEndpointHandler implements EndpointHandler {
   public constructor(
@@ -41,10 +41,10 @@ export class GameSocketEndpointHandler implements EndpointHandler {
 
     const { response, socket } = Deno.upgradeWebSocket(request);
 
-    const playerWSContextManager = playerContext.resolver.resolve(serverPlayerWSContextManagerDependency);
+    const playerDuplexContextManager = playerContext.resolver.resolve(serverPlayerDuplexContextManagerDependency);
 
     const onOpen = async () => {
-      await playerWSContextManager.createServerPlayerDuplexContext({ socket });
+      await playerDuplexContextManager.createServerPlayerDuplexContext({ socket });
     };
     socket.addEventListener("open", onOpen, { once: true });
 

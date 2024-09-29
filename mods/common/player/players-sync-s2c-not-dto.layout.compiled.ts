@@ -7,11 +7,11 @@ import {
 } from "@acme/layout/runtime/mod.ts";
 import { parsePlayerDTO, PlayerDTO } from "./player.layout.compiled.ts";
 
-export interface PlayerSyncDTONotS2C {
+export interface PlayersSyncS2CNotDTO {
   players: PlayerDTO[];
 }
 
-export const schemaPlayerSyncDTONotS2C = {
+export const schemaPlayersSyncS2CNotDTO = {
   "type": "object",
   "properties": {
     "players": {
@@ -62,7 +62,7 @@ export const schemaPlayerSyncDTONotS2C = {
   ],
   "additionalProperties": false,
 };
-export const parsePlayerSyncDTONotS2C = (data: unknown, path: string = ""): LayoutResult<PlayerSyncDTONotS2C> => {
+export const parsePlayersSyncS2CNotDTO = (data: unknown, path: string = ""): LayoutResult<PlayersSyncS2CNotDTO> => {
   let output;
   while (true) {
     if (typeof data === "object") {
@@ -72,10 +72,10 @@ export const parsePlayerSyncDTONotS2C = (data: unknown, path: string = ""): Layo
 
       // Parsing property "players"
       const input_players = "players" in data === true ? data.players : undefined;
-      let output_players;
       if (input_players === undefined) {
         return [false, missingObjectPropertyErrorContract, path, "players"];
       }
+      let output_players;
       while (true) {
         if (Array.isArray(input_players)) {
           const len = input_players.length;
