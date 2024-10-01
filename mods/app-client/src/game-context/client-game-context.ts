@@ -5,7 +5,7 @@ import { myPlayerDependency } from "../player/my-player.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { apiURLDependency } from "../api-url-config.ts";
-import { gameCreatePathname, gameQuitPathname, gameJoinPathname } from "../../../common/game/defs.ts";
+import { gameCreatePathname, gameJoinPathname, gameQuitPathname } from "../../../common/game/defs.ts";
 import { GameDTO } from "../../../common/game/game-dto.layout.compiled.ts";
 import { clientPlayerWSContextManagerDependency } from "./client-player-ws-context.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
@@ -80,7 +80,6 @@ export class ClientGameContextManager {
     } catch (error) {
       throw new Panic("error-then-create-game", { error });
     }
-
   }
 
   public async getClientGameContext(): Promise<ClientGameContext | undefined> {

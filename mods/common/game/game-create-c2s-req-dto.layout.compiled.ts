@@ -1,4 +1,11 @@
-import { LayoutResult, exceedsMaxStringLengthErrorContract, exceedsMinStringLengthErrorContract, expectedNotNullObjectErrorContract, missingObjectPropertyErrorContract, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
+import {
+  exceedsMaxStringLengthErrorContract,
+  exceedsMinStringLengthErrorContract,
+  expectedNotNullObjectErrorContract,
+  LayoutResult,
+  missingObjectPropertyErrorContract,
+  notMatchedErrorContract,
+} from "@acme/layout/runtime/mod.ts";
 import { ColorKey, parseColor } from "../color/color.layout.compiled.ts";
 
 export interface GameCreateC2SReqDTO {
@@ -19,21 +26,21 @@ export const schemaGameCreateC2SReqDTO = {
         "blue",
         "green",
         "red",
-        "yellow"
-      ]
+        "yellow",
+      ],
     },
     "name": {
       "type": "string",
       "description": "The player name",
       "minLength": 1,
-      "maxLength": 32
-    }
+      "maxLength": 32,
+    },
   },
   "required": [
     "color",
-    "name"
+    "name",
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
 };
 export const parseGameCreateC2SReqDTO = (data: unknown, path: string = ""): LayoutResult<GameCreateC2SReqDTO> => {
   let output;

@@ -2,7 +2,10 @@ import { div, div_nodes, form_nodes } from "@acme/dom/nodes.ts";
 import { createEditBox } from "../edit-box.ts";
 import { createColorSelectorBox } from "../helpers/color-selector.ts";
 import { Result } from "@acme/useful/result.ts";
-import { GameJoinC2SReqDTO, parseGameJoinC2SReqDTO } from "../../../common/game/game-join-c2s-req-dto.layout.compiled.ts";
+import {
+  GameJoinC2SReqDTO,
+  parseGameJoinC2SReqDTO,
+} from "../../../common/game/game-join-c2s-req-dto.layout.compiled.ts";
 import { unwrapLayoutResult } from "@acme/layout/runtime/defs.ts";
 
 export function createJoinModal() {

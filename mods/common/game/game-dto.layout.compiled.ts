@@ -1,5 +1,10 @@
-import { LayoutResult, expectedNotNullObjectErrorContract, missingObjectPropertyErrorContract, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
-import { PlayerDTO, parsePlayerDTO } from "../player/player-dto.layout.compiled.ts";
+import {
+  expectedNotNullObjectErrorContract,
+  LayoutResult,
+  missingObjectPropertyErrorContract,
+  notMatchedErrorContract,
+} from "@acme/layout/runtime/mod.ts";
+import { parsePlayerDTO, PlayerDTO } from "../player/player-dto.layout.compiled.ts";
 
 /** Game */
 export interface GameDTO {
@@ -17,7 +22,7 @@ export const schemaGameDTO = {
   "properties": {
     "gameId": {
       "type": "string",
-      "description": "Game identifier"
+      "description": "Game identifier",
     },
     "player": {
       "description": "A player in the game",
@@ -31,44 +36,44 @@ export const schemaGameDTO = {
             "blue",
             "green",
             "red",
-            "yellow"
-          ]
+            "yellow",
+          ],
         },
         "name": {
           "type": "string",
           "description": "The player name",
           "minLength": 1,
-          "maxLength": 32
+          "maxLength": 32,
         },
         "isAdmin": {
           "description": "Determines if the player is an admin",
-          "type": "boolean"
+          "type": "boolean",
         },
         "playerId": {
           "type": "string",
           "description": "The player ID",
-          "minLength": 1
-        }
+          "minLength": 1,
+        },
       },
       "required": [
         "color",
         "name",
         "isAdmin",
-        "playerId"
+        "playerId",
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
     },
     "token": {
       "type": "string",
-      "description": "Token"
-    }
+      "description": "Token",
+    },
   },
   "required": [
     "gameId",
     "player",
-    "token"
+    "token",
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
 };
 export const parseGameDTO = (data: unknown, path: string = ""): LayoutResult<GameDTO> => {
   let output;

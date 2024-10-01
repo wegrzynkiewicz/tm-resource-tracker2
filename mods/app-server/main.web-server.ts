@@ -9,8 +9,8 @@ import { webServerContextManagerDependency } from "@acme/web/server-context.ts";
 import { preflightEndpointHandlerDependency } from "@acme/web/build-in/preflight.ts";
 import {
   gameCreatePathname,
-  gameQuitPathname,
   gameJoinPathname,
+  gameQuitPathname,
   gameSocketPatternPathname,
 } from "../common/game/defs.ts";
 import { gameQuitEndpointHandlerDependency } from "./game/game-quit-handler.ts";
