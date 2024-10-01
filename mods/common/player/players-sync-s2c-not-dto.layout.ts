@@ -17,4 +17,6 @@ export const playersSyncS2CNotDTOLayout = new StandaloneLayout({
   }),
 });
 
-import.meta.main && await compileLayouts(`@acme/layout/runtime/mod.ts`, [playersSyncS2CNotDTOLayout]);
+if (import.meta.main) {
+  await compileLayouts(`@acme/layout/runtime/mod.ts`, [playersSyncS2CNotDTOLayout]);
+}

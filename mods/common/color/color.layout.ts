@@ -15,4 +15,6 @@ export const colorLayout = new StandaloneLayout({
   }),
 });
 
-import.meta.main && await compileLayouts(`@acme/layout/runtime/mod.ts`, [colorLayout]);
+if (import.meta.main) {
+  await compileLayouts(`@acme/layout/runtime/mod.ts`, [colorLayout]);
+}

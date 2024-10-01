@@ -18,4 +18,6 @@ export const gameJoinC2SReqDTOLayout = new StandaloneLayout({
   }),
 });
 
-import.meta.main && await compileLayouts(`@acme/layout/runtime/mod.ts`, [gameJoinC2SReqDTOLayout]);
+if (import.meta.main) {
+  await compileLayouts(`@acme/layout/runtime/mod.ts`, [gameJoinC2SReqDTOLayout]);
+}

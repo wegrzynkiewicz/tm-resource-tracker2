@@ -41,4 +41,6 @@ export const playerDTOLayout = new StandaloneLayout({
   }),
 });
 
-import.meta.main && await compileLayouts(`@acme/layout/runtime/mod.ts`, [playerDTOLayout]);
+if (import.meta.main) {
+  await compileLayouts(`@acme/layout/runtime/mod.ts`, [playerDTOLayout]);
+}

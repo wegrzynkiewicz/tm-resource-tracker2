@@ -16,4 +16,6 @@ export const gameCreateC2SReqDTOLayout = new StandaloneLayout({
   }),
 });
 
-import.meta.main && await compileLayouts(`@acme/layout/runtime/mod.ts`, [gameCreateC2SReqDTOLayout]);
+if (import.meta.main) {
+  await compileLayouts(`@acme/layout/runtime/mod.ts`, [gameCreateC2SReqDTOLayout]);
+}
