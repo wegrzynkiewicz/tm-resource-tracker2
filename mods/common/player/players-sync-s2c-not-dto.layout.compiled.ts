@@ -5,7 +5,7 @@ import {
   notMatchedArrayItemErrorContract,
   notMatchedErrorContract,
 } from "@acme/layout/runtime/mod.ts";
-import { parsePlayerDTO, PlayerDTO } from "./player.layout.compiled.ts";
+import { parsePlayerDTO, PlayerDTO } from "./player-dto.layout.compiled.ts";
 
 export interface PlayersSyncS2CNotDTO {
   players: PlayerDTO[];

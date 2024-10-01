@@ -5,11 +5,13 @@ import { myPlayerDependency } from "../player/my-player.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { apiURLDependency } from "../api-url-config.ts";
-import { gameCreatePathname, gameQuitPathname, gameReadPathname } from "../../../common/game/defs.ts";
+import { gameCreatePathname, gameQuitPathname, gameJoinPathname } from "../../../common/game/defs.ts";
 import { GameDTO } from "../../../common/game/game-dto.layout.compiled.ts";
-import { MyPlayerUpdate } from "../../../common/player/player.layout.compiled.ts";
 import { clientPlayerWSContextManagerDependency } from "./client-player-ws-context.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
+import { GameCreateC2SReqDTO } from "../../../common/game/game-create-c2s-req-dto.layout.compiled.ts";
+import { GameJoinC2SReqDTO } from "../../../common/game/game-join-c2s-req-dto.layout.compiled.ts";
+import { Panic } from "@acme/useful/errors.ts";
 
 export interface ClientGameContextIdentifier {
   gameId: string;
@@ -65,12 +67,20 @@ export class ClientGameContextManager {
     return gameContext;
   }
 
-  public async createClientGame(data: MyPlayerUpdate): Promise<ClientGameContext> {
+  public async createGame(data: GameCreateC2SReqDTO): Promise<ClientGameContext> {
     const url = new URL(gameCreatePathname, this.apiURL);
     const request = jsonRequest(url, data, { method: "POST" });
-    const response = await fetch(request);
-    const payload = await response.json() as GameDTO;
-    return this.createScope(payload);
+    try {
+      const response = await fetch(request);
+      if (response.status !== 200) {
+        throw new Panic("error-fetch-create-game", { code: response.status });
+      }
+      const payload = await response.json() as GameDTO;
+      return this.createScope(payload);
+    } catch (error) {
+      throw new Panic("error-then-create-game", { error });
+    }
+
   }
 
   public async getClientGameContext(): Promise<ClientGameContext | undefined> {
@@ -81,7 +91,7 @@ export class ClientGameContextManager {
     if (token === null) {
       return undefined;
     }
-    const url = new URL(gameReadPathname, this.apiURL);
+    const url = new URL(gameJoinPathname, this.apiURL);
     const request = jsonRequest(url);
     request.headers.set("Authorization", `Bearer ${token}`);
     try {
@@ -95,6 +105,24 @@ export class ClientGameContextManager {
     }
     localStorage.removeItem("token");
     return undefined;
+  }
+
+  public async joinClientGame(data: GameJoinC2SReqDTO): Promise<ClientGameContext | undefined> {
+    const url = new URL(gameJoinPathname, this.apiURL);
+    const request = jsonRequest(url, data, { method: "POST" });
+    try {
+      const response = await fetch(request);
+      if (response.status === 200) {
+        const payload = await response.json() as GameDTO;
+        return this.createScope(payload);
+      }
+      if (response.status === 404) {
+        return undefined;
+      }
+      throw new Panic("error-fetch-join-game", { code: response.status });
+    } catch (error) {
+      throw new Panic("error-then-join-game", error);
+    }
   }
 
   public async quitClientGame(): Promise<void> {

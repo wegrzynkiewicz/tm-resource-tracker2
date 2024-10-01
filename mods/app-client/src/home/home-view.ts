@@ -1,6 +1,5 @@
 import { appViewDependency } from "../app/app-view.ts";
 import { button, div_nodes } from "@acme/dom/nodes.ts";
-import { PlayerModal } from "../../../common/player/update/player-modal.ts";
 import { modalManagerDependency } from "../modal.ts";
 import { frontendScopeContract } from "../../defs.ts";
 import { docTitleDependency } from "../app/doc-title.ts";
@@ -10,6 +9,8 @@ import { Slot } from "../place.ts";
 import { clientGameContextManagerDependency } from "../game-context/client-game-context.ts";
 import { controllerRunnerDependency } from "../controller.ts";
 import { waitingPath } from "../waiting/waiting-defs.ts";
+import { createPlayerModal } from "../player/player-modal.ts";
+import { createJoinModal } from "./join-game-modal.ts";
 
 export function provideHomepageView(resolver: DependencyResolver) {
   const app = resolver.resolve(appViewDependency);
@@ -32,11 +33,21 @@ export function provideHomepageView(resolver: DependencyResolver) {
   ]);
 
   $create.addEventListener("click", async () => {
-    const modal = new PlayerModal();
-    modalManager.mount(modal);
+    const modal = createPlayerModal();
+    void modalManager.mount(modal);
     const [status, data] = await modal.ready;
     if (status === true) {
-      await clientGameManager.createClientGame(data);
+      await clientGameManager.createGame(data);
+      await controllerRunner.run(waitingPath);
+    }
+  });
+
+  $join.addEventListener("click", async () => {
+    const modal = createJoinModal();
+    void modalManager.mount(modal);
+    const [status, data] = await modal.ready;
+    if (status === true) {
+      await clientGameManager.joinClientGame(data);
       await controllerRunner.run(waitingPath);
     }
   });

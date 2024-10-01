@@ -5,14 +5,14 @@ import { appViewDependency } from "../app/app-view.ts";
 import { frontendScopeContract } from "../../defs.ts";
 import { docTitleDependency } from "../app/doc-title.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
-import { PlayerDTO } from "../../../common/player/player.layout.compiled.ts";
+import { PlayerDTO } from "../../../common/player/player-dto.layout.compiled.ts";
 import { controllerRunnerDependency } from "../controller.ts";
 import { homePath } from "../home/home-defs.ts";
 import { createQuestionModal, modalManagerDependency } from "../modal.ts";
-import { PlayerModal } from "../../../common/player/update/player-modal.ts";
 import { clientGameContextManagerDependency, clientGameIdDependency } from "../game-context/client-game-context.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { playersStoreDependency } from "../player/players-store.ts";
+import { createPlayerModal } from "../player/player-modal.ts";
 
 export class WaitingPlayerFactory {
   public create(player: PlayerDTO): HTMLElement {
@@ -183,7 +183,7 @@ export function provideWaitingView(resolver: DependencyResolver) {
   });
 
   $change.addEventListener("click", async () => {
-    const modal = new PlayerModal();
+    const modal = createPlayerModal();
     await modalManager.mount(modal);
     const [status, data] = await modal.ready;
     if (status === true) {

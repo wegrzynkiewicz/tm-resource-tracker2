@@ -41,17 +41,4 @@ export const playerDTOLayout = new StandaloneLayout({
   }),
 });
 
-export const myPlayerUpdateLayout = new StandaloneLayout({
-  meta: import.meta,
-  parserName: "parseMyPlayerUpdate",
-  layout: new ObjectLayout({
-    type: "MyPlayerUpdate",
-    description: "My player update object",
-    properties: {
-      color: colorLayout,
-      name: playerNameLayout,
-    },
-  }),
-});
-
-await compileLayouts(`@acme/layout/runtime/mod.ts`, [playerDTOLayout, myPlayerUpdateLayout]);
+import.meta.main && await compileLayouts(`@acme/layout/runtime/mod.ts`, [playerDTOLayout]);

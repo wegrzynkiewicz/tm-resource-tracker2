@@ -1,15 +1,15 @@
-import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
-import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
-import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-parser.ts";
+import { GameDTO } from "../../common/game/game-dto.layout.compiled.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
-import { GameDTO } from "../../common/game/game-dto.layout.compiled.ts";
+import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-parser.ts";
+import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
+import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
 import { serverPlayerContextManagerDependency, serverPlayerDTODependency } from "../player/player-context.ts";
 import { webServerScopeContract } from "@acme/dependency/scopes.ts";
-import { parseGameCreateC2SReqDTO } from "../../common/game/game-create-c2s-req-dto.layout.compiled.ts";
+import { parseGameJoinC2SReqDTO } from "../../common/game/game-join-c2s-req-dto.layout.compiled.ts";
 
-export class GameCreateWebHandler implements EndpointHandler {
+export class GameJoinEndpointHandler implements EndpointHandler {
   public constructor(
     public readonly parser: JSONRequestParser,
     public readonly gameManager: ServerGameContextManager,
@@ -17,16 +17,18 @@ export class GameCreateWebHandler implements EndpointHandler {
   ) {}
 
   public async handle(request: Request): Promise<Response> {
-    const [status, data] = await this.parser.parse(parseGameCreateC2SReqDTO, request);
+    const [status, data] = await this.parser.parse(parseGameJoinC2SReqDTO, request);
     if (status === false) {
       return data;
     }
 
-    const { color, name } = data;
-    const isAdmin = true;
+    const { color, gameId, name } = data;
+    const isAdmin = false;
 
-    const gameContext = this.gameManager.createServerGameContext();
-    const { gameId } = gameContext.identifier;
+    const gameContext = this.gameManager.games.get(gameId);
+    if (gameContext === undefined) {
+      return Response.json({ error: "game-not-found" }, { status: 404 });
+    }
 
     const playerContextManager = gameContext.resolver.resolve(serverPlayerContextManagerDependency);
     const playerContext = await playerContextManager.create({ color, name, isAdmin });
@@ -42,16 +44,16 @@ export class GameCreateWebHandler implements EndpointHandler {
   }
 }
 
-export function provideGameCreateWebHandler(resolver: DependencyResolver): EndpointHandler {
-  return new GameCreateWebHandler(
+export function provideGameJoinEndpointHandler(resolver: DependencyResolver): EndpointHandler {
+  return new GameJoinEndpointHandler(
     resolver.resolve(jsonRequestParserDependency),
     resolver.resolve(serverGameManagerDependency),
     resolver.resolve(tokenManagerDependency),
   );
 }
 
-export const gameCreateWebHandlerDependency = defineDependency({
-  name: "game-create-web-handler",
-  provider: provideGameCreateWebHandler,
+export const gameJoinEndpointHandlerDependency = defineDependency({
+  name: "game-join-web-handler",
+  provider: provideGameJoinEndpointHandler,
   scope: webServerScopeContract,
 });

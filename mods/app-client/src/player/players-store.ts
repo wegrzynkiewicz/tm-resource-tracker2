@@ -1,4 +1,4 @@
-import { PlayerDTO } from "../../../common/player/player.layout.compiled.ts";
+import { PlayerDTO } from "../../../common/player/player-dto.layout.compiled.ts";
 import { Channel } from "@acme/dependency/channel.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { frontendScopeContract } from "../../defs.ts";

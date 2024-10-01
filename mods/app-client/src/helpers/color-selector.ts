@@ -1,5 +1,5 @@
-import { colors } from "./color.ts";
-import { createSelector, SelectorStore } from "../../app-client/src/utils/selector.ts";
+import { colors } from "../../../common/color/color.ts";
+import { createSelector, SelectorStore } from "../utils/selector.ts";
 import { div_nodes, span } from "@acme/dom/nodes.ts";
 
 export function createColorSelectorBox(name: string) {

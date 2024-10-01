@@ -1,10 +1,5 @@
-import {
-  expectedNotNullObjectErrorContract,
-  LayoutResult,
-  missingObjectPropertyErrorContract,
-  notMatchedErrorContract,
-} from "@acme/layout/runtime/mod.ts";
-import { parsePlayerDTO, PlayerDTO } from "../player/player.layout.compiled.ts";
+import { LayoutResult, expectedNotNullObjectErrorContract, missingObjectPropertyErrorContract, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
+import { PlayerDTO, parsePlayerDTO } from "../player/player-dto.layout.compiled.ts";
 
 /** Game */
 export interface GameDTO {
@@ -22,7 +17,7 @@ export const schemaGameDTO = {
   "properties": {
     "gameId": {
       "type": "string",
-      "description": "Game identifier",
+      "description": "Game identifier"
     },
     "player": {
       "description": "A player in the game",
@@ -36,44 +31,44 @@ export const schemaGameDTO = {
             "blue",
             "green",
             "red",
-            "yellow",
-          ],
+            "yellow"
+          ]
         },
         "name": {
           "type": "string",
           "description": "The player name",
           "minLength": 1,
-          "maxLength": 32,
+          "maxLength": 32
         },
         "isAdmin": {
           "description": "Determines if the player is an admin",
-          "type": "boolean",
+          "type": "boolean"
         },
         "playerId": {
           "type": "string",
           "description": "The player ID",
-          "minLength": 1,
-        },
+          "minLength": 1
+        }
       },
       "required": [
         "color",
         "name",
         "isAdmin",
-        "playerId",
+        "playerId"
       ],
-      "additionalProperties": false,
+      "additionalProperties": false
     },
     "token": {
       "type": "string",
-      "description": "Token",
-    },
+      "description": "Token"
+    }
   },
   "required": [
     "gameId",
     "player",
-    "token",
+    "token"
   ],
-  "additionalProperties": false,
+  "additionalProperties": false
 };
 export const parseGameDTO = (data: unknown, path: string = ""): LayoutResult<GameDTO> => {
   let output;
@@ -85,10 +80,10 @@ export const parseGameDTO = (data: unknown, path: string = ""): LayoutResult<Gam
 
       // Parsing property "gameId"
       const input_gameId = "gameId" in data === true ? data.gameId : undefined;
-      let output_gameId;
       if (input_gameId === undefined) {
         return [false, missingObjectPropertyErrorContract, path, "gameId"];
       }
+      let output_gameId;
       while (true) {
         if (typeof input_gameId === "string") {
           output_gameId = input_gameId;
@@ -99,10 +94,10 @@ export const parseGameDTO = (data: unknown, path: string = ""): LayoutResult<Gam
 
       // Parsing property "player"
       const input_player = "player" in data === true ? data.player : undefined;
-      let output_player;
       if (input_player === undefined) {
         return [false, missingObjectPropertyErrorContract, path, "player"];
       }
+      let output_player;
       while (true) {
         const result_player = parsePlayerDTO(input_player);
         if (result_player[0] === true) {
@@ -114,10 +109,10 @@ export const parseGameDTO = (data: unknown, path: string = ""): LayoutResult<Gam
 
       // Parsing property "token"
       const input_token = "token" in data === true ? data.token : undefined;
-      let output_token;
       if (input_token === undefined) {
         return [false, missingObjectPropertyErrorContract, path, "token"];
       }
+      let output_token;
       while (true) {
         if (typeof input_token === "string") {
           output_token = input_token;
