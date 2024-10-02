@@ -8,9 +8,9 @@ import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { Slot } from "../../place.ts";
 import { clientGameContextManagerDependency } from "../../logic/game/client-game-context.ts";
 import { controllerRunnerDependency } from "../../controller.ts";
-import { waitingPath } from "../waiting/waiting-defs.ts";
 import { createJoinModal } from "./join-game-modal.ts";
 import { createPlayerModal } from "../../logic/player/player-modal.ts";
+import { waitingPath } from "../routes.ts";
 
 export function provideHomepageView(resolver: DependencyResolver) {
   const app = resolver.resolve(appViewDependency);

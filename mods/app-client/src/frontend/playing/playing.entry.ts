@@ -1,29 +1,46 @@
-import { clientGameContextManagerDependency } from "../../logic/game/client-game-context.ts";
-import { controllerRunnerDependency } from "../../controller.ts";
-import { waitingViewDependency } from "./waiting-view.ts";
-import { homePath } from "../routes.ts";
+import { parsePlayingView, PlayingView } from './playing-view.layout.compiled.ts';
 import { Context, createContext } from "@acme/dependency/context.ts";
-import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
-import { clientGameScopeContract, controllerScopeContract, frontendScopeContract } from "../../../defs.ts";
+import { clientGameContextManagerDependency } from "../../logic/game/client-game-context.ts";
+import { globalScopeContract, duplexScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { frontendScopeContract, clientGameScopeContract, controllerScopeContract } from "../../../defs.ts";
+import { controllerRunnerDependency } from "../../controller.ts";
 import { clientPlayerWSContextManagerDependency } from "../../logic/game/client-player-ws-context.ts";
+import { homePath } from "../routes.ts";
+import { supplyViewDependency } from "./supplies/supply-view.ts";
+import { Data } from "@acme/useful/types.ts";
+import { View } from "../../common.ts";
+import { Dependency } from "@acme/dependency/declaration.ts";
 
-export async function initWaitingController(context: Context) {
+const views: Record<PlayingView, Dependency<View>> = {
+  supplies: supplyViewDependency,
+  projects: supplyViewDependency,
+  histories: supplyViewDependency,
+  settings: supplyViewDependency,
+}
+
+export async function initPlayingController(context: Context, params: Data) {
   const controllerRunner = context.resolver.resolve(controllerRunnerDependency);
   const gameManager = context.resolver.resolve(clientGameContextManagerDependency);
+
+  const [result, view] = parsePlayingView(params.view);
+  if (!result) {
+    return await controllerRunner.run(homePath);
+  }
 
   const gameContext = await gameManager.getClientGameContext();
   if (!gameContext) {
     return await controllerRunner.run(homePath);
   }
+
   const clientPlayerWSContextManager = gameContext.resolver.resolve(clientPlayerWSContextManagerDependency);
   const { clientPlayerWSContext } = clientPlayerWSContextManager;
   if (clientPlayerWSContext === null) {
     return await controllerRunner.run(homePath);
   }
 
-  const waitingContext = createContext({
+  const controllerContext = createContext({
     identifier: {},
-    name: "WAITING-CTRL",
+    name: "PLAYING-CTRL",
     scopes: {
       [globalScopeContract.token]: context.scopes[globalScopeContract.token],
       [frontendScopeContract.token]: context.scopes[frontendScopeContract.token],
@@ -33,8 +50,8 @@ export async function initWaitingController(context: Context) {
       [localScopeContract.token]: new Scope(localScopeContract),
     },
   });
-  const { resolver } = waitingContext;
-  const view = resolver.resolve(waitingViewDependency);
+  const { resolver } = controllerContext;
+  const viewComponent = resolver.resolve(supplyViewDependency);
 
-  view.render();
+  viewComponent.render();
 }

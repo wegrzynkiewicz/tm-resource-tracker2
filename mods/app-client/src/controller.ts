@@ -1,10 +1,9 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { controllerScopeContract, frontendScopeContract } from "../defs.ts";
+import { frontendScopeContract } from "../defs.ts";
 import { Panic } from "@acme/useful/errors.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
-import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { Data } from "@acme/useful/types.ts";
-import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
+import { Context, contextDependency } from "@acme/dependency/context.ts";
 
 export type ControllerInitializer = (context: Context, params: Data) => Promise<void>;
 export type ControllerImporter = () => Promise<ControllerInitializer>;

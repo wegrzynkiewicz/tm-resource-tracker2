@@ -8,9 +8,8 @@ import { frontendScopeContract } from "./defs.ts";
 import { apiURLConfigContract } from "./src/api-url-config.ts";
 import { appNameConfigContract } from "./src/frontend/app/app-name-config.ts";
 import { logChannelDependency, TRACE } from "@acme/logger/defs.ts";
-import { controllerRouterDependency, controllerRunnerDependency, NaiveControllerRouter } from "./src/controller.ts";
-import { homeControllerImporter, homePath } from "./src/frontend/home/home-defs.ts";
-import { waitingControllerImporter, waitingPath } from "./src/frontend/waiting/waiting-defs.ts";
+import { controllerRouterDependency, controllerRunnerDependency } from "./src/controller.ts";
+import { initControllerRouter } from "./src/frontend/routes.ts";
 import { Context, createContext } from "@acme/dependency/context.ts";
 import { BasicLogFilter } from "@acme/logger/basic-log-filter.ts";
 import { BrowserLogSubscriber } from "@acme/logger/browser-log-subscriber.ts";
@@ -55,9 +54,7 @@ async function initFrontend(globalContext: Context): Promise<void> {
   const appSlot = resolver.resolve(appSlotDependency);
   document.body.appendChild(appSlot.$root);
 
-  const router = new NaiveControllerRouter();
-  router.addRoute(homePath, homeControllerImporter);
-  router.addRoute(waitingPath, waitingControllerImporter);
+  const router = initControllerRouter();
   resolver.inject(controllerRouterDependency, router);
 
   const controllerRunner = resolver.resolve(controllerRunnerDependency);
