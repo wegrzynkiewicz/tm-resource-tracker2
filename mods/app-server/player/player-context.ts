@@ -91,10 +91,6 @@ export class ServerPlayerContextManager {
     this.players.delete(playerId);
     this.deletes.emit(ctx);
   }
-
-  public getPlayersDTO(): PlayerDTO[] {
-    return [...this.players.values()].map((ctx) => ctx.resolver.resolve(serverPlayerDTODependency));
-  }
 }
 
 export function provideServerPlayerContextManager(resolver: DependencyResolver) {

@@ -4,15 +4,17 @@ import { ArrayLayout } from "@acme/layout/types/array-layout.ts";
 import { playerDTOLayout } from "./player-dto.layout.ts";
 import { compileLayouts } from "@acme/layout/defs.ts";
 
+export const playersDTOLayout = new ArrayLayout({
+  items: playerDTOLayout,
+});
+
 export const playersSyncS2CNotDTOLayout = new StandaloneLayout({
   meta: import.meta,
   parserName: "parsePlayersSyncS2CNotDTO",
   layout: new ObjectLayout({
     type: "PlayersSyncS2CNotDTO",
     properties: {
-      players: new ArrayLayout({
-        items: playerDTOLayout,
-      }),
+      players: playersDTOLayout,
     },
   }),
 });

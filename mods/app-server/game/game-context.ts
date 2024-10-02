@@ -5,13 +5,14 @@ import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
 import { serverGameScopeContract } from "../defs.ts";
 import { createRandomStringFactory } from "@acme/useful/strings.ts";
-import { playerBroadcastDependency } from "./player-broadcast.ts";
+import { playerBroadcastDependency } from "../player/player-broadcast.ts";
 
 export interface ServerGameContextIdentifier {
   gameId: string;
 }
 
 export type ServerGameContext = Context<ServerGameContextIdentifier>;
+
 export const serverGameIdDependency = defineDependency<string>({
   name: "game-id",
   scope: serverGameScopeContract,

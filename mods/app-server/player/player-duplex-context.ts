@@ -7,18 +7,14 @@ import { loggerDependency } from "@acme/logger/defs.ts";
 import { logifyWebSocket } from "@acme/web/socket.ts";
 import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
-import {
-  ServerPlayerContext,
-  ServerPlayerContextManager,
-  serverPlayerContextManagerDependency,
-} from "./player-context.ts";
+import { ServerPlayerContext } from "./player-context.ts";
 import { webSocketCAReceiverDependency } from "@acme/control-action/transport/ws-ca-receiver.ts";
 import { ServerNormalCAContextFactory } from "../base/normal-ca-context-factory.ts";
 import { normalCAContextFactoryDependency, normalCARouterDependency } from "@acme/control-action/normal/defs.ts";
 import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
 import { initServerNormalCARouter } from "../base/normal-ca-router.ts";
-import { PlayerBroadcast, playerBroadcastDependency } from "../game/player-broadcast.ts";
-import { playersSyncS2CNotNormalCA } from "../../common/player/defs.ts";
+import { PlayerBroadcast, playerBroadcastDependency } from "./player-broadcast.ts";
+import { PlayerSync, playerSyncDependency } from "./player-sync.ts";
 
 export interface ServerPlayerDuplexContextIdentifier {
   gameId: string;
@@ -36,7 +32,7 @@ export class ServerPlayerDuplexContextManager {
   public constructor(
     private readonly serverPlayerContext: ServerPlayerContext,
     private readonly playerBroadcast: PlayerBroadcast,
-    private readonly serverPlayerContextManager: ServerPlayerContextManager,
+    private readonly playerSync: PlayerSync,
   ) {}
 
   public async createServerPlayerDuplexContext(
@@ -60,6 +56,8 @@ export class ServerPlayerDuplexContextManager {
     });
     const { resolver } = serverPlayerDuplexContext;
 
+    this.context = serverPlayerDuplexContext;
+
     resolver.inject(webSocketDependency, socket);
 
     const logger = resolver.resolve(loggerDependency);
@@ -81,7 +79,7 @@ export class ServerPlayerDuplexContextManager {
     socket.addEventListener("message", (event) => receiver.receive(event));
 
     this.playerBroadcast.socketByPlayerId.set(playerId, socket);
-    this.syncPlayers();
+    this.playerSync.broadcast();
 
     return serverPlayerDuplexContext;
 
@@ -99,11 +97,6 @@ export class ServerPlayerDuplexContextManager {
     // }
   }
 
-  public syncPlayers() {
-    const players = this.serverPlayerContextManager.getPlayersDTO();
-    this.playerBroadcast.dispatch(playersSyncS2CNotNormalCA, { players });
-  }
-
   public async dispose() {
     if (this.context === null) {
       return;
@@ -114,7 +107,7 @@ export class ServerPlayerDuplexContextManager {
     }
     const { playerId } = this.serverPlayerContext.identifier;
     this.playerBroadcast.socketByPlayerId.delete(playerId);
-    this.syncPlayers();
+    this.playerSync.broadcast();
 
     this.context = null;
   }
@@ -124,7 +117,7 @@ export function provideServerPlayerDuplexContextManager(resolver: DependencyReso
   return new ServerPlayerDuplexContextManager(
     resolver.resolve(contextDependency) as ServerPlayerContext,
     resolver.resolve(playerBroadcastDependency),
-    resolver.resolve(serverPlayerContextManagerDependency),
+    resolver.resolve(playerSyncDependency),
   );
 }
 
