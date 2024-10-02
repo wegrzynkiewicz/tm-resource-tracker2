@@ -1,4 +1,4 @@
-import { defineDependency } from '@acme/dependency/declaration.ts';
+import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { SelectorOption, SelectorStore } from "../utils/selector.ts";
 import { playersStoreDependency } from "../../logic/player/players-store.ts";

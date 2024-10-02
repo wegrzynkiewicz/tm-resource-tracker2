@@ -11,8 +11,8 @@ export function provideLoadingView(resolver: DependencyResolver) {
   const render = () => {
     app.contentSlot.attach($root);
     app.render();
+  };
 
-  }
   return { $root, render };
 }
 

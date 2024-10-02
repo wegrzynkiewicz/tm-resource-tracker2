@@ -1,8 +1,8 @@
-import { parsePlayingView, PlayingView } from './playing-view.layout.compiled.ts';
+import { parsePlayingView, PlayingView } from "./playing-view.layout.compiled.ts";
 import { Context, createContext } from "@acme/dependency/context.ts";
 import { clientGameContextManagerDependency } from "../../logic/game/client-game-context.ts";
-import { globalScopeContract, duplexScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
-import { frontendScopeContract, clientGameScopeContract, controllerScopeContract } from "../../../defs.ts";
+import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { clientGameScopeContract, controllerScopeContract, frontendScopeContract } from "../../../defs.ts";
 import { controllerRunnerDependency } from "../../controller.ts";
 import { clientPlayerWSContextManagerDependency } from "../../logic/game/client-player-ws-context.ts";
 import { homePath } from "../routes.ts";
@@ -10,13 +10,16 @@ import { supplyViewDependency } from "./supplies/supply-view.ts";
 import { Data } from "@acme/useful/types.ts";
 import { View } from "../../common.ts";
 import { Dependency } from "@acme/dependency/declaration.ts";
+import { gameStoreDependency } from "../../logic/game/game-store.ts";
+import { loadingViewDependency } from "../../loading-view.ts";
+import { playingViewStoreDependency } from "./playing-view-store.ts";
 
 const views: Record<PlayingView, Dependency<View>> = {
   supplies: supplyViewDependency,
   projects: supplyViewDependency,
   histories: supplyViewDependency,
   settings: supplyViewDependency,
-}
+};
 
 export async function initPlayingController(context: Context, params: Data) {
   const controllerRunner = context.resolver.resolve(controllerRunnerDependency);
@@ -51,6 +54,16 @@ export async function initPlayingController(context: Context, params: Data) {
     },
   });
   const { resolver } = controllerContext;
+
+  const loading = resolver.resolve(loadingViewDependency);
+  loading.render();
+
+  const playingViewStore = resolver.resolve(playingViewStoreDependency);
+  playingViewStore.update(view);
+
+  const gameStore = gameContext.resolver.resolve(gameStoreDependency);
+  await gameStore.ready;
+
   const viewComponent = resolver.resolve(supplyViewDependency);
 
   viewComponent.render();

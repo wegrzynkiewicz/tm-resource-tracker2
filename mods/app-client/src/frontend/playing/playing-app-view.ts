@@ -28,7 +28,7 @@ export function providePlayingAppView(resolver: DependencyResolver) {
 
   const render = () => {
     appSlot.attach($root);
-  }
+  };
 
   return { $root, contentSlot, topSlot, render };
 }
@@ -38,4 +38,3 @@ export const playingAppViewDependency = defineDependency({
   provider: providePlayingAppView,
   scope: frontendScopeContract,
 });
-

@@ -62,13 +62,14 @@ export function createSelector(
   $input.type = "hidden";
 
   const $root = div_nodes("selector", [$left, $panel, $input, $right]);
-
-  store.updates.on((index) => {
+  const update = (index: number) => {
     $input.value = store.getValue().key;
     $panel.style.setProperty("--index", `${index}`);
     $left.classList.toggle("_disabled", index === 0);
     $right.classList.toggle("_disabled", index === store.options.length - 1);
-  });
+  };
+  store.updates.on(update);
+  update(0);
 
   return $root;
 }

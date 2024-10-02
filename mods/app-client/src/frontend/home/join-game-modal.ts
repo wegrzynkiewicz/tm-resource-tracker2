@@ -1,10 +1,7 @@
 import { div, div_nodes, form_nodes } from "@acme/dom/nodes.ts";
 import { createEditBox } from "../utils/edit-box.ts";
 import { Result } from "@acme/useful/result.ts";
-import {
-  GameJoinC2SReqDTO,
-  parseGameJoinC2SReqDTO,
-} from "@common/game/game-join-c2s-req-dto.layout.compiled.ts";
+import { GameJoinC2SReqDTO, parseGameJoinC2SReqDTO } from "@common/game/game-join-c2s-req-dto.layout.compiled.ts";
 import { unwrapLayoutResult } from "@acme/layout/runtime/defs.ts";
 import { createColorSelectorBox } from "../utils/color-selector.ts";
 
@@ -46,7 +43,7 @@ export function createJoinModal() {
     const data = new FormData($root);
     const payload = Object.fromEntries(data);
     const result = parseGameJoinC2SReqDTO(payload);
-    const value = unwrapLayoutResult(result, "invalid-player-name");
+    const value = unwrapLayoutResult(result, "invalid-player");
     defer.resolve([true, value]);
   });
 

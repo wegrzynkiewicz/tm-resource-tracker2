@@ -11,7 +11,7 @@ export function provideIntroTop(resolver: DependencyResolver) {
   const $root = div_nodes("top", [label]);
   store.updates.on(() => label.textContent = store.title);
 
-  return { $root }
+  return { $root };
 }
 
 export const introTopDependency = defineDependency({

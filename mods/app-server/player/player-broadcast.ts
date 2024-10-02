@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { NormalCAContract, NormalCADispatcher } from "@acme/control-action/normal/defs.ts";
+import { InferNormalCAContract, NormalCAContract, NormalCADispatcher } from "@acme/control-action/normal/defs.ts";
 import { NormalCAEnvelopeDTO } from "@acme/control-action/normal/envelope.layout.compiled.ts";
 import { serverGameScopeContract } from "../defs.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
@@ -14,7 +14,10 @@ export class PlayerBroadcast implements NormalCADispatcher {
     private readonly logger: Logger,
   ) {}
 
-  public dispatch<T>(contract: NormalCAContract<T>, data: T): void {
+  public dispatch<TContract extends NormalCAContract>(
+    contract: TContract,
+    data: InferNormalCAContract<TContract>,
+  ): void {
     const envelope: NormalCAEnvelopeDTO = { name: contract.name, data };
     const message = JSON.stringify(envelope);
     this.logger.log(TRACE, "player-broadcast", { envelope });

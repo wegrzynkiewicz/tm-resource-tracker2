@@ -6,6 +6,9 @@ import { Context, contextDependency, createContext } from "@acme/dependency/cont
 import { serverGameScopeContract } from "../defs.ts";
 import { createRandomStringFactory } from "@acme/useful/strings.ts";
 import { playerBroadcastDependency } from "../player/player-broadcast.ts";
+import { gameStageManagerDependency } from "./stages/game-stage-manager.ts";
+import { waitingGameStageDependency } from "./stages/waiting-game-stage.ts";
+import { startupGameStageDependency } from "./stages/defs.ts";
 
 export interface ServerGameContextIdentifier {
   gameId: string;
@@ -53,6 +56,11 @@ export class ServerGameContextManager {
 
     resolver.resolve(playerBroadcastDependency);
     resolver.inject(serverGameIdDependency, gameId);
+
+    const gameStage = resolver.resolve(waitingGameStageDependency);
+    resolver.inject(startupGameStageDependency, gameStage);
+
+    resolver.resolve(gameStageManagerDependency);
 
     const logger = resolver.resolve(loggerDependency);
     logger.log(DEBUG, "game-created");

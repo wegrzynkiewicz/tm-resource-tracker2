@@ -8,6 +8,9 @@ export const gameQuitPathname = "/games/quit";
 export const gameSocketPatternPathname = "/games/socket/:token";
 export const createGameSocketPathname = (token: string) => `/games/socket/${token}`;
 
+export type GameStage = "WAITING" | "PLAYING";
+
 export const gameStartC2SNotNormalCAContract = defineNormalCA<undefined>("c2s-not-game-start");
 
 export const gameSyncS2CNotNormalCAContract = defineNormalCA<GameSyncS2CNotDTO>("s2c-not-game-sync");
+export const gameStageS2CNotNormalCAContract = defineNormalCA<GameStage>("s2c-not-game-stage");

@@ -11,12 +11,12 @@ export function providePlayingTop(resolver: DependencyResolver) {
   const $root = div_nodes("top _with-controller", [
     $label,
     div_nodes("top_controller", [
-      createSelector('player', store),
+      createSelector("player", store),
     ]),
   ]);
   const updateTitle = (title: string) => $label.textContent = title;
 
-  return { $root, updateTitle }
+  return { $root, updateTitle };
 }
 
 export const playingTopDependency = defineDependency({

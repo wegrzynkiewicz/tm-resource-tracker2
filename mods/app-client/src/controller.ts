@@ -4,7 +4,7 @@ import { Panic } from "@acme/useful/errors.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { Data } from "@acme/useful/types.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
-import { globalScopeContract, Scope, localScopeContract } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 
 export type ControllerInitializer = (context: Context, params: Data) => Promise<void>;
 export type ControllerImporter = () => Promise<ControllerInitializer>;
@@ -49,16 +49,19 @@ export class NaiveControllerRouter implements ControllerRouter {
 }
 
 export class ControllerRunner {
+  public currentPathname: string = "";
+
   public constructor(
     private readonly router: ControllerRouter,
     private readonly frontendContext: Context,
   ) {}
 
-  public async run(path: string) {
-    history.pushState(null, "", path);
-    const route = this.router.match(path);
+  public async run(pathname: string) {
+    history.pushState(null, "", pathname);
+    this.currentPathname = pathname;
+    const route = this.router.match(pathname);
     if (route === undefined) {
-      throw new Panic("no-matching-controller-found", { path });
+      throw new Panic("no-matching-controller-found", { pathname });
     }
     const { importer, params } = route;
 

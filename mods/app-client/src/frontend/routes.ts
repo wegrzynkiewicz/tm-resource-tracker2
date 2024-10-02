@@ -7,7 +7,7 @@ import { initWaitingController } from "./waiting/waiting.entry.ts";
 export const homePath = "/";
 export const waitingPath = "/waiting";
 export const playingPathname = "/playing/:view";
-export const createPlayingPath = (view: PlayingView) => `/playing/${view}`;
+export const playingPathFactory = (view: PlayingView) => `/playing/${view}`;
 
 export const homeControllerImporter: ControllerImporter = async () => initHomeController;
 export const waitingControllerImporter: ControllerImporter = async () => initWaitingController;

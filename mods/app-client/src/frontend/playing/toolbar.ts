@@ -1,12 +1,12 @@
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { PlayingView } from "./playing-view.layout.compiled.ts";
-import { button_nodes, span, div_nodes } from "@acme/dom/nodes.ts";
+import { button_nodes, div_nodes, span } from "@acme/dom/nodes.ts";
 import { svg_icon } from "../utils/svg.ts";
 import { controllerRunnerDependency } from "../../controller.ts";
-import { createPlayingPath } from "../routes.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { controllerScopeContract } from "../../../defs.ts";
-import { Channel } from "@acme/dependency/channel.ts";
+import { frontendScopeContract } from "../../../defs.ts";
+import { playingPathFactory } from "../routes.ts";
+import { playingViewStoreDependency } from "./playing-view-store.ts";
 
 const buttons = [
   { view: "supplies", icon: "box", name: "Supplies" },
@@ -23,8 +23,7 @@ interface ToolbarButton {
 
 export function provideToolbar(resolver: DependencyResolver) {
   const controllerRunner = resolver.resolve(controllerRunnerDependency);
-
-  const refresh = new Channel<[]>();
+  const playingViewStore = resolver.resolve(playingViewStoreDependency);
 
   const createToolbarButton = (button: ToolbarButton) => {
     const { view, icon, name } = button;
@@ -33,15 +32,15 @@ export function provideToolbar(resolver: DependencyResolver) {
       span("toolbar_label", name),
     ]);
     $item.addEventListener("click", () => {
-      controllerRunner.run(createPlayingPath(view));
-      refresh.emit();
-      $item.classList.add("_active");
+      controllerRunner.run(playingPathFactory(view));
     });
-    refresh.on(() => {
-      $item.classList.remove("_active");
-    });
+    const update = (playingView: PlayingView) => {
+      $item.classList.toggle("_active", playingView === view);
+    };
+    playingViewStore.updates.on(update);
+    update(playingViewStore.view);
     return $item;
-  }
+  };
 
   const $root = div_nodes("toolbar", buttons.map(createToolbarButton));
 
@@ -51,5 +50,5 @@ export function provideToolbar(resolver: DependencyResolver) {
 export const toolbarDependency = defineDependency({
   name: "toolbar",
   provider: provideToolbar,
-  scope: controllerScopeContract,
+  scope: frontendScopeContract,
 });

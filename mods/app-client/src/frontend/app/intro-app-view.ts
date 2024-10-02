@@ -26,7 +26,7 @@ export function provideAppView(resolver: DependencyResolver) {
 
   const render = () => {
     appSlot.attach($root);
-  }
+  };
 
   return { $root, contentSlot, render };
 }
@@ -36,4 +36,3 @@ export const introAppViewDependency = defineDependency({
   provider: provideAppView,
   scope: frontendScopeContract,
 });
-

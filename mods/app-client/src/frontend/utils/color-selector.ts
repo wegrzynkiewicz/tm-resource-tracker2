@@ -1,6 +1,6 @@
 import { div_nodes, span } from "@acme/dom/nodes.ts";
 import { colors } from "@common/color/color.ts";
-import { SelectorStore, createSelector } from "./selector.ts";
+import { createSelector, SelectorStore } from "./selector.ts";
 
 export function createColorSelectorBox(name: string) {
   const store = new SelectorStore([...colors]);

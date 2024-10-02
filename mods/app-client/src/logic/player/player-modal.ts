@@ -37,7 +37,7 @@ export function createPlayerModal() {
     const data = new FormData($root);
     const payload = Object.fromEntries(data);
     const result = parseGameCreateC2SReqDTO(payload);
-    const value = unwrapLayoutResult(result, "invalid-player-name");
+    const value = unwrapLayoutResult(result, "invalid-player");
     defer.resolve([true, value]);
   });
 

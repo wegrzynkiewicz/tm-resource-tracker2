@@ -1,3 +1,4 @@
+import { BrowserLogHandler } from "@acme/logger/browser-log-handler.ts";
 import { builtInConfigValueExtractorDependency } from "@acme/config/built-in-extractor.ts";
 import { configBinderDependency } from "@acme/config/common.ts";
 import { configValueResultMapDependency } from "@acme/config/value-getter.ts";
@@ -12,15 +13,14 @@ import { controllerRouterDependency, controllerRunnerDependency } from "./src/co
 import { initControllerRouter } from "./src/frontend/routes.ts";
 import { Context, createContext } from "@acme/dependency/context.ts";
 import { BasicLogFilter } from "@acme/logger/basic-log-filter.ts";
-import { BrowserLogSubscriber } from "@acme/logger/browser-log-subscriber.ts";
 
 export async function initLogChannel(globalContext: Context): Promise<void> {
   const { resolver } = globalContext;
   const channel = resolver.resolve(logChannelDependency);
-  const subscriber = new BrowserLogSubscriber(
+  const handler = new BrowserLogHandler(
     new BasicLogFilter(TRACE),
   );
-  channel.subscribers.add(subscriber);
+  channel.on(handler.handle.bind(handler));
 }
 
 async function initClientConfig(globalContext: Context): Promise<void> {

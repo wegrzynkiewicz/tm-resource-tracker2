@@ -1,4 +1,4 @@
-import { BasicLogSubscriber } from "@acme/logger/basic-log-subscriber.ts";
+import { BasicLogHandler } from "@acme/logger/basic-log-handler.ts";
 import { prettyLogFormatterDependency } from "@acme/logger/pretty-log-formatter.ts";
 import { initServerConfig } from "./config.ts";
 import { initMainWebServer } from "./main.web-server.ts";
@@ -11,11 +11,11 @@ import { logChannelDependency, TRACE } from "@acme/logger/defs.ts";
 export async function initLogChannel(globalContext: Context): Promise<void> {
   const { resolver } = globalContext;
   const channel = resolver.resolve(logChannelDependency);
-  const subscriber = new BasicLogSubscriber(
+  const handler = new BasicLogHandler(
     new BasicLogFilter(TRACE),
     resolver.resolve(prettyLogFormatterDependency),
   );
-  channel.subscribers.add(subscriber);
+  channel.on(handler.handle.bind(handler));
 }
 
 async function start() {

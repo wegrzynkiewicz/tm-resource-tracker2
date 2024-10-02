@@ -8,16 +8,12 @@ import {
 import { parsePlayerDTO, PlayerDTO } from "../player/player-dto.layout.compiled.ts";
 
 export interface GameSyncS2CNotDTO {
-  stage: string;
   players: PlayerDTO[];
 }
 
 export const schemaGameSyncS2CNotDTO = {
   "type": "object",
   "properties": {
-    "stage": {
-      "type": "string",
-    },
     "players": {
       "type": "array",
       "items": {
@@ -62,7 +58,6 @@ export const schemaGameSyncS2CNotDTO = {
     },
   },
   "required": [
-    "stage",
     "players",
   ],
   "additionalProperties": false,
@@ -73,20 +68,6 @@ export const parseGameSyncS2CNotDTO = (data: unknown, path: string = ""): Layout
     if (typeof data === "object") {
       if (data === null) {
         return [false, expectedNotNullObjectErrorContract, path, ""];
-      }
-
-      // Parsing property "stage"
-      const input_stage = "stage" in data === true ? data.stage : undefined;
-      if (input_stage === undefined) {
-        return [false, missingObjectPropertyErrorContract, path, "stage"];
-      }
-      let output_stage;
-      while (true) {
-        if (typeof input_stage === "string") {
-          output_stage = input_stage;
-          break;
-        }
-        return [false, notMatchedErrorContract, path, "stage"];
       }
 
       // Parsing property "players"
@@ -117,7 +98,6 @@ export const parseGameSyncS2CNotDTO = (data: unknown, path: string = ""): Layout
         return [false, notMatchedErrorContract, path, "players"];
       }
       output = {
-        stage: output_stage,
         players: output_players,
       };
       break;
