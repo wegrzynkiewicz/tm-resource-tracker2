@@ -1,5 +1,5 @@
 import { div, div_nodes } from "@acme/dom/nodes.ts";
-import { Component } from "../../common.ts";
+import { Component } from "@common.ts";
 import { TopTitleStore, topTitleStoreDependency } from "./top-title-store.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";

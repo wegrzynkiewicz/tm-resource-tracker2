@@ -4,7 +4,7 @@ import { Result } from "@acme/useful/result.ts";
 import {
   GameJoinC2SReqDTO,
   parseGameJoinC2SReqDTO,
-} from "../../../../common/game/game-join-c2s-req-dto.layout.compiled.ts";
+} from "@common/game/game-join-c2s-req-dto.layout.compiled.ts";
 import { unwrapLayoutResult } from "@acme/layout/runtime/defs.ts";
 import { createColorSelectorBox } from "../utils/color-selector.ts";
 

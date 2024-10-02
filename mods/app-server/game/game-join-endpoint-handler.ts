@@ -1,4 +1,4 @@
-import { GameDTO } from "../../common/game/game-dto.layout.compiled.ts";
+import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
@@ -7,7 +7,7 @@ import { ServerGameContextManager, serverGameManagerDependency } from "./game-co
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
 import { serverPlayerContextManagerDependency, serverPlayerDTODependency } from "../player/player-context.ts";
 import { webServerScopeContract } from "@acme/dependency/scopes.ts";
-import { parseGameJoinC2SReqDTO } from "../../common/game/game-join-c2s-req-dto.layout.compiled.ts";
+import { parseGameJoinC2SReqDTO } from "@common/game/game-join-c2s-req-dto.layout.compiled.ts";
 
 export class GameJoinEndpointHandler implements EndpointHandler {
   public constructor(

@@ -2,9 +2,9 @@ import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency
 import { Channel } from "@acme/dependency/channel.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { PlayerDTO } from "../../common/player/player-dto.layout.compiled.ts";
+import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { ServerGameContext } from "../game/game-context.ts";
-import { ColorKey } from "../../common/color/color.layout.compiled.ts";
+import { ColorKey } from "@common/color/color.layout.compiled.ts";
 import { serverPlayerDuplexContextManagerDependency } from "./player-duplex-context.ts";
 import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";

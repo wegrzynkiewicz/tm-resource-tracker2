@@ -1,4 +1,4 @@
-import { colors } from "../../common/color/color.ts";
+import { colors } from "@common/color/color.ts";
 import { createSelector } from "./frontend/utils/selector.ts";
 
 export function createPersonalInfo() {

@@ -4,10 +4,10 @@ import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
-import { GameDTO } from "../../common/game/game-dto.layout.compiled.ts";
+import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
 import { serverPlayerContextManagerDependency, serverPlayerDTODependency } from "../player/player-context.ts";
 import { webServerScopeContract } from "@acme/dependency/scopes.ts";
-import { parseGameCreateC2SReqDTO } from "../../common/game/game-create-c2s-req-dto.layout.compiled.ts";
+import { parseGameCreateC2SReqDTO } from "@common/game/game-create-c2s-req-dto.layout.compiled.ts";
 
 export class GameCreateWebHandler implements EndpointHandler {
   public constructor(

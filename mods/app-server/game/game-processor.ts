@@ -2,8 +2,8 @@ import { PlayerBroadcast, playerBroadcastDependency } from "../player/player-bro
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { serverGameScopeContract } from "../defs.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
-import { gameSyncS2CNotNormalCAContract } from "../../common/game/defs.ts";
-import { GameSyncS2CNotDTO } from "../../common/game/game-sync-s2c-not-dto.layout.compiled.ts";
+import { gameSyncS2CNotNormalCAContract } from "@common/game/defs.ts";
+import { GameSyncS2CNotDTO } from "@common/game/game-sync-s2c-not-dto.layout.compiled.ts";
 import { GameStage, gameStageDependency } from "./game-stage.ts";
 import { PlayerSync, playerSyncDependency } from "../player/player-sync.ts";
 

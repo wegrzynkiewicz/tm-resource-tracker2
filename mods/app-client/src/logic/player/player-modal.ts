@@ -1,7 +1,7 @@
 import { div, div_nodes, form_nodes } from "@acme/dom/nodes.ts";
 import { unwrapLayoutResult } from "@acme/layout/runtime/mod.ts";
 import { Result } from "@acme/useful/result.ts";
-import { GameCreateC2SReqDTO, parseGameCreateC2SReqDTO } from "../../../../common/game/game-create-c2s-req-dto.layout.compiled.ts";
+import { GameCreateC2SReqDTO, parseGameCreateC2SReqDTO } from "@common/game/game-create-c2s-req-dto.layout.compiled.ts";
 import { createColorSelectorBox } from "../../frontend/utils/color-selector.ts";
 import { createEditBox } from "../../frontend/utils/edit-box.ts";
 

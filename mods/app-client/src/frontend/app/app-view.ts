@@ -3,7 +3,7 @@ import { ModalManager, modalManagerDependency } from "../../modal.ts";
 import { Slot } from "../../place.ts";
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { frontendScopeContract } from "../../../defs.ts";
-import { View } from "../../common.ts";
+import { View } from "@common.ts";
 import { IntroTop, introTopDependency } from "./intro-top.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";

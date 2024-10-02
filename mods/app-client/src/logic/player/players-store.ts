@@ -1,6 +1,6 @@
 import { Channel } from "@acme/dependency/channel.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { PlayerDTO } from "../../../../common/player/player-dto.layout.compiled.ts";
+import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { frontendScopeContract } from "../../../defs.ts";
 
 export class PlayersStore {

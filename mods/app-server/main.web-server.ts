@@ -12,7 +12,7 @@ import {
   gameQuitPathname,
   gameReadPathname,
   gameSocketPatternPathname,
-} from "../common/game/defs.ts";
+} from "@common/game/defs.ts";
 import { gameQuitEndpointHandlerDependency } from "./game/game-quit-endpoint-handler.ts";
 import { gameSocketEndpointHandlerDependency } from "./game/game-socket-endpoint-handler.ts";
 import { gameJoinEndpointHandlerDependency } from "./game/game-join-endpoint-handler.ts";

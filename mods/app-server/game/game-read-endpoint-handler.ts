@@ -1,4 +1,4 @@
-import { GameDTO } from "../../common/game/game-dto.layout.compiled.ts";
+import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";

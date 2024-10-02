@@ -5,7 +5,7 @@ import { defineDependency } from "@acme/dependency/declaration.ts";
 import { readySocket } from "@acme/web/socket.ts";
 import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { apiURLDependency } from "../../api-url-config.ts";
-import { createGameSocketPathname } from "../../../../common/game/defs.ts";
+import { createGameSocketPathname } from "@common/game/defs.ts";
 import { ClientGameContext, clientGameTokenDependency } from "./client-game-context.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
 import {

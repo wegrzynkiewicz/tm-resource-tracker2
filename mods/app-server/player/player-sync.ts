@@ -1,4 +1,4 @@
-import { PlayerDTO } from "../../common/player/player-dto.layout.compiled.ts";
+import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { serverGameScopeContract } from "../defs.ts";
@@ -8,7 +8,7 @@ import {
   serverPlayerContextManagerDependency,
   serverPlayerDTODependency,
 } from "./player-context.ts";
-import { playersSyncS2CNotNormalCAContract } from "../../common/player/defs.ts";
+import { playersSyncS2CNotNormalCAContract } from "@common/player/defs.ts";
 
 export class PlayerSync {
   public constructor(

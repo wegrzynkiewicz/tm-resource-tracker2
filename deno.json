@@ -1,5 +1,6 @@
 {
   "imports": {
+    "@common/": "./mods/common/",
     "@acme/": "./mods/qcmf5/mods/"
   },
   "compilerOptions": {
