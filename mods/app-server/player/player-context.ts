@@ -9,6 +9,7 @@ import { serverPlayerDuplexContextManagerDependency } from "./player-duplex-cont
 import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
 import { DEBUG, loggerDependency } from "@acme/logger/defs.ts";
+import { playerCreatedChannelDependency, playerDeletedChannelDependency } from "./defs.ts";
 
 interface ServerPlayerContextIdentifier {
   gameId: string;
@@ -37,11 +38,11 @@ export let playerIdCounter = 0;
 
 export class ServerPlayerContextManager {
   public readonly players = new Map<string, ServerPlayerContext>();
-  public readonly creates = new Channel<[ServerPlayerContext]>();
-  public readonly deletes = new Channel<[ServerPlayerContext]>();
 
   public constructor(
     private readonly gameContext: ServerGameContext,
+    private readonly playerCreated: Channel<[ServerPlayerContext, PlayerDTO]>,
+    private readonly playerDeleted: Channel<[ServerPlayerContext, PlayerDTO]>,
   ) {}
 
   public async create(
@@ -76,26 +77,38 @@ export class ServerPlayerContextManager {
     logger.log(DEBUG, "player-created");
 
     this.players.set(playerId, playerContext);
-    this.creates.emit(playerContext);
+    this.playerCreated.emit(playerContext, player);
 
     return playerContext;
   }
 
   public async dispose(playerId: string) {
-    const ctx = this.players.get(playerId);
-    if (ctx === undefined) {
+    const playerContext = this.players.get(playerId);
+    if (playerContext === undefined) {
       return;
     }
-    const serverPlayerDuplexContextManager = ctx.resolver.resolve(serverPlayerDuplexContextManagerDependency);
+    const player = playerContext.resolver.resolve(serverPlayerDTODependency);
+    const serverPlayerDuplexContextManager = playerContext.resolver.resolve(serverPlayerDuplexContextManagerDependency);
     await serverPlayerDuplexContextManager.dispose();
     this.players.delete(playerId);
-    this.deletes.emit(ctx);
+    this.playerDeleted.emit(playerContext, player);
+  }
+
+  public getPlayersDTO(): PlayerDTO[] {
+    const players: PlayerDTO[] = [];
+    for (const ctx of this.players.values()) {
+      const player = ctx.resolver.resolve(serverPlayerDTODependency);
+      players.push(player);
+    }
+    return players;
   }
 }
 
 export function provideServerPlayerContextManager(resolver: DependencyResolver) {
   return new ServerPlayerContextManager(
     resolver.resolve(contextDependency) as ServerGameContext,
+    resolver.resolve(playerCreatedChannelDependency),
+    resolver.resolve(playerDeletedChannelDependency),
   );
 }
 

@@ -7,14 +7,15 @@ import { loggerDependency } from "@acme/logger/defs.ts";
 import { logifyWebSocket } from "@acme/web/socket.ts";
 import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
-import { ServerPlayerContext } from "./player-context.ts";
+import { ServerPlayerContext, serverPlayerDTODependency } from "./player-context.ts";
 import { webSocketCAReceiverDependency } from "@acme/control-action/transport/ws-ca-receiver.ts";
 import { ServerNormalCAContextFactory } from "../base/normal-ca-context-factory.ts";
 import { normalCAContextFactoryDependency, normalCARouterDependency } from "@acme/control-action/normal/defs.ts";
 import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
 import { initServerNormalCARouter } from "../base/normal-ca-router.ts";
-import { PlayerBroadcast, playerBroadcastDependency } from "./player-broadcast.ts";
-import { PlayerSync, playerSyncDependency } from "./player-sync.ts";
+import { Channel } from "@acme/dependency/channel.ts";
+import { playerConnectedChannelDependency, playerDisconnectedChannelDependency } from "./defs.ts";
+import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 
 export interface ServerPlayerDuplexContextIdentifier {
   gameId: string;
@@ -31,8 +32,8 @@ export class ServerPlayerDuplexContextManager {
 
   public constructor(
     private readonly serverPlayerContext: ServerPlayerContext,
-    private readonly playerBroadcast: PlayerBroadcast,
-    private readonly playerSync: PlayerSync,
+    private readonly playerConnected: Channel<[ServerPlayerDuplexContext, PlayerDTO]>,
+    private readonly playerDisconnected: Channel<[ServerPlayerDuplexContext, PlayerDTO]>,
   ) {}
 
   public async createServerPlayerDuplexContext(
@@ -78,8 +79,8 @@ export class ServerPlayerDuplexContextManager {
     const receiver = resolver.resolve(webSocketCAReceiverDependency);
     socket.addEventListener("message", (event) => receiver.receive(event));
 
-    this.playerBroadcast.socketByPlayerId.set(playerId, socket);
-    this.playerSync.broadcast();
+    const player = resolver.resolve(serverPlayerDTODependency);
+    this.playerConnected.emit(serverPlayerDuplexContext, player);
 
     return serverPlayerDuplexContext;
 
@@ -105,10 +106,8 @@ export class ServerPlayerDuplexContextManager {
     if (webSocket.readyState === WebSocket.OPEN) {
       webSocket.close();
     }
-    const { playerId } = this.serverPlayerContext.identifier;
-    this.playerBroadcast.socketByPlayerId.delete(playerId);
-    this.playerSync.broadcast();
-
+    const player = this.context.resolver.resolve(serverPlayerDTODependency);
+    this.playerDisconnected.emit(this.context, player);
     this.context = null;
   }
 }
@@ -116,8 +115,8 @@ export class ServerPlayerDuplexContextManager {
 export function provideServerPlayerDuplexContextManager(resolver: DependencyResolver) {
   return new ServerPlayerDuplexContextManager(
     resolver.resolve(contextDependency) as ServerPlayerContext,
-    resolver.resolve(playerBroadcastDependency),
-    resolver.resolve(playerSyncDependency),
+    resolver.resolve(playerConnectedChannelDependency),
+    resolver.resolve(playerDisconnectedChannelDependency),
   );
 }
 
