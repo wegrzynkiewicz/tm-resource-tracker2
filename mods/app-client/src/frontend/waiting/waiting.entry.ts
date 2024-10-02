@@ -29,7 +29,7 @@ export async function initWaitingController(context: Context) {
       [frontendScopeContract.token]: context.scopes[frontendScopeContract.token],
       [clientGameScopeContract.token]: gameContext.scopes[clientGameScopeContract.token],
       [duplexScopeContract.token]: clientPlayerWSContext.scopes[duplexScopeContract.token],
-      [controllerScopeContract.token]: new Scope(controllerScopeContract),
+      [controllerScopeContract.token]: context.scopes[controllerScopeContract.token],
       [localScopeContract.token]: new Scope(localScopeContract),
     },
   });

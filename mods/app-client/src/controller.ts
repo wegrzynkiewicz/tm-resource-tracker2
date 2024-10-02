@@ -1,9 +1,10 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { frontendScopeContract } from "../defs.ts";
+import { controllerScopeContract, frontendScopeContract } from "../defs.ts";
 import { Panic } from "@acme/useful/errors.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { Data } from "@acme/useful/types.ts";
-import { Context, contextDependency } from "@acme/dependency/context.ts";
+import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
+import { globalScopeContract, Scope, localScopeContract } from "@acme/dependency/scopes.ts";
 
 export type ControllerInitializer = (context: Context, params: Data) => Promise<void>;
 export type ControllerImporter = () => Promise<ControllerInitializer>;
@@ -61,9 +62,20 @@ export class ControllerRunner {
     }
     const { importer, params } = route;
 
+    const controllerContext = createContext({
+      identifier: {},
+      name: "CONTROLLER",
+      scopes: {
+        [globalScopeContract.token]: this.frontendContext.scopes[globalScopeContract.token],
+        [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
+        [controllerScopeContract.token]: new Scope(controllerScopeContract),
+        [localScopeContract.token]: new Scope(localScopeContract),
+      },
+    });
+
     try {
       const initializer = await importer();
-      await initializer(this.frontendContext, params);
+      await initializer(controllerContext, params);
     } catch (error) {
       throw new Panic("controller-initialization-failed", { controller: importer.name, error });
     }

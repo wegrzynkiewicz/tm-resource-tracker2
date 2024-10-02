@@ -1,4 +1,4 @@
-import { appViewDependency } from "../app/app-view.ts";
+import { introAppViewDependency } from "../app/intro-app-view.ts";
 import { button, div_nodes } from "@acme/dom/nodes.ts";
 import { modalManagerDependency } from "../../modal.ts";
 import { frontendScopeContract } from "../../../defs.ts";
@@ -13,7 +13,7 @@ import { createPlayerModal } from "../../logic/player/player-modal.ts";
 import { waitingPath } from "../routes.ts";
 
 export function provideHomepageView(resolver: DependencyResolver) {
-  const app = resolver.resolve(appViewDependency);
+  const app = resolver.resolve(introAppViewDependency);
   const docTitle = resolver.resolve(docTitleDependency);
   const modalManager = resolver.resolve(modalManagerDependency);
   const clientGameManager = resolver.resolve(clientGameContextManagerDependency);

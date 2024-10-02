@@ -3,7 +3,7 @@ import { configBinderDependency } from "@acme/config/common.ts";
 import { configValueResultMapDependency } from "@acme/config/value-getter.ts";
 import { configValueExtractorsDependency, configValueResolverDependency } from "@acme/config/value-resolver.ts";
 import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
-import { appSlotDependency } from "./src/frontend/app/app-view.ts";
+import { appSlotDependency } from "./src/frontend/app/app-slot.ts";
 import { frontendScopeContract } from "./defs.ts";
 import { apiURLConfigContract } from "./src/api-url-config.ts";
 import { appNameConfigContract } from "./src/frontend/app/app-name-config.ts";

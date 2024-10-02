@@ -1,8 +1,8 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { createEditBox } from "../utils/edit-box.ts";
 import { button, div, div_nodes } from "@acme/dom/nodes.ts";
-import { appViewDependency } from "../app/app-view.ts";
-import { frontendScopeContract } from "../../../defs.ts";
+import { introAppViewDependency } from "../app/intro-app-view.ts";
+import { controllerScopeContract } from "../../../defs.ts";
 import { docTitleDependency } from "../app/doc-title.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { controllerRunnerDependency } from "../../controller.ts";
@@ -138,7 +138,7 @@ function createPlayer(player: PlayerDTO): HTMLElement {
 }
 
 export function provideWaitingView(resolver: DependencyResolver) {
-  const app = resolver.resolve(appViewDependency);
+  const app = resolver.resolve(introAppViewDependency);
   const docTitle = resolver.resolve(docTitleDependency);
   const gameId = resolver.resolve(clientGameIdDependency);
   const myPlayer = resolver.resolve(myPlayerDependency);
@@ -231,5 +231,5 @@ export function provideWaitingView(resolver: DependencyResolver) {
 export const waitingViewDependency = defineDependency({
   name: "waiting-view",
   provider: provideWaitingView,
-  scope: frontendScopeContract,
+  scope: controllerScopeContract,
 });
