@@ -11,12 +11,12 @@ import { denoRequestingConfigValueExtractorDependency } from "@acme/config/deno-
 import { configValueGetterDependency, configValueResultMapDependency } from "@acme/config/value-getter.ts";
 import { configValueExtractorsDependency, configValueResolverDependency } from "@acme/config/value-resolver.ts";
 import { configVariableNamePrefixDependency } from "@acme/config/variable-name.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
-import { loggingStrategyConfigContract } from "@acme/logger/defs.ts";
+import { Context } from "@acme/dependency/context.ts";
 
 export const mainWebServer = createWebServerConfigProvider("name");
 
-export async function initServerConfig(resolver: DependencyResolver): Promise<void> {
+export async function initServerConfig(context: Context): Promise<void> {
+  const { resolver } = context;
   resolver.inject(configVariableNamePrefixDependency, "TM_");
 
   const dotEnvMap = await readDotEnvMap(".env");
@@ -31,7 +31,6 @@ export async function initServerConfig(resolver: DependencyResolver): Promise<vo
   resolver.inject(configValueExtractorsDependency, extractors);
 
   const binder = resolver.resolve(configBinderDependency);
-  binder.bind(loggingStrategyConfigContract, "SERVER-DEV");
   binder.bind(mainWebServer.hostnameConfigContract, "0.0.0.0");
   binder.bind(mainWebServer.portConfigContract, 3008);
 

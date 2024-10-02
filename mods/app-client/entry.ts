@@ -2,20 +2,30 @@ import { builtInConfigValueExtractorDependency } from "@acme/config/built-in-ext
 import { configBinderDependency } from "@acme/config/common.ts";
 import { configValueResultMapDependency } from "@acme/config/value-getter.ts";
 import { configValueExtractorsDependency, configValueResolverDependency } from "@acme/config/value-resolver.ts";
-import { initGlobalLogChannel } from "@acme/logger/log-channel.ts";
 import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { appSlotDependency } from "./src/app/app-view.ts";
 import { frontendScopeContract } from "./defs.ts";
 import { apiURLConfigContract } from "./src/api-url-config.ts";
 import { appNameConfigContract } from "./src/app/app-name-config.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
-import { loggingStrategyConfigContract } from "@acme/logger/defs.ts";
+import { logChannelDependency, TRACE } from "@acme/logger/defs.ts";
 import { controllerRouterDependency, controllerRunnerDependency, NaiveControllerRouter } from "./src/controller.ts";
 import { homeControllerImporter, homePath } from "./src/home/home-defs.ts";
 import { waitingControllerImporter, waitingPath } from "./src/waiting/waiting-defs.ts";
 import { Context, createContext } from "@acme/dependency/context.ts";
+import { BasicLogFilter } from "@acme/logger/basic-log-filter.ts";
+import { BrowserLogSubscriber } from "@acme/logger/browser-log-subscriber.ts";
 
-async function initClientConfig(resolver: DependencyResolver): Promise<void> {
+export async function initLogChannel(globalContext: Context): Promise<void> {
+  const { resolver } = globalContext;
+  const channel = resolver.resolve(logChannelDependency);
+  const subscriber = new BrowserLogSubscriber(
+    new BasicLogFilter(TRACE),
+  );
+  channel.subscribers.add(subscriber);
+}
+
+async function initClientConfig(globalContext: Context): Promise<void> {
+  const { resolver } = globalContext;
   const extractors = [
     resolver.resolve(builtInConfigValueExtractorDependency),
   ];
@@ -23,7 +33,6 @@ async function initClientConfig(resolver: DependencyResolver): Promise<void> {
 
   const binder = resolver.resolve(configBinderDependency);
   binder.bind(appNameConfigContract, "TM Resource Tracker v2");
-  binder.bind(loggingStrategyConfigContract, "BROWSER-DEV");
   binder.bind(apiURLConfigContract, new URL("http://localhost:3008"));
 
   const configValueResolver = resolver.resolve(configValueResolverDependency);
@@ -59,7 +68,7 @@ async function initFrontend(globalContext: Context): Promise<void> {
   });
 }
 
-async function start() {
+async function bootstrap() {
   const globalContext = createContext({
     identifier: {},
     name: "GLOBAL",
@@ -68,10 +77,10 @@ async function start() {
       [localScopeContract.token]: new Scope(localScopeContract),
     },
   });
-  const { resolver } = globalContext;
 
-  await initClientConfig(resolver);
-  await initGlobalLogChannel(resolver);
+  await initClientConfig(globalContext);
+  await initLogChannel(globalContext);
   await initFrontend(globalContext);
 }
-start();
+
+bootstrap();

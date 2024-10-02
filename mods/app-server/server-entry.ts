@@ -1,9 +1,22 @@
+import { BasicLogSubscriber } from "@acme/logger/basic-log-subscriber.ts";
+import { prettyLogFormatterDependency } from "@acme/logger/pretty-log-formatter.ts";
 import { initServerConfig } from "./config.ts";
-import { initGlobalLogChannel } from "@acme/logger/log-channel.ts";
 import { initMainWebServer } from "./main.web-server.ts";
 import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { initConfig } from "@acme/app/config.ts";
-import { createContext } from "@acme/dependency/context.ts";
+import { Context, createContext } from "@acme/dependency/context.ts";
+import { BasicLogFilter } from "@acme/logger/basic-log-filter.ts";
+import { logChannelDependency, TRACE } from "@acme/logger/defs.ts";
+
+export async function initLogChannel(globalContext: Context): Promise<void> {
+  const { resolver } = globalContext;
+  const channel = resolver.resolve(logChannelDependency);
+  const subscriber = new BasicLogSubscriber(
+    new BasicLogFilter(TRACE),
+    resolver.resolve(prettyLogFormatterDependency),
+  );
+  channel.subscribers.add(subscriber);
+}
 
 async function start() {
   const globalContext = createContext({
@@ -16,12 +29,11 @@ async function start() {
       [localScopeContract.token]: new Scope(localScopeContract),
     },
   });
-  const { resolver } = globalContext;
 
-  await initServerConfig(resolver);
-  await initConfig(resolver);
-  await initGlobalLogChannel(resolver);
+  await initServerConfig(globalContext);
+  await initConfig(globalContext);
+  await initLogChannel(globalContext);
   // initTerminator(resolver);
-  initMainWebServer(resolver);
+  initMainWebServer(globalContext);
 }
 start();
