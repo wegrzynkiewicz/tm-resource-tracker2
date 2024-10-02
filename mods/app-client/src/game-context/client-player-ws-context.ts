@@ -10,11 +10,13 @@ import { ClientGameContext, clientGameTokenDependency } from "./client-game-cont
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
 import {
   normalCAContextFactoryDependency,
+  normalCADispatcherDependency,
   normalCARouterDependency,
   normalCASenderDependency,
 } from "@acme/control-action/normal/defs.ts";
 import { webSocketCAReceiverDependency } from "@acme/control-action/transport/ws-ca-receiver.ts";
 import { webSocketNormalCASenderDependency } from "@acme/control-action/transport/ws-normal-ca-sender.ts";
+import { webSocketNormalCADispatcherDependency } from "@acme/control-action/transport/ws-normal-ca-dispatcher.ts";
 import { initClientNormalCARouter } from "../game-actions/normal-ca-router.ts";
 import { ClientNormalCAContextFactory } from "./client-normal-ca-context-factory.ts";
 
@@ -62,6 +64,9 @@ export class ClientPlayerWSContextManager {
 
     const sender = resolver.resolve(webSocketNormalCASenderDependency);
     resolver.inject(normalCASenderDependency, sender);
+    
+    const dispatcher = resolver.resolve(webSocketNormalCADispatcherDependency);
+    resolver.inject(normalCADispatcherDependency, dispatcher);
 
     const onClose = () => this.dispose();
     socket.addEventListener("close", onClose, { once: true });
@@ -70,7 +75,8 @@ export class ClientPlayerWSContextManager {
     socket.addEventListener("message", (event) => receiver.receive(event));
 
     await readySocket(socket);
-    socket.send("siema");
+
+    this.clientPlayerWSContext = clientPlayerWSContext;
 
     return clientPlayerWSContext;
   }

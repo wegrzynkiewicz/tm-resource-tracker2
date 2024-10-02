@@ -13,6 +13,8 @@ import { clientGameContextManagerDependency, clientGameIdDependency } from "../g
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { playersStoreDependency } from "../player/players-store.ts";
 import { createPlayerModal } from "../player/player-modal.ts";
+import { normalCADispatcherDependency } from "@acme/control-action/normal/defs.ts";
+import { gameCreateC2SNotNormalCA } from "../../../common/game/defs.ts";
 
 export class WaitingPlayerFactory {
   public create(player: PlayerDTO): HTMLElement {
@@ -144,6 +146,7 @@ export function provideWaitingView(resolver: DependencyResolver) {
   const clientGameManager = resolver.resolve(clientGameContextManagerDependency);
   const controllerRunner = resolver.resolve(controllerRunnerDependency);
   const playersStore = resolver.resolve(playersStoreDependency);
+  const dispatcher = resolver.resolve(normalCADispatcherDependency);
 
   const gameIdBox = createEditBox({
     caption: "GameID",
@@ -201,6 +204,18 @@ export function provideWaitingView(resolver: DependencyResolver) {
     if (status === true) {
       await clientGameManager.quitClientGame();
       await controllerRunner.run(homePath);
+    }
+  });
+
+  $start.addEventListener("click", async () => {
+    const modal = createQuestionModal({
+      titleText: "Do you want to start the game?",
+      confirmText: "Start",
+    });
+    await modalManager.mount(modal);
+    const status = await modal.ready;
+    if (status === true) {
+      dispatcher.dispatch(gameCreateC2SNotNormalCA, undefined);
     }
   });
 

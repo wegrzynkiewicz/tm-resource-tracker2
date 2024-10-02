@@ -18,7 +18,7 @@ import { normalCAContextFactoryDependency, normalCARouterDependency } from "@acm
 import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
 import { initServerNormalCARouter } from "./normal-ca-router.ts";
 import { PlayerBroadcast, playerBroadcastDependency } from "../game/player-broadcast.ts";
-import { playersSyncNotS2CNormalCA } from "../../common/player/actions.ts";
+import { playersSyncS2CNotNormalCA } from "../../common/player/defs.ts";
 
 export interface ServerPlayerDuplexContextIdentifier {
   gameId: string;
@@ -101,7 +101,7 @@ export class ServerPlayerDuplexContextManager {
 
   public syncPlayers() {
     const players = this.serverPlayerContextManager.getPlayersDTO();
-    this.playerBroadcast.dispatch(playersSyncNotS2CNormalCA, { players });
+    this.playerBroadcast.dispatch(playersSyncS2CNotNormalCA, { players });
   }
 
   public async dispose() {
