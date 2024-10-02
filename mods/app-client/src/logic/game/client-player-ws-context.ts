@@ -1,11 +1,11 @@
 import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
-import { clientGameScopeContract, frontendScopeContract } from "../../defs.ts";
+import { clientGameScopeContract, frontendScopeContract } from "../../../defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { readySocket } from "@acme/web/socket.ts";
 import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
-import { apiURLDependency } from "../api-url-config.ts";
-import { createGameSocketPathname } from "../../../common/game/defs.ts";
+import { apiURLDependency } from "../../api-url-config.ts";
+import { createGameSocketPathname } from "../../../../common/game/defs.ts";
 import { ClientGameContext, clientGameTokenDependency } from "./client-game-context.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
 import {
@@ -17,8 +17,8 @@ import {
 import { webSocketCAReceiverDependency } from "@acme/control-action/transport/ws-ca-receiver.ts";
 import { webSocketNormalCASenderDependency } from "@acme/control-action/transport/ws-normal-ca-sender.ts";
 import { webSocketNormalCADispatcherDependency } from "@acme/control-action/transport/ws-normal-ca-dispatcher.ts";
-import { initClientNormalCARouter } from "../game-actions/normal-ca-router.ts";
 import { ClientNormalCAContextFactory } from "./client-normal-ca-context-factory.ts";
+import { initClientNormalCARouter } from "../base/normal-ca-router.ts";
 
 export interface ClientPlayerWSContextIdentifier {
   gameId: string;

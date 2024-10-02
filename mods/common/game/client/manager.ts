@@ -7,7 +7,7 @@ import { JoinGame } from "../join/common.ts";
 import { quitGameChannelDependency } from "../quit/modal.ts";
 import { ClientGameContextManager, clientGameContextManagerDependency } from "./context.ts";
 import { createGameChannelDependency, joinGameChannelDependency } from "./source.ts";
-import { homepageViewDependency, HomeView } from "../../../app-client/src/home/home-view.ts";
+import { homepageViewDependency, HomeView } from "../../../app-client/src/frontend/home/home-view.ts";
 
 export class ClientGameManager {
   public constructor(

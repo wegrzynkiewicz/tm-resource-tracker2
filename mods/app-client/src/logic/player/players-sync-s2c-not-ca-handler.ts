@@ -4,7 +4,7 @@ import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { caScopeContract } from "@acme/dependency/scopes.ts";
 import { PlayersSyncS2CNotDTO } from "../../../common/player/players-sync-s2c-not-dto.layout.compiled.ts";
-import { playersStoreDependency } from "../player/players-store.ts";
+import { playersStoreDependency } from "./players-store.ts";
 
 export function providePlayersSyncS2CNotNormalCAHandler(resolver: DependencyResolver): NormalCAHandler {
   const playersStore = resolver.resolve(playersStoreDependency);

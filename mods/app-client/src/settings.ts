@@ -1,5 +1,5 @@
 import { colors } from "../../common/color/color.ts";
-import { createSelector } from "./utils/selector.ts";
+import { createSelector } from "./frontend/utils/selector.ts";
 
 export function createPersonalInfo() {
   return fieldset("space_container", [

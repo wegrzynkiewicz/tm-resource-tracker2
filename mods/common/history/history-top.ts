@@ -1,4 +1,4 @@
-import { createSelector, SelectorOption, SelectorStore } from "../../app-client/src/utils/selector.ts";
+import { createSelector, SelectorOption, SelectorStore } from "../../app-client/src/frontend/utils/selector.ts";
 import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 import { providePlayingGame } from "../playing/common.ts";
 

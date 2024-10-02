@@ -1,6 +1,6 @@
 import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 
-import { createScroll } from "../../app-client/src/app/scroll.ts";
+import { createScroll } from "../../app-client/src/frontend/app/scroll.ts";
 import { ModalManager, provideModalManager } from "../../app-client/src/modal.ts";
 import { provideToolbarView, ToolbarView } from "./toolbar.ts";
 import { provideAppPlace, Slot } from "../../app-client/src/place.ts";

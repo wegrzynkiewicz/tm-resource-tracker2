@@ -1,4 +1,4 @@
-import { ControllerImporter } from "../controller.ts";
+import { ControllerImporter } from "../../controller.ts";
 import { initHomeController } from "./home.entry.ts";
 
 export const homePath = "/";

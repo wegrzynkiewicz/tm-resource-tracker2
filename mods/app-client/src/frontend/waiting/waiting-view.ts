@@ -1,20 +1,20 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { createEditBox } from "../edit-box.ts";
+import { createEditBox } from "../utils/edit-box.ts";
 import { button, div, div_nodes } from "@acme/dom/nodes.ts";
 import { appViewDependency } from "../app/app-view.ts";
-import { frontendScopeContract } from "../../defs.ts";
+import { frontendScopeContract } from "../../../defs.ts";
 import { docTitleDependency } from "../app/doc-title.ts";
-import { myPlayerDependency } from "../player/my-player.ts";
-import { PlayerDTO } from "../../../common/player/player-dto.layout.compiled.ts";
-import { controllerRunnerDependency } from "../controller.ts";
+import { PlayerDTO } from "../../../../common/player/player-dto.layout.compiled.ts";
+import { controllerRunnerDependency } from "../../controller.ts";
 import { homePath } from "../home/home-defs.ts";
-import { createQuestionModal, modalManagerDependency } from "../modal.ts";
-import { clientGameContextManagerDependency, clientGameIdDependency } from "../game-context/client-game-context.ts";
+import { createQuestionModal, modalManagerDependency } from "../../modal.ts";
+import { clientGameContextManagerDependency, clientGameIdDependency } from "../../logic/game/client-game-context.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
-import { playersStoreDependency } from "../player/players-store.ts";
-import { createPlayerModal } from "../player/player-modal.ts";
 import { normalCADispatcherDependency } from "@acme/control-action/normal/defs.ts";
-import { gameStartC2SNotNormalCAContract } from "../../../common/game/defs.ts";
+import { gameStartC2SNotNormalCAContract } from "../../../../common/game/defs.ts";
+import { myPlayerDependency } from "../../logic/player/my-player.ts";
+import { createPlayerModal } from "../../logic/player/player-modal.ts";
+import { playersStoreDependency } from "../../logic/player/players-store.ts";
 
 export class WaitingPlayerFactory {
   public create(player: PlayerDTO): HTMLElement {

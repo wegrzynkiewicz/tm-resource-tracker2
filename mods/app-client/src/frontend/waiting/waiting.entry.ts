@@ -1,11 +1,11 @@
-import { clientGameContextManagerDependency } from "../game-context/client-game-context.ts";
-import { controllerRunnerDependency } from "../controller.ts";
+import { clientGameContextManagerDependency } from "../../logic/game/client-game-context.ts";
+import { controllerRunnerDependency } from "../../controller.ts";
 import { waitingViewDependency } from "./waiting-view.ts";
 import { homePath } from "../home/home-defs.ts";
 import { Context, createContext } from "@acme/dependency/context.ts";
 import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
-import { clientGameScopeContract, controllerScopeContract, frontendScopeContract } from "../../defs.ts";
-import { clientPlayerWSContextManagerDependency } from "../game-context/client-player-ws-context.ts";
+import { clientGameScopeContract, controllerScopeContract, frontendScopeContract } from "../../../defs.ts";
+import { clientPlayerWSContextManagerDependency } from "../../logic/game/client-player-ws-context.ts";
 
 export async function initWaitingController(context: Context) {
   const controllerRunner = context.resolver.resolve(controllerRunnerDependency);

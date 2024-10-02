@@ -3,7 +3,7 @@ import { NormalCAContextFactory } from "@acme/control-action/normal/defs.ts";
 import { NormalCAEnvelopeDTO } from "@acme/control-action/normal/envelope.layout.compiled.ts";
 import { Context, createContext } from "@acme/dependency/context.ts";
 import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
-import { clientGameScopeContract, frontendScopeContract } from "../../defs.ts";
+import { clientGameScopeContract, frontendScopeContract } from "../../../defs.ts";
 
 export class ClientNormalCAContextFactory implements NormalCAContextFactory {
   public constructor(

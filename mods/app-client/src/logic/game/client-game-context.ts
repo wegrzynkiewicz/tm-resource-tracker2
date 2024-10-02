@@ -1,18 +1,17 @@
-import { gameReadPathname } from "./../../../common/game/defs";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { jsonRequest } from "@acme/useful/json-request.ts";
-import { clientGameScopeContract, frontendScopeContract } from "../../defs.ts";
-import { myPlayerDependency } from "../player/my-player.ts";
+import { clientGameScopeContract, frontendScopeContract } from "../../../defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
-import { apiURLDependency } from "../api-url-config.ts";
-import { gameCreatePathname, gameJoinPathname, gameQuitPathname } from "../../../common/game/defs.ts";
-import { GameDTO } from "../../../common/game/game-dto.layout.compiled.ts";
+import { apiURLDependency } from "../../api-url-config.ts";
+import { gameCreatePathname, gameJoinPathname, gameQuitPathname, gameReadPathname } from "../../../../common/game/defs.ts";
+import { GameDTO } from "../../../../common/game/game-dto.layout.compiled.ts";
 import { clientPlayerWSContextManagerDependency } from "./client-player-ws-context.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
-import { GameCreateC2SReqDTO } from "../../../common/game/game-create-c2s-req-dto.layout.compiled.ts";
-import { GameJoinC2SReqDTO } from "../../../common/game/game-join-c2s-req-dto.layout.compiled.ts";
+import { GameCreateC2SReqDTO } from "../../../../common/game/game-create-c2s-req-dto.layout.compiled.ts";
+import { GameJoinC2SReqDTO } from "../../../../common/game/game-join-c2s-req-dto.layout.compiled.ts";
 import { Panic } from "@acme/useful/errors.ts";
+import { myPlayerDependency } from "../player/my-player.ts";
 
 export interface ClientGameContextIdentifier {
   gameId: string;

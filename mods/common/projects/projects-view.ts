@@ -1,6 +1,6 @@
-import { createPanel } from "../../app-client/src/app/panel.ts";
+import { createPanel } from "../../app-client/src/frontend/app/panel.ts";
 import { ModalManager, provideModalManager } from "../../app-client/src/modal.ts";
-import { SelectorStore } from "../../app-client/src/utils/selector.ts";
+import { SelectorStore } from "../../app-client/src/frontend/utils/selector.ts";
 import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 import { PlayingGame, providePlayingGame } from "../playing/common.ts";
 import { PlayingAppView, providePlayingAppView } from "../playing/playing-app-view.ts";

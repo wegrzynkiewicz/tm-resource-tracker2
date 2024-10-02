@@ -1,6 +1,6 @@
 import { defineDependency, DependencyResolver } from "@acme/dependency/declaration.ts";
 import { div } from "@acme/dom/nodes.ts";
-import { AppView, appViewDependency } from "./app/app-view.ts";
+import { AppView, appViewDependency } from "./frontend/app/app-view.ts";
 import { frontendScopeContract } from "../defs.ts";
 
 export class LoadingView {

@@ -1,5 +1,5 @@
-import { createPanel } from "../../app-client/src/app/panel.ts";
-import { SelectorStore } from "../../app-client/src/utils/selector.ts";
+import { createPanel } from "../../app-client/src/frontend/app/panel.ts";
+import { SelectorStore } from "../../app-client/src/frontend/utils/selector.ts";
 import { Channel } from "../../core/channel.ts";
 import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
 import { PlayingGame, providePlayingGame } from "../playing/common.ts";
