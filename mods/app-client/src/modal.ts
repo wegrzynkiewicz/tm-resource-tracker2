@@ -1,7 +1,7 @@
-import { sleep } from "../../core/useful.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { button, comment, div, div_nodes, form_nodes } from "@acme/dom/nodes.ts";
 import { frontendScopeContract } from "../defs.ts";
+import { deferred, sleep } from "@acme/useful/async.ts";
 
 export interface Modal<T = unknown> {
   $root: HTMLElement;
@@ -27,7 +27,7 @@ export function createQuestionModal(
     ]),
   ]);
 
-  const { promise, resolve } = Promise.withResolvers<boolean>();
+  const { promise, resolve } = deferred<boolean>();
   const createClickListener = (result: boolean) => {
     return (event: Event) => {
       event.preventDefault();

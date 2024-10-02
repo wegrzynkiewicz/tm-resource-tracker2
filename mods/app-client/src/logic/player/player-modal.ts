@@ -4,6 +4,7 @@ import { Result } from "@acme/useful/result.ts";
 import { GameCreateC2SReqDTO, parseGameCreateC2SReqDTO } from "@common/game/game-create-c2s-req-dto.layout.compiled.ts";
 import { createColorSelectorBox } from "../../frontend/utils/color-selector.ts";
 import { createEditBox } from "../../frontend/utils/edit-box.ts";
+import { deferred } from "@acme/useful/async.ts";
 
 export function createPlayerModal() {
   const nameBox = createEditBox({
@@ -27,7 +28,7 @@ export function createPlayerModal() {
     ]),
   ]);
 
-  const defer = Promise.withResolvers<Result<GameCreateC2SReqDTO, null>>();
+  const defer = deferred<Result<GameCreateC2SReqDTO, null>>();
 
   $cancel.addEventListener("click", () => {
     defer.resolve([false, null]);

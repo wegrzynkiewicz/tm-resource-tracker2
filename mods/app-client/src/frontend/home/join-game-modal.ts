@@ -4,6 +4,7 @@ import { Result } from "@acme/useful/result.ts";
 import { GameJoinC2SReqDTO, parseGameJoinC2SReqDTO } from "@common/game/game-join-c2s-req-dto.layout.compiled.ts";
 import { unwrapLayoutResult } from "@acme/layout/runtime/defs.ts";
 import { createColorSelectorBox } from "../utils/color-selector.ts";
+import { deferred } from "@acme/useful/async.ts";
 
 export function createJoinModal() {
   const gameBox = createEditBox({
@@ -33,7 +34,7 @@ export function createJoinModal() {
     ]),
   ]);
 
-  const defer = Promise.withResolvers<Result<GameJoinC2SReqDTO, null>>();
+  const defer = deferred<Result<GameJoinC2SReqDTO, null>>();
 
   $cancel.addEventListener("click", () => {
     defer.resolve([false, null]);

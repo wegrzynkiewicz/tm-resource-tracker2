@@ -1,8 +1,9 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { clientGameScopeContract } from "../../../defs.ts";
+import { deferred } from "@acme/useful/async.ts";
 
 export class GameStore {
-  private readonly defer = Promise.withResolvers<void>();
+  private readonly defer = deferred<void>();
 
   public sync() {
     this.defer.resolve();
