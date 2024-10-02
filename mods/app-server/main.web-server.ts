@@ -1,4 +1,4 @@
-import { gameCreateWebHandlerDependency } from "./game/game-create-handler.ts";
+import { gameCreateWebHandlerDependency } from "./game/game-create-endpoint-handler.ts";
 import { terminatorDependency } from "@acme/system/terminator.ts";
 import { webServerDependency } from "@acme/web/server.ts";
 import { mainWebServer } from "./config.ts";
@@ -10,12 +10,14 @@ import {
   gameCreatePathname,
   gameJoinPathname,
   gameQuitPathname,
+  gameReadPathname,
   gameSocketPatternPathname,
 } from "../common/game/defs.ts";
-import { gameQuitEndpointHandlerDependency } from "./game/game-quit-handler.ts";
-import { gameSocketEndpointHandlerDependency } from "./game/game-socket-handler.ts";
-import { gameJoinEndpointHandlerDependency } from "./game/game-join-handler.ts";
+import { gameQuitEndpointHandlerDependency } from "./game/game-quit-endpoint-handler.ts";
+import { gameSocketEndpointHandlerDependency } from "./game/game-socket-endpoint-handler.ts";
+import { gameJoinEndpointHandlerDependency } from "./game/game-join-endpoint-handler.ts";
 import { Context } from "@acme/dependency/context.ts";
+import { gameReadEndpointHandlerDependency } from "./game/game-read-endpoint-handler.ts";
 
 export function initMainWebServer(context: Context) {
   const { resolver } = context;
@@ -25,6 +27,7 @@ export function initMainWebServer(context: Context) {
 
   const router = new NaiveServerWebRouter();
   router.addRoute("POST", gameCreatePathname, gameCreateWebHandlerDependency);
+  router.addRoute("GET", gameReadPathname, gameReadEndpointHandlerDependency);
   router.addRoute("POST", gameJoinPathname, gameJoinEndpointHandlerDependency);
   router.addRoute("POST", gameQuitPathname, gameQuitEndpointHandlerDependency);
   router.addRoute("GET", gameSocketPatternPathname, gameSocketEndpointHandlerDependency);

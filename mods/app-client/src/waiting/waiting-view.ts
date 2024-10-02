@@ -14,7 +14,7 @@ import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { playersStoreDependency } from "../player/players-store.ts";
 import { createPlayerModal } from "../player/player-modal.ts";
 import { normalCADispatcherDependency } from "@acme/control-action/normal/defs.ts";
-import { gameCreateC2SNotNormalCA } from "../../../common/game/defs.ts";
+import { gameStartC2SNotNormalCAContract } from "../../../common/game/defs.ts";
 
 export class WaitingPlayerFactory {
   public create(player: PlayerDTO): HTMLElement {
@@ -215,7 +215,7 @@ export function provideWaitingView(resolver: DependencyResolver) {
     await modalManager.mount(modal);
     const status = await modal.ready;
     if (status === true) {
-      dispatcher.dispatch(gameCreateC2SNotNormalCA, undefined);
+      dispatcher.dispatch(gameStartC2SNotNormalCAContract, undefined);
     }
   });
 

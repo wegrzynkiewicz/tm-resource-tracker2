@@ -13,10 +13,10 @@ import {
   serverPlayerContextManagerDependency,
 } from "./player-context.ts";
 import { webSocketCAReceiverDependency } from "@acme/control-action/transport/ws-ca-receiver.ts";
-import { ServerNormalCAContextFactory } from "./normal-ca-context-factory.ts";
+import { ServerNormalCAContextFactory } from "../base/normal-ca-context-factory.ts";
 import { normalCAContextFactoryDependency, normalCARouterDependency } from "@acme/control-action/normal/defs.ts";
 import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
-import { initServerNormalCARouter } from "./normal-ca-router.ts";
+import { initServerNormalCARouter } from "../base/normal-ca-router.ts";
 import { PlayerBroadcast, playerBroadcastDependency } from "../game/player-broadcast.ts";
 import { playersSyncS2CNotNormalCA } from "../../common/player/defs.ts";
 

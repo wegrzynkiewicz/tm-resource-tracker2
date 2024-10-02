@@ -64,7 +64,7 @@ export class ClientPlayerWSContextManager {
 
     const sender = resolver.resolve(webSocketNormalCASenderDependency);
     resolver.inject(normalCASenderDependency, sender);
-    
+
     const dispatcher = resolver.resolve(webSocketNormalCADispatcherDependency);
     resolver.inject(normalCADispatcherDependency, dispatcher);
 

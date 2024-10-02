@@ -1,3 +1,4 @@
+import { gameReadPathname } from "./../../../common/game/defs";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { jsonRequest } from "@acme/useful/json-request.ts";
 import { clientGameScopeContract, frontendScopeContract } from "../../defs.ts";
@@ -90,7 +91,7 @@ export class ClientGameContextManager {
     if (token === null) {
       return undefined;
     }
-    const url = new URL(gameJoinPathname, this.apiURL);
+    const url = new URL(gameReadPathname, this.apiURL);
     const request = jsonRequest(url);
     request.headers.set("Authorization", `Bearer ${token}`);
     try {
