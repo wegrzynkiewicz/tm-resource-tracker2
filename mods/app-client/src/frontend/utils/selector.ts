@@ -1,7 +1,7 @@
 import { Channel } from "@acme/dependency/channel.ts";
 import { svg_icon } from "./svg.ts";
 import { div_nodes, input, span } from "@acme/dom/nodes.ts";
-import { clamp } from "../app/panel.ts";
+import { clamp } from "@acme/useful/numbers.ts";
 
 export interface SelectorOption {
   readonly key: string;

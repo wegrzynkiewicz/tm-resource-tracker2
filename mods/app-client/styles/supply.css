@@ -43,6 +43,11 @@
   width: var(--size);
 }
 
+.supply_icon {
+  width: 64px;
+  height: 64px;
+}
+
 .supply {
   min-height: 85px;
   display: flex;
@@ -88,8 +93,4 @@
 
 .supply._heat {
   grid-row: 7 / 8;
-}
-
-.supply._production._points {
-  display: none;
 }

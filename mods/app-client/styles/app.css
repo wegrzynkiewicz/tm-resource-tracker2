@@ -165,11 +165,6 @@ body {
   border-image-source: var(--gradient-production-border);
 }
 
-.modal_target-icon {
-  width: 64px;
-  height: 64px;
-}
-
 .modal_count {
   display: flex;
   flex-direction: row;
