@@ -3,6 +3,5 @@ import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { clientGameScopeContract } from "../../../defs.ts";
 
 export const myPlayerDependency = defineDependency<PlayerDTO>({
-  name: "my-player",
   scope: clientGameScopeContract,
 });

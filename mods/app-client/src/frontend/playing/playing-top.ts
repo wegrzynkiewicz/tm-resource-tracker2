@@ -31,7 +31,6 @@ export function providePlayingTop(resolver: DependencyResolver) {
 }
 
 export const playingTopDependency = defineDependency({
-  name: "playing-top",
   provider: providePlayingTop,
   scope: frontendScopeContract,
 });

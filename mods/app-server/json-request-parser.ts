@@ -66,7 +66,6 @@ export function provideJSONRequestParser(resolver: DependencyResolver) {
 }
 
 export const jsonRequestParserDependency = defineDependency({
-  name: "json-request-parser",
   provider: provideJSONRequestParser,
   scope: webRequestScopeContract,
 });

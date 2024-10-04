@@ -20,12 +20,10 @@ export interface ClientGameContextIdentifier {
 export type ClientGameContext = Context<ClientGameContextIdentifier>;
 
 export const clientGameIdDependency = defineDependency<string>({
-  name: "client-game-id",
   scope: clientGameScopeContract,
 });
 
 export const clientGameTokenDependency = defineDependency<string>({
-  name: "client-game-token",
   scope: clientGameScopeContract,
 });
 
@@ -156,7 +154,6 @@ export function provideClientGameManager(resolver: DependencyResolver) {
 }
 
 export const clientGameContextManagerDependency = defineDependency({
-  name: "client-game-context-manager",
   provider: provideClientGameManager,
   scope: frontendScopeContract,
 });

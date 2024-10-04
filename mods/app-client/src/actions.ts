@@ -38,7 +38,6 @@ function provideActionBinder() {
   return new ActionBinder();
 }
 export const actionBinderDependency = defineDependency({
-  name: "action-binder",
   provider: provideActionBinder,
 });
 
@@ -65,7 +64,6 @@ export function provideActionDispatcher(resolver: DependencyResolver) {
   );
 }
 export const actionDispatcherDependency = defineDependency({
-  name: "action-dispatcher",
   provider: provideActionDispatcher,
   scope: controllerScopeContract,
 });

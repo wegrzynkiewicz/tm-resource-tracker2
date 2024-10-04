@@ -8,6 +8,5 @@ export interface GameStage {
 }
 
 export const startupGameStageDependency = defineDependency<GameStage>({
-  name: "startup-game-stage",
   scope: serverGameScopeContract,
 });

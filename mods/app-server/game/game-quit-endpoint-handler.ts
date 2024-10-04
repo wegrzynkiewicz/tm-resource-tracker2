@@ -44,7 +44,6 @@ export function provideGameQuitEndpointHandler(resolver: DependencyResolver): En
 }
 
 export const gameQuitEndpointHandlerDependency = defineDependency({
-  name: "game-quit-web-handler",
   provider: provideGameQuitEndpointHandler,
   scope: webServerScopeContract,
 });

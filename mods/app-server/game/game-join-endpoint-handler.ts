@@ -53,7 +53,6 @@ export function provideGameJoinEndpointHandler(resolver: DependencyResolver): En
 }
 
 export const gameJoinEndpointHandlerDependency = defineDependency({
-  name: "game-join-web-handler",
   provider: provideGameJoinEndpointHandler,
   scope: webServerScopeContract,
 });

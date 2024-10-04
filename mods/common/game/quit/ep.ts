@@ -44,6 +44,5 @@ export function provideQuitGameEPHandler(resolver: DependencyResolver) {
   );
 }
 export const quitGameEPHandlerDependency = defineDependency({
-  name: "quit-game-ep-handler",
   provider: provideQuitGameEPHandler,
 });

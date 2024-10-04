@@ -67,7 +67,6 @@ export function provideHomepageView(resolver: DependencyResolver) {
 }
 
 export const homepageViewDependency = defineDependency({
-  name: "home-view",
   provider: provideHomepageView,
   scope: frontendScopeContract,
 });

@@ -46,7 +46,6 @@ export function provideToolbar(resolver: DependencyResolver) {
 }
 
 export const toolbarDependency = defineDependency({
-  name: "toolbar",
   provider: provideToolbar,
   scope: frontendScopeContract,
 });

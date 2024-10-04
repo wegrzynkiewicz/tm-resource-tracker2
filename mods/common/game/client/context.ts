@@ -19,7 +19,6 @@ export function provideClientGameContext(): ClientGameContext {
   throw new Breaker("client-game-context-must-be-injected");
 }
 export const clientGameContextDependency = defineDependency({
-  name: "client-game-context",
   provider: provideClientGameContext,
   scope: frontendScopeContract,
 });
@@ -92,7 +91,6 @@ export function provideClientGameContextManager(resolver: DependencyResolver) {
   );
 }
 export const clientGameContextManagerDependency = defineDependency({
-  name: "client-game-context-manager",
   provider: provideClientGameContextManager,
   scope: frontendScopeContract,
 });

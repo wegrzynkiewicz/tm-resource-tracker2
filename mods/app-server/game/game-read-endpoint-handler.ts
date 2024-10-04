@@ -54,7 +54,6 @@ export function provideGameReadEndpointHandler(resolver: DependencyResolver): En
 }
 
 export const gameReadEndpointHandlerDependency = defineDependency({
-  name: "game-read-web-handler",
   provider: provideGameReadEndpointHandler,
   scope: webServerScopeContract,
 });

@@ -111,6 +111,5 @@ export function provideClientGameManager(resolver: DependencyResolver) {
   );
 }
 export const clientGameManagerDependency = defineDependency({
-  name: "client-game-manager",
   provider: provideClientGameManager,
 });

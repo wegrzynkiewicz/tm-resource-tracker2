@@ -20,7 +20,6 @@ export function provideDocTitle(resolver: DependencyResolver) {
 }
 
 export const docTitleDependency = defineDependency({
-  name: "doc-title",
   provider: provideDocTitle,
   scope: frontendScopeContract,
 });

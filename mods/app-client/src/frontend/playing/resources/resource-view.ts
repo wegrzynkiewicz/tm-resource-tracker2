@@ -43,7 +43,6 @@ export function provideResourcesView(resolver: DependencyResolver) {
 }
 
 export const resourcesViewDependency = defineDependency<View>({
-  name: "resources-view",
   provider: provideResourcesView,
   scope: controllerScopeContract,
 });

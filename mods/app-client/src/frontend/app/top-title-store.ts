@@ -24,7 +24,6 @@ export function provideTopTitle(resolver: DependencyResolver) {
 }
 
 export const topTitleStoreDependency = defineDependency({
-  name: "top-title-store",
   provider: provideTopTitle,
   scope: frontendScopeContract,
 });

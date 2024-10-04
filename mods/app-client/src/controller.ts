@@ -19,7 +19,6 @@ export interface ControllerRouter {
 }
 
 export const controllerRouterDependency = defineDependency<ControllerRouter>({
-  name: "controller-router",
   scope: frontendScopeContract,
 });
 
@@ -93,7 +92,6 @@ export function provideControllerRunner(resolver: DependencyResolver) {
 }
 
 export const controllerRunnerDependency = defineDependency({
-  name: "controller-runner",
   provider: provideControllerRunner,
   scope: frontendScopeContract,
 });

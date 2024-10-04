@@ -44,6 +44,5 @@ export function provideReadGameEPHandler(resolver: DependencyResolver) {
   );
 }
 export const readGameEPHandlerDependency = defineDependency({
-  name: "read-game-ep-handler",
   provider: provideReadGameEPHandler,
 });

@@ -6,7 +6,6 @@ export function provideQuitGameChannel() {
   return new Channel<null>();
 }
 export const quitGameChannelDependency = defineDependency({
-  name: "quit-game-channel",
   provider: provideQuitGameChannel,
 });
 

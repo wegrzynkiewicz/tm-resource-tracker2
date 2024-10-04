@@ -12,6 +12,5 @@ export function provideClientConfig() {
   };
 }
 export const clientConfigDependency = defineDependency({
-  name: "client-config",
   provider: provideClientConfig,
 });

@@ -33,7 +33,6 @@ export function provideGameStageS2CNotNormalCAHandler(resolver: DependencyResolv
 }
 
 export const gameStageS2CNotNormalCAHandlerDependency = defineDependency({
-  name: "game-sync-s2c-not-normal-ca-handler",
   provider: provideGameStageS2CNotNormalCAHandler,
   scope: caScopeContract,
 });

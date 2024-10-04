@@ -15,7 +15,6 @@ export function provideIntroTop(resolver: DependencyResolver) {
 }
 
 export const introTopDependency = defineDependency({
-  name: "intro-top",
   provider: provideIntroTop,
   scope: frontendScopeContract,
 });

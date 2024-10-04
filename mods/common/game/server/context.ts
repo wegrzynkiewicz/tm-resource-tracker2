@@ -16,7 +16,6 @@ export function provideServerGameContext(): ServerGameContext {
   throw new Breaker("server-game-context-must-be-injected");
 }
 export const serverGameContextDependency = defineDependency({
-  name: "server-game-context",
   provider: provideServerGameContext,
 });
 
@@ -71,7 +70,6 @@ export function provideServerGameContextManager(resolver: DependencyResolver) {
   );
 }
 export const serverGameContextManagerDependency = defineDependency({
-  name: "server-game-context-manager",
   provider: provideServerGameContextManager,
   scope: globalScopeContract,
 });

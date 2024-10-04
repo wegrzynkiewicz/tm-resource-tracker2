@@ -34,7 +34,6 @@ export function provideTokenManager() {
 }
 
 export const tokenManagerDependency = defineDependency({
-  name: "token-manager",
   provider: provideTokenManager,
   scope: globalScopeContract,
 });

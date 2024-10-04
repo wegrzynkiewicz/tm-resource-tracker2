@@ -8,7 +8,6 @@ export function providePlayersStore() {
 }
 
 export const playersStoreDependency = defineDependency({
-  name: "players-store",
   provider: providePlayersStore,
   scope: frontendScopeContract,
 });

@@ -60,6 +60,5 @@ export function provideJoinGameEPHandler(resolver: DependencyResolver) {
   );
 }
 export const joinGameEPHandlerDependency = defineDependency({
-  name: "join-game-ep-handler",
   provider: provideJoinGameEPHandler,
 });

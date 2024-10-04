@@ -51,7 +51,6 @@ export function provideGameCreateWebHandler(resolver: DependencyResolver): Endpo
 }
 
 export const gameCreateWebHandlerDependency = defineDependency({
-  name: "game-create-web-handler",
   provider: provideGameCreateWebHandler,
   scope: webServerScopeContract,
 });

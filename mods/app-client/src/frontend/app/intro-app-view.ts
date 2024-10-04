@@ -32,7 +32,6 @@ export function provideAppView(resolver: DependencyResolver) {
 }
 
 export const introAppViewDependency = defineDependency({
-  name: "intro-app-view",
   provider: provideAppView,
   scope: frontendScopeContract,
 });

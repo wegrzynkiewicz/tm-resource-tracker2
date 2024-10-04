@@ -121,7 +121,6 @@ export function provideServerPlayerDuplexContextManager(resolver: DependencyReso
 }
 
 export const serverPlayerDuplexContextManagerDependency = defineDependency({
-  name: "server-player-duplex-context-manager",
   provider: provideServerPlayerDuplexContextManager,
   scope: serverPlayerScopeContract,
 });

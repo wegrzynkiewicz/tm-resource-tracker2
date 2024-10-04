@@ -25,12 +25,10 @@ export interface ServerPlayerInput {
 }
 
 export const serverPlayerIdDependency = defineDependency<string>({
-  name: "player-id",
   scope: serverPlayerScopeContract,
 });
 
 export const serverPlayerDTODependency = defineDependency<PlayerDTO>({
-  name: "player-dto",
   scope: serverPlayerScopeContract,
 });
 
@@ -113,7 +111,6 @@ export function provideServerPlayerContextManager(resolver: DependencyResolver) 
 }
 
 export const serverPlayerContextManagerDependency = defineDependency({
-  name: "server-player-context-manager",
   provider: provideServerPlayerContextManager,
   scope: serverGameScopeContract,
 });

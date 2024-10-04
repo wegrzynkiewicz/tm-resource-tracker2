@@ -35,7 +35,6 @@ export function provideWaitingGameStage(resolver: DependencyResolver): GameStage
 }
 
 export const waitingGameStageDependency = defineDependency({
-  name: "waiting-game-stage",
   provider: provideWaitingGameStage,
   scope: serverGameScopeContract,
 });

@@ -17,7 +17,6 @@ export function provideLoadingView(resolver: DependencyResolver) {
 }
 
 export const loadingViewDependency = defineDependency({
-  name: "loading-view",
   provider: provideLoadingView,
   scope: frontendScopeContract,
 });

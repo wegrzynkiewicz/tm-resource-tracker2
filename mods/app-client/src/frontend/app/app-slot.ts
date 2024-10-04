@@ -7,7 +7,6 @@ export function provideAppSlot() {
 }
 
 export const appSlotDependency = defineDependency({
-  name: "app-slot",
   provider: provideAppSlot,
   scope: frontendScopeContract,
 });

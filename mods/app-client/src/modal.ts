@@ -64,7 +64,6 @@ export function provideModalManager() {
 }
 
 export const modalManagerDependency = defineDependency({
-  name: "modal-manager",
   provider: provideModalManager,
   scope: frontendScopeContract,
 });

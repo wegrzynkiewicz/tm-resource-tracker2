@@ -16,7 +16,6 @@ export function providePlayersSyncS2CNotNormalCAHandler(resolver: DependencyReso
 }
 
 export const playersSyncS2CNotNormalCAHandlerDependency = defineDependency({
-  name: "players-sync-s2c-not-normal-ca-handler",
   provider: providePlayersSyncS2CNotNormalCAHandler,
   scope: caScopeContract,
 });

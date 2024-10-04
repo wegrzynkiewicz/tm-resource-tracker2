@@ -60,7 +60,6 @@ export function provideGameSocketEndpointHandler(resolver: DependencyResolver): 
 }
 
 export const gameSocketEndpointHandlerDependency = defineDependency({
-  name: "game-socket-web-handler",
   provider: provideGameSocketEndpointHandler,
   scope: webServerScopeContract,
 });

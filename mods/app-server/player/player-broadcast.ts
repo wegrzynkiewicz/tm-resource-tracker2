@@ -47,7 +47,6 @@ export function providePlayerBroadcast(resolver: DependencyResolver) {
 }
 
 export const playerBroadcastDependency = defineDependency({
-  name: "player-broadcast",
   provider: providePlayerBroadcast,
   scope: serverGameScopeContract,
 });

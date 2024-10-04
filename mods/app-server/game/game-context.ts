@@ -17,7 +17,6 @@ export interface ServerGameContextIdentifier {
 export type ServerGameContext = Context<ServerGameContextIdentifier>;
 
 export const serverGameIdDependency = defineDependency<string>({
-  name: "game-id",
   scope: serverGameScopeContract,
 });
 
@@ -77,7 +76,6 @@ function provideServerGameManager(resolver: DependencyResolver) {
 }
 
 export const serverGameManagerDependency = defineDependency({
-  name: "server-game-manager",
   provider: provideServerGameManager,
   scope: globalScopeContract,
 });

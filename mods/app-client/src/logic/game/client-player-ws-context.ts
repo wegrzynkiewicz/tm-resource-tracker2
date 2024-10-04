@@ -102,7 +102,6 @@ export function provideClientPlayerWSContextManager(resolver: DependencyResolver
 }
 
 export const clientPlayerWSContextManagerDependency = defineDependency({
-  name: "client-player-ws-context-manager",
   provider: provideClientPlayerWSContextManager,
   scope: clientGameScopeContract,
 });

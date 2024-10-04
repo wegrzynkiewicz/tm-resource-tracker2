@@ -15,7 +15,6 @@ export function provideGameStartC2SNotNormalCAHandler(resolver: DependencyResolv
 }
 
 export const gameStartC2SNotNormalCAHandlerDependency = defineDependency({
-  name: "game-start-c2s-not-normal-ca-handler",
   provider: provideGameStartC2SNotNormalCAHandler,
   scope: caScopeContract,
 });

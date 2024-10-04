@@ -40,7 +40,6 @@ export function providePlayingGameStage(resolver: DependencyResolver): GameStage
 }
 
 export const playingGameStageDependency = defineDependency({
-  name: "playing-game-stage",
   provider: providePlayingGameStage,
   scope: serverGameScopeContract,
 });
