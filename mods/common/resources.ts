@@ -1,4 +1,4 @@
-import { Channel } from '@acme/dom/channel.ts';
+import { Channel } from "@acme/dom/channel.ts";
 
 export type ResourceType = "points" | "gold" | "steel" | "titan" | "plant" | "energy" | "heat";
 export type ResourceTarget = "production" | "amount";
@@ -21,7 +21,7 @@ export class ResourceStore {
 
 export interface Resource {
   type: ResourceType;
-  minProduction: number,
+  minProduction: number;
 }
 
 export function defineResource(

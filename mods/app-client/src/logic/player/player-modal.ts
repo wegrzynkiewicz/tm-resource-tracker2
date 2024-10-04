@@ -38,7 +38,7 @@ export function createPlayerModal() {
     const payload = {
       name: nameBox.$input.value,
       color: colorBox.selector.getValue()?.key,
-    }
+    };
     const result = parseGameCreateC2SReqDTO(payload);
     const value = unwrapLayoutResult(result, "invalid-player");
     defer.resolve([true, value]);

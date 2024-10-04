@@ -24,7 +24,7 @@ export function createSelector(
   itemsStore: IterableStore<SelectorItem>,
 ) {
   const moves = new Channel<[number]>();
-  
+
   let leftEnabled = true;
   let rightEnabled = true;
 
@@ -53,7 +53,7 @@ export function createSelector(
 
   const getValue = (): SelectorItem | undefined => {
     return itemsStore.items[indexStore.value];
-  }
+  };
 
   return { $root, getValue, moves };
 }

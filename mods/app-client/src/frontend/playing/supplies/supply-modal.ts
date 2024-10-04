@@ -94,7 +94,7 @@ export function createSupplyModal(options: SupplyModalOptions) {
     $operator.textContent = store.positive ? "-" : "+";
     const valid = count + store.getNumber() < minProduction;
     $confirm.toggleAttribute("disabled", valid);
-  }
+  };
   store.updates.on(update);
   update();
 

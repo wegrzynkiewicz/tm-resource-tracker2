@@ -1,4 +1,4 @@
-import { ResourceStore, Resource, ResourceTarget, resources } from "@common/resources.ts";
+import { Resource, resources, ResourceStore, ResourceTarget } from "@common/resources.ts";
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { ModalManager } from "../../../modal.ts";
 import { createSupplyModal } from "./supply-modal.ts";
@@ -27,7 +27,7 @@ export function createSupplyPanel(
       $root.appendChild($counter);
     }
     return $root;
-  }
+  };
 
   function* generateSupplies() {
     for (const resource of resources) {

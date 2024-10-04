@@ -45,7 +45,7 @@ export function createJoinModal() {
       gameId: gameBox.$input.value,
       name: nameBox.$input.value,
       color: colorBox.selector.getValue()?.key,
-    }
+    };
     const result = parseGameJoinC2SReqDTO(payload);
     const value = unwrapLayoutResult(result, "invalid-player");
     defer.resolve([true, value]);

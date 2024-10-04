@@ -1,5 +1,5 @@
-import { IterableStore } from '@acme/dom/defs.ts';
-import { NumberStore } from '@acme/dom/number-store.ts';
+import { IterableStore } from "@acme/dom/defs.ts";
+import { NumberStore } from "@acme/dom/number-store.ts";
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { clamp } from "@acme/useful/numbers.ts";
 import { Channel } from "@acme/dom/channel.ts";
@@ -24,7 +24,7 @@ export function createPanel(
 
   const animate = (value: number) => {
     document.documentElement.style.setProperty("--animate-parallax-current", value.toString());
-  }
+  };
 
   indexStore.updates.on(() => {
     parallax = indexStore.value;

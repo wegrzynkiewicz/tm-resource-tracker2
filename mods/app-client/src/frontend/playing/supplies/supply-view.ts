@@ -1,4 +1,4 @@
-import { MapperStore } from '@acme/dom/mapper-store.ts';
+import { MapperStore } from "@acme/dom/mapper-store.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { docTitleDependency } from "../../app/doc-title.ts";

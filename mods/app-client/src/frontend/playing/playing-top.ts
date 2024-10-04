@@ -6,7 +6,7 @@ import { currentPlayerStoreDependency } from "./defs.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { playersStoreDependency } from "../../logic/player/players-store.ts";
 import { MapperStore } from "@acme/dom/mapper-store.ts";
-import { SelectorItem, createSelector } from "../utils/selector.ts";
+import { createSelector, SelectorItem } from "../utils/selector.ts";
 
 const createSelectorItem = ({ color, name, playerId }: PlayerDTO) => ({ key: playerId, name, color });
 
