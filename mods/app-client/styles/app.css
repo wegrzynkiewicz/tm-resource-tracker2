@@ -150,14 +150,14 @@ body {
   align-items: center;
 }
 
-.modal_target-supply {
+.modal_target-resource {
   padding: 20px;
   border-color: transparent;
   border-style: solid;
   border-width: 2px;
 }
 
-.modal_target-supply._production {
+.modal_target-resource._production {
   background-repeat: repeat;
   background-size: 10px;
   background-image: var(--bg-production), var(--gradient-production-background);
@@ -300,7 +300,7 @@ body {
   gap: 16px;
 }
 
-.resource {
+.flow {
   align-items: center;
   display: flex;
   gap: 6px;
@@ -308,7 +308,7 @@ body {
   padding: 6px;
 }
 
-.resource._production {
+.flow._production {
   background-repeat: repeat;
   background-size: 9px;
   background-image: var(--bg-production), var(--gradient-production-background);
@@ -318,14 +318,9 @@ body {
   border-width: 2px;
 }
 
-.resource_label {
+.flow-label {
   font-size: 1.5rem;
   color: #000;
-}
-
-.resource_icon {
-  width: 32px;
-  height: 32px;
 }
 
 .space {

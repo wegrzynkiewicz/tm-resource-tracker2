@@ -1,14 +1,14 @@
 import { LayoutResult, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
 
 export const playingViewObject: Record<string, 1> = {
-  ["supplies"]: 1,
+  ["resources"]: 1,
   ["projects"]: 1,
   ["histories"]: 1,
   ["settings"]: 1,
 };
 export const playingViewValues = /** @__PURE__ */ Object.keys(playingViewObject);
 
-export type PlayingView = "supplies" | "projects" | "histories" | "settings";
+export type PlayingView = "resources" | "projects" | "histories" | "settings";
 
 export const parsePlayingView = (data: unknown, path: string = ""): LayoutResult<PlayingView> => {
   let output;

@@ -5,8 +5,8 @@ import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { caScopeContract } from "@acme/dependency/scopes.ts";
 import { GameStage } from "@common/game/defs.ts";
 import { controllerRunnerDependency } from "../../controller.ts";
-import { playingViewStoreDependency } from "../../frontend/playing/playing-view-store.ts";
 import { playingPathFactory, waitingPath } from "../../frontend/routes.ts";
+import { playingViewStoreDependency } from "../../frontend/playing/defs.ts";
 
 export function provideGameStageS2CNotNormalCAHandler(resolver: DependencyResolver): NormalCAHandler {
   const controllerRunner = resolver.resolve(controllerRunnerDependency);

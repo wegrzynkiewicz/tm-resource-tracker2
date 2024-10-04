@@ -6,19 +6,19 @@ import { clientGameScopeContract, controllerScopeContract, frontendScopeContract
 import { controllerRunnerDependency } from "../../controller.ts";
 import { clientPlayerWSContextManagerDependency } from "../../logic/game/client-player-ws-context.ts";
 import { homePath } from "../routes.ts";
-import { supplyViewDependency } from "./supplies/supply-view.ts";
+import { resourcesViewDependency } from "./resources/resource-view.ts";
 import { Data } from "@acme/useful/types.ts";
 import { View } from "../../common.ts";
 import { Dependency } from "@acme/dependency/declaration.ts";
 import { gameStoreDependency } from "../../logic/game/game-store.ts";
 import { loadingViewDependency } from "../../loading-view.ts";
-import { playingViewStoreDependency } from "./playing-view-store.ts";
+import { playingViewStoreDependency } from "./defs.ts";
 
 const views: Record<PlayingView, Dependency<View>> = {
-  supplies: supplyViewDependency,
-  projects: supplyViewDependency,
-  histories: supplyViewDependency,
-  settings: supplyViewDependency,
+  resources: resourcesViewDependency,
+  projects: resourcesViewDependency,
+  histories: resourcesViewDependency,
+  settings: resourcesViewDependency,
 };
 
 export async function initPlayingController(context: Context, params: Data) {
@@ -59,12 +59,12 @@ export async function initPlayingController(context: Context, params: Data) {
   loading.render();
 
   const playingViewStore = resolver.resolve(playingViewStoreDependency);
-  playingViewStore.update(view);
+  playingViewStore.set(view);
 
   const gameStore = gameContext.resolver.resolve(gameStoreDependency);
   await gameStore.ready;
 
-  const viewComponent = resolver.resolve(supplyViewDependency);
+  const viewComponent = resolver.resolve(resourcesViewDependency);
 
   viewComponent.render();
 }

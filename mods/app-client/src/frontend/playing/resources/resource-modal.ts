@@ -1,12 +1,12 @@
 import { Resource, ResourceTarget } from "@common/resources.ts";
 import { button, div, div_nodes, span } from "@acme/dom/nodes.ts";
-import { Channel } from "@acme/dom/channel.ts";
 import { deferred } from "@acme/useful/async.ts";
 import { Result } from "@acme/useful/result.ts";
-import { createSupplyIcon } from "./defs.ts";
+import { createResourceIcon } from "./defs.ts";
+import { Signal } from "@acme/dom/signal.ts";
 
 export class CalculatorStore {
-  public updates = new Channel<[]>();
+  public updates = new Signal();
   public digits = "0";
   public positive = true;
 
@@ -44,13 +44,13 @@ export function createCalculatorButton(digit: number) {
   return root;
 }
 
-export interface SupplyModalOptions {
+export interface ResourceModalOptions {
   count: number;
   resource: Resource;
   target: ResourceTarget;
 }
 
-export function createSupplyModal(options: SupplyModalOptions) {
+export function createResourceModal(options: ResourceModalOptions) {
   const { target, resource: { type, minProduction }, count } = options;
 
   const $input = div("box _counter _wide", "0");
@@ -70,10 +70,10 @@ export function createSupplyModal(options: SupplyModalOptions) {
     div_nodes("modal_container", [
       div("modal_title", `Change your ${target}:`),
       div_nodes("modal_target", [
-        div_nodes(`modal_target-supply _${target}`, [
+        div_nodes(`modal_target-resource _${target}`, [
           div("box _counter", count.toString()),
         ]),
-        createSupplyIcon(type),
+        createResourceIcon(type),
       ]),
       div_nodes("modal_count", [
         span("modal_count-label _left", "by"),
@@ -89,14 +89,12 @@ export function createSupplyModal(options: SupplyModalOptions) {
   ]);
 
   const store = new CalculatorStore();
-  const update = () => {
+  store.updates.on(() => {
     $input.textContent = store.getValue();
     $operator.textContent = store.positive ? "-" : "+";
     const valid = count + store.getNumber() < minProduction;
     $confirm.toggleAttribute("disabled", valid);
-  };
-  store.updates.on(update);
-  update();
+  });
 
   $calculator.addEventListener("click", (event) => {
     const $target = event.target as HTMLElement;

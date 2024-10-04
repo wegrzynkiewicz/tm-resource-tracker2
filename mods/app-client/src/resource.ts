@@ -16,7 +16,7 @@ export function createResource(resource: Resource) {
       width: "32",
       height: "32",
       alt: `${type} icon`,
-      src: `/images/supplies/${type}.svg`,
+      src: `/images/resources/${type}.svg`,
     }),
   ]);
 }

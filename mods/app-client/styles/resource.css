@@ -1,4 +1,4 @@
-.supplies {
+.resources {
   align-items: center;
   display: grid;
   gap: 0;
@@ -10,7 +10,7 @@
   width: 100%;
 }
 
-.supplies_production {
+.resources_production {
   background-repeat: repeat;
   background-size: 10px;
   background-image: var(--bg-production), var(--gradient-production-background);
@@ -24,7 +24,7 @@
   width: 100%;
 }
 
-.supplies_round {
+.resources_round {
   --size: 60px;
   -webkit-text-stroke: 1px black;
   align-items: center;
@@ -43,54 +43,54 @@
   width: var(--size);
 }
 
-.supply_icon {
+.resource_icon {
   width: 64px;
   height: 64px;
 }
 
-.supply {
+.resource {
   min-height: 85px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.supply._production {
+.resource._production {
   grid-column: production / icons;
 }
 
-.supply._icon {
+.resource._icon {
   grid-column: icons / amount;
 }
 
-.supply._amount {
+.resource._amount {
   grid-column: amount / end;
 }
 
-.supply._points {
+.resource._points {
   grid-row: 1 / 2;
 }
 
-.supply._gold {
+.resource._gold {
   grid-row: 2 / 3;
 }
 
-.supply._steel {
+.resource._steel {
   grid-row: 3 / 4;
 }
 
-.supply._titan {
+.resource._titan {
   grid-row: 4 / 5;
 }
 
-.supply._plant {
+.resource._plant {
   grid-row: 5 / 6;
 }
 
-.supply._energy {
+.resource._energy {
   grid-row: 6 / 7;
 }
 
-.supply._heat {
+.resource._heat {
   grid-row: 7 / 8;
 }

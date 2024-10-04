@@ -9,7 +9,7 @@ export const playingViewLayout = new StandaloneLayout({
     name: "playingView",
     type: "PlayingView",
     description: "The view of the playing screen",
-    values: ["supplies", "projects", "histories", "settings"],
+    values: ["resources", "projects", "histories", "settings"],
   }),
 });
 

@@ -6,10 +6,10 @@ import { controllerRunnerDependency } from "../../controller.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { frontendScopeContract } from "../../../defs.ts";
 import { playingPathFactory } from "../routes.ts";
-import { playingViewStoreDependency } from "./playing-view-store.ts";
+import { playingViewStoreDependency } from "./defs.ts";
 
 const buttons = [
-  { view: "supplies", icon: "box", name: "Supplies" },
+  { view: "resources", icon: "box", name: "Resources" },
   { view: "projects", icon: "projects", name: "Projects" },
   { view: "histories", icon: "clock", name: "History" },
   { view: "settings", icon: "gear", name: "Settings" },
@@ -34,11 +34,9 @@ export function provideToolbar(resolver: DependencyResolver) {
     $item.addEventListener("click", () => {
       controllerRunner.run(playingPathFactory(view));
     });
-    const update = (playingView: PlayingView) => {
-      $item.classList.toggle("_active", playingView === view);
-    };
-    playingViewStore.updates.on(update);
-    update(playingViewStore.view);
+    playingViewStore.updates.on(() => {
+      $item.classList.toggle("_active", playingViewStore.view === view);
+    });
     return $item;
   };
 
