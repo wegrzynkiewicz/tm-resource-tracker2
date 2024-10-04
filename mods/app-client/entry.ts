@@ -14,7 +14,7 @@ import { initControllerRouter } from "./src/frontend/routes.ts";
 import { Context, createContext } from "@acme/dependency/context.ts";
 import { BasicLogFilter } from "@acme/logger/basic-log-filter.ts";
 
-export async function initLogChannel(globalContext: Context): Promise<void> {
+async function initLogChannel(globalContext: Context): Promise<void> {
   const { resolver } = globalContext;
   const channel = resolver.resolve(logChannelDependency);
   const handler = new BrowserLogHandler(
