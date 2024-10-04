@@ -1,5 +1,5 @@
 import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
-import { Channel } from "@acme/dependency/channel.ts";
+import { Channel } from "@acme/dom/channel.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";

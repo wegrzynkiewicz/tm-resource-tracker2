@@ -17,7 +17,7 @@ export function createJoinModal() {
     name: "name",
     placeholder: "Your name",
   });
-  const colorBox = createColorSelectorBox("color");
+  const colorBox = createColorSelectorBox();
   const $cancel = div("box _button", "Cancel");
   const $join = div("box _button", "Join");
 
@@ -41,8 +41,11 @@ export function createJoinModal() {
   });
 
   $join.addEventListener("click", () => {
-    const data = new FormData($root);
-    const payload = Object.fromEntries(data);
+    const payload = {
+      gameId: gameBox.$input.value,
+      name: nameBox.$input.value,
+      color: colorBox.selector.getValue()?.key,
+    }
     const result = parseGameJoinC2SReqDTO(payload);
     const value = unwrapLayoutResult(result, "invalid-player");
     defer.resolve([true, value]);

@@ -13,7 +13,7 @@ import { ServerNormalCAContextFactory } from "../base/normal-ca-context-factory.
 import { normalCAContextFactoryDependency, normalCARouterDependency } from "@acme/control-action/normal/defs.ts";
 import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
 import { initServerNormalCARouter } from "../base/normal-ca-router.ts";
-import { Channel } from "@acme/dependency/channel.ts";
+import { Channel } from "@acme/dom/channel.ts";
 import { playerConnectedChannelDependency, playerDisconnectedChannelDependency } from "./defs.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 

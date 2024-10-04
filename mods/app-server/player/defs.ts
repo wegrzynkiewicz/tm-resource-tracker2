@@ -1,4 +1,4 @@
-import { Channel } from "@acme/dependency/channel.ts";
+import { Channel } from "@acme/dom/channel.ts";
 import { serverGameScopeContract } from "../defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { ServerPlayerContext } from "./player-context.ts";

@@ -12,7 +12,7 @@ export function provideGameSyncS2CNotNormalCAHandler(resolver: DependencyResolve
   const gameStore = resolver.resolve(gameStoreDependency);
   const handle = async (envelope: NormalCAEnvelopeDTO) => {
     const { players } = envelope.data as GameSyncS2CNotDTO;
-    playersStore.setPlayers(players);
+    playersStore.set(players);
     gameStore.sync();
   };
   return { handle };

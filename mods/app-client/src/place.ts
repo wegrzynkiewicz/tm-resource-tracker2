@@ -1,5 +1,5 @@
 import { comment } from "@acme/dom/nodes.ts";
-import { Channel } from "@acme/dependency/channel.ts";
+import { Channel } from "@acme/dom/channel.ts";
 
 export type SlotNode = Comment | Element | Text;
 

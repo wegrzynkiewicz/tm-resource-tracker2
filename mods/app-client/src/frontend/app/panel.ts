@@ -1,43 +1,57 @@
-import { div_nodes } from "@acme/dom/nodes.ts";
+import { IterableStore } from '@acme/dom/defs.ts';
+import { NumberStore } from '@acme/dom/number-store.ts';
+import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { clamp } from "@acme/useful/numbers.ts";
-import { SelectorStore } from "../utils/selector.ts";
+import { Channel } from "@acme/dom/channel.ts";
 
-export function createPanel(store: SelectorStore, nodes: Node[]) {
-  const items = nodes.map((node) => div_nodes("panel_item", [node]))
-  const $root = div_nodes("panel _transition", items);
+export function createPanel(
+  indexStore: NumberStore,
+  nodesStore: IterableStore<Node>,
+) {
+  const $container = div("panel_container _transition");
+  const $root = div_nodes("panel", [$container]);
 
   let startX = 0;
   let currentX = 0;
   let parallax = 0;
-  const total = store.options.length - 1;
 
-  const update = (index: number) => {
-    parallax = index;
-    $root.classList.add("_transition");
-    document.documentElement.style.setProperty("--animate-parallax-current", parallax.toString());
+  const swipes = new Channel<[number]>();
+
+  nodesStore.updates.on(() => {
+    const items = nodesStore.items.map((node) => div_nodes("panel_item", [node]));
+    $container.replaceChildren(...items);
+  });
+
+  const animate = (value: number) => {
+    document.documentElement.style.setProperty("--animate-parallax-current", value.toString());
   }
-  store.updates.on(update);
-  update(0);
 
-  $root.addEventListener("pointerdown", (event) => {
+  indexStore.updates.on(() => {
+    parallax = indexStore.value;
+    animate(parallax);
+  });
+
+  $container.addEventListener("pointerdown", (event) => {
     startX = event.clientX;
     currentX = 0;
-    $root.classList.remove("_transition");
+    $container.classList.remove("_transition");
   });
 
-  $root.addEventListener("pointerup", (event) => {
+  $container.addEventListener("pointerup", () => {
     if (Math.abs(currentX) > 50) {
       parallax += currentX > 0 ? 1 : -1;
-      parallax = clamp(parallax, 0, total);
+      parallax = clamp(parallax, 0, nodesStore.length - 1);
+      swipes.emit(parallax);
     }
-    store.setIndex(parallax);
+    $container.classList.add("_transition");
+    animate(parallax);
   });
 
-  $root.addEventListener("pointermove", (event) => {
+  $container.addEventListener("pointermove", (event) => {
+    const width = $root.clientWidth;
     currentX = startX - event.clientX;
-    const ele = parallax + (currentX / 500);
-    document.documentElement.style.setProperty("--animate-parallax-current", ele.toString());
+    animate(parallax + (currentX / width));
   });
 
-  return $root;
+  return { $root, swipes };
 }

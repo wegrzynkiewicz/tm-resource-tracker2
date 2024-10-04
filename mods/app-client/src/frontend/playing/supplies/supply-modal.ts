@@ -1,6 +1,6 @@
 import { Resource, ResourceTarget } from "@common/resources.ts";
 import { button, div, div_nodes, span } from "@acme/dom/nodes.ts";
-import { Channel } from "@acme/dependency/channel.ts";
+import { Channel } from "@acme/dom/channel.ts";
 import { deferred } from "@acme/useful/async.ts";
 import { Result } from "@acme/useful/result.ts";
 import { createSupplyIcon } from "./defs.ts";

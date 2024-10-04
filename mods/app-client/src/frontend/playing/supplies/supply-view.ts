@@ -1,3 +1,4 @@
+import { MapperStore } from '@acme/dom/mapper-store.ts';
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { docTitleDependency } from "../../app/doc-title.ts";
@@ -9,13 +10,16 @@ import { createSupplyPanel } from "./supply-item.ts";
 import { ResourceStore } from "@common/resources.ts";
 import { modalManagerDependency } from "../../../modal.ts";
 import { createPanel } from "../../app/panel.ts";
-import { SelectorStore } from "../../utils/selector.ts";
+import { playersStoreDependency } from "../../../logic/player/players-store.ts";
+import { currentPlayerStoreDependency } from "../defs.ts";
 
 export function provideSupplyView(resolver: DependencyResolver) {
   const app = resolver.resolve(playingAppViewDependency);
   const top = resolver.resolve(playingTopDependency);
   const modalManager = resolver.resolve(modalManagerDependency);
   const docTitle = resolver.resolve(docTitleDependency);
+  const playersStore = resolver.resolve(playersStoreDependency);
+  const currentPlayerStore = resolver.resolve(currentPlayerStoreDependency);
 
   const createPlayerSupplyPanel = () => {
     const store = new ResourceStore();
@@ -23,16 +27,9 @@ export function provideSupplyView(resolver: DependencyResolver) {
     return $root;
   };
 
-  const playerIndex = new SelectorStore([
-    { key: "black", name: "Black" },
-    { key: "blue", name: "Blue" },
-    { key: "green", name: "Green" },
-    { key: "red", name: "Red" },
-    { key: "yellow", name: "Yellow" },
-  ]);
-
-  const items = [1, 2, 3, 4, 5].map(createPlayerSupplyPanel);
-  const $root = createPanel(playerIndex, items);
+  const panelsStore = new MapperStore(playersStore, createPlayerSupplyPanel);
+  const { $root, swipes } = createPanel(currentPlayerStore, panelsStore);
+  swipes.on((index) => currentPlayerStore.set(index));
 
   const render = () => {
     docTitle.setTitle("Supplies");

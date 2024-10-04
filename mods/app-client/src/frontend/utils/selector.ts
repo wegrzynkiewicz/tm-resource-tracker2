@@ -1,75 +1,59 @@
-import { Channel } from "@acme/dependency/channel.ts";
+import { Channel } from "@acme/dom/channel.ts";
 import { svg_icon } from "./svg.ts";
-import { div_nodes, input, span } from "@acme/dom/nodes.ts";
-import { clamp } from "@acme/useful/numbers.ts";
+import { div, div_nodes, span } from "@acme/dom/nodes.ts";
+import { NumberStore } from "@acme/dom/number-store.ts";
+import { IterableStore } from "@acme/dom/defs.ts";
 
-export interface SelectorOption {
-  readonly key: string;
-  readonly name: string;
-}
-
-export class SelectorStore {
-  public index = 0;
-  public readonly updates = new Channel<[number]>();
-
-  public constructor(
-    public readonly options: SelectorOption[],
-  ) {}
-
-  public setIndex(index: number) {
-    this.index = clamp(index, 0, this.options.length - 1);
-    this.updates.emit(this.index);
-  }
-
-  public getValue(): SelectorOption {
-    return this.options[this.index];
-  }
-
-  public dec() {
-    this.setIndex(this.index - 1);
-  }
-
-  public inc() {
-    this.setIndex(this.index + 1);
-  }
-}
-
-export function createSelectorOption(option: SelectorOption) {
-  const { key, name } = option;
+export function createSelectorOption(item: SelectorItem) {
   const $content = div_nodes("selector_panel-item", [
-    span(`player-cube _${key}`),
-    span("text", name),
+    span(`player-cube _${item.color}`),
+    span("text", item.name),
   ]);
-  $content.dataset.key = key;
+  $content.dataset.key = item.key;
   return $content;
 }
 
+export interface SelectorItem {
+  key: string;
+  color: string;
+  name: string;
+}
+
 export function createSelector(
-  name: string,
-  store: SelectorStore,
+  indexStore: NumberStore,
+  itemsStore: IterableStore<SelectorItem>,
 ) {
+  const moves = new Channel<[number]>();
+  
+  let leftEnabled = true;
+  let rightEnabled = true;
+
   const $left = svg_icon("selector_icon", "arrow-left");
-  $left.addEventListener("click", () => store.dec());
+  $left.addEventListener("click", () => leftEnabled && moves.emit(-1));
 
   const $right = svg_icon("selector_icon", "arrow-right");
-  $right.addEventListener("click", () => store.inc());
+  $right.addEventListener("click", () => rightEnabled && moves.emit(1));
 
-  const $panel = div_nodes("selector_panel", [
-    div_nodes("selector_panel-container", store.options.map(createSelectorOption)),
-  ]);
-  const $input = input("selector_input");
-  $input.name = name;
-  $input.type = "hidden";
+  const $container = div("selector_panel-container");
+  const $panel = div_nodes("selector_panel", [$container]);
+  const $root = div_nodes("selector", [$left, $panel, $right]);
 
-  const $root = div_nodes("selector", [$left, $panel, $input, $right]);
-  const update = (index: number) => {
-    $input.value = store.getValue().key;
-    $panel.style.setProperty("--index", `${index}`);
-    $left.classList.toggle("_disabled", index === 0);
-    $right.classList.toggle("_disabled", index === store.options.length - 1);
-  };
-  store.updates.on(update);
-  update(0);
+  itemsStore.updates.on(() => {
+    $container.replaceChildren(...itemsStore.items.map(createSelectorOption));
+  });
 
-  return $root;
+  indexStore.updates.on(() => {
+    const { value } = indexStore;
+    $panel.style.setProperty("--index", `${value}`);
+    leftEnabled = value > 0;
+    rightEnabled = value < itemsStore.length - 1;
+    $left.classList.toggle("_disabled", leftEnabled === false);
+    $right.classList.toggle("_disabled", rightEnabled === false);
+  });
+
+  const getValue = (): SelectorItem | undefined => {
+    return itemsStore.items[indexStore.value];
+  }
+
+  return { $root, getValue, moves };
 }

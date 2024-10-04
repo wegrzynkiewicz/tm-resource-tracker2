@@ -1,4 +1,4 @@
-import { Channel } from "@acme/dependency/channel.ts";
+import { Channel } from "@acme/dom/channel.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { frontendScopeContract } from "../../../defs.ts";
 import { appNameDependency } from "./app-name-config.ts";

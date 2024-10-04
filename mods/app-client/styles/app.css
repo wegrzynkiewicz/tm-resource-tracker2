@@ -58,7 +58,7 @@ body {
   background-repeat: no-repeat;
   grid-column: left / right;
   grid-row: content / toolbar;
-  transition: background-position 0.5s ease-out;
+  transition: background-position 0.3s ease-out;
   z-index: 1;
 }
 
@@ -210,6 +210,11 @@ body {
 }
 
 .panel {
+  height: 100%;
+  width: 100%;
+}
+
+.panel_container {
   display: grid;
   grid-auto-flow: column;
   margin-left: calc(-100lvw * var(--animate-parallax-current));
@@ -217,7 +222,8 @@ body {
   overflow-x: hidden;
   touch-action: pan-y;
 }
-.panel._transition {
+
+.panel_container._transition {
   transition: margin 0.3s ease-out;
 }
 

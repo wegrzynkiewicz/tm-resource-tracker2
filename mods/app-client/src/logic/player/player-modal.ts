@@ -12,7 +12,7 @@ export function createPlayerModal() {
     name: "name",
     placeholder: "Your name",
   });
-  const colorBox = createColorSelectorBox("color");
+  const colorBox = createColorSelectorBox();
   const $cancel = div("box _button", "Cancel");
   const $create = div("box _button", "Create");
 
@@ -35,8 +35,10 @@ export function createPlayerModal() {
   });
 
   $create.addEventListener("click", () => {
-    const data = new FormData($root);
-    const payload = Object.fromEntries(data);
+    const payload = {
+      name: nameBox.$input.value,
+      color: colorBox.selector.getValue()?.key,
+    }
     const result = parseGameCreateC2SReqDTO(payload);
     const value = unwrapLayoutResult(result, "invalid-player");
     defer.resolve([true, value]);

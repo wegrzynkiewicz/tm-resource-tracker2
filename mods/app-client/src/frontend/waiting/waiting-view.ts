@@ -181,7 +181,7 @@ export function provideWaitingView(resolver: DependencyResolver) {
   ]);
 
   playersStore.updates.on(() => {
-    const players = playersStore.players.map(createPlayer);
+    const players = playersStore.items.map(createPlayer);
     $players.replaceChildren(...players);
   });
 

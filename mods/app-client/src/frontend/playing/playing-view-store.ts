@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Channel } from "@acme/dependency/channel.ts";
+import { Channel } from "@acme/dom/channel.ts";
 import { PlayingView } from "./playing-view.layout.compiled.ts";
 import { frontendScopeContract } from "../../../defs.ts";
 
