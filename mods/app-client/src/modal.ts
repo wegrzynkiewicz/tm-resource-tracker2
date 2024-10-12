@@ -15,7 +15,10 @@ export function createQuestionModal(
   },
 ) {
   const $cancel = button("box _button", "Cancel");
+  $cancel.type = "button";
+
   const $confirm = button("box _button", confirmText);
+  $confirm.type = "button";
 
   const $root = form_nodes("modal", [
     div_nodes("modal_container", [
@@ -28,14 +31,8 @@ export function createQuestionModal(
   ]);
 
   const { promise, resolve } = deferred<boolean>();
-  const createClickListener = (result: boolean) => {
-    return (event: Event) => {
-      event.preventDefault();
-      resolve(result);
-    };
-  };
-  $confirm.addEventListener("click", createClickListener(true));
-  $cancel.addEventListener("click", createClickListener(false));
+  $confirm.addEventListener("click", () => resolve(true));
+  $cancel.addEventListener("click", () => resolve(false));
 
   return { ready: promise, $root };
 }
