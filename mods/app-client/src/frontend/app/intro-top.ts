@@ -9,9 +9,15 @@ export function provideIntroTop(resolver: DependencyResolver) {
 
   const label = div("top_label", store.title);
   const $root = div_nodes("top", [label]);
-  store.updates.on(() => label.textContent = store.title);
 
-  return { $root };
+  const update = () => label.textContent = store.title;
+  store.updates.on(update);
+
+  const dispose = () => {
+    store.updates.off(update);
+  }
+
+  return { $root, dispose };
 }
 
 export const introTopDependency = defineDependency({

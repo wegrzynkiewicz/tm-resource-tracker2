@@ -34,9 +34,9 @@ export function provideToolbar(resolver: DependencyResolver) {
     $item.addEventListener("click", () => {
       controllerRunner.run(playingPathFactory(view));
     });
-    playingViewStore.updates.on(() => {
-      $item.classList.toggle("_active", playingViewStore.view === view);
-    });
+    const update = () => $item.classList.toggle("_active", playingViewStore.view === view);
+    playingViewStore.updates.on(update);
+    update();
     return $item;
   };
 

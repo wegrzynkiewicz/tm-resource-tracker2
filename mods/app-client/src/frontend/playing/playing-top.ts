@@ -26,8 +26,9 @@ export function providePlayingTop(resolver: DependencyResolver) {
     ]),
   ]);
   const updateTitle = (title: string) => $label.textContent = title;
+  const dispose = () => selector.dispose();
 
-  return { $root, updateTitle };
+  return { $root, dispose, updateTitle };
 }
 
 export const playingTopDependency = defineDependency({

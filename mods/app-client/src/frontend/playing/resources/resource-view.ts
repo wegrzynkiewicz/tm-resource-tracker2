@@ -2,7 +2,6 @@ import { MapperStore } from "@acme/dom/mapper-store.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { docTitleDependency } from "../../app/doc-title.ts";
-import { View } from "../../../common.ts";
 import { controllerScopeContract } from "../../../../defs.ts";
 import { playingAppViewDependency } from "../playing-app-view.ts";
 import { playingTopDependency } from "../playing-top.ts";
@@ -28,21 +27,28 @@ export function provideResourcesView(resolver: DependencyResolver) {
   };
 
   const panelsStore = new MapperStore(playersStore, createPlayerResourcePanel);
-  const { $root, swipes } = createPanel(currentPlayerStore, panelsStore);
-  swipes.on((index) => currentPlayerStore.set(index));
+  const panel = createPanel(currentPlayerStore, panelsStore);
+  panel.swipes.on((index) => currentPlayerStore.set(index));
+
+  const $root = panel.$root;
 
   const render = () => {
     docTitle.setTitle("Resources");
     top.updateTitle("Player's resources");
     app.topSlot.attach(top.$root);
-    app.contentSlot.attach($root);
+    app.contentSlot.attach(panel.$root);
     app.render();
   };
 
-  return { $root, render };
+  const dispose = () => {
+    panelsStore.dispose();
+    panel.dispose();
+  };
+
+  return { $root, dispose, render };
 }
 
-export const resourcesViewDependency = defineDependency<View>({
+export const resourcesViewDependency = defineDependency({
   provider: provideResourcesView,
   scope: controllerScopeContract,
 });

@@ -17,19 +17,23 @@ export function createPanel(
 
   const swipes = new Channel<[number]>();
 
-  nodesStore.updates.on(() => {
+  const updateNodes = () => {
     const items = nodesStore.items.map((node) => div_nodes("panel_item", [node]));
     $container.replaceChildren(...items);
-  });
+  };
+  nodesStore.updates.on(updateNodes);
+  updateNodes();
 
   const animate = (value: number) => {
     document.documentElement.style.setProperty("--animate-parallax-current", value.toString());
   };
 
-  indexStore.updates.on(() => {
+  const updateIndex = () => {
     parallax = indexStore.value;
-    animate(parallax);
-  });
+    animate(indexStore.value);
+  }
+  indexStore.updates.on(updateIndex);
+  updateIndex();
 
   $container.addEventListener("pointerdown", (event) => {
     startX = event.clientX;
@@ -53,5 +57,10 @@ export function createPanel(
     animate(parallax + (currentX / width));
   });
 
-  return { $root, swipes };
+  const dispose = () => {
+    nodesStore.updates.off(updateNodes);
+    indexStore.updates.off(updateIndex);
+  };
+
+  return { $root, dispose, swipes };
 }

@@ -14,5 +14,8 @@ export function createColorSelectorBox() {
     selector.$root,
   ]);
   selector.moves.on((move) => indexStore.add(move));
-  return { $root, selector };
+  const dispose = () => {
+    selector.dispose();
+  }
+  return { $root, dispose, selector };
 }

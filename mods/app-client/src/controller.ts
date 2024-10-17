@@ -5,6 +5,7 @@ import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { Data } from "@acme/useful/types.ts";
 import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
 import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { Channel } from "@acme/dom/channel.ts";
 
 export type ControllerInitializer = (context: Context, params: Data) => Promise<void>;
 export type ControllerImporter = () => Promise<ControllerInitializer>;
@@ -49,6 +50,7 @@ export class NaiveControllerRouter implements ControllerRouter {
 
 export class ControllerRunner {
   public currentPathname: string = "";
+  public currentContext: Context | null = null;
 
   public constructor(
     private readonly router: ControllerRouter,
@@ -64,7 +66,13 @@ export class ControllerRunner {
     }
     const { importer, params } = route;
 
-    const controllerContext = createContext({
+    if (this.currentContext) {
+      const abort = this.currentContext.resolver.resolve(controllerAbortDependency);
+      abort.emit();
+      this.currentContext = null;
+    }
+
+    this.currentContext = createContext({
       identifier: {},
       name: "CONTROLLER",
       scopes: {
@@ -77,7 +85,7 @@ export class ControllerRunner {
 
     try {
       const initializer = await importer();
-      await initializer(controllerContext, params);
+      await initializer(this.currentContext, params);
     } catch (error) {
       throw new Panic("controller-initialization-failed", { controller: importer.name, error });
     }
@@ -94,4 +102,9 @@ export function provideControllerRunner(resolver: DependencyResolver) {
 export const controllerRunnerDependency = defineDependency({
   provider: provideControllerRunner,
   scope: frontendScopeContract,
+});
+
+export const controllerAbortDependency = defineDependency({
+  provider: () => new Channel<[]>(),
+  scope: controllerScopeContract,
 });

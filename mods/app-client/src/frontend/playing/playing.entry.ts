@@ -1,20 +1,18 @@
-import { parsePlayingView, PlayingView } from "./playing-view.layout.compiled.ts";
+import { parsePlayingView } from "./playing-view.layout.compiled.ts";
 import { Context, createContext } from "@acme/dependency/context.ts";
 import { clientGameContextManagerDependency } from "../../logic/game/client-game-context.ts";
 import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { clientGameScopeContract, controllerScopeContract, frontendScopeContract } from "../../../defs.ts";
-import { controllerRunnerDependency } from "../../controller.ts";
+import { controllerAbortDependency, controllerRunnerDependency } from "../../controller.ts";
 import { clientPlayerWSContextManagerDependency } from "../../logic/game/client-player-ws-context.ts";
 import { homePath } from "../routes.ts";
 import { resourcesViewDependency } from "./resources/resource-view.ts";
 import { Data } from "@acme/useful/types.ts";
-import { View } from "../../common.ts";
-import { Dependency } from "@acme/dependency/declaration.ts";
 import { gameStoreDependency } from "../../logic/game/game-store.ts";
 import { loadingViewDependency } from "../../loading-view.ts";
 import { playingViewStoreDependency } from "./defs.ts";
 
-const views: Record<PlayingView, Dependency<View>> = {
+const views = {
   resources: resourcesViewDependency,
   projects: resourcesViewDependency,
   histories: resourcesViewDependency,
@@ -24,6 +22,7 @@ const views: Record<PlayingView, Dependency<View>> = {
 export async function initPlayingController(context: Context, params: Data) {
   const controllerRunner = context.resolver.resolve(controllerRunnerDependency);
   const gameManager = context.resolver.resolve(clientGameContextManagerDependency);
+  const abort = context.resolver.resolve(controllerAbortDependency);
 
   const [result, view] = parsePlayingView(params.view);
   if (!result) {
@@ -67,4 +66,8 @@ export async function initPlayingController(context: Context, params: Data) {
   const viewComponent = resolver.resolve(resourcesViewDependency);
 
   viewComponent.render();
+
+  abort.on(() => {
+    viewComponent.dispose();
+  });
 }

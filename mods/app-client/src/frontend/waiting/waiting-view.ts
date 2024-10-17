@@ -180,10 +180,12 @@ export function provideWaitingView(resolver: DependencyResolver) {
     ]),
   ]);
 
-  playersStore.updates.on(() => {
+  const updatePlayers = () => {
     const players = playersStore.items.map(createPlayer);
     $players.replaceChildren(...players);
-  });
+  };
+  playersStore.updates.on(updatePlayers);
+  updatePlayers();
 
   $change.addEventListener("click", async () => {
     const modal = createPlayerModal();
@@ -225,7 +227,11 @@ export function provideWaitingView(resolver: DependencyResolver) {
     app.render();
   };
 
-  return { $root, render };
+  const dispose = () => {
+    playersStore.updates.off(updatePlayers);
+  };
+
+  return { $root, dispose, render };
 }
 
 export const waitingViewDependency = defineDependency({

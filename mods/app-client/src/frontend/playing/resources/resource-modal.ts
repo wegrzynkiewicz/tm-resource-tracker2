@@ -3,10 +3,10 @@ import { button, div, div_nodes, span } from "@acme/dom/nodes.ts";
 import { deferred } from "@acme/useful/async.ts";
 import { Result } from "@acme/useful/result.ts";
 import { createResourceIcon } from "./defs.ts";
-import { Signal } from "@acme/dom/signal.ts";
+import { Channel } from "@acme/dom/channel.ts";
 
 export class CalculatorStore {
-  public updates = new Signal();
+  public updates = new Channel<[]>();
   public digits = "0";
   public positive = true;
 
@@ -89,12 +89,14 @@ export function createResourceModal(options: ResourceModalOptions) {
   ]);
 
   const store = new CalculatorStore();
-  store.updates.on(() => {
+  const update = () => {
     $input.textContent = store.getValue();
     $operator.textContent = store.positive ? "-" : "+";
     const valid = count + store.getNumber() < minProduction;
     $confirm.toggleAttribute("disabled", valid);
-  });
+  }
+  store.updates.on(update);
+  update();
 
   $calculator.addEventListener("click", (event) => {
     const $target = event.target as HTMLElement;

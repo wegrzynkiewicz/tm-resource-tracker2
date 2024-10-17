@@ -38,22 +38,31 @@ export function createSelector(
   const $panel = div_nodes("selector_panel", [$container]);
   const $root = div_nodes("selector", [$left, $panel, $right]);
 
-  itemsStore.updates.on(() => {
+  const updateItems = () => {
     $container.replaceChildren(...itemsStore.items.map(createSelectorOption));
-  });
+  };
+  itemsStore.updates.on(updateItems);
+  updateItems();
 
-  indexStore.updates.on(() => {
+  const updateIndex = () => {
     const { value } = indexStore;
     $panel.style.setProperty("--index", `${value}`);
     leftEnabled = value > 0;
     rightEnabled = value < itemsStore.length - 1;
     $left.classList.toggle("_disabled", leftEnabled === false);
     $right.classList.toggle("_disabled", rightEnabled === false);
-  });
+  };
+  indexStore.updates.on(updateIndex);
+  updateIndex();
 
   const getValue = (): SelectorItem | undefined => {
     return itemsStore.items[indexStore.value];
   };
 
-  return { $root, getValue, moves };
+  const dispose = () => {
+    itemsStore.updates.off(updateItems);
+    indexStore.updates.off(updateIndex);
+  }
+
+  return { $root, dispose, getValue, moves };
 }
