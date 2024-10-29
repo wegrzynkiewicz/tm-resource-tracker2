@@ -94,7 +94,7 @@ export function createResourceModal(options: ResourceModalOptions) {
     $operator.textContent = store.positive ? "-" : "+";
     const valid = count + store.getNumber() < minProduction;
     $confirm.toggleAttribute("disabled", valid);
-  }
+  };
   store.updates.on(update);
   update();
 

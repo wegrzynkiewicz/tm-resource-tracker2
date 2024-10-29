@@ -32,9 +32,9 @@ export class ClientGameContextManager {
     const { gameId, token, player } = payload;
 
     const gameContext = new Context({
-        [globalScopeContract.token]: this.frontendContext.scopes[globalScopeContract.token],
-        [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
-        [clientGameScopeContract.token]: new Scope(clientGameScopeContract),
+      [globalScopeContract.token]: this.frontendContext.scopes[globalScopeContract.token],
+      [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
+      [clientGameScopeContract.token]: new Scope(clientGameScopeContract),
     });
 
     localStorage.setItem("token", token);

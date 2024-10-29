@@ -15,7 +15,7 @@ export function provideIntroTop(context: Context) {
 
   const dispose = () => {
     store.updates.off(update);
-  }
+  };
 
   return { $root, dispose };
 }

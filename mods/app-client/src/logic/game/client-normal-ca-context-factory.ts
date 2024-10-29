@@ -13,11 +13,11 @@ export class ClientNormalCAContextFactory implements NormalCAContextFactory {
   public createCAContext(envelope: NormalCAEnvelopeDTO): Context {
     const { id, name } = envelope;
     const caContext = new Context({
-        [globalScopeContract.token]: this.context.scopes[globalScopeContract.token],
-        [frontendScopeContract.token]: this.context.scopes[frontendScopeContract.token],
-        [clientGameScopeContract.token]: this.context.scopes[clientGameScopeContract.token],
-        [duplexScopeContract.token]: this.context.scopes[duplexScopeContract.token],
-        [caScopeContract.token]: new Scope(caScopeContract),
+      [globalScopeContract.token]: this.context.scopes[globalScopeContract.token],
+      [frontendScopeContract.token]: this.context.scopes[frontendScopeContract.token],
+      [clientGameScopeContract.token]: this.context.scopes[clientGameScopeContract.token],
+      [duplexScopeContract.token]: this.context.scopes[duplexScopeContract.token],
+      [caScopeContract.token]: new Scope(caScopeContract),
     });
     return caContext;
   }

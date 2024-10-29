@@ -5,7 +5,11 @@ import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "../../qcmf5/mods/dependency/context.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
-import { serverPlayerContextManagerDependency, serverPlayerDTODependency, serverPlayerIdDependency } from "../player/player-context.ts";
+import {
+  serverPlayerContextManagerDependency,
+  serverPlayerDTODependency,
+  serverPlayerIdDependency,
+} from "../player/player-context.ts";
 import { webServerScopeContract } from "@acme/dependency/scopes.ts";
 import { parseGameCreateC2SReqDTO } from "@common/game/game-create-c2s-req-dto.layout.compiled.ts";
 

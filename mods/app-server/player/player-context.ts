@@ -9,7 +9,6 @@ import { DEBUG, loggerDependency } from "@acme/logger/defs.ts";
 import { playerCreatedChannelDependency, playerDeletedChannelDependency } from "./defs.ts";
 import { Context } from "@acme/dependency/context.ts";
 
-
 export interface ServerPlayerInput {
   color: ColorKey;
   name: string;

@@ -72,9 +72,9 @@ export class ControllerRunner {
     }
 
     this.currentContext = new Context({
-        [globalScopeContract.token]: this.frontendContext.scopes[globalScopeContract.token],
-        [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
-        [controllerScopeContract.token]: new Scope(controllerScopeContract),
+      [globalScopeContract.token]: this.frontendContext.scopes[globalScopeContract.token],
+      [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
+      [controllerScopeContract.token]: new Scope(controllerScopeContract),
     });
 
     try {

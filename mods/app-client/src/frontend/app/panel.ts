@@ -31,7 +31,7 @@ export function createPanel(
   const updateIndex = () => {
     parallax = indexStore.value;
     animate(indexStore.value);
-  }
+  };
   indexStore.updates.on(updateIndex);
   updateIndex();
 

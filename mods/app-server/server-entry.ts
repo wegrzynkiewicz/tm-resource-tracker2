@@ -19,7 +19,7 @@ export async function initLogChannel(globalContext: Context): Promise<void> {
 
 async function start() {
   const globalContext = new Context({
-      [globalScopeContract.token]: new Scope(globalScopeContract),
+    [globalScopeContract.token]: new Scope(globalScopeContract),
   });
 
   await initServerConfig(globalContext);

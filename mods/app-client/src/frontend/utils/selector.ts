@@ -62,7 +62,7 @@ export function createSelector(
   const dispose = () => {
     itemsStore.updates.off(updateItems);
     indexStore.updates.off(updateIndex);
-  }
+  };
 
   return { $root, dispose, getValue, moves };
 }

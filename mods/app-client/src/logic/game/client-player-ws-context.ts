@@ -33,10 +33,10 @@ export class ClientPlayerWSContextManager {
     const socket = new WebSocket(url.toString());
 
     const context = new Context({
-        [globalScopeContract.token]: this.clientGameContext.scopes[globalScopeContract.token],
-        [frontendScopeContract.token]: this.clientGameContext.scopes[frontendScopeContract.token],
-        [clientGameScopeContract.token]: this.clientGameContext.scopes[clientGameScopeContract.token],
-        [duplexScopeContract.token]: new Scope(duplexScopeContract),
+      [globalScopeContract.token]: this.clientGameContext.scopes[globalScopeContract.token],
+      [frontendScopeContract.token]: this.clientGameContext.scopes[frontendScopeContract.token],
+      [clientGameScopeContract.token]: this.clientGameContext.scopes[clientGameScopeContract.token],
+      [duplexScopeContract.token]: new Scope(duplexScopeContract),
     });
     context.inject(webSocketDependency, socket);
 

@@ -7,7 +7,7 @@ export function provideDocTitle(context: Context) {
   const appName = context.resolve(appNameDependency);
   const setTitle = (title: string) => {
     document.title = `${title} - ${appName}`;
-  }
+  };
   return { setTitle };
 }
 

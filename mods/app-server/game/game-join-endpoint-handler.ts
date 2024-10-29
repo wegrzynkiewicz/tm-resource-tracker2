@@ -5,7 +5,11 @@ import { EndpointHandler } from "@acme/web/defs.ts";
 import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-parser.ts";
 import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
-import { serverPlayerContextManagerDependency, serverPlayerDTODependency, serverPlayerIdDependency } from "../player/player-context.ts";
+import {
+  serverPlayerContextManagerDependency,
+  serverPlayerDTODependency,
+  serverPlayerIdDependency,
+} from "../player/player-context.ts";
 import { webServerScopeContract } from "@acme/dependency/scopes.ts";
 import { parseGameJoinC2SReqDTO } from "@common/game/game-join-c2s-req-dto.layout.compiled.ts";
 
