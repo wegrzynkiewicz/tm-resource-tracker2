@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "../../../../qcmf5/mods/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { frontendScopeContract } from "../../../defs.ts";
 import { modalManagerDependency } from "../../modal.ts";

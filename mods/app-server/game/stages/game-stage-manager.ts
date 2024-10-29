@@ -1,6 +1,6 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { serverGameScopeContract } from "../../defs.ts";
-import { Context } from "../../../qcmf5/mods/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { GameStage, startupGameStageDependency } from "./defs.ts";
 
 export class GameStageManager {

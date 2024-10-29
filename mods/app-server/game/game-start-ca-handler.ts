@@ -1,6 +1,6 @@
 import { NormalCAHandler } from "@acme/control-action/normal/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "../../qcmf5/mods/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { caScopeContract } from "@acme/dependency/scopes.ts";
 import { gameStageManagerDependency } from "./stages/game-stage-manager.ts";
 import { playingGameStageDependency } from "./stages/playing-game-stage.ts";

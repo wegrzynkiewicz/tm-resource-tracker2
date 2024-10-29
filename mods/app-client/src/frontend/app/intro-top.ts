@@ -1,7 +1,7 @@
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { topTitleStoreDependency } from "./top-title-store.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "../../../../qcmf5/mods/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { frontendScopeContract } from "../../../defs.ts";
 
 export function provideIntroTop(context: Context) {

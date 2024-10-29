@@ -1,6 +1,6 @@
 import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "../../qcmf5/mods/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-parser.ts";
 import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";

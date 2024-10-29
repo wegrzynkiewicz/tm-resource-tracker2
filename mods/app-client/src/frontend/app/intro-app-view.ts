@@ -4,7 +4,7 @@ import { Slot } from "../../place.ts";
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { introTopDependency } from "./intro-top.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "../../../../qcmf5/mods/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { appSlotDependency } from "./app-slot.ts";
 import { frontendScopeContract } from "../../../defs.ts";
 

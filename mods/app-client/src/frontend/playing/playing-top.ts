@@ -1,6 +1,6 @@
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "../../../../qcmf5/mods/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { frontendScopeContract } from "../../../defs.ts";
 import { currentPlayerStoreDependency } from "./defs.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";

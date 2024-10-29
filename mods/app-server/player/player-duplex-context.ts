@@ -1,5 +1,5 @@
-import { duplexIdDependency, duplexLoggerDependency } from '@acme/control-action/defs.ts';
-import { serverGameIdDependency } from './../game/game-context.ts';
+import { duplexIdDependency, duplexLoggerDependency } from "@acme/control-action/defs.ts";
+import { serverGameIdDependency } from "./../game/game-context.ts";
 import { normalCASenderDependency } from "@acme/control-action/normal/defs.ts";
 import { webSocketNormalCASenderDependency } from "@acme/control-action/transport/ws-normal-ca-sender.ts";
 import { duplexScopeContract, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";

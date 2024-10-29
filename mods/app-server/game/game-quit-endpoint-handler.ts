@@ -1,7 +1,7 @@
 import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "../../qcmf5/mods/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { parseAuthorizationToken } from "@acme/web/build-in/token.ts";
 import { serverPlayerContextManagerDependency } from "../player/player-context.ts";

@@ -1,6 +1,6 @@
 import { MapperStore } from "@acme/dom/mapper-store.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "../../../../../qcmf5/mods/dependency/context.ts";
+import { Context } from "../@acme/dependency/context.ts";
 import { docTitleDependency } from "../../app/doc-title.ts";
 import { controllerScopeContract } from "../../../../defs.ts";
 import { playingAppViewDependency } from "../playing-app-view.ts";

@@ -4,7 +4,7 @@ import { modalManagerDependency } from "../../modal.ts";
 import { frontendScopeContract } from "../../../defs.ts";
 import { docTitleDependency } from "../app/doc-title.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "../../../../qcmf5/mods/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { Slot } from "../../place.ts";
 import { clientGameContextManagerDependency } from "../../logic/game/client-game-context.ts";
 import { controllerRunnerDependency } from "../../controller.ts";

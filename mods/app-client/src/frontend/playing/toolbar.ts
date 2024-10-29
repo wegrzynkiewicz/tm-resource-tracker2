@@ -1,4 +1,4 @@
-import { Context } from "../../../../qcmf5/mods/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { PlayingView } from "./playing-view.layout.compiled.ts";
 import { button_nodes, div_nodes, span } from "@acme/dom/nodes.ts";
 import { svg_icon } from "../utils/svg.ts";

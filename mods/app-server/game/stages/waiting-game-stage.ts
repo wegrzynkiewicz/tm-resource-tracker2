@@ -1,4 +1,4 @@
-import { Context } from "../../../qcmf5/mods/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { playersSyncS2CNotNormalCAContract } from "@common/player/defs.ts";
 import { playerBroadcastDependency } from "../../player/player-broadcast.ts";
 import { serverPlayerContextManagerDependency } from "../../player/player-context.ts";

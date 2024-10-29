@@ -1,4 +1,4 @@
-import { Context } from "../../qcmf5/mods/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
 import { Data } from "@acme/useful/types.ts";
