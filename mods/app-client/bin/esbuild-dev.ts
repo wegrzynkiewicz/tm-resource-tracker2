@@ -33,8 +33,8 @@ const addPureAnnotation: esbuild.Plugin = {
 const ctx = await esbuild.context({
   bundle: true,
   entryPoints: [
-    "mods/app-client/entry.ts",
-    "mods/app-client/entry.css",
+    "mods/app-client/src/entry.ts",
+    "mods/app-client/styles/entry.css",
   ],
   external: [
     "/images/*.jpg",

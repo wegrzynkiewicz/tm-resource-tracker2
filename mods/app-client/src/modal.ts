@@ -1,6 +1,6 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { button, comment, div, div_nodes, form_nodes } from "@acme/dom/nodes.ts";
-import { frontendScopeContract } from "../defs.ts";
+import { frontendScopeContract } from "./defs.ts";
 import { deferred, sleep } from "@acme/useful/async.ts";
 
 export interface Modal<T = unknown> {

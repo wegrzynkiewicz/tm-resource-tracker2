@@ -1,8 +1,8 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { div } from "@acme/dom/nodes.ts";
-import { frontendScopeContract } from "../defs.ts";
-import { introAppViewDependency } from "./frontend/app/intro-app-view.ts";
+import { frontendScopeContract } from "./defs.ts";
+import { introAppViewDependency } from "./app/intro-app-view.ts";
 
 export function provideLoadingView(context: Context) {
   const app = context.resolve(introAppViewDependency);
