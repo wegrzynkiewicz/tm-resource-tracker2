@@ -5,7 +5,7 @@ import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { ColorKey } from "@common/color/color.layout.compiled.ts";
 import { serverPlayerDuplexContextManagerDependency } from "./player-duplex-context.ts";
 import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
-import { DEBUG, loggerDependency } from "@acme/logger/defs.ts";
+import { DEBUG } from "@acme/logger/defs.ts";
 import { playerCreatedChannelDependency, playerDeletedChannelDependency } from "./defs.ts";
 import { Context } from "@acme/dependency/context.ts";
 
@@ -55,8 +55,9 @@ export class ServerPlayerContextManager {
     playerContext.inject(serverPlayerIdDependency, playerId);
     playerContext.inject(serverPlayerDTODependency, player);
 
-    const logger = playerContext.resolve(loggerDependency);
-    logger.log(DEBUG, "player-created");
+    // TODO: add player logger
+    // const logger = playerContext.resolve(loggerDependency);
+    // logger.log(DEBUG, "player-created");
 
     this.players.set(playerId, playerContext);
     this.playerCreated.emit(playerContext, player);

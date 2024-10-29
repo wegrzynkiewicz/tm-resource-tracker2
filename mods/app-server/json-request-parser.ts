@@ -1,10 +1,11 @@
 import { Result } from "@acme/useful/result.ts";
-import { DEBUG, Logger, loggerDependency, WARN } from "@acme/logger/defs.ts";
+import { DEBUG, Logger, WARN } from "@acme/logger/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "../qcmf5/mods/dependency/context.ts";
 import { LayoutParser } from "@acme/layout/runtime/defs.ts";
 import { ErrorDTO } from "@acme/web/docs/error-dto.layout.compiled.ts";
 import { webRequestScopeContract } from "@acme/dependency/scopes.ts";
+import { webRequestLoggerDependency } from "@acme/web/logger.ts";
+import { Context } from "@acme/dependency/context.ts";
 
 export interface ParserResult<TPayload, TParams> {
   payload: TPayload;
@@ -61,7 +62,7 @@ export class JSONRequestParser {
 
 export function provideJSONRequestParser(context: Context) {
   return new JSONRequestParser(
-    context.resolve(loggerDependency),
+    context.resolve(webRequestLoggerDependency),
   );
 }
 

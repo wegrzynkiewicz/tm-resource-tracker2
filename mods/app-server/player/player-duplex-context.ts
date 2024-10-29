@@ -2,7 +2,6 @@ import { normalCASenderDependency } from "@acme/control-action/normal/defs.ts";
 import { webSocketNormalCASenderDependency } from "@acme/control-action/transport/ws-normal-ca-sender.ts";
 import { duplexScopeContract, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { loggerDependency } from "@acme/logger/defs.ts";
 import { logifyWebSocket } from "@acme/web/socket.ts";
 import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
 import { Context } from "@acme/dependency/context.ts";
@@ -12,15 +11,12 @@ import { normalCAContextFactoryDependency, normalCARouterDependency } from "@acm
 import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
 import { initServerNormalCARouter } from "../base/normal-ca-router.ts";
 import { Channel } from "@acme/dom/channel.ts";
-import { playerConnectedChannelDependency, playerDisconnectedChannelDependency } from "./defs.ts";
+import { duplexIdDependency, playerConnectedChannelDependency, playerDisconnectedChannelDependency } from "./defs.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { serverPlayerDTODependency } from "./player-context.ts";
+import { serverPlayerDuplexLoggerDependency } from "./player-logger.ts";
 
-export interface ServerPlayerDuplexContextIdentifier {
-  gameId: string;
-  playerId: string;
-  wsId: string;
-}
+let duplexId = 1;
 
 export class ServerPlayerDuplexContextManager {
   public context: Context | null = null;
@@ -45,9 +41,10 @@ export class ServerPlayerDuplexContextManager {
 
     this.context = context;
 
+    context.inject(duplexIdDependency, duplexId++);
     context.inject(webSocketDependency, socket);
 
-    const logger = context.resolve(loggerDependency);
+    const logger = context.resolve(serverPlayerDuplexLoggerDependency);
     logifyWebSocket(logger, socket);
 
     const factory = new ServerNormalCAContextFactory(context);

@@ -2,10 +2,11 @@ import { defineDependency } from "@acme/dependency/declaration.ts";
 import { InferNormalCAContract, NormalCAContract, NormalCADispatcher } from "@acme/control-action/normal/defs.ts";
 import { NormalCAEnvelopeDTO } from "@acme/control-action/normal/envelope.layout.compiled.ts";
 import { serverGameScopeContract } from "../defs.ts";
-import { Context } from "../../qcmf5/mods/dependency/context.ts";
-import { Logger, loggerDependency, TRACE } from "@acme/logger/defs.ts";
+import { Logger, TRACE } from "@acme/logger/defs.ts";
 import { playerConnectedChannelDependency, playerDisconnectedChannelDependency } from "./defs.ts";
 import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
+import { NullLogger } from "@acme/logger/null-logger.ts";
+import { Context } from "@acme/dependency/context.ts";
 
 export class PlayerBroadcast implements NormalCADispatcher {
   public socketByPlayerId = new Map<string, WebSocket>();
@@ -28,7 +29,7 @@ export class PlayerBroadcast implements NormalCADispatcher {
 }
 
 export function providePlayerBroadcast(context: Context) {
-  const logger = context.resolve(loggerDependency);
+  const logger = new NullLogger() as Logger;
   const playerConnected = context.resolve(playerConnectedChannelDependency);
   const playerDisconnected = context.resolve(playerDisconnectedChannelDependency);
 

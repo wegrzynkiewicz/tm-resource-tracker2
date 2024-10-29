@@ -1,5 +1,5 @@
 import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
-import { DEBUG, loggerDependency } from "@acme/logger/defs.ts";
+import { DEBUG } from "@acme/logger/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { serverGameScopeContract } from "../defs.ts";
@@ -8,6 +8,7 @@ import { playerBroadcastDependency } from "../player/player-broadcast.ts";
 import { gameStageManagerDependency } from "./stages/game-stage-manager.ts";
 import { waitingGameStageDependency } from "./stages/waiting-game-stage.ts";
 import { startupGameStageDependency } from "./stages/defs.ts";
+import { serverGameLoggerDependency } from "./game-logger.ts";
 
 export const serverGameIdDependency = defineDependency<string>({
   scope: serverGameScopeContract,
@@ -48,7 +49,7 @@ export class ServerGameContextManager {
 
     gameContext.resolve(gameStageManagerDependency);
 
-    const logger = gameContext.resolve(loggerDependency);
+    const logger = gameContext.resolve(serverGameLoggerDependency);
     logger.log(DEBUG, "game-created");
 
     this.games.set(gameId, gameContext);
