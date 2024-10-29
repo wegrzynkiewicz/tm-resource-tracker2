@@ -1,5 +1,5 @@
 import { defineDependency, Dependency } from "@acme/dependency/declaration.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../qcmf5/mods/dependency/context.ts";
 import { Scope } from "@acme/dependency/scopes.ts";
 import { Panic } from "@acme/useful/errors.ts";
 import { controllerScopeContract } from "../defs.ts";
@@ -44,7 +44,7 @@ export const actionBinderDependency = defineDependency({
 export class ActionDispatcher {
   public constructor(
     private readonly binder: ActionBinder,
-    private readonly resolver: DependencyResolver,
+    private readonly context: Context,
   ) {}
 
   public dispatch<T>(contract: ActionContract<T>, data: T) {
@@ -52,14 +52,14 @@ export class ActionDispatcher {
     if (binding === undefined) {
       throw new Panic("no-found-action-handler", { contract: contract.type });
     }
-    const handler = this.resolver.resolve(binding.dependency);
+    const handler = this.context.resolve(binding.dependency);
     handler.handle({ contract, data });
   }
 }
 
-export function provideActionDispatcher(resolver: DependencyResolver) {
+export function provideActionDispatcher(context: Context) {
   return new ActionDispatcher(
-    resolver.resolve(actionBinderDependency),
+    context.resolve(actionBinderDependency),
     resolver,
   );
 }

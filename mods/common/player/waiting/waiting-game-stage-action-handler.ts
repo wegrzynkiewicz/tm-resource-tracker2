@@ -1,4 +1,4 @@
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { GAHandler } from "../../../core/communication/define.ts";
 import { WaitingGameStageGA } from "./common.ts";
 import { ClientGameContext, provideClientGameContext } from "../../game/client/context.ts";
@@ -10,13 +10,13 @@ export class WaitingGameStageGAHandler implements GAHandler<WaitingGameStageGA> 
   ) {}
 
   public async handle(): Promise<void> {
-    const waiting = this.context.resolver.resolve(waitingViewDependency);
+    const waiting = this.context.context.resolve(waitingViewDependency);
     waiting.render();
   }
 }
 
-export function provideWaitingGameStageGAHandler(resolver: DependencyResolver) {
+export function provideWaitingGameStageGAHandler(context: Context) {
   return new WaitingGameStageGAHandler(
-    resolver.resolve(clientGameContextDependency),
+    context.resolve(clientGameContextDependency),
   );
 }

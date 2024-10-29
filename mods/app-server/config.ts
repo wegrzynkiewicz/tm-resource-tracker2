@@ -16,27 +16,26 @@ import { Context } from "@acme/dependency/context.ts";
 export const mainWebServer = createWebServerConfigProvider("name");
 
 export async function initServerConfig(context: Context): Promise<void> {
-  const { resolver } = context;
-  resolver.inject(configVariableNamePrefixDependency, "TM_");
+  context.inject(configVariableNamePrefixDependency, "TM_");
 
   const dotEnvMap = await readDotEnvMap(".env");
-  resolver.inject(dotEnvMapDependency, dotEnvMap);
+  context.inject(dotEnvMapDependency, dotEnvMap);
 
   const extractors = [
-    resolver.resolve(denoQueryingConfigValueExtractorDependency),
-    resolver.resolve(dotEnvConfigValueExtractorDependency),
-    resolver.resolve(builtInConfigValueExtractorDependency),
-    resolver.resolve(denoRequestingConfigValueExtractorDependency),
+    context.resolve(denoQueryingConfigValueExtractorDependency),
+    context.resolve(dotEnvConfigValueExtractorDependency),
+    context.resolve(builtInConfigValueExtractorDependency),
+    context.resolve(denoRequestingConfigValueExtractorDependency),
   ];
-  resolver.inject(configValueExtractorsDependency, extractors);
+  context.inject(configValueExtractorsDependency, extractors);
 
-  const binder = resolver.resolve(configBinderDependency);
+  const binder = context.resolve(configBinderDependency);
   binder.bind(mainWebServer.hostnameConfigContract, "0.0.0.0");
   binder.bind(mainWebServer.portConfigContract, 3008);
 
-  const configValueResolver = resolver.resolve(configValueResolverDependency);
+  const configValueResolver = context.resolve(configValueResolverDependency);
   const valueResultMap = await configValueResolver.resolveAll();
-  resolver.inject(configValueResultMapDependency, valueResultMap);
+  context.inject(configValueResultMapDependency, valueResultMap);
 
-  resolver.resolve(configValueGetterDependency);
+  context.resolve(configValueGetterDependency);
 }

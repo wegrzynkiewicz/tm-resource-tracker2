@@ -1,5 +1,5 @@
 import { assertObject } from "../../../core/asserts.ts";
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { EPContext, EPHandler } from "../../../core/web/endpoint.ts";
 import { provideServerGameContextManager, ServerGameContextManager } from "../server/context.ts";
 import { provideTokenManager, TokenManager } from "../../token/manager.ts";
@@ -25,16 +25,16 @@ export class GameSocketEPHandler implements EPHandler {
 
     const { response, socket } = Deno.upgradeWebSocket(request);
 
-    const playerContextManager = resolver.resolve(serverPlayerContextManagerDependency);
+    const playerContextManager = context.resolve(serverPlayerContextManagerDependency);
     await playerContextManager.createServerPlayerContext({ playerId, socket });
 
     return response;
   }
 }
 
-export function provideSocketGameEPHandler(resolver: DependencyResolver) {
+export function provideSocketGameEPHandler(context: Context) {
   return new GameSocketEPHandler(
-    resolver.resolve(serverGameContextManagerDependency),
-    resolver.resolve(tokenManagerDependency),
+    context.resolve(serverGameContextManagerDependency),
+    context.resolve(tokenManagerDependency),
   );
 }

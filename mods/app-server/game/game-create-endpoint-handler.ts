@@ -1,11 +1,11 @@
-import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
+import { ServerGameContextManager, serverGameIdDependency, serverGameManagerDependency } from "./game-context.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
 import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-parser.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../qcmf5/mods/dependency/context.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
-import { serverPlayerContextManagerDependency, serverPlayerDTODependency } from "../player/player-context.ts";
+import { serverPlayerContextManagerDependency, serverPlayerDTODependency, serverPlayerIdDependency } from "../player/player-context.ts";
 import { webServerScopeContract } from "@acme/dependency/scopes.ts";
 import { parseGameCreateC2SReqDTO } from "@common/game/game-create-c2s-req-dto.layout.compiled.ts";
 
@@ -26,13 +26,12 @@ export class GameCreateWebHandler implements EndpointHandler {
     const isAdmin = true;
 
     const gameContext = this.gameManager.createServerGameContext();
-    const { gameId } = gameContext.identifier;
+    const gameId = gameContext.resolve(serverGameIdDependency);
 
-    const playerContextManager = gameContext.resolver.resolve(serverPlayerContextManagerDependency);
+    const playerContextManager = gameContext.resolve(serverPlayerContextManagerDependency);
     const playerContext = await playerContextManager.create({ color, name, isAdmin });
-    const { playerId } = playerContext.identifier;
-
-    const player = playerContext.resolver.resolve(serverPlayerDTODependency);
+    const playerId = playerContext.resolve(serverPlayerIdDependency);
+    const player = playerContext.resolve(serverPlayerDTODependency);
 
     const token = this.tokenManager.createToken({ gameId, playerId });
 
@@ -42,11 +41,11 @@ export class GameCreateWebHandler implements EndpointHandler {
   }
 }
 
-export function provideGameCreateWebHandler(resolver: DependencyResolver): EndpointHandler {
+export function provideGameCreateWebHandler(context: Context): EndpointHandler {
   return new GameCreateWebHandler(
-    resolver.resolve(jsonRequestParserDependency),
-    resolver.resolve(serverGameManagerDependency),
-    resolver.resolve(tokenManagerDependency),
+    context.resolve(jsonRequestParserDependency),
+    context.resolve(serverGameManagerDependency),
+    context.resolve(tokenManagerDependency),
   );
 }
 

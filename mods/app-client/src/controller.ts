@@ -1,9 +1,8 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { controllerScopeContract, frontendScopeContract } from "../defs.ts";
 import { Panic } from "@acme/useful/errors.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { Data } from "@acme/useful/types.ts";
-import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { Channel } from "@acme/dom/channel.ts";
 
@@ -67,20 +66,16 @@ export class ControllerRunner {
     const { importer, params } = route;
 
     if (this.currentContext) {
-      const abort = this.currentContext.resolver.resolve(controllerAbortDependency);
+      const abort = this.currentContext.resolve(controllerAbortDependency);
       abort.emit();
       this.currentContext = null;
     }
 
-    this.currentContext = createContext({
-      identifier: {},
-      name: "CONTROLLER",
-      scopes: {
+    this.currentContext = new Context({
         [globalScopeContract.token]: this.frontendContext.scopes[globalScopeContract.token],
         [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
         [controllerScopeContract.token]: new Scope(controllerScopeContract),
         [localScopeContract.token]: new Scope(localScopeContract),
-      },
     });
 
     try {
@@ -92,10 +87,10 @@ export class ControllerRunner {
   }
 }
 
-export function provideControllerRunner(resolver: DependencyResolver) {
+export function provideControllerRunner(context: Context) {
   return new ControllerRunner(
-    resolver.resolve(controllerRouterDependency),
-    resolver.resolve(contextDependency),
+    context.resolve(controllerRouterDependency),
+    context,
   );
 }
 

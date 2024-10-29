@@ -1,4 +1,4 @@
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../qcmf5/mods/dependency/context.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
 import { Data } from "@acme/useful/types.ts";
@@ -33,7 +33,7 @@ export class GameSocketEndpointHandler implements EndpointHandler {
     if (gameContext === undefined) {
       return Response.json({ error: "game-not-found" }, { status: 404 });
     }
-    const playerContextManager = gameContext.resolver.resolve(serverPlayerContextManagerDependency);
+    const playerContextManager = gameContext.resolve(serverPlayerContextManagerDependency);
     const playerContext = playerContextManager.players.get(playerId);
     if (playerContext === undefined) {
       return Response.json({ error: "player-not-found" }, { status: 404 });
@@ -41,7 +41,7 @@ export class GameSocketEndpointHandler implements EndpointHandler {
 
     const { response, socket } = Deno.upgradeWebSocket(request);
 
-    const playerDuplexContextManager = playerContext.resolver.resolve(serverPlayerDuplexContextManagerDependency);
+    const playerDuplexContextManager = playerContext.resolve(serverPlayerDuplexContextManagerDependency);
 
     const onOpen = async () => {
       await playerDuplexContextManager.createServerPlayerDuplexContext({ socket });
@@ -52,10 +52,10 @@ export class GameSocketEndpointHandler implements EndpointHandler {
   }
 }
 
-export function provideGameSocketEndpointHandler(resolver: DependencyResolver): EndpointHandler {
+export function provideGameSocketEndpointHandler(context: Context): EndpointHandler {
   return new GameSocketEndpointHandler(
-    resolver.resolve(serverGameManagerDependency),
-    resolver.resolve(tokenManagerDependency),
+    context.resolve(serverGameManagerDependency),
+    context.resolve(tokenManagerDependency),
   );
 }
 

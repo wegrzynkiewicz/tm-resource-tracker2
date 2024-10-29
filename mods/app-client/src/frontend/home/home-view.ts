@@ -4,7 +4,7 @@ import { modalManagerDependency } from "../../modal.ts";
 import { frontendScopeContract } from "../../../defs.ts";
 import { docTitleDependency } from "../app/doc-title.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../../../qcmf5/mods/dependency/context.ts";
 import { Slot } from "../../place.ts";
 import { clientGameContextManagerDependency } from "../../logic/game/client-game-context.ts";
 import { controllerRunnerDependency } from "../../controller.ts";
@@ -12,12 +12,12 @@ import { createJoinModal } from "./join-game-modal.ts";
 import { createPlayerModal } from "../../logic/player/player-modal.ts";
 import { waitingPath } from "../routes.ts";
 
-export function provideHomepageView(resolver: DependencyResolver) {
-  const app = resolver.resolve(introAppViewDependency);
-  const docTitle = resolver.resolve(docTitleDependency);
-  const modalManager = resolver.resolve(modalManagerDependency);
-  const clientGameManager = resolver.resolve(clientGameContextManagerDependency);
-  const controllerRunner = resolver.resolve(controllerRunnerDependency);
+export function provideHomepageView(context: Context) {
+  const app = context.resolve(introAppViewDependency);
+  const docTitle = context.resolve(docTitleDependency);
+  const modalManager = context.resolve(modalManagerDependency);
+  const clientGameManager = context.resolve(clientGameContextManagerDependency);
+  const controllerRunner = context.resolve(controllerRunnerDependency);
 
   const resumeSlot = new Slot("resume");
 

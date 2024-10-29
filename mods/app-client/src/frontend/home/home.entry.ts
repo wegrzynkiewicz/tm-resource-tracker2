@@ -3,8 +3,8 @@ import { homepageViewDependency } from "./home-view.ts";
 import { Context } from "@acme/dependency/context.ts";
 
 export async function initHomeController(context: Context) {
-  const homepageView = context.resolver.resolve(homepageViewDependency);
-  const gameManager = context.resolver.resolve(clientGameContextManagerDependency);
+  const homepageView = context.resolve(homepageViewDependency);
+  const gameManager = context.resolve(clientGameContextManagerDependency);
 
   homepageView.render();
   const game = await gameManager.getClientGameContext();

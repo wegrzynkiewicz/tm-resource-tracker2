@@ -1,4 +1,4 @@
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../../qcmf5/mods/dependency/context.ts";
 import { playersSyncS2CNotNormalCAContract } from "@common/player/defs.ts";
 import { playerBroadcastDependency } from "../../player/player-broadcast.ts";
 import { serverPlayerContextManagerDependency } from "../../player/player-context.ts";
@@ -8,11 +8,11 @@ import { playerDisconnectedChannelDependency } from "../../player/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { serverGameScopeContract } from "../../defs.ts";
 
-export function provideWaitingGameStage(resolver: DependencyResolver): GameStage {
-  const playerConnected = resolver.resolve(playerConnectedChannelDependency);
-  const playerDisconnected = resolver.resolve(playerDisconnectedChannelDependency);
-  const playerBroadcast = resolver.resolve(playerBroadcastDependency);
-  const serverPlayerContextManager = resolver.resolve(serverPlayerContextManagerDependency);
+export function provideWaitingGameStage(context: Context): GameStage {
+  const playerConnected = context.resolve(playerConnectedChannelDependency);
+  const playerDisconnected = context.resolve(playerDisconnectedChannelDependency);
+  const playerBroadcast = context.resolve(playerBroadcastDependency);
+  const serverPlayerContextManager = context.resolve(serverPlayerContextManagerDependency);
 
   const name = "WAITING" as const;
 

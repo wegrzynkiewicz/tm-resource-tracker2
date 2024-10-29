@@ -2,7 +2,7 @@ import { defineDependency } from "@acme/dependency/declaration.ts";
 import { InferNormalCAContract, NormalCAContract, NormalCADispatcher } from "@acme/control-action/normal/defs.ts";
 import { NormalCAEnvelopeDTO } from "@acme/control-action/normal/envelope.layout.compiled.ts";
 import { serverGameScopeContract } from "../defs.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../qcmf5/mods/dependency/context.ts";
 import { Logger, loggerDependency, TRACE } from "@acme/logger/defs.ts";
 import { playerConnectedChannelDependency, playerDisconnectedChannelDependency } from "./defs.ts";
 import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
@@ -27,15 +27,15 @@ export class PlayerBroadcast implements NormalCADispatcher {
   }
 }
 
-export function providePlayerBroadcast(resolver: DependencyResolver) {
-  const logger = resolver.resolve(loggerDependency);
-  const playerConnected = resolver.resolve(playerConnectedChannelDependency);
-  const playerDisconnected = resolver.resolve(playerDisconnectedChannelDependency);
+export function providePlayerBroadcast(context: Context) {
+  const logger = context.resolve(loggerDependency);
+  const playerConnected = context.resolve(playerConnectedChannelDependency);
+  const playerDisconnected = context.resolve(playerDisconnectedChannelDependency);
 
   const playerBroadcast = new PlayerBroadcast(logger);
 
   playerConnected.on((ctx, player) => {
-    const webSocket = ctx.resolver.resolve(webSocketDependency);
+    const webSocket = ctx.resolve(webSocketDependency);
     playerBroadcast.socketByPlayerId.set(player.playerId, webSocket);
   });
 

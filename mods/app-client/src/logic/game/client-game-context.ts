@@ -1,4 +1,3 @@
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
 import { jsonRequest } from "@acme/useful/json-request.ts";
 import { clientGameScopeContract, frontendScopeContract } from "../../../defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
@@ -7,17 +6,11 @@ import { apiURLDependency } from "../../api-url-config.ts";
 import { gameCreatePathname, gameJoinPathname, gameQuitPathname, gameReadPathname } from "@common/game/defs.ts";
 import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
 import { clientPlayerWSContextManagerDependency } from "./client-player-ws-context.ts";
-import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { GameCreateC2SReqDTO } from "@common/game/game-create-c2s-req-dto.layout.compiled.ts";
 import { GameJoinC2SReqDTO } from "@common/game/game-join-c2s-req-dto.layout.compiled.ts";
 import { Panic } from "@acme/useful/errors.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
-
-export interface ClientGameContextIdentifier {
-  gameId: string;
-}
-
-export type ClientGameContext = Context<ClientGameContextIdentifier>;
 
 export const clientGameIdDependency = defineDependency<string>({
   scope: clientGameScopeContract,
@@ -28,7 +21,7 @@ export const clientGameTokenDependency = defineDependency<string>({
 });
 
 export class ClientGameContextManager {
-  public gameContext: ClientGameContext | null = null;
+  public gameContext: Context | null = null;
 
   public constructor(
     private readonly apiURL: URL,
@@ -38,34 +31,27 @@ export class ClientGameContextManager {
   private async createScope(payload: GameDTO) {
     const { gameId, token, player } = payload;
 
-    const gameContext = createContext({
-      identifier: {
-        gameId,
-      },
-      name: "CLIENT-GAME",
-      scopes: {
+    const gameContext = new Context({
         [globalScopeContract.token]: this.frontendContext.scopes[globalScopeContract.token],
         [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
         [clientGameScopeContract.token]: new Scope(clientGameScopeContract),
         [localScopeContract.token]: new Scope(localScopeContract),
-      },
     });
-    const { resolver } = gameContext;
 
     localStorage.setItem("token", token);
 
-    resolver.inject(clientGameIdDependency, gameId);
-    resolver.inject(clientGameTokenDependency, token);
-    resolver.inject(myPlayerDependency, player);
+    gameContext.inject(clientGameIdDependency, gameId);
+    gameContext.inject(clientGameTokenDependency, token);
+    gameContext.inject(myPlayerDependency, player);
 
-    const clientPlayerWSContentManager = resolver.resolve(clientPlayerWSContextManagerDependency);
+    const clientPlayerWSContentManager = gameContext.resolve(clientPlayerWSContextManagerDependency);
     await clientPlayerWSContentManager.create();
 
     this.gameContext = gameContext;
     return gameContext;
   }
 
-  public async createGame(data: GameCreateC2SReqDTO): Promise<ClientGameContext> {
+  public async createGame(data: GameCreateC2SReqDTO): Promise<Context> {
     const url = new URL(gameCreatePathname, this.apiURL);
     const request = jsonRequest(url, data, { method: "POST" });
     try {
@@ -80,7 +66,7 @@ export class ClientGameContextManager {
     }
   }
 
-  public async getClientGameContext(): Promise<ClientGameContext | undefined> {
+  public async getClientGameContext(): Promise<Context | undefined> {
     if (this.gameContext) {
       return this.gameContext;
     }
@@ -104,7 +90,7 @@ export class ClientGameContextManager {
     return undefined;
   }
 
-  public async joinClientGame(data: GameJoinC2SReqDTO): Promise<ClientGameContext | undefined> {
+  public async joinClientGame(data: GameJoinC2SReqDTO): Promise<Context | undefined> {
     const url = new URL(gameJoinPathname, this.apiURL);
     const request = jsonRequest(url, data, { method: "POST" });
     try {
@@ -126,7 +112,7 @@ export class ClientGameContextManager {
     if (this.gameContext === null) {
       return;
     }
-    const manager = this.gameContext.resolver.resolve(clientPlayerWSContextManagerDependency);
+    const manager = this.gameContext.resolve(clientPlayerWSContextManagerDependency);
     await manager.dispose();
 
     this.gameContext = null;
@@ -146,10 +132,10 @@ export class ClientGameContextManager {
   }
 }
 
-export function provideClientGameManager(resolver: DependencyResolver) {
+export function provideClientGameManager(context: Context) {
   return new ClientGameContextManager(
-    resolver.resolve(apiURLDependency),
-    resolver.resolve(contextDependency),
+    context.resolve(apiURLDependency),
+    context,
   );
 }
 
@@ -249,14 +235,14 @@ export const clientGameContextManagerDependency = defineDependency({
 //   }
 // }
 
-// export function provideClientGameManager(resolver: DependencyResolver) {
+// export function provideClientGameManager(context: Context) {
 //   return new ClientGameManager(
-//     resolver.resolve(clientConfigDependency),
-//     resolver.resolve(clientGameContextManagerDependency),
-//     resolver.resolve(createGameChannelDependency),
-//     resolver.resolve(homepageViewDependency),
-//     resolver.resolve(joinGameChannelDependency),
-//     resolver.resolve(quitGameChannelDependency),
+//     context.resolve(clientConfigDependency),
+//     context.resolve(clientGameContextManagerDependency),
+//     context.resolve(createGameChannelDependency),
+//     context.resolve(homepageViewDependency),
+//     context.resolve(joinGameChannelDependency),
+//     context.resolve(quitGameChannelDependency),
 //   );
 // }
 // export const clientGameManagerDependency = defineDependency({

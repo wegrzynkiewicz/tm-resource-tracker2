@@ -1,6 +1,6 @@
 import { assertTrue } from "../../../core/asserts.ts";
 import { GAHandler } from "../../../core/communication/define.ts";
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { Player, providePlayer } from "../../player/player.layout.ts";
 import { providePlayingGameStage } from "../../playing/playing-game-stage.ts";
 import { provideServerGameContext, ServerGameContext } from "../server/context.ts";
@@ -18,15 +18,15 @@ export class StartGameGAHandler implements GAHandler<StartGameGA> {
   public async handle(): Promise<void> {
     assertTrue(this.player.isAdmin, "player-must-be-admin-to-start-game");
     const { resolver } = this.serverGameContext;
-    const playingGameStage = resolver.resolve(playingGameStageDependency);
+    const playingGameStage = context.resolve(playingGameStageDependency);
     this.gameStageManager.setStage(playingGameStage);
   }
 }
 
-export function provideStartGameGAHandler(resolver: DependencyResolver) {
+export function provideStartGameGAHandler(context: Context) {
   return new StartGameGAHandler(
-    resolver.resolve(gameStageManagerDependency),
-    resolver.resolve(playerDependency),
-    resolver.resolve(serverGameContextDependency),
+    context.resolve(gameStageManagerDependency),
+    context.resolve(playerDependency),
+    context.resolve(serverGameContextDependency),
   );
 }

@@ -1,8 +1,8 @@
 import { GAProcessor } from "../../../core/communication/processor.ts";
-import { DependencyResolver } from "@acme/dependency/declaration.ts";
+import { Context } from "@acme/dependency/declaration.ts";
 
-export function feedServerGAProcessor(resolver: DependencyResolver, processor: GAProcessor) {
+export function feedServerGAProcessor(context: Context, processor: GAProcessor) {
   const handlers = processor.handlers;
-  // handlers.set(startGameGADef.kind, resolver.resolve(startGameGAHandler)Dependency);
-  // handlers.set(clientUpdatingMyPlayerGADef.kind, resolver.resolve(clientUpdatingMyPlayerGAHandler)Dependency);
+  // handlers.set(startGameGADef.kind, context.resolve(startGameGAHandler)Dependency);
+  // handlers.set(clientUpdatingMyPlayerGADef.kind, context.resolve(clientUpdatingMyPlayerGAHandler)Dependency);
 }

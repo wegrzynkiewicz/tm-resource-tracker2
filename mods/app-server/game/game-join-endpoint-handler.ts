@@ -1,11 +1,11 @@
 import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../qcmf5/mods/dependency/context.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-parser.ts";
 import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
-import { serverPlayerContextManagerDependency, serverPlayerDTODependency } from "../player/player-context.ts";
+import { serverPlayerContextManagerDependency, serverPlayerDTODependency, serverPlayerIdDependency } from "../player/player-context.ts";
 import { webServerScopeContract } from "@acme/dependency/scopes.ts";
 import { parseGameJoinC2SReqDTO } from "@common/game/game-join-c2s-req-dto.layout.compiled.ts";
 
@@ -30,11 +30,11 @@ export class GameJoinEndpointHandler implements EndpointHandler {
       return Response.json({ error: "game-not-found" }, { status: 404 });
     }
 
-    const playerContextManager = gameContext.resolver.resolve(serverPlayerContextManagerDependency);
+    const playerContextManager = gameContext.resolve(serverPlayerContextManagerDependency);
     const playerContext = await playerContextManager.create({ color, name, isAdmin });
-    const { playerId } = playerContext.identifier;
+    const playerId = playerContext.resolve(serverPlayerIdDependency);
 
-    const player = playerContext.resolver.resolve(serverPlayerDTODependency);
+    const player = playerContext.resolve(serverPlayerDTODependency);
 
     const token = this.tokenManager.createToken({ gameId, playerId });
 
@@ -44,11 +44,11 @@ export class GameJoinEndpointHandler implements EndpointHandler {
   }
 }
 
-export function provideGameJoinEndpointHandler(resolver: DependencyResolver): EndpointHandler {
+export function provideGameJoinEndpointHandler(context: Context): EndpointHandler {
   return new GameJoinEndpointHandler(
-    resolver.resolve(jsonRequestParserDependency),
-    resolver.resolve(serverGameManagerDependency),
-    resolver.resolve(tokenManagerDependency),
+    context.resolve(jsonRequestParserDependency),
+    context.resolve(serverGameManagerDependency),
+    context.resolve(tokenManagerDependency),
   );
 }
 

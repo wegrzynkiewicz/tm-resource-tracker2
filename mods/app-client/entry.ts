@@ -11,12 +11,11 @@ import { appNameConfigContract } from "./src/frontend/app/app-name-config.ts";
 import { logChannelDependency, TRACE } from "@acme/logger/defs.ts";
 import { controllerRouterDependency, controllerRunnerDependency } from "./src/controller.ts";
 import { initControllerRouter } from "./src/frontend/routes.ts";
-import { Context, createContext } from "@acme/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { BasicLogFilter } from "@acme/logger/basic-log-filter.ts";
 
 async function initLogChannel(globalContext: Context): Promise<void> {
-  const { resolver } = globalContext;
-  const channel = resolver.resolve(logChannelDependency);
+  const channel = globalContext.resolve(logChannelDependency);
   const handler = new BrowserLogHandler(
     new BasicLogFilter(TRACE),
   );
@@ -24,40 +23,34 @@ async function initLogChannel(globalContext: Context): Promise<void> {
 }
 
 async function initClientConfig(globalContext: Context): Promise<void> {
-  const { resolver } = globalContext;
   const extractors = [
-    resolver.resolve(builtInConfigValueExtractorDependency),
+    globalContext.resolve(builtInConfigValueExtractorDependency),
   ];
-  resolver.inject(configValueExtractorsDependency, extractors);
+  globalContext.inject(configValueExtractorsDependency, extractors);
 
-  const binder = resolver.resolve(configBinderDependency);
+  const binder = globalContext.resolve(configBinderDependency);
   binder.bind(appNameConfigContract, "TM Resource Tracker v2");
   binder.bind(apiURLConfigContract, new URL("http://localhost:3008"));
 
-  const configValueResolver = resolver.resolve(configValueResolverDependency);
+  const configValueResolver = globalContext.resolve(configValueResolverDependency);
   const valueResultMap = await configValueResolver.resolveAll();
-  resolver.inject(configValueResultMapDependency, valueResultMap);
+  globalContext.inject(configValueResultMapDependency, valueResultMap);
 }
 
 async function initFrontend(globalContext: Context): Promise<void> {
-  const frontendScope = createContext({
-    identifier: {},
-    name: "FRONTEND",
-    scopes: {
-      [globalScopeContract.token]: globalContext.scopes[globalScopeContract.token],
-      [frontendScopeContract.token]: new Scope(frontendScopeContract),
-      [localScopeContract.token]: new Scope(localScopeContract),
-    },
+  const frontendScope = new Context({
+    [globalScopeContract.token]: globalContext.scopes[globalScopeContract.token],
+    [frontendScopeContract.token]: new Scope(frontendScopeContract),
+    [localScopeContract.token]: new Scope(localScopeContract),
   });
-  const { resolver } = frontendScope;
 
-  const appSlot = resolver.resolve(appSlotDependency);
+  const appSlot = frontendScope.resolve(appSlotDependency);
   document.body.appendChild(appSlot.$root);
 
   const router = initControllerRouter();
-  resolver.inject(controllerRouterDependency, router);
+  frontendScope.inject(controllerRouterDependency, router);
 
-  const controllerRunner = resolver.resolve(controllerRunnerDependency);
+  const controllerRunner = frontendScope.resolve(controllerRunnerDependency);
   await controllerRunner.run(window.location.pathname);
 
   globalThis.addEventListener("popstate", async () => {
@@ -66,13 +59,9 @@ async function initFrontend(globalContext: Context): Promise<void> {
 }
 
 async function bootstrap() {
-  const globalContext = createContext({
-    identifier: {},
-    name: "GLOBAL",
-    scopes: {
-      [globalScopeContract.token]: new Scope(globalScopeContract),
-      [localScopeContract.token]: new Scope(localScopeContract),
-    },
+  const globalContext = new Context({
+    [globalScopeContract.token]: new Scope(globalScopeContract),
+    [localScopeContract.token]: new Scope(localScopeContract),
   });
 
   await initClientConfig(globalContext);

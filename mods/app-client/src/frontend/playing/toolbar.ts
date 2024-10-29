@@ -1,4 +1,4 @@
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../../../qcmf5/mods/dependency/context.ts";
 import { PlayingView } from "./playing-view.layout.compiled.ts";
 import { button_nodes, div_nodes, span } from "@acme/dom/nodes.ts";
 import { svg_icon } from "../utils/svg.ts";
@@ -21,9 +21,9 @@ interface ToolbarButton {
   name: string;
 }
 
-export function provideToolbar(resolver: DependencyResolver) {
-  const controllerRunner = resolver.resolve(controllerRunnerDependency);
-  const playingViewStore = resolver.resolve(playingViewStoreDependency);
+export function provideToolbar(context: Context) {
+  const controllerRunner = context.resolve(controllerRunnerDependency);
+  const playingViewStore = context.resolve(playingViewStoreDependency);
 
   const createToolbarButton = (button: ToolbarButton) => {
     const { view, icon, name } = button;

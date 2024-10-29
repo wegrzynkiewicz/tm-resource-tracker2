@@ -1,4 +1,4 @@
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { GADefinition, GAEnvelope } from "./define.ts";
 import { provideWebSocketChannel } from "./socket.ts";
 import { WebSocketChannel } from "./web-socket-channel.ts";
@@ -20,9 +20,9 @@ export class GADispatcher {
   }
 }
 
-export function provideGADispatcher(resolver: DependencyResolver) {
+export function provideGADispatcher(context: Context) {
   return new GADispatcher(
-    resolver.resolve(loggerDependency),
-    resolver.resolve(webSocketChannelDependency),
+    context.resolve(loggerDependency),
+    context.resolve(webSocketChannelDependency),
   );
 }

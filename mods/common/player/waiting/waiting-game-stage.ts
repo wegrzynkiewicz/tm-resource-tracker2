@@ -1,5 +1,5 @@
 import { provideGADispatcher } from "../../../core/communication/dispatcher.ts";
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { GameStage } from "../../game/stage/common.ts";
 import { PlayerBroadcast, providePlayerBroadcast } from "../player-broadcast.ts";
 import { ServerPlayerContext } from "../server/context.ts";
@@ -15,7 +15,7 @@ export class WaitingGameStage implements GameStage {
 
   public handlePlayerContextCreation(context: ServerPlayerContext) {
     const { resolver } = context;
-    const dispatcher = resolver.resolve(gADispatcherDependency);
+    const dispatcher = context.resolve(gADispatcherDependency);
     dispatcher.send(waitingGameStageGADef, null);
     this.broadcastPlayers();
   }
@@ -35,8 +35,8 @@ export class WaitingGameStage implements GameStage {
   }
 }
 
-export function provideWaitingGameStage(resolver: DependencyResolver) {
+export function provideWaitingGameStage(context: Context) {
   return new WaitingGameStage(
-    resolver.resolve(playerBroadcastDependency),
+    context.resolve(playerBroadcastDependency),
   );
 }

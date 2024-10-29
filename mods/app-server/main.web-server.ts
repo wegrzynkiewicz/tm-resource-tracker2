@@ -20,9 +20,8 @@ import { Context } from "@acme/dependency/context.ts";
 import { gameReadEndpointHandlerDependency } from "./game/game-read-endpoint-handler.ts";
 
 export function initMainWebServer(context: Context) {
-  const { resolver } = context;
-  const config = resolver.resolve(mainWebServer.webConfigService);
-  const serverScopeManager = resolver.resolve(webServerContextManagerDependency);
+  const config = context.resolve(mainWebServer.webConfigService);
+  const serverScopeManager = context.resolve(webServerContextManagerDependency);
   const webServerScope = serverScopeManager.createWebServerScope(config);
 
   const router = new NaiveServerWebRouter();
@@ -33,11 +32,11 @@ export function initMainWebServer(context: Context) {
   router.addRoute("GET", gameSocketPatternPathname, gameSocketEndpointHandlerDependency);
   router.addRoute("OPTIONS", "*", preflightEndpointHandlerDependency);
 
-  webServerScope.resolver.inject(serverWebRouterDependency, router);
+  webServerScope.inject(serverWebRouterDependency, router);
 
-  const server = webServerScope.resolver.resolve(webServerDependency);
+  const server = webServerScope.resolve(webServerDependency);
 
-  const terminator = resolver.resolve(terminatorDependency);
+  const terminator = context.resolve(terminatorDependency);
   terminator.nodes.add(server);
 
   return server;

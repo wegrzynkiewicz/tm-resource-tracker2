@@ -1,6 +1,6 @@
 import { MapperStore } from "@acme/dom/mapper-store.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../../../../qcmf5/mods/dependency/context.ts";
 import { docTitleDependency } from "../../app/doc-title.ts";
 import { controllerScopeContract } from "../../../../defs.ts";
 import { playingAppViewDependency } from "../playing-app-view.ts";
@@ -12,13 +12,13 @@ import { createPanel } from "../../app/panel.ts";
 import { playersStoreDependency } from "../../../logic/player/players-store.ts";
 import { currentPlayerStoreDependency } from "../defs.ts";
 
-export function provideResourcesView(resolver: DependencyResolver) {
-  const app = resolver.resolve(playingAppViewDependency);
-  const top = resolver.resolve(playingTopDependency);
-  const modalManager = resolver.resolve(modalManagerDependency);
-  const docTitle = resolver.resolve(docTitleDependency);
-  const playersStore = resolver.resolve(playersStoreDependency);
-  const currentPlayerStore = resolver.resolve(currentPlayerStoreDependency);
+export function provideResourcesView(context: Context) {
+  const app = context.resolve(playingAppViewDependency);
+  const top = context.resolve(playingTopDependency);
+  const modalManager = context.resolve(modalManagerDependency);
+  const docTitle = context.resolve(docTitleDependency);
+  const playersStore = context.resolve(playersStoreDependency);
+  const currentPlayerStore = context.resolve(currentPlayerStoreDependency);
 
   const createPlayerResourcePanel = () => {
     const store = new ResourceStore();

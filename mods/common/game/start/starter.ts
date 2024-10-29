@@ -1,6 +1,6 @@
 import { provideModalManager } from "../../../app-client/src/modal.ts";
 import { provideGADispatcher } from "../../../core/communication/dispatcher.ts";
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { provideLoadingView } from "../../../app-client/src/loading-view.ts";
 import { startGameGADef } from "./common.ts";
 import { createStartGameModal } from "./modal.ts";
@@ -9,10 +9,10 @@ export interface GameStarter {
   modal(): Promise<void>;
 }
 
-export function provideGameStarter(resolver: DependencyResolver) {
-  const dispatcher = resolver.resolve(gADispatcherDependency);
-  const modalManager = resolver.resolve(modalManagerDependency);
-  const loading = resolver.resolve(loadingViewDependency);
+export function provideGameStarter(context: Context) {
+  const dispatcher = context.resolve(gADispatcherDependency);
+  const modalManager = context.resolve(modalManagerDependency);
+  const loading = context.resolve(loadingViewDependency);
   const modal = async () => {
     const modal = createStartGameModal();
     modalManager.mount(modal);

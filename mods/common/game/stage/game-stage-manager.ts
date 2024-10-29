@@ -1,4 +1,4 @@
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { PlayerBroadcast } from "../../player/player-broadcast.ts";
 import { providePlayerBroadcast } from "../../player/player-broadcast.ts";
 import { ServerPlayerContext } from "../../player/server/context.ts";
@@ -25,9 +25,9 @@ export class GameStageManager {
   }
 }
 
-export function provideGameStageManager(resolver: DependencyResolver) {
+export function provideGameStageManager(context: Context) {
   return new GameStageManager(
-    resolver.resolve(playerBroadcastDependency),
-    resolver.resolve(waitingGameStageDependency),
+    context.resolve(playerBroadcastDependency),
+    context.resolve(waitingGameStageDependency),
   );
 }

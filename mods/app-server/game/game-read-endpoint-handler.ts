@@ -1,6 +1,6 @@
 import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../qcmf5/mods/dependency/context.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { parseAuthorizationToken } from "@acme/web/build-in/token.ts";
 import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-parser.ts";
@@ -32,12 +32,12 @@ export class GameReadEndpointHandler implements EndpointHandler {
       return Response.json({ error: "game-not-found" }, { status: 404 });
     }
 
-    const manager = gameContext.resolver.resolve(serverPlayerContextManagerDependency);
+    const manager = gameContext.resolve(serverPlayerContextManagerDependency);
     const ctx = manager.players.get(playerId);
     if (ctx === undefined) {
       return Response.json({ error: "player-not-found" }, { status: 404 });
     }
-    const player = ctx.resolver.resolve(serverPlayerDTODependency);
+    const player = ctx.resolve(serverPlayerDTODependency);
 
     const payload: GameDTO = { gameId, player, token: token.key };
     const response = Response.json(payload);
@@ -45,11 +45,11 @@ export class GameReadEndpointHandler implements EndpointHandler {
   }
 }
 
-export function provideGameReadEndpointHandler(resolver: DependencyResolver): EndpointHandler {
+export function provideGameReadEndpointHandler(context: Context): EndpointHandler {
   return new GameReadEndpointHandler(
-    resolver.resolve(jsonRequestParserDependency),
-    resolver.resolve(serverGameManagerDependency),
-    resolver.resolve(tokenManagerDependency),
+    context.resolve(jsonRequestParserDependency),
+    context.resolve(serverGameManagerDependency),
+    context.resolve(tokenManagerDependency),
   );
 }
 

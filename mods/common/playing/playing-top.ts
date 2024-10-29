@@ -1,9 +1,9 @@
 import { createSelector, SelectorOption, SelectorStore } from "../../app-client/src/frontend/utils/selector.ts";
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { providePlayingGame } from "./common.ts";
 
-export function providePlayingPlayerStore(resolver: DependencyResolver) {
-  const playingGame = resolver.resolve(playingGameDependency);
+export function providePlayingPlayerStore(context: Context) {
+  const playingGame = context.resolve(playingGameDependency);
   const options: SelectorOption[] = [];
   for (const { color, name } of playingGame.players) {
     options.push({ key: color, name });
@@ -31,8 +31,8 @@ export class PlayingTop {
   }
 }
 
-export function providePlayingTop(resolver: DependencyResolver) {
+export function providePlayingTop(context: Context) {
   return new PlayingTop(
-    resolver.resolve(playingPlayerStoreDependency),
+    context.resolve(playingPlayerStoreDependency),
   );
 }

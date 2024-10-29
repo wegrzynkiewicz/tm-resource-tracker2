@@ -1,5 +1,5 @@
 import { parsePlayingView } from "./playing-view.layout.compiled.ts";
-import { Context, createContext } from "@acme/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { clientGameContextManagerDependency } from "../../logic/game/client-game-context.ts";
 import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { clientGameScopeContract, controllerScopeContract, frontendScopeContract } from "../../../defs.ts";
@@ -20,9 +20,9 @@ const views = {
 };
 
 export async function initPlayingController(context: Context, params: Data) {
-  const controllerRunner = context.resolver.resolve(controllerRunnerDependency);
-  const gameManager = context.resolver.resolve(clientGameContextManagerDependency);
-  const abort = context.resolver.resolve(controllerAbortDependency);
+  const controllerRunner = context.resolve(controllerRunnerDependency);
+  const gameManager = context.resolve(clientGameContextManagerDependency);
+  const abort = context.resolve(controllerAbortDependency);
 
   const [result, view] = parsePlayingView(params.view);
   if (!result) {
@@ -34,36 +34,31 @@ export async function initPlayingController(context: Context, params: Data) {
     return await controllerRunner.run(homePath);
   }
 
-  const clientPlayerWSContextManager = gameContext.resolver.resolve(clientPlayerWSContextManagerDependency);
+  const clientPlayerWSContextManager = gameContext.resolve(clientPlayerWSContextManagerDependency);
   const { clientPlayerWSContext } = clientPlayerWSContextManager;
   if (clientPlayerWSContext === null) {
     return await controllerRunner.run(homePath);
   }
 
-  const controllerContext = createContext({
-    identifier: {},
-    name: "PLAYING-CTRL",
-    scopes: {
-      [globalScopeContract.token]: context.scopes[globalScopeContract.token],
-      [frontendScopeContract.token]: context.scopes[frontendScopeContract.token],
-      [clientGameScopeContract.token]: gameContext.scopes[clientGameScopeContract.token],
-      [duplexScopeContract.token]: clientPlayerWSContext.scopes[duplexScopeContract.token],
-      [controllerScopeContract.token]: context.scopes[controllerScopeContract.token],
-      [localScopeContract.token]: new Scope(localScopeContract),
-    },
+  const playingContext = new Context({
+    [globalScopeContract.token]: context.scopes[globalScopeContract.token],
+    [frontendScopeContract.token]: context.scopes[frontendScopeContract.token],
+    [clientGameScopeContract.token]: gameContext.scopes[clientGameScopeContract.token],
+    [duplexScopeContract.token]: clientPlayerWSContext.scopes[duplexScopeContract.token],
+    [controllerScopeContract.token]: context.scopes[controllerScopeContract.token],
+    [localScopeContract.token]: new Scope(localScopeContract),
   });
-  const { resolver } = controllerContext;
 
-  const loading = resolver.resolve(loadingViewDependency);
+  const loading = playingContext.resolve(loadingViewDependency);
   loading.render();
 
-  const playingViewStore = resolver.resolve(playingViewStoreDependency);
+  const playingViewStore = playingContext.resolve(playingViewStoreDependency);
   playingViewStore.set(view);
 
-  const gameStore = gameContext.resolver.resolve(gameStoreDependency);
+  const gameStore = gameContext.resolve(gameStoreDependency);
   await gameStore.ready;
 
-  const viewComponent = resolver.resolve(resourcesViewDependency);
+  const viewComponent = playingContext.resolve(resourcesViewDependency);
 
   viewComponent.render();
 

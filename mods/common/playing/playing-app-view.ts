@@ -1,4 +1,4 @@
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 
 import { createScroll } from "../../app-client/src/frontend/app/scroll.ts";
 import { ModalManager, provideModalManager } from "../../app-client/src/modal.ts";
@@ -39,10 +39,10 @@ export class PlayingAppView {
   }
 }
 
-export function providePlayingAppView(resolver: DependencyResolver) {
+export function providePlayingAppView(context: Context) {
   return new PlayingAppView(
-    resolver.resolve(appPlaceDependency),
-    resolver.resolve(modalManagerDependency),
-    resolver.resolve(toolbarViewDependency),
+    context.resolve(appPlaceDependency),
+    context.resolve(modalManagerDependency),
+    context.resolve(toolbarViewDependency),
   );
 }

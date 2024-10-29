@@ -1,5 +1,5 @@
 import { assertObject } from "../../../core/asserts.ts";
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { GameResponse } from "../game.ts";
 import { provideServerGameContextManager, ServerGameContextManager } from "../server/context.ts";
 import { provideTokenManager, TokenManager } from "../../token/manager.ts";
@@ -27,7 +27,7 @@ export class ReadGameEPHandler implements EPHandler {
     assertObject(gameContext, "not-found-game-with-this-token", { status: 404 });
     const { resolver } = gameContext;
 
-    const playerManager = resolver.resolve(serverPlayerManagerDependency);
+    const playerManager = context.resolve(serverPlayerManagerDependency);
     const player = playerManager.players.get(playerId);
     assertObject(player, "not-found-player-data", { status: 404 });
 
@@ -37,10 +37,10 @@ export class ReadGameEPHandler implements EPHandler {
   }
 }
 
-export function provideReadGameEPHandler(resolver: DependencyResolver) {
+export function provideReadGameEPHandler(context: Context) {
   return new ReadGameEPHandler(
-    resolver.resolve(serverGameContextManagerDependency),
-    resolver.resolve(tokenManagerDependency),
+    context.resolve(serverGameContextManagerDependency),
+    context.resolve(tokenManagerDependency),
   );
 }
 export const readGameEPHandlerDependency = defineDependency({

@@ -1,5 +1,5 @@
 import { assertObject } from "../../../core/asserts.ts";
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { provideServerGameContextManager, ServerGameContextManager } from "../server/context.ts";
 import { provideTokenManager, TokenManager } from "../../token/manager.ts";
 import { provideServerPlayerContextManager } from "../../player/server/context.ts";
@@ -27,20 +27,20 @@ export class QuitGameEPHandler implements EPHandler {
     assertObject(gameContext, "not-found-game-with-this-token", { status: 404 });
     const { resolver } = gameContext;
 
-    const playerManager = resolver.resolve(serverPlayerManagerDependency);
+    const playerManager = context.resolve(serverPlayerManagerDependency);
     playerManager.deletePlayer(playerId);
 
-    const playerContextManager = resolver.resolve(serverPlayerContextManagerDependency);
+    const playerContextManager = context.resolve(serverPlayerContextManagerDependency);
     await playerContextManager.deletePlayerContext(playerId);
 
     return new Response(null, { status: 204 });
   }
 }
 
-export function provideQuitGameEPHandler(resolver: DependencyResolver) {
+export function provideQuitGameEPHandler(context: Context) {
   return new QuitGameEPHandler(
-    resolver.resolve(serverGameContextManagerDependency),
-    resolver.resolve(tokenManagerDependency),
+    context.resolve(serverGameContextManagerDependency),
+    context.resolve(tokenManagerDependency),
   );
 }
 export const quitGameEPHandlerDependency = defineDependency({

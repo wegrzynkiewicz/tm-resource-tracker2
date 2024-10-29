@@ -1,6 +1,6 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { serverGameScopeContract } from "../../defs.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../../qcmf5/mods/dependency/context.ts";
 import { GameStage, startupGameStageDependency } from "./defs.ts";
 
 export class GameStageManager {
@@ -17,9 +17,9 @@ export class GameStageManager {
   }
 }
 
-export function provideGameStageManager(resolver: DependencyResolver) {
+export function provideGameStageManager(context: Context) {
   return new GameStageManager(
-    resolver.resolve(startupGameStageDependency),
+    context.resolve(startupGameStageDependency),
   );
 }
 

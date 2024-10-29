@@ -1,20 +1,13 @@
 import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { DEBUG, loggerDependency } from "@acme/logger/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
-import { Context, contextDependency, createContext } from "@acme/dependency/context.ts";
+import { Context } from "@acme/dependency/context.ts";
 import { serverGameScopeContract } from "../defs.ts";
 import { createRandomStringFactory } from "@acme/useful/strings.ts";
 import { playerBroadcastDependency } from "../player/player-broadcast.ts";
 import { gameStageManagerDependency } from "./stages/game-stage-manager.ts";
 import { waitingGameStageDependency } from "./stages/waiting-game-stage.ts";
 import { startupGameStageDependency } from "./stages/defs.ts";
-
-export interface ServerGameContextIdentifier {
-  gameId: string;
-}
-
-export type ServerGameContext = Context<ServerGameContextIdentifier>;
 
 export const serverGameIdDependency = defineDependency<string>({
   scope: serverGameScopeContract,
@@ -23,7 +16,7 @@ export const serverGameIdDependency = defineDependency<string>({
 const randomGameId = createRandomStringFactory(1);
 
 export class ServerGameContextManager {
-  public readonly games = new Map<string, ServerGameContext>();
+  public readonly games = new Map<string, Context>();
 
   public constructor(
     private readonly globalContext: Context,
@@ -39,29 +32,24 @@ export class ServerGameContextManager {
     }
   }
 
-  public createServerGameContext(): ServerGameContext {
+  public createServerGameContext(): Context {
     const gameId = this.generateGameId();
 
-    const gameContext = createContext({
-      identifier: { gameId },
-      name: "GAME",
-      scopes: {
-        [globalScopeContract.token]: this.globalContext.scopes[globalScopeContract.token],
-        [serverGameScopeContract.token]: new Scope(globalScopeContract),
-        [localScopeContract.token]: new Scope(localScopeContract),
-      },
+    const gameContext = new Context({
+      [globalScopeContract.token]: this.globalContext.scopes[globalScopeContract.token],
+      [serverGameScopeContract.token]: new Scope(globalScopeContract),
+      [localScopeContract.token]: new Scope(localScopeContract),
     });
-    const { resolver } = gameContext;
 
-    resolver.resolve(playerBroadcastDependency);
-    resolver.inject(serverGameIdDependency, gameId);
+    gameContext.resolve(playerBroadcastDependency);
+    gameContext.inject(serverGameIdDependency, gameId);
 
-    const gameStage = resolver.resolve(waitingGameStageDependency);
-    resolver.inject(startupGameStageDependency, gameStage);
+    const gameStage = gameContext.resolve(waitingGameStageDependency);
+    gameContext.inject(startupGameStageDependency, gameStage);
 
-    resolver.resolve(gameStageManagerDependency);
+    gameContext.resolve(gameStageManagerDependency);
 
-    const logger = resolver.resolve(loggerDependency);
+    const logger = gameContext.resolve(loggerDependency);
     logger.log(DEBUG, "game-created");
 
     this.games.set(gameId, gameContext);
@@ -69,9 +57,9 @@ export class ServerGameContextManager {
   }
 }
 
-function provideServerGameManager(resolver: DependencyResolver) {
+function provideServerGameManager(context: Context) {
   return new ServerGameContextManager(
-    resolver.resolve(contextDependency),
+    context,
   );
 }
 

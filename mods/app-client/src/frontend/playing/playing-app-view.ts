@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../../../qcmf5/mods/dependency/context.ts";
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { frontendScopeContract } from "../../../defs.ts";
 import { modalManagerDependency } from "../../modal.ts";
@@ -8,10 +8,10 @@ import { appSlotDependency } from "../app/app-slot.ts";
 import { createScroll } from "../app/scroll.ts";
 import { toolbarDependency } from "./toolbar.ts";
 
-export function providePlayingAppView(resolver: DependencyResolver) {
-  const appSlot = resolver.resolve(appSlotDependency);
-  const toolbar = resolver.resolve(toolbarDependency);
-  const modalManager = resolver.resolve(modalManagerDependency);
+export function providePlayingAppView(context: Context) {
+  const appSlot = context.resolve(appSlotDependency);
+  const toolbar = context.resolve(toolbarDependency);
+  const modalManager = context.resolve(modalManagerDependency);
 
   const topSlot = new Slot("top");
   const contentSlot = new Slot("content");

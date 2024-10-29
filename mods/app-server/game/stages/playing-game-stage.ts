@@ -1,4 +1,4 @@
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../../qcmf5/mods/dependency/context.ts";
 import { playerBroadcastDependency } from "../../player/player-broadcast.ts";
 import { serverPlayerContextManagerDependency } from "../../player/player-context.ts";
 import { GameStage } from "./defs.ts";
@@ -9,11 +9,11 @@ import { serverGameScopeContract } from "../../defs.ts";
 import { gameStageS2CNotNormalCAContract, gameSyncS2CNotNormalCAContract } from "@common/game/defs.ts";
 import { GameSyncS2CNotDTO } from "@common/game/game-sync-s2c-not-dto.layout.compiled.ts";
 
-export function providePlayingGameStage(resolver: DependencyResolver): GameStage {
-  const playerConnected = resolver.resolve(playerConnectedChannelDependency);
-  const playerDisconnected = resolver.resolve(playerDisconnectedChannelDependency);
-  const playerBroadcast = resolver.resolve(playerBroadcastDependency);
-  const serverPlayerContextManager = resolver.resolve(serverPlayerContextManagerDependency);
+export function providePlayingGameStage(context: Context): GameStage {
+  const playerConnected = context.resolve(playerConnectedChannelDependency);
+  const playerDisconnected = context.resolve(playerDisconnectedChannelDependency);
+  const playerBroadcast = context.resolve(playerBroadcastDependency);
+  const serverPlayerContextManager = context.resolve(serverPlayerContextManagerDependency);
 
   const name = "PLAYING" as const;
 

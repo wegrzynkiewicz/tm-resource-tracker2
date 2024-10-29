@@ -1,6 +1,6 @@
 import { assertObject, assertRequiredString } from "../../../core/asserts.ts";
 import { assertColor, ColorKey } from "../../color/color.ts";
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { provideServerGameContextManager, ServerGameContextManager } from "../server/context.ts";
 import { provideTokenManager, TokenManager } from "../../token/manager.ts";
 import { provideServerPlayerManager } from "../../player/server/manager.ts";
@@ -41,7 +41,7 @@ export class JoinGameEPHandler implements EPHandler {
     assertObject(gameContext, "not-found-game-with-this-token", { status: 404 });
     const { resolver } = gameContext;
 
-    const playerManager = resolver.resolve(serverPlayerManagerDependency);
+    const playerManager = context.resolve(serverPlayerManagerDependency);
     const player = playerManager.createPlayer({ color, name, isAdmin });
     const { playerId } = player;
 
@@ -53,10 +53,10 @@ export class JoinGameEPHandler implements EPHandler {
   }
 }
 
-export function provideJoinGameEPHandler(resolver: DependencyResolver) {
+export function provideJoinGameEPHandler(context: Context) {
   return new JoinGameEPHandler(
-    resolver.resolve(serverGameContextManagerDependency),
-    resolver.resolve(tokenManagerDependency),
+    context.resolve(serverGameContextManagerDependency),
+    context.resolve(tokenManagerDependency),
   );
 }
 export const joinGameEPHandlerDependency = defineDependency({

@@ -1,4 +1,4 @@
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { assertRequiredString, Breaker } from "../asserts.ts";
 import { Channel, Handler } from "../channel.ts";
 import { AnyGAEnvelope, provideReceivingGABus } from "./define.ts";
@@ -22,8 +22,8 @@ export class GADecoder implements Handler<MessageEvent> {
   }
 }
 
-export function provideGADecoder(resolver: DependencyResolver) {
+export function provideGADecoder(context: Context) {
   return new GADecoder(
-    resolver.resolve(receivingGABusDependency),
+    context.resolve(receivingGABusDependency),
   );
 }

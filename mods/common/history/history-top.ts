@@ -1,9 +1,9 @@
 import { createSelector, SelectorOption, SelectorStore } from "../../app-client/src/frontend/utils/selector.ts";
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { providePlayingGame } from "../playing/common.ts";
 
-export function provideHistoryPlayerStore(resolver: DependencyResolver) {
-  const playingGame = resolver.resolve(playingGameDependency);
+export function provideHistoryPlayerStore(context: Context) {
+  const playingGame = context.resolve(playingGameDependency);
   const options: SelectorOption[] = [];
   options.push({ key: "all", name: "All players" });
   for (const { color, name } of playingGame.players) {
@@ -26,8 +26,8 @@ export class HistoryTop {
   }
 }
 
-export function provideHistoryTop(resolver: DependencyResolver) {
+export function provideHistoryTop(context: Context) {
   return new HistoryTop(
-    resolver.resolve(historyPlayerStoreDependency),
+    context.resolve(historyPlayerStoreDependency),
   );
 }

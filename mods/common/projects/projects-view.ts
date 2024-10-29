@@ -1,7 +1,7 @@
 import { createPanel } from "../../app-client/src/frontend/app/panel.ts";
 import { ModalManager, provideModalManager } from "../../app-client/src/modal.ts";
 import { SelectorStore } from "../../app-client/src/frontend/utils/selector.ts";
-import { DependencyResolver } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@acme/dependency/service-resolver.ts";
 import { PlayingGame, providePlayingGame } from "../playing/common.ts";
 import { PlayingAppView, providePlayingAppView } from "../playing/playing-app-view.ts";
 import { PlayingTop, providePlayingPlayerStore, providePlayingTop } from "../playing/playing-top.ts";
@@ -32,12 +32,12 @@ export class ProjectsView {
   }
 }
 
-export function provideProjectsView(resolver: DependencyResolver) {
+export function provideProjectsView(context: Context) {
   return new ProjectsView(
-    resolver.resolve(modalManagerDependency),
-    resolver.resolve(playingAppViewDependency),
-    resolver.resolve(playingGameDependency),
-    resolver.resolve(playingTopDependency),
-    resolver.resolve(playingPlayerStoreDependency),
+    context.resolve(modalManagerDependency),
+    context.resolve(playingAppViewDependency),
+    context.resolve(playingGameDependency),
+    context.resolve(playingTopDependency),
+    context.resolve(playingPlayerStoreDependency),
   );
 }

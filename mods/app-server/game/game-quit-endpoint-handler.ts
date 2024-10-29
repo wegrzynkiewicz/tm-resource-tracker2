@@ -1,7 +1,7 @@
 import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../qcmf5/mods/dependency/context.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { parseAuthorizationToken } from "@acme/web/build-in/token.ts";
 import { serverPlayerContextManagerDependency } from "../player/player-context.ts";
@@ -29,17 +29,17 @@ export class GameQuitEndpointHandler implements EndpointHandler {
       return Response.json({ error: "game-not-found" }, { status: 404 });
     }
 
-    const playerContextManager = gameContext.resolver.resolve(serverPlayerContextManagerDependency);
+    const playerContextManager = gameContext.resolve(serverPlayerContextManagerDependency);
     await playerContextManager.dispose(playerId);
 
     return new Response(null, { status: 204 });
   }
 }
 
-export function provideGameQuitEndpointHandler(resolver: DependencyResolver): EndpointHandler {
+export function provideGameQuitEndpointHandler(context: Context): EndpointHandler {
   return new GameQuitEndpointHandler(
-    resolver.resolve(serverGameManagerDependency),
-    resolver.resolve(tokenManagerDependency),
+    context.resolve(serverGameManagerDependency),
+    context.resolve(tokenManagerDependency),
   );
 }
 

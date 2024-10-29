@@ -8,7 +8,7 @@ import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { controllerRunnerDependency } from "../../controller.ts";
 import { createQuestionModal, modalManagerDependency } from "../../modal.ts";
 import { clientGameContextManagerDependency, clientGameIdDependency } from "../../logic/game/client-game-context.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../../../qcmf5/mods/dependency/context.ts";
 import { normalCADispatcherDependency } from "@acme/control-action/normal/defs.ts";
 import { gameStartC2SNotNormalCAContract } from "@common/game/defs.ts";
 import { myPlayerDependency } from "../../logic/player/my-player.ts";
@@ -137,16 +137,16 @@ function createPlayer(player: PlayerDTO): HTMLElement {
   return $root;
 }
 
-export function provideWaitingView(resolver: DependencyResolver) {
-  const app = resolver.resolve(introAppViewDependency);
-  const docTitle = resolver.resolve(docTitleDependency);
-  const gameId = resolver.resolve(clientGameIdDependency);
-  const myPlayer = resolver.resolve(myPlayerDependency);
-  const modalManager = resolver.resolve(modalManagerDependency);
-  const clientGameManager = resolver.resolve(clientGameContextManagerDependency);
-  const controllerRunner = resolver.resolve(controllerRunnerDependency);
-  const playersStore = resolver.resolve(playersStoreDependency);
-  const dispatcher = resolver.resolve(normalCADispatcherDependency);
+export function provideWaitingView(context: Context) {
+  const app = context.resolve(introAppViewDependency);
+  const docTitle = context.resolve(docTitleDependency);
+  const gameId = context.resolve(clientGameIdDependency);
+  const myPlayer = context.resolve(myPlayerDependency);
+  const modalManager = context.resolve(modalManagerDependency);
+  const clientGameManager = context.resolve(clientGameContextManagerDependency);
+  const controllerRunner = context.resolve(controllerRunnerDependency);
+  const playersStore = context.resolve(playersStoreDependency);
+  const dispatcher = context.resolve(normalCADispatcherDependency);
 
   const gameIdBox = createEditBox({
     caption: "GameID",

@@ -2,7 +2,7 @@ import { Channel } from "@acme/dom/channel.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { frontendScopeContract } from "../../../defs.ts";
 import { appNameDependency } from "./app-name-config.ts";
-import { DependencyResolver } from "@acme/dependency/resolver.ts";
+import { Context } from "../../../../qcmf5/mods/dependency/context.ts";
 
 export class TopTitleStore {
   public readonly updates = new Channel<[]>();
@@ -17,9 +17,9 @@ export class TopTitleStore {
   }
 }
 
-export function provideTopTitle(resolver: DependencyResolver) {
+export function provideTopTitle(context: Context) {
   return new TopTitleStore(
-    resolver.resolve(appNameDependency),
+    context.resolve(appNameDependency),
   );
 }
 
