@@ -18,6 +18,8 @@ import { webSocketNormalCASenderDependency } from "@acme/control-action/transpor
 import { webSocketNormalCADispatcherDependency } from "@acme/control-action/transport/ws-normal-ca-dispatcher.ts";
 import { ClientNormalCAContextFactory } from "./client-normal-ca-context-factory.ts";
 import { initClientNormalCARouter } from "../base/normal-ca-router.ts";
+import { loggerFactoryDependency } from "@acme/logger/factory.ts";
+import { duplexLoggerDependency } from "@acme/control-action/defs.ts";
 
 export class ClientPlayerWSContextManager {
   public clientPlayerWSContext: Context | null = null;
@@ -39,6 +41,10 @@ export class ClientPlayerWSContextManager {
       [duplexScopeContract.token]: new Scope(duplexScopeContract),
     });
     context.inject(webSocketDependency, socket);
+
+    const loggerFactory = context.resolve(loggerFactoryDependency);
+    const logger = loggerFactory.createLogger("CLT-DUPLEX");
+    context.inject(duplexLoggerDependency, logger);
 
     const factory = new ClientNormalCAContextFactory(context);
     context.inject(normalCAContextFactoryDependency, factory);

@@ -43,8 +43,8 @@ export class GameSocketEndpointHandler implements EndpointHandler {
 
     const playerDuplexContextManager = playerContext.resolve(serverPlayerDuplexContextManagerDependency);
 
-    const onOpen = async () => {
-      await playerDuplexContextManager.createServerPlayerDuplexContext({ socket });
+    const onOpen = () => {
+      playerDuplexContextManager.createServerPlayerDuplexContext(socket);
     };
     socket.addEventListener("open", onOpen, { once: true });
 

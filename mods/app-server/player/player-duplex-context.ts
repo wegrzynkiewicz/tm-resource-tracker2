@@ -1,3 +1,5 @@
+import { duplexIdDependency, duplexLoggerDependency } from '@acme/control-action/defs.ts';
+import { serverGameIdDependency } from './../game/game-context.ts';
 import { normalCASenderDependency } from "@acme/control-action/normal/defs.ts";
 import { webSocketNormalCASenderDependency } from "@acme/control-action/transport/ws-normal-ca-sender.ts";
 import { duplexScopeContract, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
@@ -11,12 +13,12 @@ import { normalCAContextFactoryDependency, normalCARouterDependency } from "@acm
 import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
 import { initServerNormalCARouter } from "../base/normal-ca-router.ts";
 import { Channel } from "@acme/dom/channel.ts";
-import { duplexIdDependency, playerConnectedChannelDependency, playerDisconnectedChannelDependency } from "./defs.ts";
+import { playerConnectedChannelDependency, playerDisconnectedChannelDependency } from "./defs.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
-import { serverPlayerDTODependency } from "./player-context.ts";
-import { serverPlayerDuplexLoggerDependency } from "./player-logger.ts";
+import { serverPlayerDTODependency, serverPlayerIdDependency } from "./player-context.ts";
+import { loggerFactoryDependency } from "@acme/logger/factory.ts";
 
-let duplexId = 1;
+let duplexIdCounter = 1;
 
 export class ServerPlayerDuplexContextManager {
   public context: Context | null = null;
@@ -27,11 +29,7 @@ export class ServerPlayerDuplexContextManager {
     private readonly playerDisconnected: Channel<[Context, PlayerDTO]>,
   ) {}
 
-  public async createServerPlayerDuplexContext(
-    { socket }: {
-      socket: WebSocket;
-    },
-  ): Promise<Context> {
+  public createServerPlayerDuplexContext(socket: WebSocket): Context {
     const context = new Context({
       [globalScopeContract.token]: this.serverPlayerContext.scopes[globalScopeContract.token],
       [serverGameScopeContract.token]: this.serverPlayerContext.scopes[serverGameScopeContract.token],
@@ -40,12 +38,19 @@ export class ServerPlayerDuplexContextManager {
     });
 
     this.context = context;
-
-    context.inject(duplexIdDependency, duplexId++);
     context.inject(webSocketDependency, socket);
 
-    const logger = context.resolve(serverPlayerDuplexLoggerDependency);
+    const duplexId = duplexIdCounter++;
+    context.inject(duplexIdDependency, duplexId);
+
+    const loggerFactory = context.resolve(loggerFactoryDependency);
+    const logger = loggerFactory.createLogger("SRV-DUPLEX", {
+      duplexId,
+      gameId: context.resolve(serverGameIdDependency),
+      playerId: context.resolve(serverPlayerIdDependency),
+    });
     logifyWebSocket(logger, socket);
+    context.inject(duplexLoggerDependency, logger);
 
     const factory = new ServerNormalCAContextFactory(context);
     context.inject(normalCAContextFactoryDependency, factory);
@@ -81,7 +86,7 @@ export class ServerPlayerDuplexContextManager {
     // }
   }
 
-  public async dispose() {
+  public dispose() {
     if (this.context === null) {
       return;
     }

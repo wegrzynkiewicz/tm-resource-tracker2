@@ -5,8 +5,8 @@ import { serverGameScopeContract } from "../defs.ts";
 import { Logger, TRACE } from "@acme/logger/defs.ts";
 import { playerConnectedChannelDependency, playerDisconnectedChannelDependency } from "./defs.ts";
 import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
-import { NullLogger } from "@acme/logger/null-logger.ts";
 import { Context } from "@acme/dependency/context.ts";
+import { serverGameLoggerDependency } from "../game/game-logger.ts";
 
 export class PlayerBroadcast implements NormalCADispatcher {
   public socketByPlayerId = new Map<string, WebSocket>();
@@ -29,7 +29,7 @@ export class PlayerBroadcast implements NormalCADispatcher {
 }
 
 export function providePlayerBroadcast(context: Context) {
-  const logger = new NullLogger() as Logger;
+  const logger = context.resolve(serverGameLoggerDependency);
   const playerConnected = context.resolve(playerConnectedChannelDependency);
   const playerDisconnected = context.resolve(playerDisconnectedChannelDependency);
 

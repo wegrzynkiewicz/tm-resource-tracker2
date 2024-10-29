@@ -4,7 +4,6 @@ import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { serverGameScopeContract } from "../defs.ts";
 import { createRandomStringFactory } from "@acme/useful/strings.ts";
-import { playerBroadcastDependency } from "../player/player-broadcast.ts";
 import { gameStageManagerDependency } from "./stages/game-stage-manager.ts";
 import { waitingGameStageDependency } from "./stages/waiting-game-stage.ts";
 import { startupGameStageDependency } from "./stages/defs.ts";
@@ -41,7 +40,6 @@ export class ServerGameContextManager {
       [serverGameScopeContract.token]: new Scope(globalScopeContract),
     });
 
-    gameContext.resolve(playerBroadcastDependency);
     gameContext.inject(serverGameIdDependency, gameId);
 
     const gameStage = gameContext.resolve(waitingGameStageDependency);
