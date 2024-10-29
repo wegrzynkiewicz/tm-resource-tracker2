@@ -2,7 +2,7 @@ import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
 import { clientGameScopeContract, frontendScopeContract } from "../../../defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { readySocket } from "@acme/web/socket.ts";
-import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { duplexScopeContract, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { apiURLDependency } from "../../api-url-config.ts";
 import { createGameSocketPathname } from "@common/game/defs.ts";
 import { clientGameTokenDependency } from "./client-game-context.ts";
@@ -37,7 +37,6 @@ export class ClientPlayerWSContextManager {
         [frontendScopeContract.token]: this.clientGameContext.scopes[frontendScopeContract.token],
         [clientGameScopeContract.token]: this.clientGameContext.scopes[clientGameScopeContract.token],
         [duplexScopeContract.token]: new Scope(duplexScopeContract),
-        [localScopeContract.token]: new Scope(localScopeContract),
     });
     context.inject(webSocketDependency, socket);
 

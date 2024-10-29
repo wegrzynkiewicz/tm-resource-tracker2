@@ -1,6 +1,6 @@
 import { normalCASenderDependency } from "@acme/control-action/normal/defs.ts";
 import { webSocketNormalCASenderDependency } from "@acme/control-action/transport/ws-normal-ca-sender.ts";
-import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { duplexScopeContract, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { loggerDependency } from "@acme/logger/defs.ts";
 import { logifyWebSocket } from "@acme/web/socket.ts";
@@ -41,7 +41,6 @@ export class ServerPlayerDuplexContextManager {
       [serverGameScopeContract.token]: this.serverPlayerContext.scopes[serverGameScopeContract.token],
       [serverPlayerScopeContract.token]: this.serverPlayerContext.scopes[serverPlayerScopeContract.token],
       [duplexScopeContract.token]: new Scope(duplexScopeContract),
-      [localScopeContract.token]: new Scope(localScopeContract),
     });
 
     this.context = context;

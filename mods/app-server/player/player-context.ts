@@ -1,4 +1,4 @@
-import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { Channel } from "@acme/dom/channel.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
@@ -44,7 +44,6 @@ export class ServerPlayerContextManager {
       [globalScopeContract.token]: this.gameContext.scopes[globalScopeContract.token],
       [serverGameScopeContract.token]: this.gameContext.scopes[serverGameScopeContract.token],
       [serverPlayerScopeContract.token]: new Scope(serverPlayerScopeContract),
-      [localScopeContract.token]: new Scope(localScopeContract),
     });
 
     const player: PlayerDTO = {

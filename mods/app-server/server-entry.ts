@@ -2,7 +2,7 @@ import { BasicLogHandler } from "@acme/logger/basic-log-handler.ts";
 import { prettyLogFormatterDependency } from "@acme/logger/pretty-log-formatter.ts";
 import { initServerConfig } from "./config.ts";
 import { initMainWebServer } from "./main.web-server.ts";
-import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { initConfig } from "@acme/app/config.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { BasicLogFilter } from "@acme/logger/basic-log-filter.ts";
@@ -20,7 +20,6 @@ export async function initLogChannel(globalContext: Context): Promise<void> {
 async function start() {
   const globalContext = new Context({
       [globalScopeContract.token]: new Scope(globalScopeContract),
-      [localScopeContract.token]: new Scope(localScopeContract),
   });
 
   await initServerConfig(globalContext);

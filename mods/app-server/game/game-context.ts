@@ -1,4 +1,4 @@
-import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { DEBUG, loggerDependency } from "@acme/logger/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
@@ -38,7 +38,6 @@ export class ServerGameContextManager {
     const gameContext = new Context({
       [globalScopeContract.token]: this.globalContext.scopes[globalScopeContract.token],
       [serverGameScopeContract.token]: new Scope(globalScopeContract),
-      [localScopeContract.token]: new Scope(localScopeContract),
     });
 
     gameContext.resolve(playerBroadcastDependency);

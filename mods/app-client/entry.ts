@@ -3,7 +3,7 @@ import { builtInConfigValueExtractorDependency } from "@acme/config/built-in-ext
 import { configBinderDependency } from "@acme/config/common.ts";
 import { configValueResultMapDependency } from "@acme/config/value-getter.ts";
 import { configValueExtractorsDependency, configValueResolverDependency } from "@acme/config/value-resolver.ts";
-import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { appSlotDependency } from "./src/frontend/app/app-slot.ts";
 import { frontendScopeContract } from "./defs.ts";
 import { apiURLConfigContract } from "./src/api-url-config.ts";
@@ -41,7 +41,6 @@ async function initFrontend(globalContext: Context): Promise<void> {
   const frontendScope = new Context({
     [globalScopeContract.token]: globalContext.scopes[globalScopeContract.token],
     [frontendScopeContract.token]: new Scope(frontendScopeContract),
-    [localScopeContract.token]: new Scope(localScopeContract),
   });
 
   const appSlot = frontendScope.resolve(appSlotDependency);
@@ -61,7 +60,6 @@ async function initFrontend(globalContext: Context): Promise<void> {
 async function bootstrap() {
   const globalContext = new Context({
     [globalScopeContract.token]: new Scope(globalScopeContract),
-    [localScopeContract.token]: new Scope(localScopeContract),
   });
 
   await initClientConfig(globalContext);

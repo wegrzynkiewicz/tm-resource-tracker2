@@ -1,7 +1,7 @@
 import { jsonRequest } from "@acme/useful/json-request.ts";
 import { clientGameScopeContract, frontendScopeContract } from "../../../defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { apiURLDependency } from "../../api-url-config.ts";
 import { gameCreatePathname, gameJoinPathname, gameQuitPathname, gameReadPathname } from "@common/game/defs.ts";
 import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
@@ -35,7 +35,6 @@ export class ClientGameContextManager {
         [globalScopeContract.token]: this.frontendContext.scopes[globalScopeContract.token],
         [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
         [clientGameScopeContract.token]: new Scope(clientGameScopeContract),
-        [localScopeContract.token]: new Scope(localScopeContract),
     });
 
     localStorage.setItem("token", token);

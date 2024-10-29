@@ -1,7 +1,7 @@
 import { parsePlayingView } from "./playing-view.layout.compiled.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { clientGameContextManagerDependency } from "../../logic/game/client-game-context.ts";
-import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { duplexScopeContract, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { clientGameScopeContract, controllerScopeContract, frontendScopeContract } from "../../../defs.ts";
 import { controllerAbortDependency, controllerRunnerDependency } from "../../controller.ts";
 import { clientPlayerWSContextManagerDependency } from "../../logic/game/client-player-ws-context.ts";
@@ -46,7 +46,6 @@ export async function initPlayingController(context: Context, params: Data) {
     [clientGameScopeContract.token]: gameContext.scopes[clientGameScopeContract.token],
     [duplexScopeContract.token]: clientPlayerWSContext.scopes[duplexScopeContract.token],
     [controllerScopeContract.token]: context.scopes[controllerScopeContract.token],
-    [localScopeContract.token]: new Scope(localScopeContract),
   });
 
   const loading = playingContext.resolve(loadingViewDependency);

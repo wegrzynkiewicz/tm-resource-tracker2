@@ -3,7 +3,7 @@ import { controllerRunnerDependency } from "../../controller.ts";
 import { waitingViewDependency } from "./waiting-view.ts";
 import { homePath } from "../routes.ts";
 import { Context } from "@acme/dependency/context.ts";
-import { duplexScopeContract, globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { duplexScopeContract, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { clientGameScopeContract, controllerScopeContract, frontendScopeContract } from "../../../defs.ts";
 import { clientPlayerWSContextManagerDependency } from "../../logic/game/client-player-ws-context.ts";
 
@@ -27,7 +27,6 @@ export async function initWaitingController(context: Context) {
     [clientGameScopeContract.token]: gameContext.scopes[clientGameScopeContract.token],
     [duplexScopeContract.token]: clientPlayerWSContext.scopes[duplexScopeContract.token],
     [controllerScopeContract.token]: context.scopes[controllerScopeContract.token],
-    [localScopeContract.token]: new Scope(localScopeContract),
   });
   const view = waitingContext.resolve(waitingViewDependency);
 

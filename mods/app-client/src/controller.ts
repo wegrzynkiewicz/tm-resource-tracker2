@@ -3,7 +3,7 @@ import { controllerScopeContract, frontendScopeContract } from "../defs.ts";
 import { Panic } from "@acme/useful/errors.ts";
 import { Data } from "@acme/useful/types.ts";
 import { Context } from "@acme/dependency/context.ts";
-import { globalScopeContract, localScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { Channel } from "@acme/dom/channel.ts";
 
 export type ControllerInitializer = (context: Context, params: Data) => Promise<void>;
@@ -75,7 +75,6 @@ export class ControllerRunner {
         [globalScopeContract.token]: this.frontendContext.scopes[globalScopeContract.token],
         [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
         [controllerScopeContract.token]: new Scope(controllerScopeContract),
-        [localScopeContract.token]: new Scope(localScopeContract),
     });
 
     try {
