@@ -14,6 +14,7 @@ import { myPlayerDependency } from "../player/my-player.ts";
 import { createPlayerModal } from "../player/player-modal.ts";
 import { playersStoreDependency } from "../player/players-store.ts";
 import { homePath } from "../routes.ts";
+import { Context } from "@acme/dependency/context.ts";
 
 export class WaitingPlayerFactory {
   public create(player: PlayerDTO): HTMLElement {

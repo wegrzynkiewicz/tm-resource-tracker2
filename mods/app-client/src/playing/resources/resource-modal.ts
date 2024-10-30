@@ -1,8 +1,9 @@
-import { Resource, ResourceTarget } from "@common/resources.ts";
+import { ResourceTarget } from "@common/resources/resource-target.layout.compiled.ts";
+import { Resource } from "@common/resources/defs.ts";
 import { button, div, div_nodes, span } from "@acme/dom/nodes.ts";
 import { deferred } from "@acme/useful/async.ts";
 import { Result } from "@acme/useful/result.ts";
-import { createResourceIcon } from "./defs.ts";
+import { createResourceImage } from "./defs.ts";
 import { Channel } from "@acme/dom/channel.ts";
 
 export class CalculatorStore {
@@ -73,7 +74,7 @@ export function createResourceModal(options: ResourceModalOptions) {
         div_nodes(`modal_target-resource _${target}`, [
           div("box _counter", count.toString()),
         ]),
-        createResourceIcon(type),
+        createResourceImage(type),
       ]),
       div_nodes("modal_count", [
         span("modal_count-label _left", "by"),

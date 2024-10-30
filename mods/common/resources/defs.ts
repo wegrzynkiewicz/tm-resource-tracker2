@@ -1,7 +1,9 @@
+import { ResourceUpdateC2SReqDTO } from './resource-update-c2s-req-dto.layout.compiled.ts';
 import { Channel } from "@acme/dom/channel.ts";
+import { ResourceType } from "./resource-type.layout.compiled.ts";
+import { ResourceTarget } from "./resource-target.layout.compiled.ts";
+import { defineNormalCA } from "@acme/control-action/normal/defs.ts";
 
-export type ResourceType = "points" | "gold" | "steel" | "titan" | "plant" | "energy" | "heat";
-export type ResourceTarget = "production" | "amount";
 export type ResourceMatrix = Record<ResourceTarget, number>;
 
 export function createResourceMatrix(amount = 0, production = 0): ResourceMatrix {
@@ -53,3 +55,5 @@ export const resources: Resource[] = [
   defineResource("energy", 0),
   defineResource("heat", 0),
 ];
+
+export const resourceUpdateC2SReqNormalCAContract = defineNormalCA<ResourceUpdateC2SReqDTO>("c2s-req-resource-update");

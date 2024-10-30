@@ -1,16 +1,16 @@
 import { MapperStore } from "@acme/dom/mapper-store.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "../@acme/dependency/context.ts";
 import { docTitleDependency } from "../../app/doc-title.ts";
 import { controllerScopeContract } from "../../defs.ts";
 import { playingAppViewDependency } from "../playing-app-view.ts";
 import { playingTopDependency } from "../playing-top.ts";
 import { createResourcePanel } from "./resource-item.ts";
-import { ResourceStore } from "@common/resources.ts";
 import { modalManagerDependency } from "../../modal.ts";
 import { createPanel } from "../../app/panel.ts";
 import { playersStoreDependency } from "../../player/players-store.ts";
 import { currentPlayerStoreDependency } from "../defs.ts";
+import { ResourceStore } from "@common/resources/defs.ts";
+import { Context } from "@acme/dependency/context.ts";
 
 export function provideResourcesView(context: Context) {
   const app = context.resolve(playingAppViewDependency);
