@@ -1,24 +1,23 @@
+import { Panic } from '@acme/useful/errors.ts';
 import { clientGameContextManagerDependency } from "../game/client-game-context.ts";
-import { controllerRunnerDependency } from "../controller.ts";
 import { waitingViewDependency } from "./waiting-view.ts";
-import { homePath } from "../routes.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { duplexScopeContract, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { clientGameScopeContract, controllerScopeContract, frontendScopeContract } from "../defs.ts";
 import { clientPlayerWSContextManagerDependency } from "../game/client-player-ws-context.ts";
+import { Controller } from "../controller.ts";
 
-export async function initWaitingController(context: Context) {
-  const controllerRunner = context.resolve(controllerRunnerDependency);
+export async function initWaitingController(context: Context): Promise<Controller> {
   const gameManager = context.resolve(clientGameContextManagerDependency);
 
   const gameContext = await gameManager.getClientGameContext();
   if (!gameContext) {
-    return await controllerRunner.run(homePath);
+    throw new Panic("game-context-missing");
   }
   const clientPlayerWSContextManager = gameContext.resolve(clientPlayerWSContextManagerDependency);
   const { clientPlayerWSContext } = clientPlayerWSContextManager;
   if (clientPlayerWSContext === null) {
-    return await controllerRunner.run(homePath);
+    throw new Panic("player-ws-context-missing");
   }
 
   const waitingContext = new Context({
@@ -26,9 +25,15 @@ export async function initWaitingController(context: Context) {
     [frontendScopeContract.token]: context.scopes[frontendScopeContract.token],
     [clientGameScopeContract.token]: gameContext.scopes[clientGameScopeContract.token],
     [duplexScopeContract.token]: clientPlayerWSContext.scopes[duplexScopeContract.token],
-    [controllerScopeContract.token]: context.scopes[controllerScopeContract.token],
+    [controllerScopeContract.token]: new Scope(controllerScopeContract),
   });
   const view = waitingContext.resolve(waitingViewDependency);
 
   view.render();
+
+  const dispose = () => {
+    view.dispose();
+  };
+
+  return { dispose };
 }

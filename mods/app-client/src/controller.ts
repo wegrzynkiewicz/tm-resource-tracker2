@@ -3,10 +3,12 @@ import { controllerScopeContract, frontendScopeContract } from "./defs.ts";
 import { Panic } from "@acme/useful/errors.ts";
 import { Data } from "@acme/useful/types.ts";
 import { Context } from "@acme/dependency/context.ts";
-import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
 import { Channel } from "@acme/dom/channel.ts";
 
-export type ControllerInitializer = (context: Context, params: Data) => Promise<void>;
+export interface Controller {
+  dispose(): void;
+}
+export type ControllerInitializer = (context: Context, params: Data) => Promise<Controller>;
 export type ControllerImporter = () => Promise<ControllerInitializer>;
 
 export interface ControllerRouteMatch {
@@ -49,7 +51,7 @@ export class NaiveControllerRouter implements ControllerRouter {
 
 export class ControllerRunner {
   public currentPathname: string = "";
-  public currentContext: Context | null = null;
+  public currentController: Controller | null = null;
 
   public constructor(
     private readonly router: ControllerRouter,
@@ -65,23 +67,15 @@ export class ControllerRunner {
     }
     const { importer, params } = route;
 
-    if (this.currentContext) {
-      const abort = this.currentContext.resolve(controllerAbortDependency);
-      abort.emit();
-      this.currentContext = null;
+    if (this.currentController) {
+      this.currentController.dispose();
     }
-
-    this.currentContext = new Context({
-      [globalScopeContract.token]: this.frontendContext.scopes[globalScopeContract.token],
-      [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
-      [controllerScopeContract.token]: new Scope(controllerScopeContract),
-    });
 
     try {
       const initializer = await importer();
-      await initializer(this.currentContext, params);
+      this.currentController = await initializer(this.frontendContext, params);
     } catch (error) {
-      throw new Panic("controller-initialization-failed", { controller: importer.name, error });
+      throw new Panic("controller-initialization-failed", { pathname, error });
     }
   }
 }

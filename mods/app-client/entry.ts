@@ -10,7 +10,7 @@ import { apiURLConfigContract } from "./src/api-url-config.ts";
 import { appNameConfigContract } from "./src/app/app-name-config.ts";
 import { logChannelDependency, TRACE } from "@acme/logger/defs.ts";
 import { controllerRouterDependency, controllerRunnerDependency } from "./src/controller.ts";
-import { initControllerRouter } from "./src/routes.ts";
+import { homePath, initControllerRouter } from "./src/routes.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { BasicLogFilter } from "@acme/logger/basic-log-filter.ts";
 
@@ -38,19 +38,23 @@ async function initClientConfig(globalContext: Context): Promise<void> {
 }
 
 async function initFrontend(globalContext: Context): Promise<void> {
-  const frontendScope = new Context({
+  const frontendContext = new Context({
     [globalScopeContract.token]: globalContext.scopes[globalScopeContract.token],
     [frontendScopeContract.token]: new Scope(frontendScopeContract),
   });
 
-  const appSlot = frontendScope.resolve(appSlotDependency);
+  const appSlot = frontendContext.resolve(appSlotDependency);
   document.body.appendChild(appSlot.$root);
 
   const router = initControllerRouter();
-  frontendScope.inject(controllerRouterDependency, router);
+  frontendContext.inject(controllerRouterDependency, router);
 
-  const controllerRunner = frontendScope.resolve(controllerRunnerDependency);
-  await controllerRunner.run(window.location.pathname);
+  const controllerRunner = frontendContext.resolve(controllerRunnerDependency);
+  try {
+    await controllerRunner.run(window.location.pathname);
+  } catch {
+    await controllerRunner.run(homePath);
+  }
 
   globalThis.addEventListener("popstate", async () => {
     await controllerRunner.run(window.location.pathname);
