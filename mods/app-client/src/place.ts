@@ -6,8 +6,8 @@ export type SlotNode = Comment | Element | Text;
 export class Slot {
   public readonly $anchor: Comment;
   public $root: SlotNode;
-  public readonly attached = new Channel<[SlotNode, Slot]>();
-  public readonly detached = new Channel<[SlotNode, Slot]>();
+  public readonly attached = new Channel<[SlotNode]>();
+  public readonly detached = new Channel<[SlotNode]>();
 
   public constructor(
     public readonly description: string,
@@ -21,9 +21,9 @@ export class Slot {
       return;
     }
     this.$root.replaceWith($node);
-    this.detached.emit(this.$root, this);
+    this.detached.emit(this.$root);
     this.$root = $node;
-    this.attached.emit($node, this);
+    this.attached.emit($node);
   }
 
   public detach() {
