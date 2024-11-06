@@ -5,7 +5,7 @@ import { frontendScopeToken } from "../defs.ts";
 import { docTitleDependency } from "../app/doc-title.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
-import { Slot } from "../place.ts";
+import { Slot } from "@acme/dom/slot.ts";
 import { clientGameContextManagerDependency } from "../game/client-game-context.ts";
 import { controllerRunnerDependency } from "../controller.ts";
 import { createJoinModal } from "./join-game-modal.ts";

@@ -1,6 +1,6 @@
 import { createScroll } from "./scroll.ts";
 import { modalManagerDependency } from "../modal.ts";
-import { Slot } from "../place.ts";
+import { Slot } from "@acme/dom/slot.ts";
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { introTopDependency } from "./intro-top.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";

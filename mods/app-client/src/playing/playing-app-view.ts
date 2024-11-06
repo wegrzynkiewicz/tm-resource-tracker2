@@ -3,7 +3,7 @@ import { Context } from "@acme/dependency/context.ts";
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { frontendScopeToken } from "../defs.ts";
 import { modalManagerDependency } from "../modal.ts";
-import { Slot } from "../place.ts";
+import { Slot } from "@acme/dom/slot.ts";
 import { appSlotDependency } from "../app/app-slot.ts";
 import { createScroll } from "../app/scroll.ts";
 import { toolbarDependency } from "./toolbar.ts";
