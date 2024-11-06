@@ -2,7 +2,7 @@ import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { topTitleStoreDependency } from "./top-title-store.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
-import { frontendScopeContract } from "../defs.ts";
+import { frontendScopeToken } from "../defs.ts";
 
 export function provideIntroTop(context: Context) {
   const store = context.resolve(topTitleStoreDependency);
@@ -22,5 +22,5 @@ export function provideIntroTop(context: Context) {
 
 export const introTopDependency = defineDependency({
   provider: provideIntroTop,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });

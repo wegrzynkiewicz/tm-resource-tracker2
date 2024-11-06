@@ -1,7 +1,7 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { div, div_nodes } from "@acme/dom/nodes.ts";
-import { frontendScopeContract } from "../defs.ts";
+import { frontendScopeToken } from "../defs.ts";
 import { modalManagerDependency } from "../modal.ts";
 import { Slot } from "../place.ts";
 import { appSlotDependency } from "../app/app-slot.ts";
@@ -35,5 +35,5 @@ export function providePlayingAppView(context: Context) {
 
 export const playingAppViewDependency = defineDependency({
   provider: providePlayingAppView,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });

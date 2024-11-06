@@ -6,7 +6,7 @@ import { introTopDependency } from "./intro-top.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { appSlotDependency } from "./app-slot.ts";
-import { frontendScopeContract } from "../defs.ts";
+import { frontendScopeToken } from "../defs.ts";
 
 export function provideAppView(context: Context) {
   const appSlot = context.resolve(appSlotDependency);
@@ -33,5 +33,5 @@ export function provideAppView(context: Context) {
 
 export const introAppViewDependency = defineDependency({
   provider: provideAppView,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });

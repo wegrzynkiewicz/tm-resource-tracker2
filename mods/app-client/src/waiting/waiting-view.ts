@@ -2,7 +2,7 @@ import { defineDependency } from "@acme/dependency/declaration.ts";
 import { createEditBox } from "../utils/edit-box.ts";
 import { button, div, div_nodes } from "@acme/dom/nodes.ts";
 import { introAppViewDependency } from "../app/intro-app-view.ts";
-import { controllerScopeContract } from "../defs.ts";
+import { controllerScopeToken } from "../defs.ts";
 import { docTitleDependency } from "../app/doc-title.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { controllerRunnerDependency } from "../controller.ts";
@@ -236,5 +236,5 @@ export function provideWaitingView(context: Context) {
 
 export const waitingViewDependency = defineDependency({
   provider: provideWaitingView,
-  scopeToken: controllerScopeContract,
+  scopeToken: controllerScopeToken,
 });

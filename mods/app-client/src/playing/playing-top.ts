@@ -1,7 +1,7 @@
 import { div, div_nodes } from "@acme/dom/nodes.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
-import { frontendScopeContract } from "../defs.ts";
+import { frontendScopeToken } from "../defs.ts";
 import { currentPlayerStoreDependency } from "./defs.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { playersStoreDependency } from "../player/players-store.ts";
@@ -33,5 +33,5 @@ export function providePlayingTop(context: Context) {
 
 export const playingTopDependency = defineDependency({
   provider: providePlayingTop,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });

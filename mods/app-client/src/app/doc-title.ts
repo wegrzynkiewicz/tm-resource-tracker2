@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { frontendScopeContract } from "../defs.ts";
+import { frontendScopeToken } from "../defs.ts";
 import { appNameDependency } from "./app-name-config.ts";
 import { Context } from "@acme/dependency/context.ts";
 
@@ -13,5 +13,5 @@ export function provideDocTitle(context: Context) {
 
 export const docTitleDependency = defineDependency({
   provider: provideDocTitle,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });

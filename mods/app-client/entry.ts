@@ -5,7 +5,7 @@ import { configValueResultMapDependency } from "@acme/config/value-getter.ts";
 import { configValueExtractorsDependency, configValueResolverDependency } from "@acme/config/value-resolver.ts";
 import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { appSlotDependency } from "./src/app/app-slot.ts";
-import { frontendScopeContract } from "./src/defs.ts";
+import { frontendScopeToken } from "./src/defs.ts";
 import { apiURLConfigContract } from "./src/api-url-config.ts";
 import { appNameConfigContract } from "./src/app/app-name-config.ts";
 import { logChannelDependency, TRACE } from "@acme/logger/defs.ts";
@@ -40,7 +40,7 @@ async function initClientConfig(globalContext: Context): Promise<void> {
 async function initFrontend(globalContext: Context): Promise<void> {
   const frontendContext = new Context({
     [globalScopeToken.token]: globalContext.scopes[globalScopeToken.token],
-    [frontendScopeContract.token]: new Scope(frontendScopeContract),
+    [frontendScopeToken.token]: new Scope(),
   });
 
   const appSlot = frontendContext.resolve(appSlotDependency);

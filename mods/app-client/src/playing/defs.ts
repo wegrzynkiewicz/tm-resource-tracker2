@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { frontendScopeContract } from "../defs.ts";
+import { frontendScopeToken } from "../defs.ts";
 import { NumberStore } from "@acme/dom/number-store.ts";
 import { PlayingView } from "./playing-view.layout.compiled.ts";
 import { Channel } from "@acme/dom/channel.ts";
@@ -10,7 +10,7 @@ export function provideCurrentPlayerStore() {
 
 export const currentPlayerStoreDependency = defineDependency({
   provider: provideCurrentPlayerStore,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });
 
 export class PlayingViewStore {
@@ -29,5 +29,5 @@ export function providePlayingViewStore() {
 
 export const playingViewStoreDependency = defineDependency({
   provider: providePlayingViewStore,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });

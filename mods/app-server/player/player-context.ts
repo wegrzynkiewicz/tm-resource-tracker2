@@ -43,7 +43,7 @@ export class ServerPlayerContextManager {
     const playerContext = new Context({
       [globalScopeToken.token]: this.gameContext.scopes[globalScopeToken.token],
       [serverGameScopeContract.token]: this.gameContext.scopes[serverGameScopeContract.token],
-      [serverPlayerScopeContract.token]: new Scope(serverPlayerScopeContract),
+      [serverPlayerScopeContract.token]: new Scope(),
     });
 
     const player: PlayerDTO = {

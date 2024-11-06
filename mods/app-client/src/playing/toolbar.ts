@@ -4,7 +4,7 @@ import { button_nodes, div_nodes, span } from "@acme/dom/nodes.ts";
 import { svg_icon } from "../utils/svg.ts";
 import { controllerRunnerDependency } from "../controller.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { frontendScopeContract } from "../defs.ts";
+import { frontendScopeToken } from "../defs.ts";
 import { playingPathFactory } from "../routes.ts";
 import { playingViewStoreDependency } from "./defs.ts";
 
@@ -47,5 +47,5 @@ export function provideToolbar(context: Context) {
 
 export const toolbarDependency = defineDependency({
   provider: provideToolbar,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });

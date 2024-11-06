@@ -3,7 +3,7 @@ import { clientGameContextManagerDependency } from "../game/client-game-context.
 import { waitingViewDependency } from "./waiting-view.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { duplexScopeToken, globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
-import { clientGameScopeContract, controllerScopeContract, frontendScopeContract } from "../defs.ts";
+import { clientGameScopeToken, controllerScopeToken, frontendScopeToken } from "../defs.ts";
 import { clientPlayerWSContextManagerDependency } from "../game/client-player-ws-context.ts";
 import { Controller } from "../controller.ts";
 
@@ -22,10 +22,10 @@ export async function initWaitingController(context: Context): Promise<Controlle
 
   const waitingContext = new Context({
     [globalScopeToken.token]: context.scopes[globalScopeToken.token],
-    [frontendScopeContract.token]: context.scopes[frontendScopeContract.token],
-    [clientGameScopeContract.token]: gameContext.scopes[clientGameScopeContract.token],
+    [frontendScopeToken.token]: context.scopes[frontendScopeToken.token],
+    [clientGameScopeToken.token]: gameContext.scopes[clientGameScopeToken.token],
     [duplexScopeToken.token]: clientPlayerWSContext.scopes[duplexScopeToken.token],
-    [controllerScopeContract.token]: new Scope(controllerScopeContract),
+    [controllerScopeToken.token]: new Scope(),
   });
   const view = waitingContext.resolve(waitingViewDependency);
 

@@ -1,7 +1,7 @@
 import { introAppViewDependency } from "../app/intro-app-view.ts";
 import { button, div_nodes } from "@acme/dom/nodes.ts";
 import { modalManagerDependency } from "../modal.ts";
-import { frontendScopeContract } from "../defs.ts";
+import { frontendScopeToken } from "../defs.ts";
 import { docTitleDependency } from "../app/doc-title.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
@@ -68,5 +68,5 @@ export function provideHomepageView(context: Context) {
 
 export const homepageViewDependency = defineDependency({
   provider: provideHomepageView,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });

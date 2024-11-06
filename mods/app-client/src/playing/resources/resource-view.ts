@@ -1,7 +1,7 @@
 import { MapperStore } from "@acme/dom/mapper-store.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { docTitleDependency } from "../../app/doc-title.ts";
-import { controllerScopeContract } from "../../defs.ts";
+import { controllerScopeToken } from "../../defs.ts";
 import { playingAppViewDependency } from "../playing-app-view.ts";
 import { playingTopDependency } from "../playing-top.ts";
 import { createResourcePanel } from "./resource-item.ts";
@@ -50,5 +50,5 @@ export function provideResourcesView(context: Context) {
 
 export const resourcesViewDependency = defineDependency({
   provider: provideResourcesView,
-  scopeToken: controllerScopeContract,
+  scopeToken: controllerScopeToken,
 });

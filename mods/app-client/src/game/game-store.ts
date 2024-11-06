@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { clientGameScopeContract } from "../defs.ts";
+import { clientGameScopeToken } from "../defs.ts";
 import { deferred } from "@acme/useful/async.ts";
 
 export class GameStore {
@@ -20,5 +20,5 @@ export function provideGameStore() {
 
 export const gameStoreDependency = defineDependency({
   provider: provideGameStore,
-  scopeToken: clientGameScopeContract,
+  scopeToken: clientGameScopeToken,
 });

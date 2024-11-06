@@ -1,7 +1,7 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { div } from "@acme/dom/nodes.ts";
-import { frontendScopeContract } from "./defs.ts";
+import { frontendScopeToken } from "./defs.ts";
 import { introAppViewDependency } from "./app/intro-app-view.ts";
 
 export function provideLoadingView(context: Context) {
@@ -18,5 +18,5 @@ export function provideLoadingView(context: Context) {
 
 export const loadingViewDependency = defineDependency({
   provider: provideLoadingView,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });

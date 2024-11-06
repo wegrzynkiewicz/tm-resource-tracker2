@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { frontendScopeContract } from "../defs.ts";
+import { frontendScopeToken } from "../defs.ts";
 import { Slot } from "../place.ts";
 
 export function provideAppSlot() {
@@ -8,5 +8,5 @@ export function provideAppSlot() {
 
 export const appSlotDependency = defineDependency({
   provider: provideAppSlot,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });

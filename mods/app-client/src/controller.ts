@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { controllerScopeContract, frontendScopeContract } from "./defs.ts";
+import { controllerScopeToken, frontendScopeToken } from "./defs.ts";
 import { Panic } from "@acme/useful/errors.ts";
 import { Data } from "@acme/useful/types.ts";
 import { Context } from "@acme/dependency/context.ts";
@@ -22,7 +22,7 @@ export interface ControllerRouter {
 
 export const controllerRouterDependency = defineDependency<ControllerRouter>({
   provider: createInjectableProvider("controllerRouter"),
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });
 
 export interface NaiveControllerRoute {
@@ -90,10 +90,10 @@ export function provideControllerRunner(context: Context) {
 
 export const controllerRunnerDependency = defineDependency({
   provider: provideControllerRunner,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });
 
 export const controllerAbortDependency = defineDependency({
   provider: () => new Channel<[]>(),
-  scopeToken: controllerScopeContract,
+  scopeToken: controllerScopeToken,
 });

@@ -1,5 +1,5 @@
 import { jsonRequest } from "@acme/useful/json-request.ts";
-import { clientGameScopeContract, frontendScopeContract } from "../defs.ts";
+import { clientGameScopeToken, frontendScopeToken } from "../defs.ts";
 import { createInjectableProvider, defineDependency } from "@acme/dependency/declaration.ts";
 import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { apiURLDependency } from "../api-url-config.ts";
@@ -14,12 +14,12 @@ import { myPlayerDependency } from "../player/my-player.ts";
 
 export const clientGameIdDependency = defineDependency<string>({
   provider: createInjectableProvider("client-game-id"),
-  scopeToken: clientGameScopeContract,
+  scopeToken: clientGameScopeToken,
 });
 
 export const clientGameTokenDependency = defineDependency<string>({
   provider: createInjectableProvider("client-game-token"),
-  scopeToken: clientGameScopeContract,
+  scopeToken: clientGameScopeToken,
 });
 
 export class ClientGameContextManager {
@@ -35,8 +35,8 @@ export class ClientGameContextManager {
 
     const gameContext = new Context({
       [globalScopeToken.token]: this.frontendContext.scopes[globalScopeToken.token],
-      [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
-      [clientGameScopeContract.token]: new Scope(clientGameScopeContract),
+      [frontendScopeToken.token]: this.frontendContext.scopes[frontendScopeToken.token],
+      [clientGameScopeToken.token]: new Scope(),
     });
 
     localStorage.setItem("token", token);
@@ -142,7 +142,7 @@ export function provideClientGameManager(context: Context) {
 
 export const clientGameContextManagerDependency = defineDependency({
   provider: provideClientGameManager,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });
 
 // export class ClientGameManager {

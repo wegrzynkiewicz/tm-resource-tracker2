@@ -1,6 +1,6 @@
 import { Channel } from "@acme/dom/channel.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { frontendScopeContract } from "../defs.ts";
+import { frontendScopeToken } from "../defs.ts";
 import { appNameDependency } from "./app-name-config.ts";
 import { Context } from "@acme/dependency/context.ts";
 
@@ -25,5 +25,5 @@ export function provideTopTitle(context: Context) {
 
 export const topTitleStoreDependency = defineDependency({
   provider: provideTopTitle,
-  scopeToken: frontendScopeContract,
+  scopeToken: frontendScopeToken,
 });
