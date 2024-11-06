@@ -10,7 +10,7 @@ export function provideCurrentPlayerStore() {
 
 export const currentPlayerStoreDependency = defineDependency({
   provider: provideCurrentPlayerStore,
-  scope: frontendScopeContract,
+  scopeToken: frontendScopeContract,
 });
 
 export class PlayingViewStore {
@@ -29,5 +29,5 @@ export function providePlayingViewStore() {
 
 export const playingViewStoreDependency = defineDependency({
   provider: providePlayingViewStore,
-  scope: frontendScopeContract,
+  scopeToken: frontendScopeContract,
 });

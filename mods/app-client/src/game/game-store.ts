@@ -20,5 +20,5 @@ export function provideGameStore() {
 
 export const gameStoreDependency = defineDependency({
   provider: provideGameStore,
-  scope: clientGameScopeContract,
+  scopeToken: clientGameScopeContract,
 });

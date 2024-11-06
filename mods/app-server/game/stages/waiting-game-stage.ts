@@ -36,5 +36,5 @@ export function provideWaitingGameStage(context: Context): GameStage {
 
 export const waitingGameStageDependency = defineDependency({
   provider: provideWaitingGameStage,
-  scope: serverGameScopeContract,
+  scopeToken: serverGameScopeContract,
 });

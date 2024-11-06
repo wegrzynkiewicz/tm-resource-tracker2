@@ -13,5 +13,5 @@ export function provideDocTitle(context: Context) {
 
 export const docTitleDependency = defineDependency({
   provider: provideDocTitle,
-  scope: frontendScopeContract,
+  scopeToken: frontendScopeContract,
 });

@@ -236,5 +236,5 @@ export function provideWaitingView(context: Context) {
 
 export const waitingViewDependency = defineDependency({
   provider: provideWaitingView,
-  scope: controllerScopeContract,
+  scopeToken: controllerScopeContract,
 });

@@ -5,7 +5,7 @@ import { Context } from "@acme/dependency/context.ts";
 import { EndpointHandler } from "@acme/web/defs.ts";
 import { parseAuthorizationToken } from "@acme/web/build-in/token.ts";
 import { serverPlayerContextManagerDependency } from "../player/player-context.ts";
-import { webServerScopeContract } from "@acme/dependency/scopes.ts";
+import { webServerScopeToken } from "@acme/dependency/scopes.ts";
 
 export class GameQuitEndpointHandler implements EndpointHandler {
   public constructor(
@@ -45,5 +45,5 @@ export function provideGameQuitEndpointHandler(context: Context): EndpointHandle
 
 export const gameQuitEndpointHandlerDependency = defineDependency({
   provider: provideGameQuitEndpointHandler,
-  scope: webServerScopeContract,
+  scopeToken: webServerScopeToken,
 });

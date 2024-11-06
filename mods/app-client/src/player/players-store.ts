@@ -9,5 +9,5 @@ export function providePlayersStore() {
 
 export const playersStoreDependency = defineDependency({
   provider: providePlayersStore,
-  scope: frontendScopeContract,
+  scopeToken: frontendScopeContract,
 });

@@ -68,5 +68,5 @@ export function provideHomepageView(context: Context) {
 
 export const homepageViewDependency = defineDependency({
   provider: provideHomepageView,
-  scope: frontendScopeContract,
+  scopeToken: frontendScopeContract,
 });

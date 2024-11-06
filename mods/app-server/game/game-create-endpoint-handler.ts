@@ -10,7 +10,7 @@ import {
   serverPlayerDTODependency,
   serverPlayerIdDependency,
 } from "../player/player-context.ts";
-import { webServerScopeContract } from "@acme/dependency/scopes.ts";
+import { webServerScopeToken } from "@acme/dependency/scopes.ts";
 import { parseGameCreateC2SReqDTO } from "@common/game/game-create-c2s-req-dto.layout.compiled.ts";
 
 export class GameCreateWebHandler implements EndpointHandler {
@@ -55,5 +55,5 @@ export function provideGameCreateWebHandler(context: Context): EndpointHandler {
 
 export const gameCreateWebHandlerDependency = defineDependency({
   provider: provideGameCreateWebHandler,
-  scope: webServerScopeContract,
+  scopeToken: webServerScopeToken,
 });

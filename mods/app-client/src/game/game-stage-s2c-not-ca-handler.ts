@@ -2,7 +2,7 @@ import { NormalCAHandler } from "@acme/control-action/normal/defs.ts";
 import { NormalCAEnvelopeDTO } from "@acme/control-action/normal/envelope.layout.compiled.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
-import { caScopeContract } from "@acme/dependency/scopes.ts";
+import { caScopeToken } from "@acme/dependency/scopes.ts";
 import { GameStage } from "@common/game/defs.ts";
 import { controllerRunnerDependency } from "../controller.ts";
 import { playingPathFactory, waitingPath } from "../routes.ts";
@@ -34,5 +34,5 @@ export function provideGameStageS2CNotNormalCAHandler(context: Context): NormalC
 
 export const gameStageS2CNotNormalCAHandlerDependency = defineDependency({
   provider: provideGameStageS2CNotNormalCAHandler,
-  scope: caScopeContract,
+  scopeToken: caScopeToken,
 });

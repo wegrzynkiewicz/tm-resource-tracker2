@@ -50,5 +50,5 @@ export function provideResourcesView(context: Context) {
 
 export const resourcesViewDependency = defineDependency({
   provider: provideResourcesView,
-  scope: controllerScopeContract,
+  scopeToken: controllerScopeContract,
 });

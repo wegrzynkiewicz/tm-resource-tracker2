@@ -65,5 +65,5 @@ export function provideActionDispatcher(context: Context) {
 }
 export const actionDispatcherDependency = defineDependency({
   provider: provideActionDispatcher,
-  scope: controllerScopeContract,
+  scopeToken: controllerScopeContract,
 });

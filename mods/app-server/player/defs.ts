@@ -6,20 +6,20 @@ import { Context } from "@acme/dependency/context.ts";
 
 export const playerCreatedChannelDependency = defineDependency({
   provider: () => new Channel<[Context, PlayerDTO]>(),
-  scope: serverGameScopeContract,
+  scopeToken: serverGameScopeContract,
 });
 
 export const playerDeletedChannelDependency = defineDependency({
   provider: () => new Channel<[Context, PlayerDTO]>(),
-  scope: serverGameScopeContract,
+  scopeToken: serverGameScopeContract,
 });
 
 export const playerConnectedChannelDependency = defineDependency({
   provider: () => new Channel<[Context, PlayerDTO]>(),
-  scope: serverGameScopeContract,
+  scopeToken: serverGameScopeContract,
 });
 
 export const playerDisconnectedChannelDependency = defineDependency({
   provider: () => new Channel<[Context, PlayerDTO]>(),
-  scope: serverGameScopeContract,
+  scopeToken: serverGameScopeContract,
 });

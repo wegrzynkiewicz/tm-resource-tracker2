@@ -21,7 +21,7 @@ export interface ControllerRouter {
 }
 
 export const controllerRouterDependency = defineDependency<ControllerRouter>({
-  scope: frontendScopeContract,
+  scopeToken: frontendScopeContract,
 });
 
 export interface NaiveControllerRoute {
@@ -89,10 +89,10 @@ export function provideControllerRunner(context: Context) {
 
 export const controllerRunnerDependency = defineDependency({
   provider: provideControllerRunner,
-  scope: frontendScopeContract,
+  scopeToken: frontendScopeContract,
 });
 
 export const controllerAbortDependency = defineDependency({
   provider: () => new Channel<[]>(),
-  scope: controllerScopeContract,
+  scopeToken: controllerScopeContract,
 });

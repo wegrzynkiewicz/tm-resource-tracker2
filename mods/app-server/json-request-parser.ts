@@ -3,7 +3,7 @@ import { DEBUG, Logger, WARN } from "@acme/logger/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { LayoutParser } from "@acme/layout/runtime/defs.ts";
 import { ErrorDTO } from "@acme/web/docs/error-dto.layout.compiled.ts";
-import { webRequestScopeContract } from "@acme/dependency/scopes.ts";
+import { webRequestScopeToken } from "@acme/dependency/scopes.ts";
 import { webRequestLoggerDependency } from "@acme/web/logger.ts";
 import { Context } from "@acme/dependency/context.ts";
 
@@ -68,5 +68,5 @@ export function provideJSONRequestParser(context: Context) {
 
 export const jsonRequestParserDependency = defineDependency({
   provider: provideJSONRequestParser,
-  scope: webRequestScopeContract,
+  scopeToken: webRequestScopeToken,
 });

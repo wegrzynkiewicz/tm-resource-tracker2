@@ -49,5 +49,5 @@ export function providePlayerBroadcast(context: Context) {
 
 export const playerBroadcastDependency = defineDependency({
   provider: providePlayerBroadcast,
-  scope: serverGameScopeContract,
+  scopeToken: serverGameScopeContract,
 });

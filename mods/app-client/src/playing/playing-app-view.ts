@@ -35,5 +35,5 @@ export function providePlayingAppView(context: Context) {
 
 export const playingAppViewDependency = defineDependency({
   provider: providePlayingAppView,
-  scope: frontendScopeContract,
+  scopeToken: frontendScopeContract,
 });

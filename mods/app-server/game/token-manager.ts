@@ -1,6 +1,6 @@
 import { createRandomStringFactory } from "@acme/useful/strings.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { globalScopeContract } from "@acme/dependency/scopes.ts";
+import { globalScopeToken } from "@acme/dependency/scopes.ts";
 
 export interface TokenTarget {
   readonly gameId: string;
@@ -35,5 +35,5 @@ export function provideTokenManager() {
 
 export const tokenManagerDependency = defineDependency({
   provider: provideTokenManager,
-  scope: globalScopeContract,
+  scopeToken: globalScopeToken,
 });

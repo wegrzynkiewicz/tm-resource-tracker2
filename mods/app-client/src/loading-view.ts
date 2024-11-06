@@ -18,5 +18,5 @@ export function provideLoadingView(context: Context) {
 
 export const loadingViewDependency = defineDependency({
   provider: provideLoadingView,
-  scope: frontendScopeContract,
+  scopeToken: frontendScopeContract,
 });

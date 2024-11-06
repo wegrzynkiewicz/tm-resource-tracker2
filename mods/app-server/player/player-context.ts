@@ -1,4 +1,4 @@
-import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { Channel } from "@acme/dom/channel.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
@@ -16,11 +16,11 @@ export interface ServerPlayerInput {
 }
 
 export const serverPlayerIdDependency = defineDependency<string>({
-  scope: serverPlayerScopeContract,
+  scopeToken: serverPlayerScopeContract,
 });
 
 export const serverPlayerDTODependency = defineDependency<PlayerDTO>({
-  scope: serverPlayerScopeContract,
+  scopeToken: serverPlayerScopeContract,
 });
 
 export let playerIdCounter = 0;
@@ -40,7 +40,7 @@ export class ServerPlayerContextManager {
     const playerId = (++playerIdCounter).toString();
 
     const playerContext = new Context({
-      [globalScopeContract.token]: this.gameContext.scopes[globalScopeContract.token],
+      [globalScopeToken.token]: this.gameContext.scopes[globalScopeToken.token],
       [serverGameScopeContract.token]: this.gameContext.scopes[serverGameScopeContract.token],
       [serverPlayerScopeContract.token]: new Scope(serverPlayerScopeContract),
     });
@@ -97,5 +97,5 @@ export function provideServerPlayerContextManager(context: Context) {
 
 export const serverPlayerContextManagerDependency = defineDependency({
   provider: provideServerPlayerContextManager,
-  scope: serverGameScopeContract,
+  scopeToken: serverGameScopeContract,
 });

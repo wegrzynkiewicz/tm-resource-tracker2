@@ -1,7 +1,7 @@
 import { jsonRequest } from "@acme/useful/json-request.ts";
 import { clientGameScopeContract, frontendScopeContract } from "../defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { apiURLDependency } from "../api-url-config.ts";
 import { gameCreatePathname, gameJoinPathname, gameQuitPathname, gameReadPathname } from "@common/game/defs.ts";
 import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
@@ -13,11 +13,11 @@ import { Panic } from "@acme/useful/errors.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
 
 export const clientGameIdDependency = defineDependency<string>({
-  scope: clientGameScopeContract,
+  scopeToken: clientGameScopeContract,
 });
 
 export const clientGameTokenDependency = defineDependency<string>({
-  scope: clientGameScopeContract,
+  scopeToken: clientGameScopeContract,
 });
 
 export class ClientGameContextManager {
@@ -32,7 +32,7 @@ export class ClientGameContextManager {
     const { gameId, token, player } = payload;
 
     const gameContext = new Context({
-      [globalScopeContract.token]: this.frontendContext.scopes[globalScopeContract.token],
+      [globalScopeToken.token]: this.frontendContext.scopes[globalScopeToken.token],
       [frontendScopeContract.token]: this.frontendContext.scopes[frontendScopeContract.token],
       [clientGameScopeContract.token]: new Scope(clientGameScopeContract),
     });
@@ -140,7 +140,7 @@ export function provideClientGameManager(context: Context) {
 
 export const clientGameContextManagerDependency = defineDependency({
   provider: provideClientGameManager,
-  scope: frontendScopeContract,
+  scopeToken: frontendScopeContract,
 });
 
 // export class ClientGameManager {

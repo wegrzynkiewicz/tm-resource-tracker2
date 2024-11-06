@@ -2,7 +2,7 @@ import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
 import { clientGameScopeContract, frontendScopeContract } from "../defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { readySocket } from "@acme/web/socket.ts";
-import { duplexScopeContract, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { duplexScopeToken, globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { apiURLDependency } from "../api-url-config.ts";
 import { createGameSocketPathname } from "@common/game/defs.ts";
 import { clientGameTokenDependency } from "./client-game-context.ts";
@@ -35,10 +35,10 @@ export class ClientPlayerWSContextManager {
     const socket = new WebSocket(url.toString());
 
     const context = new Context({
-      [globalScopeContract.token]: this.clientGameContext.scopes[globalScopeContract.token],
+      [globalScopeToken.token]: this.clientGameContext.scopes[globalScopeToken.token],
       [frontendScopeContract.token]: this.clientGameContext.scopes[frontendScopeContract.token],
       [clientGameScopeContract.token]: this.clientGameContext.scopes[clientGameScopeContract.token],
-      [duplexScopeContract.token]: new Scope(duplexScopeContract),
+      [duplexScopeToken.token]: new Scope(duplexScopeToken),
     });
     context.inject(webSocketDependency, socket);
 
@@ -93,5 +93,5 @@ export function provideClientPlayerWSContextManager(context: Context) {
 
 export const clientPlayerWSContextManagerDependency = defineDependency({
   provider: provideClientPlayerWSContextManager,
-  scope: clientGameScopeContract,
+  scopeToken: clientGameScopeContract,
 });

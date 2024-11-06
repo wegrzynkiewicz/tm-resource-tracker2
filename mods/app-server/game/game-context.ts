@@ -1,4 +1,4 @@
-import { globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { DEBUG } from "@acme/logger/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
@@ -10,7 +10,7 @@ import { startupGameStageDependency } from "./stages/defs.ts";
 import { serverGameLoggerDependency } from "./game-logger.ts";
 
 export const serverGameIdDependency = defineDependency<string>({
-  scope: serverGameScopeContract,
+  scopeToken: serverGameScopeContract,
 });
 
 const randomGameId = createRandomStringFactory(1);
@@ -36,8 +36,8 @@ export class ServerGameContextManager {
     const gameId = this.generateGameId();
 
     const gameContext = new Context({
-      [globalScopeContract.token]: this.globalContext.scopes[globalScopeContract.token],
-      [serverGameScopeContract.token]: new Scope(globalScopeContract),
+      [globalScopeToken.token]: this.globalContext.scopes[globalScopeToken.token],
+      [serverGameScopeContract.token]: new Scope(globalScopeToken),
     });
 
     gameContext.inject(serverGameIdDependency, gameId);
@@ -63,5 +63,5 @@ function provideServerGameManager(context: Context) {
 
 export const serverGameManagerDependency = defineDependency({
   provider: provideServerGameManager,
-  scope: globalScopeContract,
+  scopeToken: globalScopeToken,
 });

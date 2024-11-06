@@ -25,5 +25,5 @@ export function provideGameStageManager(context: Context) {
 
 export const gameStageManagerDependency = defineDependency({
   provider: provideGameStageManager,
-  scope: serverGameScopeContract,
+  scopeToken: serverGameScopeContract,
 });

@@ -2,7 +2,7 @@ import { duplexIdDependency, duplexLoggerDependency } from "@acme/control-action
 import { serverGameIdDependency } from "./../game/game-context.ts";
 import { normalCASenderDependency } from "@acme/control-action/normal/defs.ts";
 import { webSocketNormalCASenderDependency } from "@acme/control-action/transport/ws-normal-ca-sender.ts";
-import { duplexScopeContract, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { duplexScopeToken, globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { logifyWebSocket } from "@acme/web/socket.ts";
 import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
@@ -31,10 +31,10 @@ export class ServerPlayerDuplexContextManager {
 
   public createServerPlayerDuplexContext(socket: WebSocket): Context {
     const context = new Context({
-      [globalScopeContract.token]: this.serverPlayerContext.scopes[globalScopeContract.token],
+      [globalScopeToken.token]: this.serverPlayerContext.scopes[globalScopeToken.token],
       [serverGameScopeContract.token]: this.serverPlayerContext.scopes[serverGameScopeContract.token],
       [serverPlayerScopeContract.token]: this.serverPlayerContext.scopes[serverPlayerScopeContract.token],
-      [duplexScopeContract.token]: new Scope(duplexScopeContract),
+      [duplexScopeToken.token]: new Scope(duplexScopeToken),
     });
 
     this.context = context;
@@ -110,5 +110,5 @@ export function provideServerPlayerDuplexContextManager(context: Context) {
 
 export const serverPlayerDuplexContextManagerDependency = defineDependency({
   provider: provideServerPlayerDuplexContextManager,
-  scope: serverPlayerScopeContract,
+  scopeToken: serverPlayerScopeContract,
 });

@@ -1,8 +1,8 @@
-import { caScopeContract } from "@acme/dependency/scopes.ts";
+import { caScopeToken } from "@acme/dependency/scopes.ts";
 import { NormalCAContextFactory } from "@acme/control-action/normal/defs.ts";
 import { NormalCAEnvelopeDTO } from "@acme/control-action/normal/envelope.layout.compiled.ts";
 import { Context } from "@acme/dependency/context.ts";
-import { duplexScopeContract, globalScopeContract, Scope } from "@acme/dependency/scopes.ts";
+import { duplexScopeToken, globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { clientGameScopeContract, frontendScopeContract } from "../defs.ts";
 
 export class ClientNormalCAContextFactory implements NormalCAContextFactory {
@@ -13,11 +13,11 @@ export class ClientNormalCAContextFactory implements NormalCAContextFactory {
   public createCAContext(envelope: NormalCAEnvelopeDTO): Context {
     const { id, name } = envelope;
     const caContext = new Context({
-      [globalScopeContract.token]: this.context.scopes[globalScopeContract.token],
+      [globalScopeToken.token]: this.context.scopes[globalScopeToken.token],
       [frontendScopeContract.token]: this.context.scopes[frontendScopeContract.token],
       [clientGameScopeContract.token]: this.context.scopes[clientGameScopeContract.token],
-      [duplexScopeContract.token]: this.context.scopes[duplexScopeContract.token],
-      [caScopeContract.token]: new Scope(caScopeContract),
+      [duplexScopeToken.token]: this.context.scopes[duplexScopeToken.token],
+      [caScopeToken.token]: new Scope(caScopeToken),
     });
     return caContext;
   }

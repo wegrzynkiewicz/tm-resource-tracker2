@@ -33,5 +33,5 @@ export function providePlayingTop(context: Context) {
 
 export const playingTopDependency = defineDependency({
   provider: providePlayingTop,
-  scope: frontendScopeContract,
+  scopeToken: frontendScopeContract,
 });

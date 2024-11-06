@@ -13,5 +13,5 @@ export function provideServerGameLogger(context: Context) {
 
 export const serverGameLoggerDependency = defineDependency({
   provider: provideServerGameLogger,
-  scope: serverGameScopeContract,
+  scopeToken: serverGameScopeContract,
 });

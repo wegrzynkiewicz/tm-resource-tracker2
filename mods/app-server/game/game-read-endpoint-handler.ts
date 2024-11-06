@@ -7,7 +7,7 @@ import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-
 import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
 import { serverPlayerContextManagerDependency, serverPlayerDTODependency } from "../player/player-context.ts";
-import { webServerScopeContract } from "@acme/dependency/scopes.ts";
+import { webServerScopeToken } from "@acme/dependency/scopes.ts";
 
 export class GameReadEndpointHandler implements EndpointHandler {
   public constructor(
@@ -55,5 +55,5 @@ export function provideGameReadEndpointHandler(context: Context): EndpointHandle
 
 export const gameReadEndpointHandlerDependency = defineDependency({
   provider: provideGameReadEndpointHandler,
-  scope: webServerScopeContract,
+  scopeToken: webServerScopeToken,
 });

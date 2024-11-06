@@ -22,5 +22,5 @@ export function provideIntroTop(context: Context) {
 
 export const introTopDependency = defineDependency({
   provider: provideIntroTop,
-  scope: frontendScopeContract,
+  scopeToken: frontendScopeContract,
 });

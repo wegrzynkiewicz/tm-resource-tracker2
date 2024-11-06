@@ -6,7 +6,7 @@ import { parseNotEmptyString } from "@acme/layout/runtime/parsers.ts";
 import { ErrorDTO } from "@acme/web/docs/error-dto.layout.compiled.ts";
 import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
 import { serverPlayerContextManagerDependency } from "../player/player-context.ts";
-import { webServerScopeContract } from "@acme/dependency/scopes.ts";
+import { webServerScopeToken } from "@acme/dependency/scopes.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { serverPlayerDuplexContextManagerDependency } from "../player/player-duplex-context.ts";
 
@@ -61,5 +61,5 @@ export function provideGameSocketEndpointHandler(context: Context): EndpointHand
 
 export const gameSocketEndpointHandlerDependency = defineDependency({
   provider: provideGameSocketEndpointHandler,
-  scope: webServerScopeContract,
+  scopeToken: webServerScopeToken,
 });
