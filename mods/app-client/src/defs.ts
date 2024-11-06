@@ -1,5 +1,5 @@
-import { defineScope } from "@acme/dependency/scopes.ts";
+import { defineScopeToken } from "@acme/dependency/scopes.ts";
 
-export const frontendScopeContract = defineScope("FRONTEND");
-export const controllerScopeContract = defineScope("CONTROLLER");
-export const clientGameScopeContract = defineScope("CLIENT-GAME");
+export const frontendScopeContract = defineScopeToken("FRONTEND");
+export const controllerScopeContract = defineScopeToken("CONTROLLER");
+export const clientGameScopeContract = defineScopeToken("CLIENT-GAME");

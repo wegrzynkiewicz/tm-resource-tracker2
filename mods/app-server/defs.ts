@@ -1,4 +1,4 @@
-import { defineScope } from "@acme/dependency/scopes.ts";
+import { defineScopeToken } from "@acme/dependency/scopes.ts";
 
-export const serverGameScopeContract = defineScope("SRV-GAME");
-export const serverPlayerScopeContract = defineScope("SRV-PLAYER");
+export const serverGameScopeContract = defineScopeToken("SRV-GAME");
+export const serverPlayerScopeContract = defineScopeToken("SRV-PLAYER");
