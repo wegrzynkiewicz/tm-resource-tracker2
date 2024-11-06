@@ -2,16 +2,16 @@ import {
   dotEnvConfigValueExtractorDependency,
   dotEnvMapDependency,
   readDotEnvMap,
-} from "@acme/config/dot-env-extractor.ts";
-import { createWebServerConfigProvider } from "@acme/web/server-config.ts";
-import { builtInConfigValueExtractorDependency } from "@acme/config/built-in-extractor.ts";
-import { configBinderDependency } from "@acme/config/common.ts";
-import { denoQueryingConfigValueExtractorDependency } from "@acme/config/deno-querying-extractor.ts";
-import { denoRequestingConfigValueExtractorDependency } from "@acme/config/deno-requesting-extractor.ts";
-import { configValueGetterDependency, configValueResultMapDependency } from "@acme/config/value-getter.ts";
-import { configValueExtractorsDependency, configValueResolverDependency } from "@acme/config/value-resolver.ts";
-import { configVariableNamePrefixDependency } from "@acme/config/variable-name.ts";
-import { Context } from "@acme/dependency/context.ts";
+} from "@framework/config/dot-env-extractor.ts";
+import { createWebServerConfigProvider } from "@framework/web/server-config.ts";
+import { builtInConfigValueExtractorDependency } from "@framework/config/built-in-extractor.ts";
+import { configBinderDependency } from "@framework/config/common.ts";
+import { denoQueryingConfigValueExtractorDependency } from "@framework/config/deno-querying-extractor.ts";
+import { denoRequestingConfigValueExtractorDependency } from "@framework/config/deno-requesting-extractor.ts";
+import { configValueGetterDependency, configValueResultMapDependency } from "@framework/config/value-getter.ts";
+import { configValueExtractorsDependency, configValueResolverDependency } from "@framework/config/value-resolver.ts";
+import { configVariableNamePrefixDependency } from "@framework/config/variable-name.ts";
+import { Context } from "@framework/dependency/context.ts";
 
 export const mainWebServer = createWebServerConfigProvider("name");
 

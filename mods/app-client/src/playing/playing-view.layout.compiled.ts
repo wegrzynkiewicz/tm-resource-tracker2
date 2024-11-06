@@ -1,4 +1,4 @@
-import { LayoutResult, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
+import { LayoutResult, notMatchedErrorContract } from "@framework/layout/runtime/mod.ts";
 
 export const playingViewObject: Record<string, 1> = {
   ["resources"]: 1,

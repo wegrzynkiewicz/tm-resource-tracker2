@@ -1,11 +1,11 @@
-import { Result } from "@acme/useful/result.ts";
-import { DEBUG, Logger, WARN } from "@acme/logger/defs.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { LayoutParser } from "@acme/layout/runtime/defs.ts";
-import { ErrorDTO } from "@acme/web/docs/error-dto.layout.compiled.ts";
-import { webRequestScopeToken } from "@acme/dependency/scopes.ts";
-import { webRequestLoggerDependency } from "@acme/web/logger.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { Result } from "@framework/useful/result.ts";
+import { DEBUG, Logger, WARN } from "@framework/logger/defs.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { LayoutParser } from "@framework/layout/runtime/defs.ts";
+import { ErrorDTO } from "@framework/web/docs/error-dto.layout.compiled.ts";
+import { webRequestScopeToken } from "@framework/dependency/scopes.ts";
+import { webRequestLoggerDependency } from "@framework/web/logger.ts";
+import { Context } from "@framework/dependency/context.ts";
 
 export interface ParserResult<TPayload, TParams> {
   payload: TPayload;

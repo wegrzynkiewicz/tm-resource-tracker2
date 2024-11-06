@@ -1,13 +1,13 @@
 import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "@acme/dependency/context.ts";
-import { EndpointHandler } from "@acme/web/defs.ts";
-import { parseAuthorizationToken } from "@acme/web/build-in/token.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { Context } from "@framework/dependency/context.ts";
+import { EndpointHandler } from "@framework/web/defs.ts";
+import { parseAuthorizationToken } from "@framework/web/build-in/token.ts";
 import { JSONRequestParser, jsonRequestParserDependency } from "../json-request-parser.ts";
 import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
 import { serverPlayerContextManagerDependency, serverPlayerDTODependency } from "../player/player-context.ts";
-import { webServerScopeToken } from "@acme/dependency/scopes.ts";
+import { webServerScopeToken } from "@framework/dependency/scopes.ts";
 
 export class GameReadEndpointHandler implements EndpointHandler {
   public constructor(

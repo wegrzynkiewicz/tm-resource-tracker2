@@ -1,11 +1,11 @@
 import { introAppViewDependency } from "../app/intro-app-view.ts";
-import { button, div_nodes } from "@acme/dom/nodes.ts";
+import { button, div_nodes } from "@framework/dom/nodes.ts";
 import { modalManagerDependency } from "../modal.ts";
 import { frontendScopeToken } from "../defs.ts";
 import { docTitleDependency } from "../app/doc-title.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "@acme/dependency/context.ts";
-import { Slot } from "@acme/dom/slot.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { Context } from "@framework/dependency/context.ts";
+import { Slot } from "@framework/dom/slot.ts";
 import { clientGameContextManagerDependency } from "../game/client-game-context.ts";
 import { controllerRunnerDependency } from "../controller.ts";
 import { createJoinModal } from "./join-game-modal.ts";

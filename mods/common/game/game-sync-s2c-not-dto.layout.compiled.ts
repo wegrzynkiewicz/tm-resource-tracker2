@@ -4,7 +4,7 @@ import {
   missingObjectPropertyErrorContract,
   notMatchedArrayItemErrorContract,
   notMatchedErrorContract,
-} from "@acme/layout/runtime/mod.ts";
+} from "@framework/layout/runtime/mod.ts";
 import { parsePlayerDTO, PlayerDTO } from "../player/player-dto.layout.compiled.ts";
 
 export interface GameSyncS2CNotDTO {

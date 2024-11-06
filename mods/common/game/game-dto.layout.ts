@@ -1,8 +1,8 @@
-import { StandaloneLayout } from "@acme/layout/types/standalone-layout.ts";
+import { StandaloneLayout } from "@framework/layout/types/standalone-layout.ts";
 import { playerDTOLayout } from "../player/player-dto.layout.ts";
-import { ObjectLayout } from "@acme/layout/types/object-layout.ts";
-import { StringLayout } from "@acme/layout/types/string-layout.ts";
-import { compileLayouts } from "@acme/layout/defs.ts";
+import { ObjectLayout } from "@framework/layout/types/object-layout.ts";
+import { StringLayout } from "@framework/layout/types/string-layout.ts";
+import { compileLayouts } from "@framework/layout/defs.ts";
 
 export const gameIdLayout = new StringLayout({
   description: "Game identifier",

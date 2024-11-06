@@ -1,11 +1,11 @@
-import { div, div_nodes } from "@acme/dom/nodes.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { div, div_nodes } from "@framework/dom/nodes.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { Context } from "@framework/dependency/context.ts";
 import { frontendScopeToken } from "../defs.ts";
 import { currentPlayerStoreDependency } from "./defs.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { playersStoreDependency } from "../player/players-store.ts";
-import { MapperStore } from "@acme/dom/mapper-store.ts";
+import { MapperStore } from "@framework/dom/mapper-store.ts";
 import { createSelector, SelectorItem } from "../utils/selector.ts";
 
 const createSelectorItem = ({ color, name, playerId }: PlayerDTO) => ({ key: playerId, name, color });

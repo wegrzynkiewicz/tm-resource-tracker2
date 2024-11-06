@@ -1,4 +1,4 @@
-import { div, div_nodes } from "@acme/dom/nodes.ts";
+import { div, div_nodes } from "@framework/dom/nodes.ts";
 
 export function createScroll(
   $root: HTMLElement,

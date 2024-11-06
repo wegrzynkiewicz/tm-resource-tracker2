@@ -1,4 +1,4 @@
-import { defineNormalCA } from "@acme/control-action/normal/defs.ts";
+import { defineNormalCA } from "@framework/control-action/normal/defs.ts";
 import { GameSyncS2CNotDTO } from "./game-sync-s2c-not-dto.layout.compiled.ts";
 
 export const gameCreatePathname = "/games/create";

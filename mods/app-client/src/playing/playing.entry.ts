@@ -1,16 +1,16 @@
 import { parsePlayingView } from "./playing-view.layout.compiled.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 import { clientGameContextManagerDependency } from "../game/client-game-context.ts";
-import { duplexScopeToken, globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
+import { duplexScopeToken, globalScopeToken, Scope } from "@framework/dependency/scopes.ts";
 import { clientGameScopeToken, controllerScopeToken, frontendScopeToken } from "../defs.ts";
 import { Controller } from "../controller.ts";
 import { clientPlayerWSContextManagerDependency } from "../game/client-player-ws-context.ts";
 import { resourcesViewDependency } from "./resources/resource-view.ts";
-import { Data } from "@acme/useful/types.ts";
+import { Data } from "@framework/useful/types.ts";
 import { gameStoreDependency } from "../game/game-store.ts";
 import { loadingViewDependency } from "../loading-view.ts";
 import { playingViewStoreDependency } from "./defs.ts";
-import { Panic } from "@acme/useful/errors.ts";
+import { Panic } from "@framework/useful/errors.ts";
 
 const views = {
   resources: resourcesViewDependency,

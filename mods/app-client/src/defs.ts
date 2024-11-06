@@ -1,4 +1,4 @@
-import { defineScopeToken } from "@acme/dependency/scopes.ts";
+import { defineScopeToken } from "@framework/dependency/scopes.ts";
 
 export const frontendScopeToken = defineScopeToken("FRONTEND");
 export const controllerScopeToken = defineScopeToken("CONTROLLER");

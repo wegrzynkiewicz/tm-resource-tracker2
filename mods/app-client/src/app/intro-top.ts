@@ -1,7 +1,7 @@
-import { div, div_nodes } from "@acme/dom/nodes.ts";
+import { div, div_nodes } from "@framework/dom/nodes.ts";
 import { topTitleStoreDependency } from "./top-title-store.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { Context } from "@framework/dependency/context.ts";
 import { frontendScopeToken } from "../defs.ts";
 
 export function provideIntroTop(context: Context) {

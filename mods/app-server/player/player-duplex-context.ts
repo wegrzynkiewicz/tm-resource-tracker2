@@ -1,22 +1,22 @@
-import { duplexIdDependency, duplexLoggerDependency } from "@acme/control-action/defs.ts";
+import { duplexIdDependency, duplexLoggerDependency } from "@framework/control-action/defs.ts";
 import { serverGameIdDependency } from "./../game/game-context.ts";
-import { normalCASenderDependency } from "@acme/control-action/normal/defs.ts";
-import { webSocketNormalCASenderDependency } from "@acme/control-action/transport/ws-normal-ca-sender.ts";
-import { duplexScopeToken, globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { logifyWebSocket } from "@acme/web/socket.ts";
+import { normalCASenderDependency } from "@framework/control-action/normal/defs.ts";
+import { webSocketNormalCASenderDependency } from "@framework/control-action/transport/ws-normal-ca-sender.ts";
+import { duplexScopeToken, globalScopeToken, Scope } from "@framework/dependency/scopes.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { logifyWebSocket } from "@framework/web/socket.ts";
 import { serverGameScopeToken, serverPlayerScopeToken } from "../defs.ts";
-import { Context } from "@acme/dependency/context.ts";
-import { webSocketCAReceiverDependency } from "@acme/control-action/transport/ws-ca-receiver.ts";
+import { Context } from "@framework/dependency/context.ts";
+import { webSocketCAReceiverDependency } from "@framework/control-action/transport/ws-ca-receiver.ts";
 import { ServerNormalCAContextFactory } from "../base/normal-ca-context-factory.ts";
-import { normalCAContextFactoryDependency, normalCARouterDependency } from "@acme/control-action/normal/defs.ts";
-import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
+import { normalCAContextFactoryDependency, normalCARouterDependency } from "@framework/control-action/normal/defs.ts";
+import { webSocketDependency } from "@framework/control-action/transport/defs.ts";
 import { initServerNormalCARouter } from "../base/normal-ca-router.ts";
-import { Channel } from "@acme/dom/channel.ts";
+import { Channel } from "@framework/dom/channel.ts";
 import { playerConnectedChannelDependency, playerDisconnectedChannelDependency } from "./defs.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { serverPlayerDTODependency, serverPlayerIdDependency } from "./player-context.ts";
-import { loggerFactoryDependency } from "@acme/logger/factory.ts";
+import { loggerFactoryDependency } from "@framework/logger/factory.ts";
 
 let duplexIdCounter = 1;
 

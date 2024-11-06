@@ -1,6 +1,6 @@
-import { compileLayouts } from "@acme/layout/defs.ts";
-import { EnumLayout } from "@acme/layout/types/enum-layout.ts";
-import { StandaloneLayout } from "@acme/layout/types/standalone-layout.ts";
+import { compileLayouts } from "@framework/layout/defs.ts";
+import { EnumLayout } from "@framework/layout/types/enum-layout.ts";
+import { StandaloneLayout } from "@framework/layout/types/standalone-layout.ts";
 
 export const resourceTargetLayout = new StandaloneLayout({
   meta: import.meta,

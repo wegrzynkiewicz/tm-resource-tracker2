@@ -1,4 +1,4 @@
-import { createInjectableProvider, defineDependency } from "@acme/dependency/declaration.ts";
+import { createInjectableProvider, defineDependency } from "@framework/dependency/declaration.ts";
 import { serverGameScopeToken } from "../../defs.ts";
 
 export interface GameStage {

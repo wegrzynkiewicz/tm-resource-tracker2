@@ -1,5 +1,5 @@
 import { createSelector, SelectorOption, SelectorStore } from "../../app-client/src/frontend/utils/selector.ts";
-import { Context } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@framework/dependency/service-resolver.ts";
 import { providePlayingGame } from "../playing/common.ts";
 
 export function provideHistoryPlayerStore(context: Context) {

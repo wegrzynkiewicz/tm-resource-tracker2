@@ -1,7 +1,7 @@
 import { createPanel } from "../../app-client/src/frontend/app/panel.ts";
 import { SelectorStore } from "../../app-client/src/frontend/utils/selector.ts";
 import { Channel } from "../../core/channel.ts";
-import { Context } from "@acme/dependency/service-resolver.ts";
+import { Context } from "@framework/dependency/service-resolver.ts";
 import { PlayingGame, providePlayingGame } from "../playing/common.ts";
 import { PlayingAppView } from "../playing/playing-app-view.ts";
 import { providePlayingAppView } from "../playing/playing-app-view.ts";

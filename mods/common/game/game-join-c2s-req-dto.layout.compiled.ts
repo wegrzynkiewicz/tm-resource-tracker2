@@ -5,7 +5,7 @@ import {
   LayoutResult,
   missingObjectPropertyErrorContract,
   notMatchedErrorContract,
-} from "@acme/layout/runtime/mod.ts";
+} from "@framework/layout/runtime/mod.ts";
 import { ColorKey, parseColor } from "../color/color.layout.compiled.ts";
 
 export interface GameJoinC2SReqDTO {

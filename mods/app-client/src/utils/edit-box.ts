@@ -1,4 +1,4 @@
-import { div_nodes, input, label } from "@acme/dom/nodes.ts";
+import { div_nodes, input, label } from "@framework/dom/nodes.ts";
 
 export function createEditBox(
   { caption, name, placeholder }: {

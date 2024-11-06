@@ -1,10 +1,10 @@
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 import { playerBroadcastDependency } from "../../player/player-broadcast.ts";
 import { serverPlayerContextManagerDependency } from "../../player/player-context.ts";
 import { GameStage } from "./defs.ts";
 import { playerConnectedChannelDependency } from "../../player/defs.ts";
 import { playerDisconnectedChannelDependency } from "../../player/defs.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
 import { serverGameScopeToken } from "../../defs.ts";
 import { gameStageS2CNotNormalCAContract, gameSyncS2CNotNormalCAContract } from "@common/game/defs.ts";
 import { GameSyncS2CNotDTO } from "@common/game/game-sync-s2c-not-dto.layout.compiled.ts";

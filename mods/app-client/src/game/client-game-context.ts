@@ -1,15 +1,15 @@
-import { jsonRequest } from "@acme/useful/json-request.ts";
+import { jsonRequest } from "@framework/useful/json-request.ts";
 import { clientGameScopeToken, frontendScopeToken } from "../defs.ts";
-import { createInjectableProvider, defineDependency } from "@acme/dependency/declaration.ts";
-import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
+import { createInjectableProvider, defineDependency } from "@framework/dependency/declaration.ts";
+import { globalScopeToken, Scope } from "@framework/dependency/scopes.ts";
 import { apiURLDependency } from "../api-url-config.ts";
 import { gameCreatePathname, gameJoinPathname, gameQuitPathname, gameReadPathname } from "@common/game/defs.ts";
 import { GameDTO } from "@common/game/game-dto.layout.compiled.ts";
 import { clientPlayerWSContextManagerDependency } from "./client-player-ws-context.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 import { GameCreateC2SReqDTO } from "@common/game/game-create-c2s-req-dto.layout.compiled.ts";
 import { GameJoinC2SReqDTO } from "@common/game/game-join-c2s-req-dto.layout.compiled.ts";
-import { Panic } from "@acme/useful/errors.ts";
+import { Panic } from "@framework/useful/errors.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
 
 export const clientGameIdDependency = defineDependency<string>({

@@ -1,8 +1,8 @@
-import { IterableStore } from "@acme/dom/defs.ts";
-import { NumberStore } from "@acme/dom/number-store.ts";
-import { div, div_nodes } from "@acme/dom/nodes.ts";
-import { clamp } from "@acme/useful/numbers.ts";
-import { Channel } from "@acme/dom/channel.ts";
+import { IterableStore } from "@framework/dom/defs.ts";
+import { NumberStore } from "@framework/dom/number-store.ts";
+import { div, div_nodes } from "@framework/dom/nodes.ts";
+import { clamp } from "@framework/useful/numbers.ts";
+import { Channel } from "@framework/dom/channel.ts";
 
 export function createPanel(
   indexStore: NumberStore,

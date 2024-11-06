@@ -1,6 +1,6 @@
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
 import { createEditBox } from "../utils/edit-box.ts";
-import { button, div, div_nodes } from "@acme/dom/nodes.ts";
+import { button, div, div_nodes } from "@framework/dom/nodes.ts";
 import { introAppViewDependency } from "../app/intro-app-view.ts";
 import { controllerScopeToken } from "../defs.ts";
 import { docTitleDependency } from "../app/doc-title.ts";
@@ -8,13 +8,13 @@ import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { controllerRunnerDependency } from "../controller.ts";
 import { createQuestionModal, modalManagerDependency } from "../modal.ts";
 import { clientGameContextManagerDependency, clientGameIdDependency } from "../game/client-game-context.ts";
-import { normalCADispatcherDependency } from "@acme/control-action/normal/defs.ts";
+import { normalCADispatcherDependency } from "@framework/control-action/normal/defs.ts";
 import { gameStartC2SNotNormalCAContract } from "@common/game/defs.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
 import { createPlayerModal } from "../player/player-modal.ts";
 import { playersStoreDependency } from "../player/players-store.ts";
 import { homePath } from "../routes.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 
 export class WaitingPlayerFactory {
   public create(player: PlayerDTO): HTMLElement {

@@ -1,6 +1,6 @@
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
 import { clientGameScopeToken } from "../defs.ts";
-import { deferred } from "@acme/useful/async.ts";
+import { deferred } from "@framework/useful/async.ts";
 
 export class GameStore {
   private readonly defer = deferred<void>();

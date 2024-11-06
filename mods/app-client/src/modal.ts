@@ -1,7 +1,7 @@
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { button, comment, div, div_nodes, form_nodes } from "@acme/dom/nodes.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { button, comment, div, div_nodes, form_nodes } from "@framework/dom/nodes.ts";
 import { frontendScopeToken } from "./defs.ts";
-import { deferred, sleep } from "@acme/useful/async.ts";
+import { deferred, sleep } from "@framework/useful/async.ts";
 
 export interface Modal<T = unknown> {
   $root: HTMLElement;

@@ -1,10 +1,10 @@
-import { div, div_nodes, form_nodes } from "@acme/dom/nodes.ts";
+import { div, div_nodes, form_nodes } from "@framework/dom/nodes.ts";
 import { createEditBox } from "../utils/edit-box.ts";
-import { Result } from "@acme/useful/result.ts";
+import { Result } from "@framework/useful/result.ts";
 import { GameJoinC2SReqDTO, parseGameJoinC2SReqDTO } from "@common/game/game-join-c2s-req-dto.layout.compiled.ts";
-import { unwrapLayoutResult } from "@acme/layout/runtime/defs.ts";
+import { unwrapLayoutResult } from "@framework/layout/runtime/defs.ts";
 import { createColorSelectorBox } from "../utils/color-selector.ts";
-import { deferred } from "@acme/useful/async.ts";
+import { deferred } from "@framework/useful/async.ts";
 
 export function createJoinModal() {
   const gameBox = createEditBox({

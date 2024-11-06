@@ -1,9 +1,9 @@
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 import { PlayingView } from "./playing-view.layout.compiled.ts";
-import { button_nodes, div_nodes, span } from "@acme/dom/nodes.ts";
+import { button_nodes, div_nodes, span } from "@framework/dom/nodes.ts";
 import { svg_icon } from "../utils/svg.ts";
 import { controllerRunnerDependency } from "../controller.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
 import { frontendScopeToken } from "../defs.ts";
 import { playingPathFactory } from "../routes.ts";
 import { playingViewStoreDependency } from "./defs.ts";

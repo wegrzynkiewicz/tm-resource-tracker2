@@ -1,9 +1,9 @@
-import { createInjectableProvider, defineDependency } from "@acme/dependency/declaration.ts";
+import { createInjectableProvider, defineDependency } from "@framework/dependency/declaration.ts";
 import { controllerScopeToken, frontendScopeToken } from "./defs.ts";
-import { Panic } from "@acme/useful/errors.ts";
-import { Data } from "@acme/useful/types.ts";
-import { Context } from "@acme/dependency/context.ts";
-import { Channel } from "@acme/dom/channel.ts";
+import { Panic } from "@framework/useful/errors.ts";
+import { Data } from "@framework/useful/types.ts";
+import { Context } from "@framework/dependency/context.ts";
+import { Channel } from "@framework/dom/channel.ts";
 
 export interface Controller {
   dispose(): void;

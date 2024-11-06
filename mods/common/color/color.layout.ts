@@ -1,7 +1,7 @@
-import { EnumLayout } from "@acme/layout/types/enum-layout.ts";
-import { StandaloneLayout } from "@acme/layout/types/standalone-layout.ts";
+import { EnumLayout } from "@framework/layout/types/enum-layout.ts";
+import { StandaloneLayout } from "@framework/layout/types/standalone-layout.ts";
 import { colors } from "./color.ts";
-import { compileLayouts } from "@acme/layout/defs.ts";
+import { compileLayouts } from "@framework/layout/defs.ts";
 
 export const colorLayout = new StandaloneLayout({
   meta: import.meta,

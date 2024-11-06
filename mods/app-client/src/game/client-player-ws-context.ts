@@ -1,25 +1,25 @@
-import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
+import { webSocketDependency } from "@framework/control-action/transport/defs.ts";
 import { clientGameScopeToken, frontendScopeToken } from "../defs.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { readySocket } from "@acme/web/socket.ts";
-import { duplexScopeToken, globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { readySocket } from "@framework/web/socket.ts";
+import { duplexScopeToken, globalScopeToken, Scope } from "@framework/dependency/scopes.ts";
 import { apiURLDependency } from "../api-url-config.ts";
 import { createGameSocketPathname } from "@common/game/defs.ts";
 import { clientGameTokenDependency } from "./client-game-context.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 import {
   normalCAContextFactoryDependency,
   normalCADispatcherDependency,
   normalCARouterDependency,
   normalCASenderDependency,
-} from "@acme/control-action/normal/defs.ts";
-import { webSocketCAReceiverDependency } from "@acme/control-action/transport/ws-ca-receiver.ts";
-import { webSocketNormalCASenderDependency } from "@acme/control-action/transport/ws-normal-ca-sender.ts";
-import { webSocketNormalCADispatcherDependency } from "@acme/control-action/transport/ws-normal-ca-dispatcher.ts";
+} from "@framework/control-action/normal/defs.ts";
+import { webSocketCAReceiverDependency } from "@framework/control-action/transport/ws-ca-receiver.ts";
+import { webSocketNormalCASenderDependency } from "@framework/control-action/transport/ws-normal-ca-sender.ts";
+import { webSocketNormalCADispatcherDependency } from "@framework/control-action/transport/ws-normal-ca-dispatcher.ts";
 import { ClientNormalCAContextFactory } from "./client-normal-ca-context-factory.ts";
 import { initClientNormalCARouter } from "../normal-ca-router.ts";
-import { loggerFactoryDependency } from "@acme/logger/factory.ts";
-import { duplexLoggerDependency } from "@acme/control-action/defs.ts";
+import { loggerFactoryDependency } from "@framework/logger/factory.ts";
+import { duplexLoggerDependency } from "@framework/control-action/defs.ts";
 
 export class ClientPlayerWSContextManager {
   public clientPlayerWSContext: Context | null = null;

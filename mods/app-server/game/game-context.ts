@@ -1,9 +1,9 @@
-import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
-import { DEBUG } from "@acme/logger/defs.ts";
-import { createInjectableProvider, defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { globalScopeToken, Scope } from "@framework/dependency/scopes.ts";
+import { DEBUG } from "@framework/logger/defs.ts";
+import { createInjectableProvider, defineDependency } from "@framework/dependency/declaration.ts";
+import { Context } from "@framework/dependency/context.ts";
 import { serverGameScopeToken } from "../defs.ts";
-import { createRandomStringFactory } from "@acme/useful/strings.ts";
+import { createRandomStringFactory } from "@framework/useful/strings.ts";
 import { gameStageManagerDependency } from "./stages/game-stage-manager.ts";
 import { waitingGameStageDependency } from "./stages/waiting-game-stage.ts";
 import { startupGameStageDependency } from "./stages/defs.ts";

@@ -1,4 +1,4 @@
-import { LayoutResult, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
+import { LayoutResult, notMatchedErrorContract } from "@framework/layout/runtime/mod.ts";
 
 export const resourceTypeObject: Record<string, 1> = {
   ["points"]: 1,

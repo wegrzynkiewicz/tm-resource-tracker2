@@ -1,7 +1,7 @@
-import { div_nodes, span } from "@acme/dom/nodes.ts";
+import { div_nodes, span } from "@framework/dom/nodes.ts";
 import { colors } from "@common/color/color.ts";
-import { ArrayStore } from "@acme/dom/array-store.ts";
-import { NumberStore } from "@acme/dom/number-store.ts";
+import { ArrayStore } from "@framework/dom/array-store.ts";
+import { NumberStore } from "@framework/dom/number-store.ts";
 import { createSelector } from "./selector.ts";
 
 export const colorStore = new ArrayStore(colors);

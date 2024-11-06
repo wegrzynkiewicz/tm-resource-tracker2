@@ -1,9 +1,9 @@
-import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
+import { globalScopeToken, Scope } from "@framework/dependency/scopes.ts";
 import { Controller } from "../controller.ts";
 import { controllerScopeToken, frontendScopeToken } from "../defs.ts";
 import { clientGameContextManagerDependency } from "../game/client-game-context.ts";
 import { homepageViewDependency } from "./home-view.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 
 export async function initHomeController(context: Context): Promise<Controller> {
   const homepageContext = new Context({

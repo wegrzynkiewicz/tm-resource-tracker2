@@ -1,4 +1,4 @@
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
 
 export interface ClientConfig {
   readonly apiUrl: string;

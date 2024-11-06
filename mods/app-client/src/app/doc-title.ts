@@ -1,7 +1,7 @@
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
 import { frontendScopeToken } from "../defs.ts";
 import { appNameDependency } from "./app-name-config.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 
 export function provideDocTitle(context: Context) {
   const appName = context.resolve(appNameDependency);

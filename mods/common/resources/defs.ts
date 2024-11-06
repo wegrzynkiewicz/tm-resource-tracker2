@@ -1,8 +1,8 @@
 import { ResourceUpdateC2SReqDTO } from "./resource-update-c2s-req-dto.layout.compiled.ts";
-import { Channel } from "@acme/dom/channel.ts";
+import { Channel } from "@framework/dom/channel.ts";
 import { ResourceType } from "./resource-type.layout.compiled.ts";
 import { ResourceTarget } from "./resource-target.layout.compiled.ts";
-import { defineNormalCA } from "@acme/control-action/normal/defs.ts";
+import { defineNormalCA } from "@framework/control-action/normal/defs.ts";
 
 export type ResourceMatrix = Record<ResourceTarget, number>;
 

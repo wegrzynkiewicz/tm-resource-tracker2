@@ -1,9 +1,9 @@
 import { Resource } from "@common/resources/defs.ts";
-import { div, div_nodes } from "@acme/dom/nodes.ts";
+import { div, div_nodes } from "@framework/dom/nodes.ts";
 import { ModalManager } from "../../modal.ts";
 import { createResourceModal } from "./resource-modal.ts";
 import { createResourceIcon } from "./defs.ts";
-import { Channel } from "@acme/dom/channel.ts";
+import { Channel } from "@framework/dom/channel.ts";
 import { resources, ResourceStore } from "@common/resources/defs.ts";
 import { ResourceTarget } from "@common/resources/resource-target.layout.compiled.ts";
 

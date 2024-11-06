@@ -1,4 +1,4 @@
-import { div_nodes, img } from "@acme/dom/nodes.ts";
+import { div_nodes, img } from "@framework/dom/nodes.ts";
 import { ResourceType } from "@common/resources/resource-type.layout.compiled.ts";
 
 export function createResourceImage(type: ResourceType) {

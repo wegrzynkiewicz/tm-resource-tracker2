@@ -1,5 +1,8 @@
-import { errorNormalCAContract, errorNormalCAHandlerDependency } from "@acme/control-action/error-normal-ca-handler.ts";
-import { NaiveNormalCARouter } from "@acme/control-action/normal/naive-router.ts";
+import {
+  errorNormalCAContract,
+  errorNormalCAHandlerDependency,
+} from "@framework/control-action/error-normal-ca-handler.ts";
+import { NaiveNormalCARouter } from "@framework/control-action/normal/naive-router.ts";
 import { playersSyncS2CNotNormalCAHandlerDependency } from "./player/players-sync-s2c-not-ca-handler.ts";
 import { playersSyncS2CNotNormalCAContract } from "@common/player/defs.ts";
 import { gameStageS2CNotNormalCAContract, gameSyncS2CNotNormalCAContract } from "@common/game/defs.ts";

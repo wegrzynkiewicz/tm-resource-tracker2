@@ -1,11 +1,11 @@
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { InferNormalCAContract, NormalCAContract, NormalCADispatcher } from "@acme/control-action/normal/defs.ts";
-import { NormalCAEnvelopeDTO } from "@acme/control-action/normal/envelope.layout.compiled.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { InferNormalCAContract, NormalCAContract, NormalCADispatcher } from "@framework/control-action/normal/defs.ts";
+import { NormalCAEnvelopeDTO } from "@framework/control-action/normal/envelope.layout.compiled.ts";
 import { serverGameScopeToken } from "../defs.ts";
-import { Logger, TRACE } from "@acme/logger/defs.ts";
+import { Logger, TRACE } from "@framework/logger/defs.ts";
 import { playerConnectedChannelDependency, playerDisconnectedChannelDependency } from "./defs.ts";
-import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { webSocketDependency } from "@framework/control-action/transport/defs.ts";
+import { Context } from "@framework/dependency/context.ts";
 import { serverGameLoggerDependency } from "../game/game-logger.ts";
 
 export class PlayerBroadcast implements NormalCADispatcher {

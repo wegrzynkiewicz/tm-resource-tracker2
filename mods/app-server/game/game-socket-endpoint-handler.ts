@@ -1,13 +1,13 @@
-import { Context } from "@acme/dependency/context.ts";
-import { EndpointHandler } from "@acme/web/defs.ts";
+import { Context } from "@framework/dependency/context.ts";
+import { EndpointHandler } from "@framework/web/defs.ts";
 import { TokenManager, tokenManagerDependency } from "./token-manager.ts";
-import { Data } from "@acme/useful/types.ts";
-import { parseNotEmptyString } from "@acme/layout/runtime/parsers.ts";
-import { ErrorDTO } from "@acme/web/docs/error-dto.layout.compiled.ts";
+import { Data } from "@framework/useful/types.ts";
+import { parseNotEmptyString } from "@framework/layout/runtime/parsers.ts";
+import { ErrorDTO } from "@framework/web/docs/error-dto.layout.compiled.ts";
 import { ServerGameContextManager, serverGameManagerDependency } from "./game-context.ts";
 import { serverPlayerContextManagerDependency } from "../player/player-context.ts";
-import { webServerScopeToken } from "@acme/dependency/scopes.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { webServerScopeToken } from "@framework/dependency/scopes.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
 import { serverPlayerDuplexContextManagerDependency } from "../player/player-duplex-context.ts";
 
 export class GameSocketEndpointHandler implements EndpointHandler {

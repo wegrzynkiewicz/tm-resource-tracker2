@@ -1,12 +1,12 @@
-import { BasicLogHandler } from "@acme/logger/basic-log-handler.ts";
-import { prettyLogFormatterDependency } from "@acme/logger/pretty-log-formatter.ts";
+import { BasicLogHandler } from "@framework/logger/basic-log-handler.ts";
+import { prettyLogFormatterDependency } from "@framework/logger/pretty-log-formatter.ts";
 import { initServerConfig } from "./config.ts";
 import { initMainWebServer } from "./main.web-server.ts";
-import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
-import { initConfig } from "@acme/app/config.ts";
-import { Context } from "@acme/dependency/context.ts";
-import { BasicLogFilter } from "@acme/logger/basic-log-filter.ts";
-import { logChannelDependency, TRACE } from "@acme/logger/defs.ts";
+import { globalScopeToken, Scope } from "@framework/dependency/scopes.ts";
+import { initConfig } from "@framework/app/config.ts";
+import { Context } from "@framework/dependency/context.ts";
+import { BasicLogFilter } from "@framework/logger/basic-log-filter.ts";
+import { logChannelDependency, TRACE } from "@framework/logger/defs.ts";
 
 export async function initLogChannel(globalContext: Context): Promise<void> {
   const channel = globalContext.resolve(logChannelDependency);

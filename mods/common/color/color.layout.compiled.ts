@@ -1,4 +1,4 @@
-import { LayoutResult, notMatchedErrorContract } from "@acme/layout/runtime/mod.ts";
+import { LayoutResult, notMatchedErrorContract } from "@framework/layout/runtime/mod.ts";
 
 export const colorKeyObject: Record<string, 1> = {
   ["black"]: 1,

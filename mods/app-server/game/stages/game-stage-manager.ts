@@ -1,6 +1,6 @@
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
 import { serverGameScopeToken } from "../../defs.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 import { GameStage, startupGameStageDependency } from "./defs.ts";
 
 export class GameStageManager {

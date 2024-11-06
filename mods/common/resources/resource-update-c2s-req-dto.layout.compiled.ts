@@ -4,7 +4,7 @@ import {
   LayoutResult,
   missingObjectPropertyErrorContract,
   notMatchedErrorContract,
-} from "@acme/layout/runtime/mod.ts";
+} from "@framework/layout/runtime/mod.ts";
 import { parseResourceTarget, ResourceTarget } from "./resource-target.layout.compiled.ts";
 import { parseResourceType, ResourceType } from "./resource-type.layout.compiled.ts";
 

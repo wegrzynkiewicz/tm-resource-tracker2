@@ -1,10 +1,10 @@
 import { ResourceTarget } from "@common/resources/resource-target.layout.compiled.ts";
 import { Resource } from "@common/resources/defs.ts";
-import { button, div, div_nodes, span } from "@acme/dom/nodes.ts";
-import { deferred } from "@acme/useful/async.ts";
-import { Result } from "@acme/useful/result.ts";
+import { button, div, div_nodes, span } from "@framework/dom/nodes.ts";
+import { deferred } from "@framework/useful/async.ts";
+import { Result } from "@framework/useful/result.ts";
 import { createResourceImage } from "./defs.ts";
-import { Channel } from "@acme/dom/channel.ts";
+import { Channel } from "@framework/dom/channel.ts";
 
 export class CalculatorStore {
   public updates = new Channel<[]>();

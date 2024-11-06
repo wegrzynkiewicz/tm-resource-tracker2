@@ -1,6 +1,6 @@
-import { createRandomStringFactory } from "@acme/useful/strings.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { globalScopeToken } from "@acme/dependency/scopes.ts";
+import { createRandomStringFactory } from "@framework/useful/strings.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { globalScopeToken } from "@framework/dependency/scopes.ts";
 
 export interface TokenTarget {
   readonly gameId: string;

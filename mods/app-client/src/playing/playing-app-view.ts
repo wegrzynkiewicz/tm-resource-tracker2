@@ -1,9 +1,9 @@
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "@acme/dependency/context.ts";
-import { div, div_nodes } from "@acme/dom/nodes.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { Context } from "@framework/dependency/context.ts";
+import { div, div_nodes } from "@framework/dom/nodes.ts";
 import { frontendScopeToken } from "../defs.ts";
 import { modalManagerDependency } from "../modal.ts";
-import { Slot } from "@acme/dom/slot.ts";
+import { Slot } from "@framework/dom/slot.ts";
 import { appSlotDependency } from "../app/app-slot.ts";
 import { createScroll } from "../app/scroll.ts";
 import { toolbarDependency } from "./toolbar.ts";

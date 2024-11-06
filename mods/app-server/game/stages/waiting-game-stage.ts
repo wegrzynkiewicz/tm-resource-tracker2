@@ -1,11 +1,11 @@
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 import { playersSyncS2CNotNormalCAContract } from "@common/player/defs.ts";
 import { playerBroadcastDependency } from "../../player/player-broadcast.ts";
 import { serverPlayerContextManagerDependency } from "../../player/player-context.ts";
 import { GameStage } from "./defs.ts";
 import { playerConnectedChannelDependency } from "../../player/defs.ts";
 import { playerDisconnectedChannelDependency } from "../../player/defs.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
 import { serverGameScopeToken } from "../../defs.ts";
 
 export function provideWaitingGameStage(context: Context): GameStage {

@@ -1,6 +1,6 @@
-import { StandaloneLayout } from "@acme/layout/types/standalone-layout.ts";
-import { ObjectLayout } from "@acme/layout/types/object-layout.ts";
-import { compileLayouts } from "@acme/layout/defs.ts";
+import { StandaloneLayout } from "@framework/layout/types/standalone-layout.ts";
+import { ObjectLayout } from "@framework/layout/types/object-layout.ts";
+import { compileLayouts } from "@framework/layout/defs.ts";
 import { colorLayout } from "../color/color.layout.ts";
 import { playerNameLayout } from "../player/player-dto.layout.ts";
 

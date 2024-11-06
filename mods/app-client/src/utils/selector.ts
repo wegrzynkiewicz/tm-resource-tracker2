@@ -1,8 +1,8 @@
-import { Channel } from "@acme/dom/channel.ts";
+import { Channel } from "@framework/dom/channel.ts";
 import { svg_icon } from "./svg.ts";
-import { div, div_nodes, span } from "@acme/dom/nodes.ts";
-import { NumberStore } from "@acme/dom/number-store.ts";
-import { IterableStore } from "@acme/dom/defs.ts";
+import { div, div_nodes, span } from "@framework/dom/nodes.ts";
+import { NumberStore } from "@framework/dom/number-store.ts";
+import { IterableStore } from "@framework/dom/defs.ts";
 
 export function createSelectorOption(item: SelectorItem) {
   const $content = div_nodes("selector_panel-item", [

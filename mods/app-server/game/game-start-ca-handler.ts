@@ -1,7 +1,7 @@
-import { NormalCAHandler } from "@acme/control-action/normal/defs.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { Context } from "@acme/dependency/context.ts";
-import { caScopeToken } from "@acme/dependency/scopes.ts";
+import { NormalCAHandler } from "@framework/control-action/normal/defs.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { Context } from "@framework/dependency/context.ts";
+import { caScopeToken } from "@framework/dependency/scopes.ts";
 import { gameStageManagerDependency } from "./stages/game-stage-manager.ts";
 import { playingGameStageDependency } from "./stages/playing-game-stage.ts";
 

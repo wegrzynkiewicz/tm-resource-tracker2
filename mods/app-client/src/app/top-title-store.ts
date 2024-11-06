@@ -1,8 +1,8 @@
-import { Channel } from "@acme/dom/channel.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { Channel } from "@framework/dom/channel.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
 import { frontendScopeToken } from "../defs.ts";
 import { appNameDependency } from "./app-name-config.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 
 export class TopTitleStore {
   public readonly updates = new Channel<[]>();

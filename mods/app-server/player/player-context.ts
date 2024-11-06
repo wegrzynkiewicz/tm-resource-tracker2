@@ -1,12 +1,12 @@
-import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
-import { Channel } from "@acme/dom/channel.ts";
-import { createInjectableProvider, defineDependency } from "@acme/dependency/declaration.ts";
+import { globalScopeToken, Scope } from "@framework/dependency/scopes.ts";
+import { Channel } from "@framework/dom/channel.ts";
+import { createInjectableProvider, defineDependency } from "@framework/dependency/declaration.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { ColorKey } from "@common/color/color.layout.compiled.ts";
 import { serverPlayerDuplexContextManagerDependency } from "./player-duplex-context.ts";
 import { serverGameScopeToken, serverPlayerScopeToken } from "../defs.ts";
 import { playerCreatedChannelDependency, playerDeletedChannelDependency } from "./defs.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 
 export interface ServerPlayerInput {
   color: ColorKey;

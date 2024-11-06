@@ -1,11 +1,11 @@
-import { BooleanLayout } from "@acme/layout/types/boolean-layout.ts";
-import { ObjectLayout } from "@acme/layout/types/object-layout.ts";
-import { StringLayout } from "@acme/layout/types/string-layout.ts";
-import { StringMaxLengthValidator } from "@acme/layout/types/string-max-length.ts";
-import { StringMinLengthValidator } from "@acme/layout/types/string-min-length.ts";
+import { BooleanLayout } from "@framework/layout/types/boolean-layout.ts";
+import { ObjectLayout } from "@framework/layout/types/object-layout.ts";
+import { StringLayout } from "@framework/layout/types/string-layout.ts";
+import { StringMaxLengthValidator } from "@framework/layout/types/string-max-length.ts";
+import { StringMinLengthValidator } from "@framework/layout/types/string-min-length.ts";
 import { colorLayout } from "../color/color.layout.ts";
-import { StandaloneLayout } from "@acme/layout/types/standalone-layout.ts";
-import { compileLayouts } from "@acme/layout/defs.ts";
+import { StandaloneLayout } from "@framework/layout/types/standalone-layout.ts";
+import { compileLayouts } from "@framework/layout/defs.ts";
 
 export const playerIdLayout = new StringLayout({
   description: "The player ID",

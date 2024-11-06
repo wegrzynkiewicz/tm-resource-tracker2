@@ -1,7 +1,7 @@
-import { defineDependency } from "@acme/dependency/declaration.ts";
-import { loggerFactoryDependency } from "@acme/logger/factory.ts";
+import { defineDependency } from "@framework/dependency/declaration.ts";
+import { loggerFactoryDependency } from "@framework/logger/factory.ts";
 import { serverGameScopeToken } from "../defs.ts";
-import { Context } from "@acme/dependency/context.ts";
+import { Context } from "@framework/dependency/context.ts";
 import { serverGameIdDependency } from "./game-context.ts";
 
 export function provideServerGameLogger(context: Context) {

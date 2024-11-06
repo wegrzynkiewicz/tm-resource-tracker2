@@ -1,7 +1,7 @@
-import { defineDependency, Dependency } from "@acme/dependency/declaration.ts";
-import { Context } from "@acme/dependency/context.ts";
-import { Scope } from "@acme/dependency/scopes.ts";
-import { Panic } from "@acme/useful/errors.ts";
+import { defineDependency, Dependency } from "@framework/dependency/declaration.ts";
+import { Context } from "@framework/dependency/context.ts";
+import { Scope } from "@framework/dependency/scopes.ts";
+import { Panic } from "@framework/useful/errors.ts";
 import { controllerScopeContract } from "../defs.ts";
 
 export interface ActionContract<T = unknown> {

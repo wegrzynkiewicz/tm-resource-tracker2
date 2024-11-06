@@ -1,18 +1,18 @@
-import { BrowserLogHandler } from "@acme/logger/browser-log-handler.ts";
-import { builtInConfigValueExtractorDependency } from "@acme/config/built-in-extractor.ts";
-import { configBinderDependency } from "@acme/config/common.ts";
-import { configValueResultMapDependency } from "@acme/config/value-getter.ts";
-import { configValueExtractorsDependency, configValueResolverDependency } from "@acme/config/value-resolver.ts";
-import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
+import { BrowserLogHandler } from "@framework/logger/browser-log-handler.ts";
+import { builtInConfigValueExtractorDependency } from "@framework/config/built-in-extractor.ts";
+import { configBinderDependency } from "@framework/config/common.ts";
+import { configValueResultMapDependency } from "@framework/config/value-getter.ts";
+import { configValueExtractorsDependency, configValueResolverDependency } from "@framework/config/value-resolver.ts";
+import { globalScopeToken, Scope } from "@framework/dependency/scopes.ts";
 import { appSlotDependency } from "./src/app/app-slot.ts";
 import { frontendScopeToken } from "./src/defs.ts";
 import { apiURLConfigContract } from "./src/api-url-config.ts";
 import { appNameConfigContract } from "./src/app/app-name-config.ts";
-import { logChannelDependency, TRACE } from "@acme/logger/defs.ts";
+import { logChannelDependency, TRACE } from "@framework/logger/defs.ts";
 import { controllerRouterDependency, controllerRunnerDependency } from "./src/controller.ts";
 import { homePath, initControllerRouter } from "./src/routes.ts";
-import { Context } from "@acme/dependency/context.ts";
-import { BasicLogFilter } from "@acme/logger/basic-log-filter.ts";
+import { Context } from "@framework/dependency/context.ts";
+import { BasicLogFilter } from "@framework/logger/basic-log-filter.ts";
 
 async function initLogChannel(globalContext: Context): Promise<void> {
   const channel = globalContext.resolve(logChannelDependency);

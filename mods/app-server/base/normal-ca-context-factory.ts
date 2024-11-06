@@ -1,8 +1,8 @@
-import { NormalCAContextFactory } from "@acme/control-action/normal/defs.ts";
-import { Context } from "@acme/dependency/context.ts";
-import { NormalCAEnvelopeDTO } from "@acme/control-action/normal/envelope.layout.compiled.ts";
+import { NormalCAContextFactory } from "@framework/control-action/normal/defs.ts";
+import { Context } from "@framework/dependency/context.ts";
+import { NormalCAEnvelopeDTO } from "@framework/control-action/normal/envelope.layout.compiled.ts";
 import { serverGameScopeToken, serverPlayerScopeToken } from "../defs.ts";
-import { caScopeToken, duplexScopeToken, globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
+import { caScopeToken, duplexScopeToken, globalScopeToken, Scope } from "@framework/dependency/scopes.ts";
 
 export class ServerNormalCAContextFactory implements NormalCAContextFactory {
   public constructor(
