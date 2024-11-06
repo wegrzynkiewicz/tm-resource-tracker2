@@ -1,11 +1,10 @@
 import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { Channel } from "@acme/dom/channel.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { createInjectableProvider, defineDependency } from "@acme/dependency/declaration.ts";
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { ColorKey } from "@common/color/color.layout.compiled.ts";
 import { serverPlayerDuplexContextManagerDependency } from "./player-duplex-context.ts";
 import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
-import { DEBUG } from "@acme/logger/defs.ts";
 import { playerCreatedChannelDependency, playerDeletedChannelDependency } from "./defs.ts";
 import { Context } from "@acme/dependency/context.ts";
 
@@ -16,10 +15,12 @@ export interface ServerPlayerInput {
 }
 
 export const serverPlayerIdDependency = defineDependency<string>({
+  provider: createInjectableProvider("server-player-id"),
   scopeToken: serverPlayerScopeContract,
 });
 
 export const serverPlayerDTODependency = defineDependency<PlayerDTO>({
+  provider: createInjectableProvider("server-player-dto"),
   scopeToken: serverPlayerScopeContract,
 });
 

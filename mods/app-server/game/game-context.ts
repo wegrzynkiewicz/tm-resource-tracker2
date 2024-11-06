@@ -1,6 +1,6 @@
 import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { DEBUG } from "@acme/logger/defs.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { createInjectableProvider, defineDependency } from "@acme/dependency/declaration.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { serverGameScopeContract } from "../defs.ts";
 import { createRandomStringFactory } from "@acme/useful/strings.ts";
@@ -10,6 +10,7 @@ import { startupGameStageDependency } from "./stages/defs.ts";
 import { serverGameLoggerDependency } from "./game-logger.ts";
 
 export const serverGameIdDependency = defineDependency<string>({
+  provider: createInjectableProvider("server-game-id"),
   scopeToken: serverGameScopeContract,
 });
 

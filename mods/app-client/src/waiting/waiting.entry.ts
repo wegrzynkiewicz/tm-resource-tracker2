@@ -1,4 +1,4 @@
-import { Panic } from '@acme/useful/errors.ts';
+import { Panic } from "@acme/useful/errors.ts";
 import { clientGameContextManagerDependency } from "../game/client-game-context.ts";
 import { waitingViewDependency } from "./waiting-view.ts";
 import { Context } from "@acme/dependency/context.ts";

@@ -1,7 +1,7 @@
 .top {
   align-items: center;
   background: var(--gradient-bar-background);
-  border-bottom: 1px solid #6A2600;
+  border-bottom: 1px solid #6a2600;
   display: flex;
   grid-column: left / right;
   grid-row: top / content;

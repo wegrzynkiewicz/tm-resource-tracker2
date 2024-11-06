@@ -1,6 +1,6 @@
 import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { Controller } from "../controller.ts";
-import { frontendScopeContract, controllerScopeContract } from "../defs.ts";
+import { controllerScopeContract, frontendScopeContract } from "../defs.ts";
 import { clientGameContextManagerDependency } from "../game/client-game-context.ts";
 import { homepageViewDependency } from "./home-view.ts";
 import { Context } from "@acme/dependency/context.ts";
@@ -22,6 +22,6 @@ export async function initHomeController(context: Context): Promise<Controller> 
   }
 
   const dispose = () => {};
-  
+
   return { dispose };
 }

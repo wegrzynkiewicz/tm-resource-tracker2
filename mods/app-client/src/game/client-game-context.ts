@@ -1,6 +1,6 @@
 import { jsonRequest } from "@acme/useful/json-request.ts";
 import { clientGameScopeContract, frontendScopeContract } from "../defs.ts";
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { createInjectableProvider, defineDependency } from "@acme/dependency/declaration.ts";
 import { globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { apiURLDependency } from "../api-url-config.ts";
 import { gameCreatePathname, gameJoinPathname, gameQuitPathname, gameReadPathname } from "@common/game/defs.ts";
@@ -13,10 +13,12 @@ import { Panic } from "@acme/useful/errors.ts";
 import { myPlayerDependency } from "../player/my-player.ts";
 
 export const clientGameIdDependency = defineDependency<string>({
+  provider: createInjectableProvider("client-game-id"),
   scopeToken: clientGameScopeContract,
 });
 
 export const clientGameTokenDependency = defineDependency<string>({
+  provider: createInjectableProvider("client-game-token"),
   scopeToken: clientGameScopeContract,
 });
 

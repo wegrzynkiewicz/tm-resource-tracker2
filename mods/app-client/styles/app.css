@@ -6,15 +6,21 @@
 
   --color-text: #222222;
   --color-text-inactive: rgba(0, 0, 0, 0.30);
-  --color-box-primary: #CDB39A;
-  --color-frame: #2D2D2D;
+  --color-box-primary: #cdb39a;
+  --color-frame: #2d2d2d;
   --color-background: rgba(183, 100, 43, 0.7);
 
-  --gradient-production-border: linear-gradient(180deg, #181818 0%, #2D2D2D 12%, #2D2D2D 88%, #636363 100%);
-  --gradient-production-background: linear-gradient(180deg, #AA5C3A 0%, #843807 100%);
-  --gradient-bar-background: linear-gradient(180deg, #E69252 0%, #A85020 100%);
-  --gradient-box-border: linear-gradient(180deg, #7B7B7B 0%, #2D2D2D 12%, #2D2D2D 88%, #000 100%);
-  --gradient-box-background: linear-gradient(180deg, #978271 0%, var(--color-box-primary) 25%, var(--color-box-primary) 75%, #EDE0D3 100%);
+  --gradient-production-border: linear-gradient(180deg, #181818 0%, #2d2d2d 12%, #2d2d2d 88%, #636363 100%);
+  --gradient-production-background: linear-gradient(180deg, #aa5c3a 0%, #843807 100%);
+  --gradient-bar-background: linear-gradient(180deg, #e69252 0%, #a85020 100%);
+  --gradient-box-border: linear-gradient(180deg, #7b7b7b 0%, #2d2d2d 12%, #2d2d2d 88%, #000 100%);
+  --gradient-box-background: linear-gradient(
+    180deg,
+    #978271 0%,
+    var(--color-box-primary) 25%,
+    var(--color-box-primary) 75%,
+    #ede0d3 100%
+  );
 }
 
 * {
@@ -160,7 +166,9 @@ body {
 .modal_target-resource._production {
   background-repeat: repeat;
   background-size: 10px;
-  background-image: var(--bg-production), var(--gradient-production-background);
+  background-image:
+    var(--bg-production),
+    var(--gradient-production-background);
   border-image-slice: 1;
   border-image-source: var(--gradient-production-border);
 }
@@ -264,23 +272,23 @@ body {
 }
 
 .player-cube._black {
-  background-color: #8D8F92;
+  background-color: #8d8f92;
 }
 
 .player-cube._blue {
-  background-color: #3586FF;
+  background-color: #3586ff;
 }
 
 .player-cube._green {
-  background-color: #1DCF00;
+  background-color: #1dcf00;
 }
 
 .player-cube._red {
-  background-color: #CF0000;
+  background-color: #cf0000;
 }
 
 .player-cube._yellow {
-  background-color: #FFF735;
+  background-color: #fff735;
 }
 
 .projects {
@@ -311,7 +319,9 @@ body {
 .flow._production {
   background-repeat: repeat;
   background-size: 9px;
-  background-image: var(--bg-production), var(--gradient-production-background);
+  background-image:
+    var(--bg-production),
+    var(--gradient-production-background);
   border-image-slice: 1;
   border-image-source: var(--gradient-production-border);
   border-style: solid;

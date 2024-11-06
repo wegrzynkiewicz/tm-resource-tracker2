@@ -20,7 +20,7 @@ export function createResourcePanel(
 ) {
   const clicks = new Channel<[ResourceBox]>();
 
-  const createResourceBox = (resource: Resource, target: ResourceTarget,) => {
+  const createResourceBox = (resource: Resource, target: ResourceTarget) => {
     const $counter = div("box _counter", "0");
     const $root = div_nodes(`resource _${target} _${resource.type}`, [$counter]);
     const update = (value: string) => $counter.textContent = value;

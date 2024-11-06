@@ -1,7 +1,7 @@
 .toolbar {
   align-items: center;
   background: var(--gradient-bar-background);
-  border-top: 1px solid #F0A66D;
+  border-top: 1px solid #f0a66d;
   display: flex;
   flex-shrink: 0;
   grid-column: left / right;

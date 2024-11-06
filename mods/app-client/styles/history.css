@@ -45,12 +45,12 @@
   gap: 4px;
   align-self: stretch;
   flex-wrap: wrap;
-  border-top: 2px solid var(--color-frame)
+  border-top: 2px solid var(--color-frame);
 }
 
 .history_generation {
   align-items: center;
-  background-image: url('/images/mars-generation.png');
+  background-image: url("/images/mars-generation.png");
   background-repeat: no-repeat;
   color: white;
   display: flex;

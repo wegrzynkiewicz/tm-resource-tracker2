@@ -21,6 +21,7 @@ export interface ControllerRouter {
 }
 
 export const controllerRouterDependency = defineDependency<ControllerRouter>({
+  provider: createInjectableProvider("controllerRouter"),
   scopeToken: frontendScopeContract,
 });
 
