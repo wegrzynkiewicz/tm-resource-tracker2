@@ -1,5 +1,5 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { serverGameScopeContract } from "../../defs.ts";
+import { serverGameScopeToken } from "../../defs.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { GameStage, startupGameStageDependency } from "./defs.ts";
 
@@ -25,5 +25,5 @@ export function provideGameStageManager(context: Context) {
 
 export const gameStageManagerDependency = defineDependency({
   provider: provideGameStageManager,
-  scopeToken: serverGameScopeContract,
+  scopeToken: serverGameScopeToken,
 });

@@ -5,7 +5,7 @@ import { GameStage } from "./defs.ts";
 import { playerConnectedChannelDependency } from "../../player/defs.ts";
 import { playerDisconnectedChannelDependency } from "../../player/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { serverGameScopeContract } from "../../defs.ts";
+import { serverGameScopeToken } from "../../defs.ts";
 import { gameStageS2CNotNormalCAContract, gameSyncS2CNotNormalCAContract } from "@common/game/defs.ts";
 import { GameSyncS2CNotDTO } from "@common/game/game-sync-s2c-not-dto.layout.compiled.ts";
 
@@ -41,5 +41,5 @@ export function providePlayingGameStage(context: Context): GameStage {
 
 export const playingGameStageDependency = defineDependency({
   provider: providePlayingGameStage,
-  scopeToken: serverGameScopeContract,
+  scopeToken: serverGameScopeToken,
 });

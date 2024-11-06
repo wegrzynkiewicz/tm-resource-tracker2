@@ -4,7 +4,7 @@ import { createInjectableProvider, defineDependency } from "@acme/dependency/dec
 import { PlayerDTO } from "@common/player/player-dto.layout.compiled.ts";
 import { ColorKey } from "@common/color/color.layout.compiled.ts";
 import { serverPlayerDuplexContextManagerDependency } from "./player-duplex-context.ts";
-import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
+import { serverGameScopeToken, serverPlayerScopeToken } from "../defs.ts";
 import { playerCreatedChannelDependency, playerDeletedChannelDependency } from "./defs.ts";
 import { Context } from "@acme/dependency/context.ts";
 
@@ -16,12 +16,12 @@ export interface ServerPlayerInput {
 
 export const serverPlayerIdDependency = defineDependency<string>({
   provider: createInjectableProvider("server-player-id"),
-  scopeToken: serverPlayerScopeContract,
+  scopeToken: serverPlayerScopeToken,
 });
 
 export const serverPlayerDTODependency = defineDependency<PlayerDTO>({
   provider: createInjectableProvider("server-player-dto"),
-  scopeToken: serverPlayerScopeContract,
+  scopeToken: serverPlayerScopeToken,
 });
 
 export let playerIdCounter = 0;
@@ -41,9 +41,9 @@ export class ServerPlayerContextManager {
     const playerId = (++playerIdCounter).toString();
 
     const playerContext = new Context({
-      [globalScopeToken.token]: this.gameContext.scopes[globalScopeToken.token],
-      [serverGameScopeContract.token]: this.gameContext.scopes[serverGameScopeContract.token],
-      [serverPlayerScopeContract.token]: new Scope(),
+      [globalScopeToken]: this.gameContext.scopes[globalScopeToken],
+      [serverGameScopeToken]: this.gameContext.scopes[serverGameScopeToken],
+      [serverPlayerScopeToken]: new Scope(),
     });
 
     const player: PlayerDTO = {
@@ -98,5 +98,5 @@ export function provideServerPlayerContextManager(context: Context) {
 
 export const serverPlayerContextManagerDependency = defineDependency({
   provider: provideServerPlayerContextManager,
-  scopeToken: serverGameScopeContract,
+  scopeToken: serverGameScopeToken,
 });

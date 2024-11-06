@@ -6,7 +6,7 @@ import { GameStage } from "./defs.ts";
 import { playerConnectedChannelDependency } from "../../player/defs.ts";
 import { playerDisconnectedChannelDependency } from "../../player/defs.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
-import { serverGameScopeContract } from "../../defs.ts";
+import { serverGameScopeToken } from "../../defs.ts";
 
 export function provideWaitingGameStage(context: Context): GameStage {
   const playerConnected = context.resolve(playerConnectedChannelDependency);
@@ -36,5 +36,5 @@ export function provideWaitingGameStage(context: Context): GameStage {
 
 export const waitingGameStageDependency = defineDependency({
   provider: provideWaitingGameStage,
-  scopeToken: serverGameScopeContract,
+  scopeToken: serverGameScopeToken,
 });

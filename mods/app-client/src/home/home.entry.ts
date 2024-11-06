@@ -7,9 +7,9 @@ import { Context } from "@acme/dependency/context.ts";
 
 export async function initHomeController(context: Context): Promise<Controller> {
   const homepageContext = new Context({
-    [globalScopeToken.token]: context.scopes[globalScopeToken.token],
-    [frontendScopeToken.token]: context.scopes[frontendScopeToken.token],
-    [controllerScopeToken.token]: new Scope(),
+    [globalScopeToken]: context.scopes[globalScopeToken],
+    [frontendScopeToken]: context.scopes[frontendScopeToken],
+    [controllerScopeToken]: new Scope(),
   });
 
   const homepageView = homepageContext.resolve(homepageViewDependency);

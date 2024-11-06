@@ -34,9 +34,9 @@ export class ClientGameContextManager {
     const { gameId, token, player } = payload;
 
     const gameContext = new Context({
-      [globalScopeToken.token]: this.frontendContext.scopes[globalScopeToken.token],
-      [frontendScopeToken.token]: this.frontendContext.scopes[frontendScopeToken.token],
-      [clientGameScopeToken.token]: new Scope(),
+      [globalScopeToken]: this.frontendContext.scopes[globalScopeToken],
+      [frontendScopeToken]: this.frontendContext.scopes[frontendScopeToken],
+      [clientGameScopeToken]: new Scope(),
     });
 
     localStorage.setItem("token", token);
@@ -105,7 +105,7 @@ export class ClientGameContextManager {
       }
       throw new Panic("error-fetch-join-game", { code: response.status });
     } catch (error) {
-      throw new Panic("error-then-join-game", error);
+      throw new Panic("error-then-join-game", { error });
     }
   }
 

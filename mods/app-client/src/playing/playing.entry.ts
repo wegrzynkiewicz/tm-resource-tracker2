@@ -39,11 +39,11 @@ export async function initPlayingController(context: Context, params: Data): Pro
   }
 
   const playingContext = new Context({
-    [globalScopeToken.token]: context.scopes[globalScopeToken.token],
-    [frontendScopeToken.token]: context.scopes[frontendScopeToken.token],
-    [clientGameScopeToken.token]: gameContext.scopes[clientGameScopeToken.token],
-    [duplexScopeToken.token]: clientPlayerWSContext.scopes[duplexScopeToken.token],
-    [controllerScopeToken.token]: new Scope(),
+    [globalScopeToken]: context.scopes[globalScopeToken],
+    [frontendScopeToken]: context.scopes[frontendScopeToken],
+    [clientGameScopeToken]: gameContext.scopes[clientGameScopeToken],
+    [duplexScopeToken]: clientPlayerWSContext.scopes[duplexScopeToken],
+    [controllerScopeToken]: new Scope(),
   });
 
   const loading = playingContext.resolve(loadingViewDependency);

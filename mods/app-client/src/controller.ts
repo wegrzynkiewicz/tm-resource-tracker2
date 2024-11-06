@@ -1,4 +1,4 @@
-import { defineDependency } from "@acme/dependency/declaration.ts";
+import { createInjectableProvider, defineDependency } from "@acme/dependency/declaration.ts";
 import { controllerScopeToken, frontendScopeToken } from "./defs.ts";
 import { Panic } from "@acme/useful/errors.ts";
 import { Data } from "@acme/useful/types.ts";

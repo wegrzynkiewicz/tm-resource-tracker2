@@ -39,8 +39,8 @@ async function initClientConfig(globalContext: Context): Promise<void> {
 
 async function initFrontend(globalContext: Context): Promise<void> {
   const frontendContext = new Context({
-    [globalScopeToken.token]: globalContext.scopes[globalScopeToken.token],
-    [frontendScopeToken.token]: new Scope(),
+    [globalScopeToken]: globalContext.scopes[globalScopeToken],
+    [frontendScopeToken]: new Scope(),
   });
 
   const appSlot = frontendContext.resolve(appSlotDependency);
@@ -63,7 +63,7 @@ async function initFrontend(globalContext: Context): Promise<void> {
 
 async function bootstrap() {
   const globalContext = new Context({
-    [globalScopeToken.token]: new Scope(globalScopeToken),
+    [globalScopeToken]: new Scope(),
   });
 
   await initClientConfig(globalContext);

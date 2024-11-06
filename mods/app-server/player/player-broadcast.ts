@@ -1,7 +1,7 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { InferNormalCAContract, NormalCAContract, NormalCADispatcher } from "@acme/control-action/normal/defs.ts";
 import { NormalCAEnvelopeDTO } from "@acme/control-action/normal/envelope.layout.compiled.ts";
-import { serverGameScopeContract } from "../defs.ts";
+import { serverGameScopeToken } from "../defs.ts";
 import { Logger, TRACE } from "@acme/logger/defs.ts";
 import { playerConnectedChannelDependency, playerDisconnectedChannelDependency } from "./defs.ts";
 import { webSocketDependency } from "@acme/control-action/transport/defs.ts";
@@ -49,5 +49,5 @@ export function providePlayerBroadcast(context: Context) {
 
 export const playerBroadcastDependency = defineDependency({
   provider: providePlayerBroadcast,
-  scopeToken: serverGameScopeContract,
+  scopeToken: serverGameScopeToken,
 });

@@ -1,6 +1,6 @@
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { loggerFactoryDependency } from "@acme/logger/factory.ts";
-import { serverGameScopeContract } from "../defs.ts";
+import { serverGameScopeToken } from "../defs.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { serverGameIdDependency } from "./game-context.ts";
 
@@ -13,5 +13,5 @@ export function provideServerGameLogger(context: Context) {
 
 export const serverGameLoggerDependency = defineDependency({
   provider: provideServerGameLogger,
-  scopeToken: serverGameScopeContract,
+  scopeToken: serverGameScopeToken,
 });

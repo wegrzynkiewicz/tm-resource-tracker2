@@ -5,7 +5,7 @@ import { webSocketNormalCASenderDependency } from "@acme/control-action/transpor
 import { duplexScopeToken, globalScopeToken, Scope } from "@acme/dependency/scopes.ts";
 import { defineDependency } from "@acme/dependency/declaration.ts";
 import { logifyWebSocket } from "@acme/web/socket.ts";
-import { serverGameScopeContract, serverPlayerScopeContract } from "../defs.ts";
+import { serverGameScopeToken, serverPlayerScopeToken } from "../defs.ts";
 import { Context } from "@acme/dependency/context.ts";
 import { webSocketCAReceiverDependency } from "@acme/control-action/transport/ws-ca-receiver.ts";
 import { ServerNormalCAContextFactory } from "../base/normal-ca-context-factory.ts";
@@ -31,10 +31,10 @@ export class ServerPlayerDuplexContextManager {
 
   public createServerPlayerDuplexContext(socket: WebSocket): Context {
     const context = new Context({
-      [globalScopeToken.token]: this.serverPlayerContext.scopes[globalScopeToken.token],
-      [serverGameScopeContract.token]: this.serverPlayerContext.scopes[serverGameScopeContract.token],
-      [serverPlayerScopeContract.token]: this.serverPlayerContext.scopes[serverPlayerScopeContract.token],
-      [duplexScopeToken.token]: new Scope(duplexScopeToken),
+      [globalScopeToken]: this.serverPlayerContext.scopes[globalScopeToken],
+      [serverGameScopeToken]: this.serverPlayerContext.scopes[serverGameScopeToken],
+      [serverPlayerScopeToken]: this.serverPlayerContext.scopes[serverPlayerScopeToken],
+      [duplexScopeToken]: new Scope(),
     });
 
     this.context = context;
@@ -110,5 +110,5 @@ export function provideServerPlayerDuplexContextManager(context: Context) {
 
 export const serverPlayerDuplexContextManagerDependency = defineDependency({
   provider: provideServerPlayerDuplexContextManager,
-  scopeToken: serverPlayerScopeContract,
+  scopeToken: serverPlayerScopeToken,
 });
